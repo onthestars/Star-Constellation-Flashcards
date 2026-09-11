@@ -7,6 +7,11 @@
   padding: 20px;
 }
 
+.page-title {
+  color: #bfbfbf;   /* 75% の灰色 */
+  font-weight: 600; /* 少し太めで視認性を維持 */
+}
+
 #book {
   width: 90vw;
   margin-top: 20px;
@@ -178,3 +183,28 @@
   animation-duration: 0.6s;
   animation-fill-mode: both;
 }
+
+/* スマホ向け（幅 600px 以下） */
+@media (max-width: 600px) {
+
+  /* 季節ボタン（上段） */
+  .season-buttons {
+    gap: 16px;               /* ← ボタン間隔を広げる */
+  }
+
+  .season-buttons button {
+    padding: 20px 24px;      /* ← ボタンをさらに大きく */
+    font-size: 24px;         /* ← 文字も大きく */
+  }
+
+  /* 操作ボタン（下段） */
+  .action-buttons {
+    gap: 12px;               /* ← ボタン間隔を広げる */
+  }
+
+  .action-buttons button {
+    padding: 16px 20px;      /* ← ボタンを大きく */
+    font-size: 20px;
+  }
+}
+
