@@ -86,4 +86,20 @@ flipBtn.addEventListener('click', () => {
   updateView();
 });
 
+function jumpToSeason(season) {
+  // DOM上で最初に出てくる、その季節のカードを探す
+  const targetIndex = [...cards].findIndex(card => card.dataset.season === season);
+  if (targetIndex === -1) return;  // その季節がなければ何もしない
+
+  currentIndex = targetIndex;
+  updateView();  // 既存の表示更新関数を呼ぶ
+}
+
+// ボタンにイベントを付ける
+document.getElementById("springBtn").onclick = () => jumpToSeason("spring");
+document.getElementById("summerBtn").onclick = () => jumpToSeason("summer");
+document.getElementById("autumnBtn").onclick = () => jumpToSeason("autumn");
+document.getElementById("winterBtn").onclick = () => jumpToSeason("winter");
+document.getElementById("southBtn").onclick = () => jumpToSeason("south");
+
 updateView();
