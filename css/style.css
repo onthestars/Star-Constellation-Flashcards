@@ -223,7 +223,7 @@
 
   .season-buttons button {
     padding: 20px 24px;      /* ← ボタンをさらに大きく */
-    font-size: 24px;         /* ← 文字も大きく */
+    font-size: 32px;         /* ← 文字も大きく */
     margin-bottom: 24px;
   }
 
