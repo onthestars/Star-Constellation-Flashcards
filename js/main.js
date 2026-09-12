@@ -86,13 +86,27 @@ flipBtn.addEventListener('click', () => {
   updateView();
 });
 
+function showCardWithFade(index) {
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => card.style.display = 'none');
+
+  const target = cards[index];
+  target.style.display = 'block';
+
+  // 一度クラスを消してから付ける（連続押しでも発火させる）
+  target.classList.remove('fade-in');
+  void target.offsetWidth; // ← 強制再描画（重要）
+  target.classList.add('fade-in');
+}
+
 function jumpToSeason(season) {
   // DOM上で最初に出てくる、その季節のカードを探す
   const targetIndex = [...cards].findIndex(card => card.dataset.season === season);
   if (targetIndex === -1) return;  // その季節がなければ何もしない
 
   currentIndex = targetIndex;
-  updateView();  // 既存の表示更新関数を呼ぶ
+  showCardWithFade(currentIndex);  // ← フェードインで表示する
 }
 
 // ボタンにイベントを付ける
