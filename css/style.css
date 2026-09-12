@@ -213,6 +213,17 @@
   cursor: pointer;
 }
 
+/* ▼ カードのフェードイン効果 */
+.card.fade-in {
+  opacity: 0;
+  animation: fadeInCard 0.8s ease forwards;
+}
+
+@keyframes fadeInCard {
+  0%   { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 /* スマホ向け（幅 600px 以下） */
 @media (max-width: 600px) {
 
