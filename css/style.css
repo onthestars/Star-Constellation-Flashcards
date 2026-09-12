@@ -224,6 +224,7 @@
   .season-buttons button {
     padding: 20px 24px;      /* ← ボタンをさらに大きく */
     font-size: 24px;         /* ← 文字も大きく */
+    margin-bottom: 24px;
   }
 
   /* 操作ボタン（下段） */
@@ -235,5 +236,15 @@
     padding: 16px 20px;      /* ← ボタンを大きく */
     font-size: 20px;
   }
-}
+  /* 下段の4ボタン（前のカード／次のカード／表裏めくる／南） */
+  .action-buttons button {
+    transform: scale(1.5);     /* ← 1.5倍に拡大 */
+    transform-origin: center;  /* ← 中心基準で拡大（ズレ防止） */
+    margin: 12px 0;            /* ← ボタン同士の間隔も広げる */
+  }
 
+  /* ボタンのレイアウトが崩れないように親要素も調整 */
+  .action-buttons {
+    gap: 20px;                 /* ← ボタン間隔をさらに安定させる */
+  }
+}
