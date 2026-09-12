@@ -224,38 +224,29 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* スマホ向け（幅 600px 以下） */
-@media (max-width: 600px) {
+/* スマホ向け（幅 640px 以下） */
+@media (max-width: 640px) {
 
   /* 季節ボタン（上段） */
-  .season-buttons {
-    gap: 16px;               /* ← ボタン間隔を広げる */
-  }
-
   .season-buttons button {
-    padding: 20px 24px;      /* ← ボタンをさらに大きく */
-    font-size: 32px;         /* ← 文字も大きく */
-    margin-bottom: 24px;
+    padding: 20px 28px;
+    font-size: 24px;
+    border-radius: 12px;
   }
 
   /* 操作ボタン（下段） */
+
+  /* 下段4ボタンを2×2にする */
   .action-buttons {
-    gap: 12px;               /* ← ボタン間隔を広げる */
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* ← 2列にする */
+    margin: 12px;
   }
 
   .action-buttons button {
-    padding: 16px 20px;      /* ← ボタンを大きく */
-    font-size: 20px;
-  }
-  /* 下段の4ボタン（前のカード／次のカード／表裏めくる／南） */
-  .action-buttons button {
-    transform: scale(1.5);     /* ← 1.5倍に拡大 */
-    transform-origin: center;  /* ← 中心基準で拡大（ズレ防止） */
-    margin: 12px 0;            /* ← ボタン同士の間隔も広げる */
-  }
-
-  /* ボタンのレイアウトが崩れないように親要素も調整 */
-  .action-buttons {
-    gap: 20px;                 /* ← ボタン間隔をさらに安定させる */
-  }
+    padding: 22px 30px;
+    font-size: 30px !important;
+    border-radius: 12px;
+    width: 100%;                     /* ← 横幅いっぱいで整う */
+}
 }
