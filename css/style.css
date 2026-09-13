@@ -114,6 +114,7 @@ body {
 
 .page-indicator {
   margin-top: 10px;
+  font-size: 1.0rem;
   font-weight: bold;
   color: #fff;
 }
@@ -239,8 +240,16 @@ body {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* スマホ向け（幅 ****px 以下） */
+/* ▼スマホ向け（幅 ****px 以下） */
 @media (max-width: 1000px) {
+
+.page-indicator {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
 
   /* 季節ボタン（上段） */
   .season-buttons button {
