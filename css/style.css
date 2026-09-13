@@ -113,8 +113,6 @@ body {
 }
 
 .page-indicator {
-  text-align: center;
-  width: 100%;
   margin-top: 10px;
   font-size: 1.0rem;
   font-weight: bold;
@@ -246,8 +244,6 @@ body {
 @media (max-width: 1080px) {
 
 .page-indicator {
-  text-align: center;
-  width: 100%;
   margin-top: 10px;
   font-size: 1.2rem;
   font-weight: bold;
@@ -258,7 +254,7 @@ body {
   /* 季節ボタン（上段） */
   .season-buttons button {
     padding: 20px 28px;
-    font-size: 24px;
+    font-size: 22px;
     border-radius: 12px;
   }
 
@@ -286,58 +282,52 @@ body {
   }
 }
 
-/* ▼横画面専用レイアウト */
-@media (orientation: landscape) {
+/* ▼横画面専用レイアウト（幅 ****px 以上） */
+@media (min-width: 1081px) and (orientation: landscape) {
 
-  .controls {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  .container {
-    align-items: flex-start;   /* ← 中央揃えを解除 */
-  }
-
-  .season-buttons {
-    margin-top: 4px;           /* ← 必要なら微調整 */
-  }
-
-  .card img {
-    max-height: 70vh;          /* ← 横画面では高さを抑える */
-  }
-
+  /* 全体を横3分割レイアウトにする */
   .container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 100vh;
+    align-items: center;
+    height: 100vh;            /* 画面の高さにフィット */
     padding: 0 20px;
     box-sizing: border-box;
   }
 
-.season-buttons {
-  display: flex;
-  flex-wrap: wrap;     /* ← 折り返しを許可 */
-  justify-content: center;
-  gap: 12px;
-}
-
-  .card-area {
-    flex: 1;
+  /* 左：季節ボタン（縦並び） */
+  .season-buttons {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 16px;
+  }
+  .season-buttons button {
+    padding: 14px 20px;
+    font-size: 20px;
   }
 
+  /* 中央：カード画像（高さを自動調整） */
+  .card {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .card img {
-    max-height: 90vh;
+    max-height: 90vh;         /* 画面内に収める */
     width: auto;
     height: auto;
   }
 
+  /* 右：操作ボタン（縦並び） */
   .action-buttons {
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+  .action-buttons button {
+    padding: 14px 20px;
+    font-size: 20px;
   }
 }
