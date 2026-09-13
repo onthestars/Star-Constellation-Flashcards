@@ -37,9 +37,6 @@
   background-color: #fff;
   font-size: 16px;
   margin: 6px;
-
-  /* 影（自然で控えめ） */
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
 }
 
 /* ホバー時の強調 */
@@ -48,7 +45,6 @@
 #flipBtn:hover,
 #SpecialBtn:hover {
   border-color: #007bff;
-  box-shadow: 3px 3px 8px rgba(0,0,0,0.35); /* 少し濃く */
 }
 
 .page-wrapper {
@@ -145,6 +141,7 @@
 .controls {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   margin-top: 10px;
 }
@@ -152,11 +149,12 @@
 /* ▼ 季節ボタン（上段） */
 .season-buttons {
   display: flex;
-  justify-content: center;     /* ← 中央揃え（確実に中央に来る） */
-  gap: 20px;                   /* ← ボタン間隔を広げて押しやすく */
+  justify-content: center;
+  gap: 20px;
   width: 100%;
   max-width: 600px;
-  padding: 4px 0;              /* ← 左右余白は不要、中央揃えが最優先 */
+  margin: 0 auto;
+  border: 1px solid red;
 }
 
 .season-buttons button {
@@ -198,19 +196,22 @@
   color: #555555;           /* 濃い灰色（黒より柔らかく読みやすい） */
 }
 
-/* ▼ 操作ボタン（下段） */
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
 .action-buttons button {
   padding: 10px 16px;
   font-size: 16px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;   /* 季節ボタンと同じ幅にする */
+  margin: 0 auto;     /* 箱ごと中央に固定 */
+  border: 1px solid red;
 }
 
 /* ▼ カードのフェードイン効果 */
@@ -224,7 +225,7 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* スマホ向け（幅 ****px 以下） */
+/* スマホ向け（幅 640px 以下） */
 @media (max-width: 640px) {
 
   /* 季節ボタン（上段） */
@@ -234,19 +235,21 @@
     border-radius: 12px;
   }
 
-  /* 操作ボタン（下段） */
-
-  /* 下段4ボタンを2×2にする */
-  .action-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;  /* ← 2列にする */
-    margin: 12px;
-  }
+/* 操作ボタン（下段） */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;   /* 季節ボタンと同じ幅にする */
+  margin: 0 auto;     /* 箱ごと中央に固定 */
+  border: 1px solid red;
+}
 
   .action-buttons button {
     padding: 22px 30px;
     font-size: 24px !important;
     border-radius: 12px;
     width: 100%;                     /* ← 横幅いっぱいで整う */
-}
+  }
 }
