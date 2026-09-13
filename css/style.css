@@ -225,7 +225,7 @@
 }
 
 /* スマホ向け（幅 ****px 以下） */
-@media (max-width: 2000px) {
+@media (max-width: 640px) {
 
   /* 季節ボタン（上段） */
   .season-buttons button {
