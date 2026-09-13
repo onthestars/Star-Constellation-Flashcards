@@ -154,7 +154,7 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  border: 1px solid red;
+  border: 10px solid red;
 }
 
 .season-buttons button {
@@ -211,7 +211,7 @@
   width: 100%;
   max-width: 600px;   /* 季節ボタンと同じ幅にする */
   margin: 0 auto;     /* 箱ごと中央に固定 */
-  border: 1px solid red;
+  border: 10px solid red;
 }
 
 /* ▼ カードのフェードイン効果 */
@@ -225,8 +225,8 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* スマホ向け（幅 640px 以下） */
-@media (max-width: 640px) {
+/* スマホ向け（幅 800px 以下） */
+@media (max-width: 800px) {
 
   /* 季節ボタン（上段） */
   .season-buttons button {
@@ -239,16 +239,16 @@
 .action-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 100px;
   width: 100%;
   max-width: 600px;   /* 季節ボタンと同じ幅にする */
   margin: 0 auto;     /* 箱ごと中央に固定 */
-  border: 1px solid red;
+  border: 10px solid red;
 }
 
   .action-buttons button {
-    padding: 22px 30px;
-    font-size: 24px !important;
+    padding: 22px 100px;
+    font-size: 32px !important;
     border-radius: 12px;
     width: 100%;                     /* ← 横幅いっぱいで整う */
   }
