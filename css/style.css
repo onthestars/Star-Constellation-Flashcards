@@ -224,8 +224,8 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* スマホ向け（幅 720px 以下） */
-@media (max-width: 720px) {
+/* スマホ向け（幅 ****px 以下） */
+@media (max-width: 2000px) {
 
   /* 季節ボタン（上段） */
   .season-buttons button {
