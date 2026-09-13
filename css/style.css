@@ -241,7 +241,7 @@ body {
 }
 
 /* ▼スマホ向け（幅 ****px 以下） */
-@media (max-width: 1000px) {
+@media (max-width: 1080px) {
 
 .page-indicator {
   margin-top: 10px;
@@ -279,5 +279,44 @@ body {
     font-size: 28px !important;
     border-radius: 12px;
     width: 100%;                     /* ← 横幅いっぱいで整う */
+  }
+}
+
+/* ▼横画面専用レイアウト */
+@media (orientation: landscape) {
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .season-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card img {
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 }
