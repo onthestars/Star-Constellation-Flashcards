@@ -224,8 +224,8 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* スマホ向け（幅 640px 以下） */
-@media (max-width: 640px) {
+/* スマホ向け（幅 720px 以下） */
+@media (max-width: 720px) {
 
   /* 季節ボタン（上段） */
   .season-buttons button {
@@ -245,7 +245,7 @@
 
   .action-buttons button {
     padding: 22px 30px;
-    font-size: 30px !important;
+    font-size: 24px !important;
     border-radius: 12px;
     width: 100%;                     /* ← 横幅いっぱいで整う */
 }
