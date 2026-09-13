@@ -258,7 +258,7 @@ body {
   /* 季節ボタン（上段） */
   .season-buttons button {
     padding: 20px 28px;
-    font-size: 22px;
+    font-size: 24px;
     border-radius: 12px;
   }
 
@@ -289,21 +289,38 @@ body {
 /* ▼横画面専用レイアウト */
 @media (orientation: landscape) {
 
+  .controls {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .container {
+    align-items: flex-start;   /* ← 中央揃えを解除 */
+  }
+
+  .season-buttons {
+    margin-top: 4px;           /* ← 必要なら微調整 */
+  }
+
+  .card img {
+    max-height: 70vh;          /* ← 横画面では高さを抑える */
+  }
+
   .container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     height: 100vh;
     padding: 0 20px;
     box-sizing: border-box;
   }
 
-  .season-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+.season-buttons {
+  display: flex;
+  flex-wrap: wrap;     /* ← 折り返しを許可 */
+  justify-content: center;
+  gap: 12px;
+}
 
   .card-area {
     flex: 1;
