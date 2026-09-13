@@ -10,6 +10,18 @@
 
 <body>
 
+<!-- ボタン -->
+<div class="container">
+
+  <div class="season-buttons">
+    <button id="springBtn">春</button>
+    <button id="summerBtn">夏</button>
+    <button id="autumnBtn">秋</button>
+    <button id="winterBtn">冬</button>
+    <button id="southBtn">南</button>
+  </div>
+
+  <div class="card-area">
 <!-- <div class="page-title">【開発中】 トレミーの48星座 フラッシュカード</div> -->
 
   <div id="book">
@@ -519,19 +531,27 @@
 
 <!-- -->
   </div>
+    <div class="card">
+      <div class="page-wrapper">
+        <div class="flip-inner">
+          <div class="face front"><img src="image/card-null.png"></div>
+          <div class="face back"><img src="image/card-null.png"></div>
+        </div>
+      </div>
+    </div>
 
-  <div class="page-indicator" id="pageIndicator">
-    カード 1 / 55 ｜ 表面
-  </div>
+    <div class="card">
+      <div class="page-wrapper">
+        <div class="flip-inner">
+          <div class="face front"><img src="image/card-null.png"></div>
+          <div class="face back"><img src="image/card-null.png"></div>
+        </div>
+      </div>
+    </div>
 
-<!-- ボタン -->
-<div class="controls">
-  <div class="season-buttons">
-    <button id="springBtn">春</button>
-    <button id="summerBtn">夏</button>
-    <button id="autumnBtn">秋</button>
-    <button id="winterBtn">冬</button>
-    <button id="southBtn">南</button>
+    <div class="page-indicator" id="pageIndicator">
+      カード 1 / 55 ｜ 表面
+    </div>
   </div>
 
   <div class="action-buttons">
@@ -539,6 +559,7 @@
     <button id="nextBtn">次のカード</button>
     <button id="flipBtn">表／裏めくる</button>
   </div>
+
 </div>
 
 <script src="js/main.js"></script>
