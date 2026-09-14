@@ -1,14 +1,13 @@
 ﻿html,
 body {
-  font-size: 16px;
   /* フォントのルートサイズ指定 */
+  font-size: 16px;
+
   height: 100%;
   margin: 0;
   padding: 0;
-}
 
-body {
-  font-family: system-ui;
+  font-family: "Meiryo UI" , "Yu Gothic" , sans-serif;
 
   background-image: url("../image/common/back-ground-image.png");
   background-size: cover;
