@@ -75,11 +75,12 @@
 }
 
 #pageIndicator {
-  display: flex;
+  display: none;
+  /* display: flex;
   justify-content: center;
   margin: 0 auto;
   font-size: 1rem;
-  color: #fff;
+  color: #fff; */
 }
 
 /* 季節ボタン */
