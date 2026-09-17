@@ -133,3 +133,41 @@
   gap: 8px;
   margin-top: 10px;
 }
+
+/* スマホ横置き専用レイアウト */
+@media (orientation: landscape) and (max-width: 900px) {
+
+  /* カードとボタンを横並びにする */
+  #contents {
+    display: grid;
+    grid-template-columns: 1fr 120px; /* カード / 季節ボタン */
+    gap: 20px;
+    align-items: center;
+  }
+
+  /* カードが画面からはみ出さないようにする */
+  .card.active .page-wrapper,
+  .card.active img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* 季節ボタンを縦並びに */
+  .season-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* スマホでは操作ボタンを非表示 */
+  .action-buttons {
+    display: none;
+  }
+
+  /* ボタンのサイズ調整（スマホ横置き向け） */
+  .season-buttons button {
+    padding: 16px;
+    font-size: 20px;
+    width: 100%;
+  }
+}
