@@ -134,40 +134,40 @@
   margin-top: 10px;
 }
 
-/* スマホ横置き専用レイアウト */
 @media (orientation: landscape) and (max-width: 900px) {
 
-  /* カードとボタンを横並びにする */
+  /* カードと季節ボタンを横並びにする */
   #contents {
-    display: grid;
-    grid-template-columns: 1fr 120px; /* カード / 季節ボタン */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 20px;
-    align-items: center;
   }
 
-  /* カードが画面からはみ出さないようにする */
-  .card.active .page-wrapper,
-  .card.active img {
+  /* カード部分を左側に固定 */
+  .card.active {
+    flex: 1 1 auto;
     max-width: 100%;
-    height: auto;
   }
 
-  /* 季節ボタンを縦並びに */
+  /* カード画像の比率を壊さない */
+  .card.active img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 季節ボタンを右側に縦並び */
   .season-buttons {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 120px;
+    flex-shrink: 0;
   }
 
   /* スマホでは操作ボタンを非表示 */
   .action-buttons {
-    display: none;
-  }
-
-  /* ボタンのサイズ調整（スマホ横置き向け） */
-  .season-buttons button {
-    padding: 16px;
-    font-size: 20px;
-    width: 100%;
+    display: none !important;
   }
 }
