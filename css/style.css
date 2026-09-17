@@ -142,34 +142,45 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 20px;
+    gap: 12px;
+    height: 100vh;              /* 画面の高さに合わせる */
+    overflow: hidden;           /* はみ出し防止 */
+    padding: 8px;
+    box-sizing: border-box;
   }
 
-  /* カード部分を左側に固定し、はみ出さないようにする */
+  /* カード部分（左側） */
   .card.active {
     flex: 1 1 auto;
-    max-width: 100%;
+    max-height: 100%;           /* 画面からはみ出さない */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* カード画像の比率を壊さない */
+  /* カード画像の比率を壊さずに縮小 */
   .card.active img {
-    width: 100%;
+    max-height: 100%;
+    width: auto;
     height: auto;
+    object-fit: contain;        /* 比率維持で収める */
     display: block;
   }
 
   /* page-wrapper の transform を壊さない */
   .card.active .page-wrapper {
-    width: 100%;
+    max-height: 100%;
+    width: auto;
   }
 
-  /* 季節ボタンを右側に縦並びにする */
+  /* 季節ボタン（右側） */
   .season-buttons {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    width: 120px;      /* 右側の幅を固定 */
-    flex-shrink: 0;    /* カードに押し潰されない */
+    gap: 12px;
+    width: 110px;               /* はみ出さない固定幅 */
+    flex-shrink: 0;             /* カードに押し潰されない */
   }
 
   /* スマホでは操作ボタンを非表示 */
