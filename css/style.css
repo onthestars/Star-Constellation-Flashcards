@@ -1,9 +1,11 @@
-﻿html, body {
-  font-size: 16px;
-  height: 100%;
+﻿html,
+body {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+
   font-family: "Meiryo UI", "Yu Gothic", sans-serif;
+
   background-image: url("../image/common/back-ground-image.png");
   background-size: cover;
   background-repeat: no-repeat;
@@ -11,22 +13,25 @@
 }
 
 #contents {
-  width: 97vw;
+  max-width: 98%;
   margin: 0 auto;
+  border: solid 5px red;
 }
 
 #book {
-  width: 97vw;
+  max-width: 100%;
   margin: 0 auto;
   perspective: 1400px;
+  border: solid 4px violet;
 }
 
 .card {
-  width: 100%;
-  min-height: 230px;
+  max-width: 100%;
+  aspect-ratio: 3 / 2; /* 画像の比率に合わせて調整 */
   position: relative;
   margin-bottom: 20px;
   display: none;
+  border: solid 2px white;
 }
 
 .page-wrapper {
@@ -74,14 +79,13 @@
   font-weight: 600;
 }
 
-#pageIndicator {
-  display: none;
-  /* display: flex;
+/* #pageIndicator {
+  display: flex;
   justify-content: center;
   margin: 0 auto;
   font-size: 1rem;
-  color: #fff; */
-}
+  color: #fff;
+} */
 
 /* 季節ボタン */
 .season-buttons {
@@ -102,11 +106,30 @@
   cursor: pointer;
 }
 
-#springBtn { background-color: #ffc0cb; color: #b00040; }
-#summerBtn { background-color: #a7e3ff; color: #005a8c; }
-#autumnBtn { background-color: #ffb347; color: #8c4b00; }
-#winterBtn { background-color: #b39ddb; color: #ffffff; }
-#southBtn  { background-color: #fff9c4; color: #555555; }
+#springBtn {
+  background-color: #ffc0cb;
+  color: #b00040;
+}
+
+#summerBtn {
+  background-color: #a7e3ff;
+  color: #005a8c;
+}
+
+#autumnBtn {
+  background-color: #ffb347;
+  color: #8c4b00;
+}
+
+#winterBtn {
+  background-color: #b39ddb;
+  color: #ffffff;
+}
+
+#southBtn {
+  background-color: #fff9c4;
+  color: #555555;
+}
 
 /* 下段ボタン */
 .action-buttons {
@@ -134,58 +157,3 @@
   gap: 8px;
   margin-top: 10px;
 }
-
-@media (orientation: landscape) and (max-width: 900px) {
-
-  /* カードと季節ボタンを横並びにする */
-  #contents {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 12px;
-    height: 100vh;              /* 画面の高さに合わせる */
-    overflow: hidden;           /* はみ出し防止 */
-    padding: 8px;
-    box-sizing: border-box;
-  }
-
-  /* カード部分（左側） */
-  .card.active {
-    flex: 1 1 auto;
-    max-height: 100%;           /* 画面からはみ出さない */
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* カード画像の比率を壊さずに縮小 */
-  .card.active img {
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;        /* 比率維持で収める */
-    display: block;
-  }
-
-  /* page-wrapper の transform を壊さない */
-  .card.active .page-wrapper {
-    max-height: 100%;
-    width: auto;
-  }
-
-  /* 季節ボタン（右側） */
-  .season-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 110px;               /* はみ出さない固定幅 */
-    flex-shrink: 0;             /* カードに押し潰されない */
-  }
-
-  /* スマホでは操作ボタンを非表示 */
-  .action-buttons {
-    display: none !important;
-  }
-}
-
