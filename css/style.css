@@ -51,26 +51,26 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 /* ★ 季節ボタン（基準サイズ） */
 .btn-season {
-  width: 56px;
+  width: 72px;
   height: auto;
-  margin:12px;
+  margin:20px;
 }
 
 /* ★ 操作ボタン */
 .btn-control {
-  width: 90px;
+  width: 112px;
   height: auto;
   margin:0 16px;
 }
 
 /* ★ Specialボタン（1.5倍） */
 .btn-special {
-  width: 72px;
+  width: 80px;
   height: auto;
 }
 
