@@ -3,48 +3,57 @@
 
 <head>
   <meta charset="UTF-8">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>星座カード</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-  <!-- ★ カード枠（スマホ画面の黒枠） -->
+  <!-- ★ カード枠（スマホ画面の中央に固定） -->
   <div id="card-frame">
 
     <!-- ★ カード画像（最初は表紙。JSが差し替える） -->
     <div class="card-image-area">
-      <img src="image/other/card-top.png" id="card-img" class="card-img">
+      <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
     </div>
 
-    <!-- ★ 四季ボタンブロック -->
-    <div class="season-block">
+    <!-- ★ ボタン群（季節・操作・Specialを一括管理） -->
+    <div class="button-block">
+
+      <!-- ★ 四季ボタン -->
       <div class="button-row season-row">
-        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn">
-        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn">
-        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn">
-        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn">
-        <img src="image/common/btn-south.png" class="btn-season" id="southBtn">
+        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" alt="春">
+        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" alt="夏">
+        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" alt="秋">
+        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" alt="冬">
+        <img src="image/common/btn-south.png" class="btn-season" id="southBtn" alt="南">
       </div>
-    </div>
 
-    <!-- ★ 操作ボタンブロック -->
-    <div class="control-block">
+      <!-- ★ 操作ボタン -->
       <div class="button-row control-row">
-        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn">
-        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn">
-        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn">
+        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
+        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
+        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
       </div>
-    </div>
 
-    <!-- ★ Special viewer ボタンブロック -->
-    <div class="special-block">
+      <!-- ★ Special viewer ボタン -->
       <div class="button-row special-row">
-        <img src="image/common/btn-star.png" class="btn-special" id="specialBtn">
+        <img src="image/common/btn-star.png" class="btn-special" id="specialBtn" alt="Special">
       </div>
+
     </div>
 
+  </div>
+
+  <!-- ★ Special viewer（写真表示用） -->
+  <div id="special-viewer" style="display:none;">
+    <img id="special-img" src="" alt="Special画像">
+    <div class="special-controls">
+      <button id="special-lines">星座線を描く</button>
+      <button id="special-clear">消す</button>
+      <button id="special-close">閉じる</button>
+    </div>
   </div>
 
   <script src="js/main.js"></script>
