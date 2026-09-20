@@ -6,8 +6,8 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;   /* 左右中央 */
-  align-items: center;       /* 上下中央 */
+  justify-content: center;
+  align-items: center;
   height: 98vh;
 }
 
@@ -16,12 +16,11 @@ body {
    =============================== */
 #card-frame {
   width: 95vw;
-  max-width: 640px;
+  max-width: 480px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: solid 2px #008000; /* green */
 }
 
 /* ===============================
@@ -35,7 +34,7 @@ body {
 
 .card-img {
   width: 100%;
-  max-width: 640px;
+  max-width: 480px;
   height: auto;
   object-fit: contain;
 }
@@ -48,50 +47,50 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  border: solid 2px blue;
 }
 
 /* ===============================
    ★ ボタン行（横一列）
    =============================== */
 .button-row {
-  width: 90%;
-  max-width: 520px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
 
-    border: solid 2px red;
+  /* 横一列を維持しつつ、狭い画面では自動縮小 */
+  flex-wrap: nowrap;
 }
 
 /* ===============================
-   ★ 季節ボタン
+   ★ 季節ボタン（自動縮小）
    =============================== */
 .btn-season {
-  width: 18vw;
-  max-width: 64px;
+  width: 18vw;        /* 画面幅に応じて自動縮小 */
+  max-width: 72px;    /* 上限（広い画面） */
+  min-width: 42px;    /* 下限（狭い画面） */
   height: auto;
-  margin: 8px;
+  margin: 4px;
 }
 
 /* ===============================
-   ★ 操作ボタン
+   ★ 操作ボタン（自動縮小）
    =============================== */
 .btn-control {
-  width: 22vw;
-  max-width: 112px;
+  width: 20vw;
+  max-width: 96px;
+  min-width: 42px;
   height: auto;
-  margin: 0 12px;
+  margin: 4px;
 }
 
 /* ===============================
-   ★ Specialボタン
+   ★ Specialボタン（自動縮小）
    =============================== */
 .btn-special {
   width: 20vw;
   max-width: 80px;
+  min-width: 42px;
   height: auto;
 }
 
@@ -101,99 +100,4 @@ body {
 .disabled {
   opacity: 0.5;
   pointer-events: none;
-}
-
-/* ===============================
-   ★ Special viewer
-   =============================== */
-#special-viewer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#special-img {
-  max-width: 90%;
-  height: auto;
-  margin-bottom: 16px;
-}
-
-.special-controls {
-  display: flex;
-  gap: 12px;
-}
-
-/* ===============================
-   ★ ブレイクポイント：スマホ縦向き
-   =============================== */
-@media screen and (max-width: 480px) {
-  #card-frame {
-    max-width: 360px;
-  }
-
-  .btn-season {
-    width: 16vw;
-    max-width: 56px;
-    margin: 6px;
-  }
-
-  .btn-control {
-    width: 20vw;
-    max-width: 96px;
-  }
-
-  .btn-special {
-    width: 18vw;
-    max-width: 72px;
-  }
-
-  .button-row {
-    width: 90%;
-    max-width: 420px;
-  }
-}
-
-/* ===============================
-   ★ ブレイクポイント：横向き
-   =============================== */
-@media screen and (orientation: landscape) {
-  #card-frame {
-    max-width: 640px;
-  }
-
-  .btn-season {
-    width: 12vw;
-    max-width: 64px;
-    margin: 8px;
-  }
-
-  .button-row {
-    width: 80%;
-    max-width: 520px;
-  }
-}
-
-/* ===============================
-   ★ ブレイクポイント：タブレット・PC
-   =============================== */
-@media screen and (min-width: 768px) {
-  #card-frame {
-    max-width: 640px;
-  }
-
-  .btn-season {
-    width: 72px;
-    margin: 8px;
-  }
-
-  .button-row {
-    max-width: 520px;
-  }
 }
