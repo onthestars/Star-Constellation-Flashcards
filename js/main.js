@@ -1,5 +1,5 @@
 // ===============================
-// 全カード（Q → other → A）
+// カード画像パス（遅延読み込み）
 // ===============================
 const images = [
   "image/other/card-top.png",
@@ -35,7 +35,6 @@ const images = [
   "image/summer/Q/card-Lyra-Q.png",
   "image/summer/Q/card-Aquila-Q.png",
   "image/summer/Q/card-Cygnus-Q.png",
-  "image/summer/other/card-Summer-Triangle.png",
   "image/summer/Q/card-Delphinus-Q.png",
   "image/summer/Q/card-Sagitta-Q.png",
   "image/summer/Q/card-Sagittarius-Q.png",
@@ -46,6 +45,9 @@ const images = [
   "image/summer/Q/card-Ophiuchus-Q.png",
   "image/summer/Q/card-Corona-Borealis-Q.png",
   "image/summer/Q/card-Corona-Australis-Q.png",
+
+  // 夏 other
+  "image/summer/other/card-Summer-Triangle.png",
 
   // 夏 A
   "image/summer/A/card-Lyra-A.png",
@@ -61,9 +63,6 @@ const images = [
   "image/summer/A/card-Ophiuchus-A.png",
   "image/summer/A/card-Corona-Borealis-A.png",
   "image/summer/A/card-Corona-Australis-A.png",
-
-  // 夏 other
-  "image/summer/other/card-Summer-Triangle.png",
 
   // 秋 Q
   "image/autumn/Q/card-Aquarius-Q.png",
@@ -102,9 +101,11 @@ const images = [
   "image/winter/Q/card-Orion-Q.png",
   "image/winter/Q/card-Canis-Major-Q.png",
   "image/winter/Q/card-Canis-Minor-Q.png",
-  "image/winter/other/card-Winter-Triangle.png",
   "image/winter/Q/card-Eridanus-Q.png",
   "image/winter/Q/card-Lepus-Q.png",
+
+  // 冬 other
+  "image/winter/other/card-Winter-Triangle.png",
 
   // 冬 A
   "image/winter/A/card-Gemini-A.png",
@@ -129,56 +130,41 @@ const images = [
   "image/south/A/card-Argo-Puppis-Vela-Carina-Pyxis-A.png"
 ];
 
-
 // ===============================
-// 裏面（Q ↔ A、other ↔ null）
+// 裏面パス
 // ===============================
 const backs = images.map((img, i) => {
-
   if (i === 0 || i === 1) return "image/common/card-null.png";
-
-  const isQ = img.includes("/Q/");
-  const isA = img.includes("/A/");
-  const isOther = img.includes("/other/");
-
-  if (isQ) {
-    return img.replace("/Q/", "/A/").replace("-Q.png", "-A.png");
-  }
-
-  if (isA) {
-    return img.replace("/A/", "/Q/").replace("-A.png", "-Q.png");
-  }
-
-  if (isOther) return "image/common/card-null.png";
-
+  if (img.includes("/Q/")) return img.replace("/Q/", "/A/").replace("-Q.png", "-A.png");
+  if (img.includes("/A/")) return img.replace("/A/", "/Q/").replace("-A.png", "-Q.png");
+  if (img.includes("/other/")) return "image/common/card-null.png";
   return "image/common/card-null.png";
 });
 
-
 // ===============================
-// 季節の開始 index
+// 季節開始 index
 // ===============================
 const seasonStart = {
   spring: 2,
   summer: 22,
-  autumn: 50,
-  winter: 76,
-  south: 93
+  autumn: 49,
+  winter: 75,
+  south: 92
 };
 
+const ARGO_Q_INDEX = 95;
 
-// ===============================
-// 状態
-// ===============================
 let index = 0;
 let isBack = false;
+let isFinalNull = false;
 
+let savedIndex = null;
+let savedIsBack = null;
 
 // ===============================
 // DOM
 // ===============================
 const viewer = document.querySelector("#card-area img");
-
 const prevBtn = document.getElementById("prevBtn");
 const flipBtn = document.getElementById("flipBtn");
 const nextBtn = document.getElementById("nextBtn");
@@ -189,91 +175,204 @@ const autumnBtn = document.getElementById("autumnBtn");
 const winterBtn = document.getElementById("winterBtn");
 const southBtn  = document.getElementById("southBtn");
 
+const specialBtn = document.getElementById("specialBtn");
+
+// Special写真 viewer
+const specialViewer = document.getElementById("special-viewer");
+const specialImg    = document.getElementById("special-img");
+const specialClose  = document.getElementById("special-close");
+const specialLines  = document.getElementById("special-lines");
+const specialClear  = document.getElementById("special-clear");
 
 // ===============================
-// 表示更新
+// 写真があるカードかどうか（春の大三角のみ）
 // ===============================
-function updateViewer() {
-  viewer.src = isBack ? backs[index] : images[index];
+function hasPhotoFor(i) {
+  return images[i].includes("Spring-Triangle");
 }
 
+// ===============================
+// ★ボタン状態更新
+// ===============================
+function updateSpecialButton() {
+  if (hasPhotoFor(index)) {
+    specialBtn.disabled = false;
+    specialBtn.style.opacity = 1;
+  } else {
+    specialBtn.disabled = true;
+    specialBtn.style.opacity = 0.4;
+  }
+}
 
 // ===============================
-// 季節ジャンプ
+// 表示更新（遅延読み込み）
+function updateViewer() {
+  if (isFinalNull) {
+    viewer.src = "image/common/card-null.png";
+    nextBtn.disabled = true;
+    nextBtn.style.opacity = 0.4;
+  } else {
+    viewer.src = isBack ? backs[index] : images[index];
+    nextBtn.disabled = false;
+    nextBtn.style.opacity = 1;
+  }
+
+  if (index === 0) {
+    prevBtn.disabled = true;
+    prevBtn.style.opacity = 0.4;
+  } else {
+    prevBtn.disabled = false;
+    prevBtn.style.opacity = 1;
+  }
+
+  updateSpecialButton();
+}
+
+// ===============================
+// A をスキップして次の Q/other を探す
+function findNextIndex(i) {
+  let n = i + 1;
+  while (n < images.length && images[n].includes("/A/")) n++;
+  return n;
+}
+
+// ===============================
+function findPrevIndex(i) {
+  let p = i - 1;
+  while (p >= 0 && images[p].includes("/A/")) p--;
+  return p;
+}
+
 // ===============================
 function jumpToSeason(season) {
   index = seasonStart[season];
   isBack = false;
+  isFinalNull = false;
   updateViewer();
 }
 
-
-// ===============================
-// 次のカード
 // ===============================
 nextBtn.onclick = () => {
+  if (isFinalNull) return;
 
-  // 表紙の裏 → 凡例へ
-  if (index === 0 && isBack === true) {
+  if (index === 0 && isBack) {
     index = 1;
     isBack = false;
     updateViewer();
     return;
   }
 
-  // 凡例の裏 → 春の1枚目へ
-  if (index === 1 && isBack === true) {
-    index = seasonStart.spring;  // 2
+  if (index === 1 && isBack) {
+    index = seasonStart.spring;
     isBack = false;
     updateViewer();
     return;
   }
 
-  // Aカードの裏面（backs[index] が A）→ 次の星座のQへ
-  if (isBack === true && backs[index].includes("/A/")) {
-    if (index < images.length - 1) {
-      index++;
+  if (!isBack && index === ARGO_Q_INDEX) {
+    isFinalNull = true;
+    isBack = true;
+    updateViewer();
+    return;
+  }
+
+  if (isBack && backs[index].includes("/A/")) {
+    let next = findNextIndex(index);
+    if (next >= images.length) {
+      isFinalNull = true;
+      isBack = true;
+      updateViewer();
+      return;
     }
+    index = next;
     isBack = false;
     updateViewer();
     return;
   }
 
-  // other の裏面（null）は進めない
-  if (isBack === true) return;
-
-  // 通常の進む処理
-  if (index < images.length - 1) {
-    index++;
+  if (isBack && images[index].includes("/other/")) {
+    let next = findNextIndex(index);
+    if (next >= images.length) {
+      isFinalNull = true;
+      isBack = true;
+      updateViewer();
+      return;
+    }
+    index = next;
+    isBack = false;
+    updateViewer();
+    return;
   }
 
+  if (isBack && backs[index] === "image/common/card-null.png") {
+    return;
+  }
+
+  let next = findNextIndex(index);
+  if (next >= images.length) {
+    isFinalNull = true;
+    isBack = true;
+    updateViewer();
+    return;
+  }
+
+  index = next;
   isBack = false;
   updateViewer();
 };
 
-
-// ===============================
-// 前のカード
 // ===============================
 prevBtn.onclick = () => {
-
-  if (index === 0 && isBack === true) return;
-
-  if (index > 0) {
-    index--;
+  if (isFinalNull) {
+    isFinalNull = false;
+    index = ARGO_Q_INDEX;
+    isBack = false;
+    updateViewer();
+    return;
   }
 
+  if (index === 0 && isBack) return;
+
+  if (isBack && backs[index].includes("/A/")) {
+    let prev = findPrevIndex(index);
+    if (prev >= 0) {
+      index = prev;
+      isBack = false;
+      updateViewer();
+    }
+    return;
+  }
+
+  if (isBack && images[index].includes("/other/")) {
+    let prev = findPrevIndex(index);
+    if (prev >= 0) {
+      index = prev;
+      isBack = false;
+      updateViewer();
+    }
+    return;
+  }
+
+  if (isBack && backs[index] === "image/common/card-null.png") {
+    return;
+  }
+
+  let prev = findPrevIndex(index);
+  if (prev >= 0) {
+    index = prev;
+  }
   isBack = false;
   updateViewer();
 };
 
-
-// ===============================
-// 表裏めくる（Q ↔ A、other ↔ null）
 // ===============================
 flipBtn.onclick = () => {
+  if (isFinalNull) {
+    isBack = true;
+    updateViewer();
+    return;
+  }
 
-  // null → other
   if (isBack && backs[index] === "image/common/card-null.png") {
     if (images[index].includes("/other/")) {
       isBack = false;
@@ -286,12 +385,73 @@ flipBtn.onclick = () => {
   updateViewer();
 };
 
+// ===============================
+// ★ボタン：Special写真表示
+// ===============================
+specialBtn.onclick = () => {
+  if (!hasPhotoFor(index)) return;
+
+  savedIndex = index;
+  savedIsBack = isBack;
+
+  specialImg.src = "image/spring/Special/pic-Spring-Triangle.jpg";
+  specialViewer.style.display = "flex";
+
+  nextBtn.disabled = true;
+  prevBtn.disabled = true;
+  flipBtn.disabled = true;
+
+  nextBtn.style.opacity = 0.4;
+  prevBtn.style.opacity = 0.4;
+  flipBtn.style.opacity = 0.4;
+};
 
 // ===============================
-// 季節ボタン
+// Special写真から戻る
+// ===============================
+if (specialClose) {
+  specialClose.onclick = () => {
+    specialViewer.style.display = "none";
+
+    index = savedIndex;
+    isBack = savedIsBack;
+
+    nextBtn.disabled = false;
+    prevBtn.disabled = (index === 0);
+    flipBtn.disabled = false;
+
+    nextBtn.style.opacity = 1;
+    prevBtn.style.opacity = (index === 0 ? 0.4 : 1);
+    flipBtn.style.opacity = 1;
+
+    updateViewer();
+  };
+}
+
+// ===============================
+// ⭐ 星座線を描くボタン
+// ===============================
+if (specialLines) {
+  specialLines.onclick = () => {
+    specialImg.src = "image/spring/Special/pic-lines-Spring-Triangle.jpg";
+  };
+}
+
+// ===============================
+// ⭐ 消すボタン（元の画像に戻す）
+// ===============================
+if (specialClear) {
+  specialClear.onclick = () => {
+    specialImg.src = "image/spring/Special/pic-Spring-Triangle.jpg";
+  };
+}
+
 // ===============================
 springBtn.onclick = () => jumpToSeason("spring");
 summerBtn.onclick = () => jumpToSeason("summer");
 autumnBtn.onclick = () => jumpToSeason("autumn");
 winterBtn.onclick = () => jumpToSeason("winter");
 southBtn.onclick  = () => jumpToSeason("south");
+
+// ===============================
+updateViewer();
