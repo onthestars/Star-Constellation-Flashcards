@@ -1,0 +1,25 @@
+body {
+  background-color: #0A0F2A;
+  margin: 0;
+  padding:0; 
+}
+
+/* カード枠（表面・裏面共通） */
+.card-frame {
+  width: 98vw;                /* 画面幅の98% */
+  aspect-ratio: 3 / 2;        /* 比率を固定（3:2） */
+  background-color: #0A0F2A;  /* 濃紺 */
+  margin: 0 auto;             /* 中央揃え */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;           /* はみ出し防止 */
+}
+
+/* カードの表示について */
+.card-img {
+  width: 98%;
+  height: auto;
+  object-fit: contain;
+}
+
