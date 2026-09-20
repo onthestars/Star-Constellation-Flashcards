@@ -55,7 +55,7 @@ body {
 .button-row {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 
   /* 横一列を維持しつつ、狭い画面では自動縮小 */
@@ -66,11 +66,11 @@ body {
    ★ 季節ボタン（自動縮小）
    =============================== */
 .btn-season {
-  width: 18vw;        /* 画面幅に応じて自動縮小 */
-  max-width: 72px;    /* 上限（広い画面） */
-  min-width: 42px;    /* 下限（狭い画面） */
+  width: 10vw;        /* 画面幅に応じて自動縮小 */
+  max-width: 64px;    /* 上限（広い画面） */
+  min-width: 32px;    /* 下限（狭い画面） */
   height: auto;
-  margin: 4px;
+  margin: 18px 0 12px 0;
 }
 
 /* ===============================
@@ -81,15 +81,15 @@ body {
   max-width: 96px;
   min-width: 42px;
   height: auto;
-  margin: 4px;
+  margin: 12px 0;
 }
 
 /* ===============================
    ★ Specialボタン（自動縮小）
    =============================== */
 .btn-special {
-  width: 20vw;
-  max-width: 80px;
+  width: 12vw;
+  max-width: 72px;
   min-width: 42px;
   height: auto;
 }
