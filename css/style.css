@@ -1,6 +1,6 @@
 /* ★ 画面全体：カードを中央に固定 */
 body {
-  background-color: #999999;
+  background-color: #ffffff;
   margin: 0;
   padding: 0;
 
@@ -12,20 +12,20 @@ body {
 
   height: 100vh;
 
-  border: solid 2px yellow;
+  /* border: solid 2px yellow; */
 }
 
 /* ★ カード枠（スマホ画面の黒枠） */
 #card-frame {
   width: 95vw;
   max-width: 800px;
-  background-color: #999999;
+  background-color: #ffffff;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  border: solid 2px white;
+  /* border: solid 2px white; */
 }
 
 /* ★ カード画像領域 */
@@ -34,7 +34,7 @@ body {
   display: flex;
   justify-content: center;
 
-  border: solid 2px blue;
+  /* border: solid 2px blue; */
 }
 
 .card-img {
