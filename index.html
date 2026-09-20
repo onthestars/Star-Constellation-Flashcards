@@ -5,46 +5,19 @@
   <meta charset="UTF-8">
   <title>星座カード</title>
 
-  <style>
-    /* Special写真 viewer（画面全体に表示） */
-    #special-viewer {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.85);
-      z-index: 9999;
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/special-viewer.css">
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #special-img {
-      max-width: 95vw;
-      max-height: 85vh;
-      object-fit: contain;
-    }
-
-    #special-close {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 20px;
-    }
-  </style>
 </head>
 
 <body>
 
-  <h1>【開発中】星座カード</h1>
-
   <!-- カード表示エリア -->
-  <div id="card-area">
-    <img src="image/other/card-top.png" alt="星座カード">
+<div id="card-area">
+  <div class="card-frame" id="card-front">
+    <img src="image/cards/spring_triangle.jpg" class="card-img">
   </div>
+</div>
 
   <!-- 操作ボタン -->
   <div id="controls">
