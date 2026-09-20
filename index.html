@@ -47,14 +47,35 @@
   </div>
 
   <!-- ★ Special viewer（写真表示用） -->
-  <div id="special-viewer" style="display:none;">
+  <!-- <div id="special-viewer" style="display:none;">
     <img id="special-img" src="" alt="Special画像">
     <div class="special-controls">
       <button id="special-lines">星座線を描く</button>
       <button id="special-clear">消す</button>
       <button id="special-close">閉じる</button>
     </div>
+  </div> -->
+
+<div id="special-viewer" style="display:none;">
+
+  <!-- ★ Special画像（必須） -->
+  <img id="special-img" src="" alt="Special画像">
+
+  <!-- ★ ボタン1段目 -->
+  <div class="special-controls-row">
+    <img src="image/common/btn-back.png"  id="special-prev"  class="special-btn" alt="前へ">
+    <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線あり">
+    <img src="image/common/btn-3stars.png" id="special-clear" class="special-btn" alt="星座線なし">
+    <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
   </div>
+
+  <!-- ★ ボタン2段目（閉じる） -->
+  <div class="special-controls-row">
+    <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
+  </div>
+
+</div>
+
 
   <script src="js/main.js"></script>
 </body>
