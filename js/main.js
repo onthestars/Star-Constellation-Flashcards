@@ -164,7 +164,7 @@ let savedIsBack = null;
 // ===============================
 // DOM
 // ===============================
-const viewer = document.querySelector("#card-area img");
+const viewer = document.getElementById("card-img");
 const prevBtn = document.getElementById("prevBtn");
 const flipBtn = document.getElementById("flipBtn");
 const nextBtn = document.getElementById("nextBtn");
