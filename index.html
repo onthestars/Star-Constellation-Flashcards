@@ -4,55 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <title>星座カード</title>
-
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/special-viewer.css">
-
 </head>
 
 <body>
 
-  <!-- カード表示エリア -->
-<div id="card-area">
-  <div class="card-frame" id="card-front">
-    <img src="image/cards/spring_triangle.jpg" class="card-img">
+  <!-- ★ カード枠（スマホ画面の黒枠） -->
+  <div id="card-frame">
+
+    <!-- ★ カード画像（最初は表紙。JSが差し替える） -->
+    <div class="card-image-area">
+      <img src="image/other/card-top.png" id="card-img" class="card-img">
+    </div>
+
+    <!-- ★ 四季ボタンブロック -->
+    <div class="season-block">
+      <div class="button-row season-row">
+        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn">
+        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn">
+        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn">
+        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn">
+        <img src="image/common/btn-south.png" class="btn-season" id="southBtn">
+      </div>
+    </div>
+
+    <!-- ★ 操作ボタンブロック -->
+    <div class="control-block">
+      <div class="button-row control-row">
+        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn">
+        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn">
+        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn">
+      </div>
+    </div>
+
+    <!-- ★ Special viewer ボタンブロック -->
+    <div class="special-block">
+      <div class="button-row special-row">
+        <img src="image/common/btn-star.png" class="btn-special" id="specialBtn">
+      </div>
+    </div>
+
   </div>
-</div>
 
-  <!-- 操作ボタン -->
-  <div id="controls">
-    <button id="prevBtn">前のカード</button>
-    <button id="flipBtn">表／裏めくる</button>
-    <button id="nextBtn">次のカード</button>
-  </div>
-
-  <!-- 季節ボタン -->
-  <div id="season-buttons">
-    <button id="springBtn">春</button>
-    <button id="summerBtn">夏</button>
-    <button id="autumnBtn">秋</button>
-    <button id="winterBtn">冬</button>
-    <button id="southBtn">南</button>
-
-    <!-- ★ボタン -->
-    <button id="specialBtn" disabled style="opacity:0.4;">★</button>
-  </div>
-
-<!-- ★ Special写真 viewer（必須） -->
-<div id="special-viewer" style="display:none;">
-  <img id="special-img" src="">
-
-  <div id="special-buttons">
-    <button id="special-close">戻る</button>
-    <button id="special-lines">星座線を描く</button>
-    <button id="special-clear">消す</button>
-  </div>
-</div>
-
-
-  <!-- 外部 JavaScript -->
   <script src="js/main.js"></script>
-
 </body>
 
 </html>
