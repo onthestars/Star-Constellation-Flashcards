@@ -51,20 +51,19 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 /* ★ 季節ボタン（基準サイズ） */
 .btn-season {
-  width: 48px;
+  width: 56px;
   height: auto;
   margin:12px;
 }
 
-/* ★ 操作ボタン（季節ボタンの1.5倍） */
+/* ★ 操作ボタン */
 .btn-control {
-  width: 72px;
-  /* 48px × 1.5 */
+  width: 90px;
   height: auto;
   margin:0 16px;
 }
