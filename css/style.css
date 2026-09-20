@@ -1,80 +1,101 @@
-/* ★ 画面全体：カードを中央に固定 */
+/* ===============================
+   ★ 画面全体：カードを中央に固定
+   =============================== */
 body {
   background-color: #ffffff;
   margin: 0;
   padding: 0;
 
   display: flex;
-  justify-content: center;
-  /* 左右中央 */
-  align-items: center;
-  /* 上下中央 */
+  justify-content: center;   /* 左右中央 */
+  align-items: center;       /* 上下中央 */
 
   height: 98vh;
-
-  /* border: solid 2px yellow; */
 }
 
-/* ★ カード枠（スマホ画面の黒枠） */
+/* ===============================
+   ★ カード枠
+   =============================== */
 #card-frame {
   width: 95vw;
-  max-width: 800px;
+  max-width: 480px;          /* ← Xperia 5V でも暴走しない */
   background-color: #ffffff;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  /* border: solid 2px white; */
+  border: solid 2px green;
 }
 
-/* ★ カード画像領域 */
+/* ===============================
+   ★ カード画像領域
+   =============================== */
 .card-image-area {
   width: 100%;
   display: flex;
   justify-content: center;
 
-  /* border: solid 2px blue; */
+  border: solid 2px blue;
 }
 
 .card-img {
   width: 100%;
+  max-width: 480px;          /* ← 画像の暴走防止 */
   height: auto;
-  max-width: 100%;
   object-fit: contain;
+
+  border: solid 2px violet;
 }
 
-/* ★ ボタン行（横一列に並べる） */
+/* ===============================
+   ★ ボタン行（横一列）
+   =============================== */
 .button-row {
-  width: 70%;
-  /* ← 最重要：カード枠の幅に合わせる */
+  width: 90%;                /* ← 80% → 90% にしてズレ防止 */
+  max-width: 520px;          /* ← 460px → 520px に拡張してズレ完全解消 */
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
+
+  border: solid 2px black;
 }
 
-/* ★ 季節ボタン（基準サイズ） */
+/* ===============================
+   ★ 季節ボタン
+   =============================== */
 .btn-season {
-  width: 72px;
+  width: 18vw;               /* ← スマホ幅に応じて自動調整 */
+  max-width: 64px;           /* ← 72px → 64px にしてズレ解消 */
   height: auto;
-  margin:20px;
+  margin: 8px;               /* ← 16px → 8px に縮小して衝突防止 */
+
+  border: solid 3px gold;
 }
 
-/* ★ 操作ボタン */
+/* ===============================
+   ★ 操作ボタン
+   =============================== */
 .btn-control {
-  width: 112px;
+  width: 22vw;               /* ← 自動調整 */
+  max-width: 112px;          /* ← 上限は維持 */
   height: auto;
-  margin:0 16px;
+  margin: 0 12px;
 }
 
-/* ★ Specialボタン（1.5倍） */
+/* ===============================
+   ★ Specialボタン
+   =============================== */
 .btn-special {
-  width: 80px;
+  width: 20vw;
+  max-width: 80px;
   height: auto;
 }
 
-/* ★ 無効化されたボタン（半透明＋押せない） */
+/* ===============================
+   ★ 無効化されたボタン
+   =============================== */
 .disabled {
   opacity: 0.5;
   pointer-events: none;
