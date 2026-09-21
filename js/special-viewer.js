@@ -8,6 +8,9 @@ let specialMode  = "normal";   // "normal" or "lines"
 let savedIndex   = null;
 let savedIsBack  = null;
 
+// ★ Special viewer 用アニメーション
+let spAnimationClass = null;
+
 // DOM
 const specialViewer = document.getElementById("special-viewer");
 const specialImg    = document.getElementById("special-img");
@@ -16,9 +19,6 @@ const specialLines  = document.getElementById("special-lines");
 const specialClear  = document.getElementById("special-clear");
 const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
-// ★ specialBtn は main.js で取得済みなので、ここでは宣言しない
-// const specialBtn = document.getElementById("specialBtn");
-
 
 // =====================================
 // 星座名を index から取得（今は固定）
@@ -63,7 +63,7 @@ specialBtn.onclick = () => {
   savedIsBack = isBack;
 
   specialIndex = 0;
-  specialMode  = "normal";  // ★最初は必ず線なし
+  specialMode  = "normal";
 
   const starName = getStarNameFromIndex(index);
   specialImg.src = "image/spring/Special/" + specialPhotos[starName].normal[0];
@@ -103,10 +103,25 @@ specialClose.onclick = () => {
 };
 
 // =====================================
+// ★ アニメ適用（共通処理）
+// =====================================
+function applySpecialAnimation() {
+  specialImg.classList.remove("sp-slide-next", "sp-slide-prev", "sp-fade");
+  void specialImg.offsetWidth; // 強制リフロー
+  if (spAnimationClass) {
+    specialImg.classList.add(spAnimationClass);
+    spAnimationClass = null;
+  }
+}
+
+// =====================================
 // ★ 星座線なし（specialIndex を維持）
 // =====================================
 specialLines.onclick = () => {
   specialMode = "normal";
+
+  spAnimationClass = "sp-fade";
+  applySpecialAnimation();
 
   const starName = getStarNameFromIndex(savedIndex);
   specialImg.src = "image/spring/Special/" + specialPhotos[starName].normal[specialIndex];
@@ -119,6 +134,9 @@ specialLines.onclick = () => {
 // =====================================
 specialClear.onclick = () => {
   specialMode = "lines";
+
+  spAnimationClass = "sp-fade";
+  applySpecialAnimation();
 
   const starName = getStarNameFromIndex(savedIndex);
   specialImg.src = "image/spring/Special/" + specialPhotos[starName].lines[specialIndex];
@@ -135,8 +153,10 @@ specialNext.onclick = () => {
   if (specialIndex < specialPhotos[starName].normal.length - 1) {
     specialIndex++;
 
-    // ★別の写真に移るときは必ず線なしに戻す
     specialMode = "normal";
+
+    spAnimationClass = "sp-slide-next";
+    applySpecialAnimation();
 
     specialImg.src = "image/spring/Special/" + specialPhotos[starName].normal[specialIndex];
   }
@@ -153,8 +173,10 @@ specialPrev.onclick = () => {
   if (specialIndex > 0) {
     specialIndex--;
 
-    // ★別の写真に戻るときも必ず線なしに戻す
     specialMode = "normal";
+
+    spAnimationClass = "sp-slide-prev";
+    applySpecialAnimation();
 
     specialImg.src = "image/spring/Special/" + specialPhotos[starName].normal[specialIndex];
   }
@@ -162,32 +184,27 @@ specialPrev.onclick = () => {
   updateSpecialButtons();
 };
 
-/* ===============================
-   ★ Special viewer のスワイプ操作
-   =============================== */
+// =====================================
+// ★ Special viewer のスワイプ操作
+// =====================================
+let spStartX = 0;
+let spEndX = 0;
 
-    let spStartX=0;
-    let spEndX=0;
+specialImg.addEventListener("touchstart", (e) => {
+  spStartX = e.touches[0].clientX;
+});
 
-    const spImg=document.getElementById("special-img");
+specialImg.addEventListener("touchend", (e) => {
+  spEndX = e.changedTouches[0].clientX;
+  const diff = spEndX - spStartX;
 
-    spImg.addEventListener("touchstart", (e)=> {
-        spStartX=e.touches[0].clientX;
-      });
+  if (Math.abs(diff) < 50) return;
 
-    spImg.addEventListener("touchend", (e)=> {
-        spEndX=e.changedTouches[0].clientX;
-        const diff=spEndX - spStartX;
-
-        if (Math.abs(diff) < 50) return;
-
-        if (diff < 0) {
-          // 左へスワイプ → 次へ
-          document.getElementById("special-next").onclick();
-        }
-
-        else {
-          // 右へスワイプ → 前へ
-          document.getElementById("special-prev").onclick();
-        }
-      });
+  if (diff < 0) {
+    spAnimationClass = "sp-slide-next";
+    specialNext.onclick();
+  } else {
+    spAnimationClass = "sp-slide-prev";
+    specialPrev.onclick();
+  }
+});
