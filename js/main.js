@@ -446,12 +446,11 @@ viewer.addEventListener("touchend", (e) => {
 
   if (diff < 0) {
     // 左へスワイプ → 次へ
-    animationClass = "fade-enter";  // ★ 最小限フェード
+    animationClass = "fade";  // ★ 既存のフェードアニメを使う
     nextBtn.onclick();
   } else {
     // 右へスワイプ → 前へ
-    animationClass = "fade-enter";  // ★ 最小限フェード
+    animationClass = "fade";  // ★ 既存のフェードアニメを使う
     prevBtn.onclick();
   }
 });
-
