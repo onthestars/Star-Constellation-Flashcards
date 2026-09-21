@@ -154,6 +154,7 @@ const seasonStart = {
 
 const ARGO_Q_INDEX = 95;
 
+let currentSeason = null;   // ★ 追加：現在の季節を記録
 let index = 0;
 let isBack = false;
 let isFinalNull = false;
@@ -229,13 +230,25 @@ function findPrevIndex(i) {
   return p;
 }
 
+function updateSeasonHighlight() {
+  document.querySelectorAll('.season-wrap').forEach(wrap => {
+    const season = wrap.dataset.season;
+    wrap.classList.toggle('active-season', season === currentSeason);
+  });
+}
+
+
 // ===============================
 function jumpToSeason(season) {
+  currentSeason = season;       // ★ 追加：現在の季節を記録
+  updateSeasonHighlight();      // ★ 追加：ボタン枠線を更新
+
   index = seasonStart[season];
   isBack = false;
   isFinalNull = false;
   updateViewer();
 }
+
 
 // ===============================
 nextBtn.onclick = () => {
