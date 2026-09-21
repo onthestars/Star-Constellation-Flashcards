@@ -166,10 +166,13 @@ function detectSeasonByIndex(i) {
 
 const ARGO_Q_INDEX = 95;
 
-let currentSeason = null;   // ★ 追加：現在の季節を記録
+let currentSeason = null;
 let index = 0;
 let isBack = false;
 let isFinalNull = false;
+
+// ★ 追加：アニメーション用
+let animationClass = null;
 
 // ===============================
 // DOM
@@ -231,8 +234,10 @@ function updateSeasonButtons() {
 // 季節ジャンプ
 // ===============================
 function jumpToSeason(season) {
-  currentSeason = season;       // ★ 現在の季節を記録
-  updateSeasonButtons();        // ★ ボタン画像を差し替える
+  animationClass = "fade";   // ★ 季節変更はフェード
+
+  currentSeason = season;
+  updateSeasonButtons();
 
   index = seasonStart[season];
   isBack = false;
@@ -259,7 +264,17 @@ function updateSpecialButton() {
 }
 
 // ===============================
+// ★ updateViewer（アニメーション統合済）
+// ===============================
 function updateViewer() {
+
+  // ★ アニメーション適用
+  if (animationClass) {
+    viewer.classList.remove("slide-in-right", "slide-in-left", "flip", "fade");
+    void viewer.offsetWidth; // ← 強制リフロー
+    viewer.classList.add(animationClass);
+    animationClass = null;
+  }
 
   // ★ 最終カードのときは季節ボタンをリセット
   if (isFinalNull) {
@@ -267,12 +282,12 @@ function updateViewer() {
     nextBtn.disabled = true;
     nextBtn.style.opacity = 0.4;
 
-    currentSeason = null;       // ★ 季節を無効化
-    updateSeasonButtons();      // ★ 全ボタンを normal に戻す
-    return;                     // ★ 季節判定を行わず終了
+    currentSeason = null;
+    updateSeasonButtons();
+    return;
   }
 
-  // ここから通常カードの処理
+  // 通常カード
   viewer.src = isBack ? backs[index] : images[index];
   nextBtn.disabled = false;
   nextBtn.style.opacity = 1;
@@ -287,7 +302,7 @@ function updateViewer() {
 
   updateSpecialButton();
 
-  // ★ 通常カードのときだけ季節判定を行う
+  // ★ 季節自動判定
   const autoSeason = detectSeasonByIndex(index);
   if (autoSeason !== currentSeason) {
     currentSeason = autoSeason;
@@ -310,7 +325,11 @@ function findPrevIndex(i) {
 }
 
 // ===============================
+// 次へ（右→左スライド）
+// ===============================
 nextBtn.onclick = () => {
+  animationClass = "slide-in-right";
+
   if (isFinalNull) return;
 
   if (index === 0 && isBack) {
@@ -380,7 +399,11 @@ nextBtn.onclick = () => {
 };
 
 // ===============================
+// 前へ（左→右スライド）
+// ===============================
 prevBtn.onclick = () => {
+  animationClass = "slide-in-left";
+
   if (isFinalNull) {
     isFinalNull = false;
     index = ARGO_Q_INDEX;
@@ -424,7 +447,11 @@ prevBtn.onclick = () => {
 };
 
 // ===============================
+// 表／裏（フリップ）
+// ===============================
 flipBtn.onclick = () => {
+  animationClass = "flip";
+
   if (isFinalNull) {
     isBack = true;
     updateViewer();
@@ -443,6 +470,8 @@ flipBtn.onclick = () => {
   updateViewer();
 };
 
+// ===============================
+// 季節ボタン
 // ===============================
 springBtn.onclick = () => jumpToSeason("spring");
 summerBtn.onclick = () => jumpToSeason("summer");
