@@ -97,11 +97,11 @@ body {
    ★ 操作ボタン（自動縮小）
    =============================== */
 .btn-control {
-  width: 20vw;
-  max-width: 96px;
+  width: 18vw;
+  max-width: 90px;
   min-width: 42px;
   height: auto;
-  margin: 12px 0;
+  margin: 12px -50px;
 }
 
 /* ===============================
