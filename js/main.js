@@ -152,6 +152,18 @@ const seasonStart = {
   south: 92
 };
 
+// ===============================
+// index から季節を判定する
+// ===============================
+function detectSeasonByIndex(i) {
+  if (i >= seasonStart.spring && i < seasonStart.summer) return "spring";
+  if (i >= seasonStart.summer && i < seasonStart.autumn) return "summer";
+  if (i >= seasonStart.autumn && i < seasonStart.winter) return "autumn";
+  if (i >= seasonStart.winter && i < seasonStart.south) return "winter";
+  if (i >= seasonStart.south) return "south";
+  return null;
+}
+
 const ARGO_Q_INDEX = 95;
 
 let currentSeason = null;   // ★ 追加：現在の季節を記録
@@ -248,15 +260,22 @@ function updateSpecialButton() {
 
 // ===============================
 function updateViewer() {
+
+  // ★ 最終カードのときは季節ボタンをリセット
   if (isFinalNull) {
     viewer.src = "image/common/card-null.png";
     nextBtn.disabled = true;
     nextBtn.style.opacity = 0.4;
-  } else {
-    viewer.src = isBack ? backs[index] : images[index];
-    nextBtn.disabled = false;
-    nextBtn.style.opacity = 1;
+
+    currentSeason = null;       // ★ 季節を無効化
+    updateSeasonButtons();      // ★ 全ボタンを normal に戻す
+    return;                     // ★ 季節判定を行わず終了
   }
+
+  // ここから通常カードの処理
+  viewer.src = isBack ? backs[index] : images[index];
+  nextBtn.disabled = false;
+  nextBtn.style.opacity = 1;
 
   if (index === 0) {
     prevBtn.disabled = true;
@@ -267,6 +286,13 @@ function updateViewer() {
   }
 
   updateSpecialButton();
+
+  // ★ 通常カードのときだけ季節判定を行う
+  const autoSeason = detectSeasonByIndex(index);
+  if (autoSeason !== currentSeason) {
+    currentSeason = autoSeason;
+    updateSeasonButtons();
+  }
 }
 
 // ===============================
