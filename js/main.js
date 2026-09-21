@@ -176,6 +176,59 @@ const southBtn  = document.getElementById("southBtn");
 const specialBtn = document.getElementById("specialBtn");
 
 // ===============================
+// カレント季節ボタン画像
+// ===============================
+const seasonImages = {
+  spring: {
+    normal: "image/common/btn-spring.png",
+    active: "image/common/btn-spring-active.png"
+  },
+  summer: {
+    normal: "image/common/btn-summer.png",
+    active: "image/common/btn-summer-active.png"
+  },
+  autumn: {
+    normal: "image/common/btn-autumn.png",
+    active: "image/common/btn-autumn-active.png"
+  },
+  winter: {
+    normal: "image/common/btn-winter.png",
+    active: "image/common/btn-winter-active.png"
+  },
+  south: {
+    normal: "image/common/btn-south.png",
+    active: "image/common/btn-south-active.png"
+  }
+};
+
+// ===============================
+// カレント季節ボタンの画像を切り替える
+// ===============================
+function updateSeasonButtons() {
+  document.querySelectorAll('.btn-season').forEach(btn => {
+    const season = btn.dataset.season;
+    if (season === currentSeason) {
+      btn.src = seasonImages[season].active;
+    } else {
+      btn.src = seasonImages[season].normal;
+    }
+  });
+}
+
+// ===============================
+// 季節ジャンプ
+// ===============================
+function jumpToSeason(season) {
+  currentSeason = season;       // ★ 現在の季節を記録
+  updateSeasonButtons();        // ★ ボタン画像を差し替える
+
+  index = seasonStart[season];
+  isBack = false;
+  isFinalNull = false;
+  updateViewer();
+}
+
+// ===============================
 // Special viewer が存在するカードか
 // ===============================
 function hasPhotoFor(i) {
@@ -229,26 +282,6 @@ function findPrevIndex(i) {
   while (p >= 0 && images[p].includes("/A/")) p--;
   return p;
 }
-
-function updateSeasonHighlight() {
-  document.querySelectorAll('.season-wrap').forEach(wrap => {
-    const season = wrap.dataset.season;
-    wrap.classList.toggle('active-season', season === currentSeason);
-  });
-}
-
-
-// ===============================
-function jumpToSeason(season) {
-  currentSeason = season;       // ★ 追加：現在の季節を記録
-  updateSeasonHighlight();      // ★ 追加：ボタン枠線を更新
-
-  index = seasonStart[season];
-  isBack = false;
-  isFinalNull = false;
-  updateViewer();
-}
-
 
 // ===============================
 nextBtn.onclick = () => {
