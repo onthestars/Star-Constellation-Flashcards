@@ -161,3 +161,33 @@ specialPrev.onclick = () => {
 
   updateSpecialButtons();
 };
+
+/* ===============================
+   ★ Special viewer のスワイプ操作
+   =============================== */
+
+    let spStartX=0;
+    let spEndX=0;
+
+    const spImg=document.getElementById("special-img");
+
+    spImg.addEventListener("touchstart", (e)=> {
+        spStartX=e.touches[0].clientX;
+      });
+
+    spImg.addEventListener("touchend", (e)=> {
+        spEndX=e.changedTouches[0].clientX;
+        const diff=spEndX - spStartX;
+
+        if (Math.abs(diff) < 50) return;
+
+        if (diff < 0) {
+          // 左へスワイプ → 次へ
+          document.getElementById("special-next").onclick();
+        }
+
+        else {
+          // 右へスワイプ → 前へ
+          document.getElementById("special-prev").onclick();
+        }
+      });
