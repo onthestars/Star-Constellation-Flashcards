@@ -88,7 +88,7 @@ body {
 .btn-special {
   width: 12vw;
   max-width: 72px;
-  min-width: 42px;
+  min-width: 38px;
   height: auto;
 }
 
@@ -138,9 +138,10 @@ body {
    ★ Special viewer の画像ボタン（サイズ固定）
    =============================== */
 .special-btn {
+    width: 12vw;
   width: 48px;        /* ← これで巨大化しない */
   height: auto;
-  max-width: 48px;
+  max-width: 38px;
   cursor: pointer;
   margin: 6px 8px;
 }
