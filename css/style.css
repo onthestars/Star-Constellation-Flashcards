@@ -324,12 +324,14 @@ body {
   }
 
   /* ★ ボタンサイズを約30%に縮小 */
+@media (orientation: landscape) {
   .btn-season {
-    width: 6vw;
-    max-width: 40px;
-    min-width: 24px;
-    margin: 6px 0;            /* ← margin も少し詰める */
+    width: 4.5vw;       /* ← 6vw → 4.5vw（約75%） */
+    max-width: 30px;    /* ← 40px → 30px */
+    min-width: 20px;    /* ← 24px → 20px */
+    margin: 4px 0;      /* ← さらに余白を詰める */
   }
+}
 
   .btn-control {
     width: 10vw;
