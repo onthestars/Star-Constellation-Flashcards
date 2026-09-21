@@ -171,7 +171,7 @@ let index = 0;
 let isBack = false;
 let isFinalNull = false;
 
-// ★ 追加：アニメーション用
+// ★ アニメーション用
 let animationClass = null;
 
 // ===============================
@@ -270,7 +270,7 @@ function updateViewer() {
 
   // ★ アニメーション適用
   if (animationClass) {
-    viewer.classList.remove("slide-in-right", "slide-in-left", "flip", "fade", "page-turn-out", "page-turn-in");
+    viewer.classList.remove("slide-in-next", "slide-in-prev", "flip", "fade");
     void viewer.offsetWidth; // ← 強制リフロー
     viewer.classList.add(animationClass);
     animationClass = null;
@@ -325,66 +325,64 @@ function findPrevIndex(i) {
 }
 
 // ===============================
-// 次へ（ページめくり風）
+// 次へ（右 → 左スライドイン）
 // ===============================
 nextBtn.onclick = () => {
   if (isFinalNull) return;
 
-  nextBtn.disabled = true; // ★ 追加：アニメーション中は無効化
-  viewer.classList.add("page-turn-out");
+  nextBtn.disabled = true;
+
+  animationClass = "slide-in-next";
+
+  let next = findNextIndex(index);
+
+  if (next >= images.length) {
+    isFinalNull = true;
+    isBack = true;
+    updateViewer();
+    nextBtn.disabled = false;
+    return;
+  }
+
+  index = next;
+  isBack = false;
+  updateViewer();
 
   setTimeout(() => {
-    let next = findNextIndex(index);
-    if (next >= images.length) {
-      isFinalNull = true;
-      isBack = true;
-      updateViewer();
-      nextBtn.disabled = false; // ★ 再有効化
-      return;
-    }
-    index = next;
-    isBack = false;
-    updateViewer();
-
-    viewer.classList.remove("page-turn-out");
-    viewer.classList.add("page-turn-in");
-    setTimeout(() => {
-      viewer.classList.remove("page-turn-in");
-      nextBtn.disabled = false; // ★ 再有効化
-    }, 600);
+    nextBtn.disabled = false;
   }, 600);
 };
 
 // ===============================
-// 前へ（ページめくり風）
+// 前へ（左 → 右スライドイン）
 // ===============================
 prevBtn.onclick = () => {
-  prevBtn.disabled = true; // ★ 追加：アニメーション中は無効化
-  viewer.classList.add("page-turn-out");
+  prevBtn.disabled = true;
+
+  animationClass = "slide-in-prev";
+
+  if (isFinalNull) {
+    isFinalNull = false;
+    index = ARGO_Q_INDEX;
+    isBack = false;
+    updateViewer();
+
+    setTimeout(() => {
+      prevBtn.disabled = false;
+    }, 600);
+    return;
+  }
+
+  let prev = findPrevIndex(index);
+
+  if (prev >= 0) {
+    index = prev;
+    isBack = false;
+    updateViewer();
+  }
 
   setTimeout(() => {
-    if (isFinalNull) {
-      isFinalNull = false;
-      index = ARGO_Q_INDEX;
-      isBack = false;
-      updateViewer();
-      prevBtn.disabled = false; // ★ 再有効化
-      return;
-    }
-
-    let prev = findPrevIndex(index);
-    if (prev >= 0) {
-      index = prev;
-      isBack = false;
-      updateViewer();
-    }
-
-    viewer.classList.remove("page-turn-out");
-    viewer.classList.add("page-turn-in");
-    setTimeout(() => {
-      viewer.classList.remove("page-turn-in");
-      prevBtn.disabled = false; // ★ 再有効化
-    }, 600);
+    prevBtn.disabled = false;
   }, 600);
 };
 
@@ -392,13 +390,14 @@ prevBtn.onclick = () => {
 // 表／裏（フリップ）
 // ===============================
 flipBtn.onclick = () => {
-  flipBtn.disabled = true; // ★ 追加：アニメーション中は無効化
+  flipBtn.disabled = true;
+
   animationClass = "flip";
 
   if (isFinalNull) {
     isBack = true;
     updateViewer();
-    flipBtn.disabled = false; // ★ 再有効化
+    flipBtn.disabled = false;
     return;
   }
 
@@ -406,7 +405,7 @@ flipBtn.onclick = () => {
     if (images[index].includes("/other/")) {
       isBack = false;
       updateViewer();
-      flipBtn.disabled = false; // ★ 再有効化
+      flipBtn.disabled = false;
       return;
     }
   }
@@ -414,20 +413,34 @@ flipBtn.onclick = () => {
   isBack = !isBack;
   updateViewer();
 
-  // ★ アニメーション終了後に再有効化
   setTimeout(() => {
     flipBtn.disabled = false;
   }, 400);
 };
 
 // ===============================
-// 季節ボタン
+// 季節ボタン（フェード）
 // ===============================
-springBtn.onclick = () => jumpToSeason("spring");
-summerBtn.onclick = () => jumpToSeason("summer");
-autumnBtn.onclick = () => jumpToSeason("autumn");
-winterBtn.onclick = () => jumpToSeason("winter");
-southBtn.onclick  = () => jumpToSeason("south");
+springBtn.onclick = () => {
+  animationClass = "fade";
+  jumpToSeason("spring");
+};
+summerBtn.onclick = () => {
+  animationClass = "fade";
+  jumpToSeason("summer");
+};
+autumnBtn.onclick = () => {
+  animationClass = "fade";
+  jumpToSeason("autumn");
+};
+winterBtn.onclick = () => {
+  animationClass = "fade";
+  jumpToSeason("winter");
+};
+southBtn.onclick  = () => {
+  animationClass = "fade";
+  jumpToSeason("south");
+};
 
 // ===============================
 updateViewer();
