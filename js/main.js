@@ -270,7 +270,7 @@ function updateViewer() {
 
   // ★ アニメーション適用
   if (animationClass) {
-    viewer.classList.remove("slide-in-right", "slide-in-left", "flip", "fade");
+    viewer.classList.remove("slide-in-right", "slide-in-left", "flip", "fade", "page-turn-out", "page-turn-in");
     void viewer.offsetWidth; // ← 強制リフロー
     viewer.classList.add(animationClass);
     animationClass = null;
@@ -325,136 +325,80 @@ function findPrevIndex(i) {
 }
 
 // ===============================
-// 次へ（右→左スライド）
+// 次へ（ページめくり風）
 // ===============================
 nextBtn.onclick = () => {
-  animationClass = "slide-in-right";
-
   if (isFinalNull) return;
 
-  if (index === 0 && isBack) {
-    index = 1;
-    isBack = false;
-    updateViewer();
-    return;
-  }
+  nextBtn.disabled = true; // ★ 追加：アニメーション中は無効化
+  viewer.classList.add("page-turn-out");
 
-  if (index === 1 && isBack) {
-    index = seasonStart.spring;
-    isBack = false;
-    updateViewer();
-    return;
-  }
-
-  if (!isBack && index === ARGO_Q_INDEX) {
-    isFinalNull = true;
-    isBack = true;
-    updateViewer();
-    return;
-  }
-
-  if (isBack && backs[index].includes("/A/")) {
+  setTimeout(() => {
     let next = findNextIndex(index);
     if (next >= images.length) {
       isFinalNull = true;
       isBack = true;
       updateViewer();
+      nextBtn.disabled = false; // ★ 再有効化
       return;
     }
     index = next;
     isBack = false;
     updateViewer();
-    return;
-  }
 
-  if (isBack && images[index].includes("/other/")) {
-    let next = findNextIndex(index);
-    if (next >= images.length) {
-      isFinalNull = true;
-      isBack = true;
-      updateViewer();
-      return;
-    }
-    index = next;
-    isBack = false;
-    updateViewer();
-    return;
-  }
-
-  if (isBack && backs[index] === "image/common/card-null.png") {
-    return;
-  }
-
-  let next = findNextIndex(index);
-  if (next >= images.length) {
-    isFinalNull = true;
-    isBack = true;
-    updateViewer();
-    return;
-  }
-
-  index = next;
-  isBack = false;
-  updateViewer();
+    viewer.classList.remove("page-turn-out");
+    viewer.classList.add("page-turn-in");
+    setTimeout(() => {
+      viewer.classList.remove("page-turn-in");
+      nextBtn.disabled = false; // ★ 再有効化
+    }, 600);
+  }, 600);
 };
 
 // ===============================
-// 前へ（左→右スライド）
+// 前へ（ページめくり風）
 // ===============================
 prevBtn.onclick = () => {
-  animationClass = "slide-in-left";
+  prevBtn.disabled = true; // ★ 追加：アニメーション中は無効化
+  viewer.classList.add("page-turn-out");
 
-  if (isFinalNull) {
-    isFinalNull = false;
-    index = ARGO_Q_INDEX;
-    isBack = false;
-    updateViewer();
-    return;
-  }
+  setTimeout(() => {
+    if (isFinalNull) {
+      isFinalNull = false;
+      index = ARGO_Q_INDEX;
+      isBack = false;
+      updateViewer();
+      prevBtn.disabled = false; // ★ 再有効化
+      return;
+    }
 
-  if (index === 0 && isBack) return;
-
-  if (isBack && backs[index].includes("/A/")) {
     let prev = findPrevIndex(index);
     if (prev >= 0) {
       index = prev;
       isBack = false;
       updateViewer();
     }
-    return;
-  }
 
-  if (isBack && images[index].includes("/other/")) {
-    let prev = findPrevIndex(index);
-    if (prev >= 0) {
-      index = prev;
-      isBack = false;
-      updateViewer();
-    }
-    return;
-  }
-
-  if (isBack && backs[index] === "image/common/card-null.png") {
-    return;
-  }
-
-  let prev = findPrevIndex(index);
-  if (prev >= 0) {
-    index = prev;
-  }
-  isBack = false;
-  updateViewer();
+    viewer.classList.remove("page-turn-out");
+    viewer.classList.add("page-turn-in");
+    setTimeout(() => {
+      viewer.classList.remove("page-turn-in");
+      prevBtn.disabled = false; // ★ 再有効化
+    }, 600);
+  }, 600);
 };
 
 // ===============================
 // 表／裏（フリップ）
 // ===============================
 flipBtn.onclick = () => {
+  flipBtn.disabled = true; // ★ 追加：アニメーション中は無効化
   animationClass = "flip";
 
   if (isFinalNull) {
     isBack = true;
     updateViewer();
+    flipBtn.disabled = false; // ★ 再有効化
     return;
   }
 
@@ -462,12 +406,18 @@ flipBtn.onclick = () => {
     if (images[index].includes("/other/")) {
       isBack = false;
       updateViewer();
+      flipBtn.disabled = false; // ★ 再有効化
       return;
     }
   }
 
   isBack = !isBack;
   updateViewer();
+
+  // ★ アニメーション終了後に再有効化
+  setTimeout(() => {
+    flipBtn.disabled = false;
+  }, 400);
 };
 
 // ===============================
