@@ -233,12 +233,14 @@ function updateSeasonButtons() {
 // ===============================
 function jumpToSeason(season) {
 
+  // ★ flip-rotate を必ず除去（これが重要）
+  viewer.classList.remove("flip-rotate");
+
   // ★ ① 現カードをフェードアウト
   viewer.classList.remove("fade-out", "fade-in", "slide-out-left", "slide-out-right");
   void viewer.offsetWidth;
   viewer.classList.add("fade-out");
 
-  // ★ ② フェードアウト後に季節ジャンプ処理
   setTimeout(() => {
 
     currentSeason = season;
@@ -248,17 +250,15 @@ function jumpToSeason(season) {
     isBack = false;
     isFinalNull = false;
 
-    // ★ ③ 新しいカードをフェードイン
     viewer.src = images[index];
 
     viewer.classList.remove("fade-out");
     void viewer.offsetWidth;
     viewer.classList.add("fade-in");
 
-      // ★ ここを追加
-  updateViewer();
+    updateViewer();
 
-  }, 300); // ← fade-out の duration と合わせる
+  }, 300);
 }
 
 // ===============================
