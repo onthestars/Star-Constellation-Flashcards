@@ -238,3 +238,37 @@ body {
   opacity: 1;
   transform: translateX(0);
 }
+
+/* ===============================
+   ★ Special viewer：アニメーション
+   =============================== */
+
+/* 次へ：右 → 左 */
+.sp-slide-next {
+  animation: spSlideNext 0.4s ease forwards;
+}
+
+@keyframes spSlideNext {
+  from { transform: translateX(30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* 前へ：左 → 右 */
+.sp-slide-prev {
+  animation: spSlidePrev 0.4s ease forwards;
+}
+
+@keyframes spSlidePrev {
+  from { transform: translateX(-30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* フェード */
+.sp-fade {
+  animation: spFade 0.3s ease forwards;
+}
+
+@keyframes spFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
