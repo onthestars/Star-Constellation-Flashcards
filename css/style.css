@@ -24,9 +24,13 @@ body {
   width: 95vw;
   max-width: 480px;
   background-color: #ffffff;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  padding: 8px 2px;
+  margin: 0 16px;
 }
 
 /* ===============================
@@ -36,6 +40,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
+  background-color: transparent;
 }
 
 .card-img {
