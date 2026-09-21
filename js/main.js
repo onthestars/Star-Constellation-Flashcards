@@ -185,24 +185,41 @@ const specialLines  = document.getElementById("special-lines");
 const specialClear  = document.getElementById("special-clear");
 
 // ===============================
+// ★ Special写真データ構造（ここに追加）
+// ===============================
+const specialPhotos = {
+  "Spring-Triangle": {
+    normal: [
+      "pic-Spring-Triangle01.jpg",
+      "pic-Spring-Triangle02.jpg"
+    ],
+    lines: [
+      "pic-lines-Spring-Triangle01.jpg",
+      "pic-lines-Spring-Triangle02.jpg"
+    ]
+  }
+};
+
+// ===============================
 // 写真があるカードかどうか（春の大三角のみ）
 // ===============================
 function hasPhotoFor(i) {
-  return images[i].includes("Spring-Triangle");
+  const starName = getStarNameFromIndex(i); // 星座名を取得する関数（既存構造に合わせて）
+  const data = specialPhotos[starName];
+  return data && data.normal && data.normal.length > 0;
 }
 
 // ===============================
 // ★ボタン状態更新
 // ===============================
-function updateSpecialButton() {
-  if (hasPhotoFor(index)) {
-    specialBtn.disabled = false;
-    specialBtn.style.opacity = 1;
-  } else {
-    specialBtn.disabled = true;
-    specialBtn.style.opacity = 0.4;
+function getStarNameFromIndex(i) {
+  // images[i] が "Spring-Triangle" を含む場合
+  if (images[i].includes("Spring-Triangle")) {
+    return "Spring-Triangle";
   }
+  return null;
 }
+
 
 // ===============================
 // 表示更新（遅延読み込み）
