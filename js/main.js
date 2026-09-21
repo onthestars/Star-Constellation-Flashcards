@@ -242,7 +242,7 @@ function updateSpecialButton() {
     specialBtn.style.opacity = 1;
   } else {
     specialBtn.disabled = true;
-    specialBtn.style.opacity = 0.4;
+    specialBtn.style.opacity = 0.2;
   }
 }
 
