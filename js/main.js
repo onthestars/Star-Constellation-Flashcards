@@ -171,7 +171,7 @@ let index = 0;
 let isBack = false;
 let isFinalNull = false;
 
-// ★ アニメーション用
+// ★ アニメーション用（slide-in-next / slide-in-prev / fade）
 let animationClass = null;
 
 // ===============================
@@ -222,19 +222,17 @@ const seasonImages = {
 function updateSeasonButtons() {
   document.querySelectorAll('.btn-season').forEach(btn => {
     const season = btn.dataset.season;
-    if (season === currentSeason) {
-      btn.src = seasonImages[season].active;
-    } else {
-      btn.src = seasonImages[season].normal;
-    }
+    btn.src = (season === currentSeason)
+      ? seasonImages[season].active
+      : seasonImages[season].normal;
   });
 }
 
 // ===============================
-// 季節ジャンプ
+// 季節ジャンプ（フェード）
 // ===============================
 function jumpToSeason(season) {
-  animationClass = "fade";   // ★ 季節変更はフェード
+  animationClass = "fade";
 
   currentSeason = season;
   updateSeasonButtons();
@@ -264,19 +262,19 @@ function updateSpecialButton() {
 }
 
 // ===============================
-// ★ updateViewer（アニメーション統合済）
+// ★ updateViewer（不要アニメ削除済）
 // ===============================
 function updateViewer() {
 
-  // ★ アニメーション適用
+  // ★ アニメーション適用（必要なものだけ）
   if (animationClass) {
-    viewer.classList.remove("slide-in-next", "slide-in-prev", "flip", "fade");
+    viewer.classList.remove("slide-in-next", "slide-in-prev", "fade");
     void viewer.offsetWidth; // ← 強制リフロー
     viewer.classList.add(animationClass);
     animationClass = null;
   }
 
-  // ★ 最終カードのときは季節ボタンをリセット
+  // ★ 最終カード
   if (isFinalNull) {
     viewer.src = "image/common/card-null.png";
     nextBtn.disabled = true;
@@ -287,18 +285,13 @@ function updateViewer() {
     return;
   }
 
-  // 通常カード
+  // ★ 通常カード
   viewer.src = isBack ? backs[index] : images[index];
   nextBtn.disabled = false;
   nextBtn.style.opacity = 1;
 
-  if (index === 0) {
-    prevBtn.disabled = true;
-    prevBtn.style.opacity = 0.4;
-  } else {
-    prevBtn.disabled = false;
-    prevBtn.style.opacity = 1;
-  }
+  prevBtn.disabled = (index === 0);
+  prevBtn.style.opacity = (index === 0 ? 0.4 : 1);
 
   updateSpecialButton();
 
@@ -311,12 +304,16 @@ function updateViewer() {
 }
 
 // ===============================
+// 次の index を探す
+// ===============================
 function findNextIndex(i) {
   let n = i + 1;
   while (n < images.length && images[n].includes("/A/")) n++;
   return n;
 }
 
+// ===============================
+// 前の index を探す
 // ===============================
 function findPrevIndex(i) {
   let p = i - 1;
@@ -387,12 +384,12 @@ prevBtn.onclick = () => {
 };
 
 // ===============================
-// 表／裏（フリップ）
+// 表／裏（フェード）
 // ===============================
 flipBtn.onclick = () => {
   flipBtn.disabled = true;
 
-  animationClass = "flip";
+  animationClass = "fade";
 
   if (isFinalNull) {
     isBack = true;
@@ -415,32 +412,17 @@ flipBtn.onclick = () => {
 
   setTimeout(() => {
     flipBtn.disabled = false;
-  }, 400);
+  }, 300);
 };
 
 // ===============================
 // 季節ボタン（フェード）
 // ===============================
-springBtn.onclick = () => {
-  animationClass = "fade";
-  jumpToSeason("spring");
-};
-summerBtn.onclick = () => {
-  animationClass = "fade";
-  jumpToSeason("summer");
-};
-autumnBtn.onclick = () => {
-  animationClass = "fade";
-  jumpToSeason("autumn");
-};
-winterBtn.onclick = () => {
-  animationClass = "fade";
-  jumpToSeason("winter");
-};
-southBtn.onclick  = () => {
-  animationClass = "fade";
-  jumpToSeason("south");
-};
+springBtn.onclick = () => { animationClass = "fade"; jumpToSeason("spring"); };
+summerBtn.onclick = () => { animationClass = "fade"; jumpToSeason("summer"); };
+autumnBtn.onclick = () => { animationClass = "fade"; jumpToSeason("autumn"); };
+winterBtn.onclick = () => { animationClass = "fade"; jumpToSeason("winter"); };
+southBtn.onclick  = () => { animationClass = "fade"; jumpToSeason("south"); };
 
 // ===============================
 updateViewer();
