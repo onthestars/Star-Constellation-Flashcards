@@ -171,7 +171,6 @@ body {
   cursor: pointer;
   margin: 6px 8px;
 }
-
 /* ===============================
    ★ アニメーション（カード切替）
    =============================== */
@@ -200,6 +199,52 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* ===============================
+   ★ 新方式：現カード → 左へスライドアウト
+   =============================== */
+.slide-out-left {
+  animation: slideOutLeft 0.4s ease forwards;
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-40px); opacity: 0; }
+}
+
+/* ===============================
+   ★ 新方式：次カード → フェードイン
+   =============================== */
+.fade-in {
+  animation: fadeInNew 0.4s ease forwards;
+}
+
+@keyframes fadeInNew {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ★ 現カードを右へスライドアウト（前へ用） */
+.slide-out-right {
+  animation: slideOutRight 0.4s ease forwards;
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(40px); opacity: 0; }
+}
+
+/* ===============================
+   ★ 季節ジャンプ：現カード → フェードアウト
+   =============================== */
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 /* ===============================
@@ -281,19 +326,19 @@ body {
     min-width: 28px;
   }
 
-    /* ボタン行の間隔を詰める */
+  /* ボタン行の間隔を詰める */
   .button-row {
-    justify-content: center;   /* ← space-evenly をやめる */
-    gap: 32px;                 /* ← PCでは gap を明示的に設定 */
+    justify-content: center;
+    gap: 32px;
   }
 
   #card-frame {
-    max-width: 800px;   /* ← PCでカードを大きくする */
-    width: 70vw;        /* ← 画面幅に応じて伸びる */
+    max-width: 800px;
+    width: 70vw;
   }
 
   .card-img {
-    max-width: 800px;   /* ← カード画像も拡大 */
+    max-width: 800px;
   }
 }
 
@@ -301,7 +346,6 @@ body {
    ★ 横置きレイアウト（Landscape：スマホ限定）
    =============================== */
 @media (orientation: landscape) and (max-width: 900px) {
-
 
   body {
     height: 100vh;
@@ -348,7 +392,7 @@ body {
     height: 100%;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;   /* 左列：操作、右列：季節 */
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(5, auto);
     gap: 0.6vh;
 
