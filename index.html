@@ -10,20 +10,20 @@
 
 <body>
 
-  <!-- ★ カード枠（スマホ画面の中央に固定） -->
+  <!-- ★ カード枠（縦置き／横置きで自動切替） -->
   <div id="card-frame" class="card-frame">
 
-    <!-- ★ カード画像（最初は表紙。JSが差し替える） -->
+    <!-- ★ カード画像領域 -->
     <div class="card-image-area">
 
-      <!-- ★ transform 衝突回避のためのラッパー -->
+      <!-- ★ transform 衝突回避のためのラッパー（横置きでも使う） -->
       <div id="card-anim-wrapper">
         <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
       </div>
 
     </div>
 
-    <!-- ★ ボタン群（季節・操作・Specialを一括管理） -->
+    <!-- ★ ボタン群（季節・操作・Special） -->
     <div class="button-block">
 
       <!-- ★ 四季ボタン -->
@@ -51,7 +51,7 @@
 
   </div>
 
-  <!-- ★ Special viewer -->
+  <!-- ★ Special viewer（星空写真の全画面ビュー） -->
   <div id="special-viewer" style="display:none;">
     <img id="special-img" src="" alt="Special画像">
 
@@ -67,6 +67,7 @@
     </div>
   </div>
 
+  <!-- ★ JavaScript -->
   <script src="js/main.js"></script>
   <script src="js/data-special.js"></script>
   <script src="js/special-viewer.js"></script>
