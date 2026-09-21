@@ -426,3 +426,32 @@ southBtn.onclick  = () => { animationClass = "fade"; jumpToSeason("south"); };
 
 // ===============================
 updateViewer();
+
+// ===============================
+// ★ スワイプ操作（左右で前後カード）
+// ===============================
+let startX = 0;
+let endX = 0;
+
+viewer.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+});
+
+viewer.addEventListener("touchend", (e) => {
+  endX = e.changedTouches[0].clientX;
+  const diff = endX - startX;
+
+  // スワイプ判定（軽め）
+  if (Math.abs(diff) < 50) return;
+
+  if (diff < 0) {
+    // 左へスワイプ → 次へ
+    animationClass = "fade-enter";  // ★ 最小限フェード
+    nextBtn.onclick();
+  } else {
+    // 右へスワイプ → 前へ
+    animationClass = "fade-enter";  // ★ 最小限フェード
+    prevBtn.onclick();
+  }
+});
+
