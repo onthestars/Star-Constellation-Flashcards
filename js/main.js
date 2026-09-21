@@ -384,35 +384,33 @@ prevBtn.onclick = () => {
 };
 
 // ===============================
-// 表／裏（フェード）
+// 表／裏（Y軸回転アニメ：途中で画像切替）
 // ===============================
 flipBtn.onclick = () => {
-  flipBtn.disabled = true;
-
-  animationClass = "fade";
-
   if (isFinalNull) {
+    // 最終カードの場合は従来通りの処理でもOK
     isBack = true;
     updateViewer();
-    flipBtn.disabled = false;
     return;
   }
 
-  if (isBack && backs[index] === "image/common/card-null.png") {
-    if (images[index].includes("/other/")) {
-      isBack = false;
-      updateViewer();
-      flipBtn.disabled = false;
-      return;
-    }
-  }
+  flipBtn.disabled = true;
 
-  isBack = !isBack;
-  updateViewer();
+  // ★ アニメをリセットしてから付け直す
+  viewer.classList.remove("flip-rotate");
+  void viewer.offsetWidth; // 強制リフロー
+  viewer.classList.add("flip-rotate");
 
+  // ★ 途中（0.8秒の半分＝0.4秒）で表裏を切り替える
+  setTimeout(() => {
+    isBack = !isBack;
+    updateViewer();  // ← ここで初めて画像を差し替える
+  }, 400); // 0.8s の半分
+
+  // ★ アニメ終了後にボタンを再有効化
   setTimeout(() => {
     flipBtn.disabled = false;
-  }, 300);
+  }, 800);
 };
 
 // ===============================
