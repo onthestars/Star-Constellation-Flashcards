@@ -131,7 +131,7 @@ const images = [
 ];
 
 // ===============================
-// 裏面パス
+// 裏面パス生成
 // ===============================
 const backs = images.map((img, i) => {
   if (i === 0 || i === 1) return "image/common/card-null.png";
@@ -158,9 +158,6 @@ let index = 0;
 let isBack = false;
 let isFinalNull = false;
 
-let savedIndex = null;
-let savedIsBack = null;
-
 // ===============================
 // DOM
 // ===============================
@@ -177,52 +174,25 @@ const southBtn  = document.getElementById("southBtn");
 
 const specialBtn = document.getElementById("specialBtn");
 
-// Special写真 viewer
-const specialViewer = document.getElementById("special-viewer");
-const specialImg    = document.getElementById("special-img");
-const specialClose  = document.getElementById("special-close");
-const specialLines  = document.getElementById("special-lines");
-const specialClear  = document.getElementById("special-clear");
-
 // ===============================
-// ★ Special写真データ構造（ここに追加）
-// ===============================
-const specialPhotos = {
-  "Spring-Triangle": {
-    normal: [
-      "pic-Spring-Triangle01.jpg",
-      "pic-Spring-Triangle02.jpg"
-    ],
-    lines: [
-      "pic-lines-Spring-Triangle01.jpg",
-      "pic-lines-Spring-Triangle02.jpg"
-    ]
-  }
-};
-
-// ===============================
-// 写真があるカードかどうか（春の大三角のみ）
+// Special viewer が存在するカードか
 // ===============================
 function hasPhotoFor(i) {
-  const starName = getStarNameFromIndex(i); // 星座名を取得する関数（既存構造に合わせて）
-  const data = specialPhotos[starName];
-  return data && data.normal && data.normal.length > 0;
+  return images[i].includes("Spring-Triangle");
 }
 
 // ===============================
-// ★ボタン状態更新
-// ===============================
-function getStarNameFromIndex(i) {
-  // images[i] が "Spring-Triangle" を含む場合
-  if (images[i].includes("Spring-Triangle")) {
-    return "Spring-Triangle";
+function updateSpecialButton() {
+  if (hasPhotoFor(index)) {
+    specialBtn.disabled = false;
+    specialBtn.style.opacity = 1;
+  } else {
+    specialBtn.disabled = true;
+    specialBtn.style.opacity = 0.4;
   }
-  return null;
 }
 
-
 // ===============================
-// 表示更新（遅延読み込み）
 function updateViewer() {
   if (isFinalNull) {
     viewer.src = "image/common/card-null.png";
@@ -246,7 +216,6 @@ function updateViewer() {
 }
 
 // ===============================
-// A をスキップして次の Q/other を探す
 function findNextIndex(i) {
   let n = i + 1;
   while (n < images.length && images[n].includes("/A/")) n++;
@@ -401,67 +370,6 @@ flipBtn.onclick = () => {
   isBack = !isBack;
   updateViewer();
 };
-
-// ===============================
-// ★ボタン：Special写真表示
-// ===============================
-specialBtn.onclick = () => {
-  if (!hasPhotoFor(index)) return;
-
-  savedIndex = index;
-  savedIsBack = isBack;
-
-  specialImg.src = "image/spring/Special/pic-Spring-Triangle.jpg";
-  specialViewer.style.display = "flex";
-
-  nextBtn.disabled = true;
-  prevBtn.disabled = true;
-  flipBtn.disabled = true;
-
-  nextBtn.style.opacity = 0.4;
-  prevBtn.style.opacity = 0.4;
-  flipBtn.style.opacity = 0.4;
-};
-
-// ===============================
-// Special写真から戻る
-// ===============================
-if (specialClose) {
-  specialClose.onclick = () => {
-    specialViewer.style.display = "none";
-
-    index = savedIndex;
-    isBack = savedIsBack;
-
-    nextBtn.disabled = false;
-    prevBtn.disabled = (index === 0);
-    flipBtn.disabled = false;
-
-    nextBtn.style.opacity = 1;
-    prevBtn.style.opacity = (index === 0 ? 0.4 : 1);
-    flipBtn.style.opacity = 1;
-
-    updateViewer();
-  };
-}
-
-// ===============================
-// ⭐ 星座線を描くボタン
-// ===============================
-if (specialLines) {
-  specialLines.onclick = () => {
-    specialImg.src = "image/spring/Special/pic-lines-Spring-Triangle.jpg";
-  };
-}
-
-// ===============================
-// ⭐ 消すボタン（元の画像に戻す）
-// ===============================
-if (specialClear) {
-  specialClear.onclick = () => {
-    specialImg.src = "image/spring/Special/pic-Spring-Triangle.jpg";
-  };
-}
 
 // ===============================
 springBtn.onclick = () => jumpToSeason("spring");
