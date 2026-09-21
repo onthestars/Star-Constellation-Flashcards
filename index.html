@@ -15,7 +15,12 @@
 
     <!-- ★ カード画像（最初は表紙。JSが差し替える） -->
     <div class="card-image-area">
-      <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
+
+      <!-- ★ transform 衝突回避のためのラッパー -->
+      <div id="card-anim-wrapper">
+        <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
+      </div>
+
     </div>
 
     <!-- ★ ボタン群（季節・操作・Specialを一括管理） -->
