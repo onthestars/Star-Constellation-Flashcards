@@ -6,7 +6,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       z-index: 9999;
 
       display: flex;
@@ -26,3 +26,32 @@
       padding: 10px 20px;
       font-size: 20px;
     }
+
+    // ===============================
+    // ★ Special viewer のスワイプ操作
+    // ===============================
+    let spStartX=0;
+    let spEndX=0;
+
+    const spImg=document.getElementById("special-img");
+
+    spImg.addEventListener("touchstart", (e)=> {
+        spStartX=e.touches[0].clientX;
+      });
+
+    spImg.addEventListener("touchend", (e)=> {
+        spEndX=e.changedTouches[0].clientX;
+        const diff=spEndX - spStartX;
+
+        if (Math.abs(diff) < 50) return;
+
+        if (diff < 0) {
+          // 左へスワイプ → 次へ
+          document.getElementById("special-next").onclick();
+        }
+
+        else {
+          // 右へスワイプ → 前へ
+          document.getElementById("special-prev").onclick();
+        }
+      });
