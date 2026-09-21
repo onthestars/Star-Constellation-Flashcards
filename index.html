@@ -18,16 +18,32 @@
       <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
     </div>
 
-    <!-- ★ ボタン群（季節・操作・Specialを一括管理） -->
+    <!-- ★ ボタン群（季節・操作・Special） -->
     <div class="button-block">
 
-      <!-- ★ 四季ボタン -->
+      <!-- ★ 四季ボタン（season-wrap で包む） -->
       <div class="button-row season-row">
-        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" alt="春">
-        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" alt="夏">
-        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" alt="秋">
-        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" alt="冬">
-        <img src="image/common/btn-south.png" class="btn-season" id="southBtn" alt="南">
+
+        <div class="season-wrap" data-season="spring">
+          <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" alt="春">
+        </div>
+
+        <div class="season-wrap" data-season="summer">
+          <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" alt="夏">
+        </div>
+
+        <div class="season-wrap" data-season="autumn">
+          <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" alt="秋">
+        </div>
+
+        <div class="season-wrap" data-season="winter">
+          <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" alt="冬">
+        </div>
+
+        <div class="season-wrap" data-season="south">
+          <img src="image/common/btn-south.png" class="btn-season" id="southBtn" alt="南">
+        </div>
+
       </div>
 
       <!-- ★ 操作ボタン -->
@@ -46,9 +62,10 @@
 
   </div>
 
+  <!-- ★ Special viewer -->
   <div id="special-viewer" style="display:none;">
 
-    <!-- ★ Special画像（必須） -->
+    <!-- ★ Special画像 -->
     <img id="special-img" src="" alt="Special画像">
 
     <!-- ★ ボタン1段目 -->
@@ -65,7 +82,6 @@
     </div>
 
   </div>
-
 
   <script src="js/main.js"></script>
   <script src="js/data-special.js"></script>
