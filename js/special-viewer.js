@@ -8,7 +8,7 @@ let specialMode  = "normal";   // "normal" or "lines"
 let savedIndex   = null;
 let savedIsBack  = null;
 
-// ★ Special viewer 用アニメーション
+// ★ Special viewer 用アニメーション（写真切り替え専用）
 let spAnimationClass = null;
 
 // DOM
@@ -103,7 +103,7 @@ specialClose.onclick = () => {
 };
 
 // =====================================
-// ★ アニメ適用（共通処理）
+// ★ アニメ適用（写真切り替え専用）
 // =====================================
 function applySpecialAnimation() {
   specialImg.classList.remove("sp-slide-next", "sp-slide-prev", "sp-fade");
@@ -116,12 +116,10 @@ function applySpecialAnimation() {
 
 // =====================================
 // ★ 星座線なし（specialIndex を維持）
+// ★ アニメなし（即時切り替え）
 // =====================================
 specialLines.onclick = () => {
   specialMode = "normal";
-
-  spAnimationClass = "sp-fade";
-  applySpecialAnimation();
 
   const starName = getStarNameFromIndex(savedIndex);
   specialImg.src = "image/spring/Special/" + specialPhotos[starName].normal[specialIndex];
@@ -131,12 +129,10 @@ specialLines.onclick = () => {
 
 // =====================================
 // ★ 星座線あり（specialIndex を維持）
+// ★ アニメなし（即時切り替え）
 // =====================================
 specialClear.onclick = () => {
   specialMode = "lines";
-
-  spAnimationClass = "sp-fade";
-  applySpecialAnimation();
 
   const starName = getStarNameFromIndex(savedIndex);
   specialImg.src = "image/spring/Special/" + specialPhotos[starName].lines[specialIndex];
@@ -146,6 +142,7 @@ specialClear.onclick = () => {
 
 // =====================================
 // ★ Special写真：「次へ」
+// ★ 写真切り替えはアニメあり
 // =====================================
 specialNext.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
@@ -166,6 +163,7 @@ specialNext.onclick = () => {
 
 // =====================================
 // ★ Special写真：「前へ」
+// ★ 写真切り替えはアニメあり
 // =====================================
 specialPrev.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
@@ -186,6 +184,7 @@ specialPrev.onclick = () => {
 
 // =====================================
 // ★ Special viewer のスワイプ操作
+// ★ 写真切り替えはアニメあり
 // =====================================
 let spStartX = 0;
 let spEndX = 0;

@@ -171,7 +171,7 @@ let index = 0;
 let isBack = false;
 let isFinalNull = false;
 
-// ★ アニメーション用（slide-in-next / slide-in-prev / fade）
+// ★ アニメーション用（旧方式は削除）
 let animationClass = null;
 
 // ===============================
@@ -229,18 +229,36 @@ function updateSeasonButtons() {
 }
 
 // ===============================
-// 季節ジャンプ（フェード）
+// 季節ジャンプ（新アニメ方式：フェードアウト → フェードイン）
 // ===============================
 function jumpToSeason(season) {
-  animationClass = "fade";
 
-  currentSeason = season;
-  updateSeasonButtons();
+  // ★ ① 現カードをフェードアウト
+  viewer.classList.remove("fade-out", "fade-in", "slide-out-left", "slide-out-right");
+  void viewer.offsetWidth;
+  viewer.classList.add("fade-out");
 
-  index = seasonStart[season];
-  isBack = false;
-  isFinalNull = false;
+  // ★ ② フェードアウト後に季節ジャンプ処理
+  setTimeout(() => {
+
+    currentSeason = season;
+    updateSeasonButtons();
+
+    index = seasonStart[season];
+    isBack = false;
+    isFinalNull = false;
+
+    // ★ ③ 新しいカードをフェードイン
+    viewer.src = images[index];
+
+    viewer.classList.remove("fade-out");
+    void viewer.offsetWidth;
+    viewer.classList.add("fade-in");
+
+      // ★ ここを追加
   updateViewer();
+
+  }, 300); // ← fade-out の duration と合わせる
 }
 
 // ===============================
@@ -262,14 +280,14 @@ function updateSpecialButton() {
 }
 
 // ===============================
-// ★ updateViewer（不要アニメ削除済）
+// ★ updateViewer（新アニメ方式対応）
 // ===============================
 function updateViewer() {
 
-  // ★ アニメーション適用（必要なものだけ）
+  // ★ 新アニメ適用（slide-out-left / fade-in）
   if (animationClass) {
-    viewer.classList.remove("slide-in-next", "slide-in-prev", "fade");
-    void viewer.offsetWidth; // ← 強制リフロー
+    viewer.classList.remove("slide-out-left", "fade-in");
+    void viewer.offsetWidth;
     viewer.classList.add(animationClass);
     animationClass = null;
   }
@@ -322,73 +340,93 @@ function findPrevIndex(i) {
 }
 
 // ===============================
-// 次へ（右 → 左スライドイン）
+// ★ 次へ（新アニメ方式）
 // ===============================
 nextBtn.onclick = () => {
   if (isFinalNull) return;
 
   nextBtn.disabled = true;
 
-  animationClass = "slide-in-next";
+  // ① 現カードを左へスライドアウト
+  viewer.classList.remove("slide-out-left", "fade-in");
+  void viewer.offsetWidth;
+  viewer.classList.add("slide-out-left");
 
-  let next = findNextIndex(index);
+  // ② アニメ終了後に画像切替 → フェードイン
+  setTimeout(() => {
 
-  if (next >= images.length) {
-    isFinalNull = true;
-    isBack = true;
-    updateViewer();
-    nextBtn.disabled = false;
-    return;
-  }
+    let next = findNextIndex(index);
 
-  index = next;
-  isBack = false;
+    if (next >= images.length) {
+      isFinalNull = true;
+      isBack = true;
+      viewer.src = "image/common/card-null.png";
+    } else {
+      index = next;
+      isBack = false;
+      viewer.src = images[index];
+    }
+
+    viewer.classList.remove("slide-out-left");
+    void viewer.offsetWidth;
+    viewer.classList.add("fade-in");
+
+      // ★ ここを追加
   updateViewer();
 
-  setTimeout(() => {
     nextBtn.disabled = false;
-  }, 600);
+
+  }, 400);
 };
 
 // ===============================
-// 前へ（左 → 右スライドイン）
+// ★ 前へ（新アニメ方式）
 // ===============================
 prevBtn.onclick = () => {
+
+    // ★ 表紙なら何もせず終了（これが重要）
+  if (index === 0) return;
+  
   prevBtn.disabled = true;
 
-  animationClass = "slide-in-prev";
-
-  if (isFinalNull) {
-    isFinalNull = false;
-    index = ARGO_Q_INDEX;
-    isBack = false;
-    updateViewer();
-
-    setTimeout(() => {
-      prevBtn.disabled = false;
-    }, 600);
-    return;
-  }
-
-  let prev = findPrevIndex(index);
-
-  if (prev >= 0) {
-    index = prev;
-    isBack = false;
-    updateViewer();
-  }
+  // ★ 前へは右へスライドアウト
+  viewer.classList.remove("slide-out-left", "slide-out-right", "fade-in");
+  void viewer.offsetWidth;
+  viewer.classList.add("slide-out-right");
 
   setTimeout(() => {
+
+    if (isFinalNull) {
+      isFinalNull = false;
+      index = ARGO_Q_INDEX;
+      isBack = false;
+      viewer.src = images[index];
+    } else {
+      let prev = findPrevIndex(index);
+      if (prev >= 0) {
+        index = prev;
+        isBack = false;
+        viewer.src = images[index];
+      }
+    }
+
+    viewer.classList.remove("slide-out-right");
+    void viewer.offsetWidth;
+    viewer.classList.add("fade-in");
+
+    updateViewer();
+
     prevBtn.disabled = false;
-  }, 600);
+
+  }, 400);
 };
 
+
 // ===============================
-// 表／裏（Y軸回転アニメ：途中で画像切替）
+// 表／裏（Y軸回転アニメ）
 // ===============================
 flipBtn.onclick = () => {
   if (isFinalNull) {
-    // 最終カードの場合は従来通りの処理でもOK
     isBack = true;
     updateViewer();
     return;
@@ -396,31 +434,28 @@ flipBtn.onclick = () => {
 
   flipBtn.disabled = true;
 
-  // ★ アニメをリセットしてから付け直す
   viewer.classList.remove("flip-rotate");
-  void viewer.offsetWidth; // 強制リフロー
+  void viewer.offsetWidth;
   viewer.classList.add("flip-rotate");
 
-  // ★ 途中（0.8秒の半分＝0.4秒）で表裏を切り替える
   setTimeout(() => {
     isBack = !isBack;
-    updateViewer();  // ← ここで初めて画像を差し替える
-  }, 400); // 0.8s の半分
+    updateViewer();
+  }, 400);
 
-  // ★ アニメ終了後にボタンを再有効化
   setTimeout(() => {
     flipBtn.disabled = false;
   }, 800);
 };
 
 // ===============================
-// 季節ボタン（フェード）
+// 季節ボタン（フェードイン）
 // ===============================
-springBtn.onclick = () => { animationClass = "fade"; jumpToSeason("spring"); };
-summerBtn.onclick = () => { animationClass = "fade"; jumpToSeason("summer"); };
-autumnBtn.onclick = () => { animationClass = "fade"; jumpToSeason("autumn"); };
-winterBtn.onclick = () => { animationClass = "fade"; jumpToSeason("winter"); };
-southBtn.onclick  = () => { animationClass = "fade"; jumpToSeason("south"); };
+springBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("spring"); };
+summerBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("summer"); };
+autumnBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("autumn"); };
+winterBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("winter"); };
+southBtn.onclick  = () => { animationClass = "fade-in"; jumpToSeason("south"); };
 
 // ===============================
 updateViewer();
@@ -439,16 +474,11 @@ viewer.addEventListener("touchend", (e) => {
   endX = e.changedTouches[0].clientX;
   const diff = endX - startX;
 
-  // スワイプ判定（軽め）
   if (Math.abs(diff) < 50) return;
 
   if (diff < 0) {
-    // 左へスワイプ → 次へ
-    animationClass = "fade";  // ★ 既存のフェードアニメを使う
     nextBtn.onclick();
   } else {
-    // 右へスワイプ → 前へ
-    animationClass = "fade";  // ★ 既存のフェードアニメを使う
     prevBtn.onclick();
   }
 });
