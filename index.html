@@ -6,29 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>星座カード</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* ★ ページめくり風アニメーション */
-    .card-img {
-      width: 100%;
-      backface-visibility: hidden;
-      transition: transform 0.6s ease, opacity 0.6s ease;
-      transform-origin: left center;
-    }
-
-    .slide-out {
-      transform: rotateY(-90deg);
-      opacity: 0;
-    }
-
-    .slide-in {
-      transform: rotateY(0deg);
-      opacity: 1;
-    }
-
-    .card-frame {
-      perspective: 1000px;
-    }
-  </style>
 </head>
 
 <body>
@@ -84,37 +61,6 @@
       <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
     </div>
   </div>
-
-  <script>
-    // ★ ページめくり風アニメーション制御
-    function turnPage(nextSrc) {
-      const card = document.getElementById("card-img");
-      const preload = new Image();
-      preload.src = nextSrc;
-
-      preload.onload = () => {
-        card.classList.add("slide-out");
-
-        setTimeout(() => {
-          card.src = nextSrc;
-          card.classList.remove("slide-out");
-          card.classList.add("slide-in");
-
-          setTimeout(() => {
-            card.classList.remove("slide-in");
-          }, 600);
-        }, 600);
-      };
-    }
-
-    // ★ ボタンイベント例（実際の画像パスは適宜変更）
-    document.getElementById("nextBtn").addEventListener("click", () => {
-      turnPage("image/cards/next-card.png");
-    });
-    document.getElementById("prevBtn").addEventListener("click", () => {
-      turnPage("image/cards/prev-card.png");
-    });
-  </script>
 
   <script src="js/main.js"></script>
   <script src="js/data-special.js"></script>
