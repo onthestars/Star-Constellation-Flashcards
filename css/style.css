@@ -194,3 +194,24 @@ body {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+/* ===============================
+   ★ スワイプ＋最小限フェード（新規追加）
+   =============================== */
+
+/* カードの基本（フェード用） */
+#card-img {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* フェードイン開始前の状態 */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+/* フェードイン中 */
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
