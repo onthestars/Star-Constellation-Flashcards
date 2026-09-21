@@ -87,8 +87,8 @@ body {
    ★ 季節ボタン
    =============================== */
 .btn-season {
-  width: 10vw;
-  max-width: 64px;
+  width: 8vw;
+  max-width: 56px;
   min-width: 32px;
   height: auto;
   margin: 18px 0 12px 0;
@@ -104,8 +104,8 @@ body {
    ★ 操作ボタン
    =============================== */
 .btn-control {
-  width: 18vw;
-  max-width: 90px;
+  width: 16vw;
+  max-width: 80px;
   min-width: 42px;
   height: auto;
   margin: 12px -12px;
@@ -116,7 +116,7 @@ body {
    =============================== */
 .btn-special {
   width: 12vw;
-  max-width: 72px;
+  max-width: 64px;
   min-width: 38px;
   height: auto;
 }
@@ -259,9 +259,49 @@ body {
 }
 
 /* ===============================
-   ★ 横置きレイアウト（Landscape）
+   ★ PC専用レイアウト（ボタン縮小）
    =============================== */
-@media (orientation: landscape) {
+@media (min-width: 1000px) {
+
+  .btn-season {
+    width: 8vw;
+    max-width: 42px;
+    min-width: 24px;
+  }
+
+  .btn-control {
+    width: 12vw;
+    max-width: 64px;
+    min-width: 32px;
+  }
+
+  .btn-special {
+    width: 10vw;
+    max-width: 56px;
+    min-width: 28px;
+  }
+
+    /* ボタン行の間隔を詰める */
+  .button-row {
+    justify-content: center;   /* ← space-evenly をやめる */
+    gap: 32px;                 /* ← PCでは gap を明示的に設定 */
+  }
+
+  #card-frame {
+    max-width: 800px;   /* ← PCでカードを大きくする */
+    width: 70vw;        /* ← 画面幅に応じて伸びる */
+  }
+
+  .card-img {
+    max-width: 800px;   /* ← カード画像も拡大 */
+  }
+}
+
+/* ===============================
+   ★ 横置きレイアウト（Landscape：スマホ限定）
+   =============================== */
+@media (orientation: landscape) and (max-width: 900px) {
+
 
   body {
     height: 100vh;
@@ -269,8 +309,8 @@ body {
 
   #card-frame {
     width: 100vw;
-    max-width: none;
     height: 100vh;
+    max-width: none;
 
     display: flex;
     flex-direction: row;
@@ -302,49 +342,40 @@ body {
     width: auto;
   }
 
-  /* ★ 右側：ボタン群全体を縦に並べる */
+  /* ★ 右側：完全タイル張り（2列 × 5行） */
   .button-block {
     width: 32%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1.2vh;   /* ← 少し詰める */
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* 左列：操作、右列：季節 */
+    grid-template-rows: repeat(5, auto);
+    gap: 0.6vh;
+
+    justify-items: center;
+    align-items: start;
   }
 
-  /* ★ 各ボタン行は横並びのまま（横間隔を詰める） */
-  .button-row {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;   /* ← space-evenly → center に変更 */
-    align-items: center;
-    gap: 0.4vh;                /* ← 横間隔をさらに詰める */
-  }
-
-  /* ★ ボタンサイズを約30%に縮小 */
-@media (orientation: landscape) {
-  .btn-season {
-    width: 4.5vw;       /* ← 6vw → 4.5vw（約75%） */
-    max-width: 30px;    /* ← 40px → 30px */
-    min-width: 20px;    /* ← 24px → 20px */
-    margin: 4px 0;      /* ← さらに余白を詰める */
-  }
-}
-
-  .btn-control {
-    width: 10vw;
-    max-width: 50px;
-    min-width: 28px;
-    margin: 6px 0;
-  }
-
+  /* ★ ボタンサイズを統一（横置き専用） */
+  .btn-season,
+  .btn-control,
   .btn-special {
-    width: 8vw;
-    max-width: 48px;
-    min-width: 28px;
-    margin: 6px 0;
+    width: 6vw;
+    max-width: 38px;
+    min-width: 22px;
+    margin: 0;
   }
-}
 
+  /* ★ 季節ボタン（右列） */
+  #springBtn  { grid-column: 2; grid-row: 1; }
+  #summerBtn  { grid-column: 2; grid-row: 2; }
+  #autumnBtn  { grid-column: 2; grid-row: 3; }
+  #winterBtn  { grid-column: 2; grid-row: 4; }
+  #southBtn   { grid-column: 2; grid-row: 5; }
+
+  /* ★ 操作＋Special（左列） */
+  #prevBtn        { grid-column: 1; grid-row: 1; }
+  #flipBtn        { grid-column: 1; grid-row: 2; }
+  #nextBtn        { grid-column: 1; grid-row: 3; }
+  #specialBtn     { grid-column: 1; grid-row: 4; }
+}
