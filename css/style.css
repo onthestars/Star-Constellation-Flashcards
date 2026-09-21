@@ -14,7 +14,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-
 }
 
 /* ===============================
@@ -69,7 +68,6 @@ body {
   justify-content: space-evenly;
   align-items: center;
   flex-wrap: nowrap;
-  /* ← 二段化しない */
 }
 
 /* ===============================
@@ -77,11 +75,8 @@ body {
    =============================== */
 .btn-season {
   width: 10vw;
-  /* 画面幅に応じて自動縮小 */
   max-width: 64px;
-  /* 上限（広い画面） */
   min-width: 32px;
-  /* 下限（狭い画面） */
   height: auto;
   margin: 18px 0 12px 0;
 }
@@ -91,7 +86,6 @@ body {
   border-radius: 10px;
   padding: 4px;
 }
-
 
 /* ===============================
    ★ 操作ボタン（自動縮小）
@@ -127,7 +121,6 @@ body {
    =============================== */
 #special-viewer {
   position: fixed;
-  /* ← 全画面に固定 */
   top: 0;
   left: 0;
   width: 100%;
@@ -135,27 +128,23 @@ body {
   background-color: rgba(0, 0, 0, 0.85);
 
   display: none;
-  /* JSで表示 */
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
   z-index: 9999;
-  /* ← 最前面に出す */
 }
 
 /* ★ Special画像 */
 #special-img {
   max-width: 90%;
-  /* ← 画面幅に応じて自動縮小 */
   max-height: 80%;
-  /* ← 画面高さに応じて自動縮小 */
   height: auto;
   object-fit: contain;
   margin-bottom: 16px;
 }
 
-/* ★ Special viewer のボタン（後で画像ボタンに差し替え可能） */
+/* ★ Special viewer のボタン */
 .special-controls {
   display: flex;
   gap: 12px;
@@ -165,9 +154,7 @@ body {
    ★ Special viewer の画像ボタン（サイズ固定）
    =============================== */
 .special-btn {
-  width: 12vw;
   width: 48px;
-  /* ← これで巨大化しない */
   height: auto;
   max-width: 38px;
   cursor: pointer;
@@ -178,27 +165,27 @@ body {
    ★ アニメーション（カード切替）
    =============================== */
 
-/* 左→右スライド（次へ） */
-.slide-in-right {
-  animation: slideInRight 0.3s ease forwards;
+/* ★ 次へ：右 → 左 */
+.slide-in-next {
+  animation: slideNext 0.6s ease forwards;
 }
 
-@keyframes slideInRight {
-  from { transform: translateX(30px); opacity: 0; }
+@keyframes slideNext {
+  from { transform: translateX(100%); opacity: 0; }
   to   { transform: translateX(0); opacity: 1; }
 }
 
-/* 右→左スライド（前へ） */
-.slide-in-left {
-  animation: slideInLeft 0.3s ease forwards;
+/* ★ 前へ：左 → 右 */
+.slide-in-prev {
+  animation: slidePrev 0.6s ease forwards;
 }
 
-@keyframes slideInLeft {
-  from { transform: translateX(-30px); opacity: 0; }
+@keyframes slidePrev {
+  from { transform: translateX(-100%); opacity: 0; }
   to   { transform: translateX(0); opacity: 1; }
 }
 
-/* 表裏めくり（Y軸回転） */
+/* ★ 表裏めくり（Y軸回転） */
 .flip {
   animation: flipCard 0.4s ease forwards;
 }
@@ -208,34 +195,12 @@ body {
   to   { transform: rotateY(0deg); opacity: 1; }
 }
 
-/* 季節変更・南ボタン用フェード */
+/* ★ 季節変更・南ボタン用フェード */
 .fade {
   animation: fadeIn 0.3s ease forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* ===============================
-   ★ ページめくり風アニメーション
-   =============================== */
-
-.card-img {
-  backface-visibility: hidden;
-  transform-origin: left center;
-  transition: transform 0.6s ease, opacity 0.6s ease;
-}
-
-.page-turn-out {
-  transform: rotateY(-90deg);
-  opacity: 0;
-  transition: transform 0.6s ease, opacity 0.6s ease;
-}
-
-.page-turn-in {
-  transform: rotateY(0deg);
-  opacity: 1;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
