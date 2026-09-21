@@ -6,12 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>星座カード</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ★ ページめくり風アニメーション */
+    .card-img {
+      width: 100%;
+      backface-visibility: hidden;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      transform-origin: left center;
+    }
+
+    .slide-out {
+      transform: rotateY(-90deg);
+      opacity: 0;
+    }
+
+    .slide-in {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+
+    .card-frame {
+      perspective: 1000px;
+    }
+  </style>
 </head>
 
 <body>
 
   <!-- ★ カード枠（スマホ画面の中央に固定） -->
-  <div id="card-frame">
+  <div id="card-frame" class="card-frame">
 
     <!-- ★ カード画像（最初は表紙。JSが差し替える） -->
     <div class="card-image-area">
@@ -23,7 +46,7 @@
 
       <!-- ★ 四季ボタン -->
       <div class="button-row season-row">
-        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring">
+        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
         <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
         <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
         <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
@@ -46,12 +69,10 @@
 
   </div>
 
+  <!-- ★ Special viewer -->
   <div id="special-viewer" style="display:none;">
-
-    <!-- ★ Special画像（必須） -->
     <img id="special-img" src="" alt="Special画像">
 
-    <!-- ★ ボタン1段目 -->
     <div class="special-controls-row">
       <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
       <img src="image/common/btn-3stars.png" id="special-lines" class="special-btn" alt="星座線あり">
@@ -59,13 +80,41 @@
       <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
     </div>
 
-    <!-- ★ ボタン2段目（閉じる） -->
     <div class="special-controls-row">
       <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
     </div>
-
   </div>
 
+  <script>
+    // ★ ページめくり風アニメーション制御
+    function turnPage(nextSrc) {
+      const card = document.getElementById("card-img");
+      const preload = new Image();
+      preload.src = nextSrc;
+
+      preload.onload = () => {
+        card.classList.add("slide-out");
+
+        setTimeout(() => {
+          card.src = nextSrc;
+          card.classList.remove("slide-out");
+          card.classList.add("slide-in");
+
+          setTimeout(() => {
+            card.classList.remove("slide-in");
+          }, 600);
+        }, 600);
+      };
+    }
+
+    // ★ ボタンイベント例（実際の画像パスは適宜変更）
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      turnPage("image/cards/next-card.png");
+    });
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      turnPage("image/cards/prev-card.png");
+    });
+  </script>
 
   <script src="js/main.js"></script>
   <script src="js/data-special.js"></script>
