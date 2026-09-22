@@ -181,7 +181,7 @@ body {
 /* ===============================
    ★ 横置きレイアウト（Landscape）
    =============================== */
-@media (orientation: landscape) and (max-width: 600px) {
+@media (orientation: landscape) and (max-width: 900px) {
 
   body {
     height: 100vh;
@@ -271,4 +271,135 @@ body {
     display: flex;
     justify-content: center;
   }
+}
+/* ===============================
+   ★ アニメーション（カード切替）
+   =============================== */
+.slide-in-next {
+  animation: slideNext 0.6s ease forwards;
+}
+
+@keyframes slideNext {
+  from { transform: translateX(30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.slide-in-prev {
+  animation: slidePrev 0.6s ease forwards;
+}
+
+@keyframes slidePrev {
+  from { transform: translateX(-30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.fade {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ===============================
+   ★ 新方式：現カード → 左へスライドアウト
+   =============================== */
+.slide-out-left {
+  animation: slideOutLeft 0.4s ease forwards;
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-40px); opacity: 0; }
+}
+
+/* ===============================
+   ★ 新方式：次カード → フェードイン
+   =============================== */
+.fade-in {
+  animation: fadeInNew 0.4s ease forwards;
+}
+
+@keyframes fadeInNew {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ★ 現カードを右へスライドアウト（前へ用） */
+.slide-out-right {
+  animation: slideOutRight 0.4s ease forwards;
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(40px); opacity: 0; }
+}
+
+/* ===============================
+   ★ 季節ジャンプ：現カード → フェードアウト
+   =============================== */
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ===============================
+   ★ スワイプ＋フェード
+   =============================== */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===============================
+   ★ Special viewer：アニメーション
+   =============================== */
+.sp-slide-next {
+  animation: spSlideNext 0.4s ease forwards;
+}
+
+@keyframes spSlideNext {
+  from { transform: translateX(30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.sp-slide-prev {
+  animation: spSlidePrev 0.4s ease forwards;
+}
+
+@keyframes spSlidePrev {
+  from { transform: translateX(-30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.sp-fade {
+  animation: spFade 0.3s ease forwards;
+}
+
+@keyframes spFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ===============================
+   ★ 表／裏めくるアニメ（くるり）
+   =============================== */
+.flip-rotate {
+  animation: flipY 0.8s ease-in-out;
+}
+
+@keyframes flipY {
+  0%   { transform: rotateY(0deg); }
+  50%  { transform: rotateY(90deg); opacity: 0.5; }
+  100% { transform: rotateY(0deg); opacity: 1; }
 }
