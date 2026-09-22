@@ -16,7 +16,7 @@
     <!-- ★ カード画像領域 -->
     <div class="card-image-area">
 
-      <!-- ★ transform 衝突回避のためのラッパー（横置きでも使う） -->
+      <!-- ★ transform 衝突回避のためのラッパー -->
       <div id="card-anim-wrapper">
         <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
       </div>
@@ -24,32 +24,30 @@
     </div>
 
     <!-- ★ ボタン群（季節・操作・Special） -->
-    <div class="button-block">
+    <!-- ★ 縦置き／横置き両対応のため「1コンテナに統合」 -->
+<div class="button-block">
 
-      <!-- ★ 四季ボタン -->
-      <div class="button-row season-row">
-        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
-        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
-        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
-        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
-        <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
-      </div>
-
-      <!-- ★ 操作ボタン -->
-      <div class="button-row control-row">
-        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
-        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
-        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
-      </div>
-
-      <!-- ★ Special viewer ボタン -->
-      <div class="button-row special-row">
-        <img src="image/common/btn-3stars.png" class="btn-special" id="specialBtn" alt="Special">
-      </div>
-
-    </div>
-
+  <div class="season-group">
+    <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
+    <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
+    <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
+    <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
+    <img src="image/common/btn-south.png"  class="btn-season" id="southBtn"  data-season="south" alt="南">
   </div>
+
+  <div class="control-group">
+    <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
+    <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
+    <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
+  </div>
+
+  <div class="special-group">
+    <img src="image/common/btn-3stars.png" class="btn-special" id="specialBtn" alt="Special">
+  </div>
+
+</div>
+
+
 
   <!-- ★ Special viewer（星空写真の全画面ビュー） -->
   <div id="special-viewer" style="display:none;">
