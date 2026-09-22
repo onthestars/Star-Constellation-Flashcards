@@ -181,7 +181,7 @@ body {
 /* ===============================
    ★ 横置きレイアウト（Landscape）
    =============================== */
-@media (orientation: landscape) and (max-width: 900px) {
+@media (orientation: landscape) and (max-width: 600px) {
 
   body {
     height: 100vh;
