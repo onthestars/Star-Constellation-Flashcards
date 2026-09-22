@@ -190,7 +190,7 @@ body {
   #card-frame {
     width: 80vw;
     height: 60vh;
-    max-width: none;
+    /* max-width: none; */
 
     display: flex;
     flex-direction: column;   /* 上：カード、下：ボタン */
