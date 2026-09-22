@@ -371,8 +371,7 @@ nextBtn.onclick = () => {
     void viewer.offsetWidth;
     viewer.classList.add("fade-in");
 
-      // ★ ここを追加
-  updateViewer();
+    updateViewer();
 
     nextBtn.disabled = false;
 
@@ -384,7 +383,7 @@ nextBtn.onclick = () => {
 // ===============================
 prevBtn.onclick = () => {
 
-    // ★ 表紙なら何もせず終了（これが重要）
+  // ★ 表紙なら何もせず終了（これが重要）
   if (index === 0) return;
   
   prevBtn.disabled = true;
@@ -434,16 +433,20 @@ flipBtn.onclick = () => {
 
   flipBtn.disabled = true;
 
+  // アニメ開始
   viewer.classList.remove("flip-rotate");
   void viewer.offsetWidth;
   viewer.classList.add("flip-rotate");
 
+  // 画像切替（updateViewer は呼ばない）
   setTimeout(() => {
     isBack = !isBack;
-    updateViewer();
+    viewer.src = isBack ? backs[index] : images[index];
   }, 400);
 
+  // flip クラス除去＋ボタン復帰
   setTimeout(() => {
+    viewer.classList.remove("flip-rotate");
     flipBtn.disabled = false;
   }, 800);
 };
