@@ -188,9 +188,9 @@ body {
   }
 
   #card-frame {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
+    width: 80vw;
+    height: 60vh;
+    max-width: 640px;
 
     display: flex;
     flex-direction: column;   /* 上：カード、下：ボタン */
