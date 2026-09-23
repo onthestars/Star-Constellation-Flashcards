@@ -136,7 +136,10 @@ body {
 
 .special-controls-row {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 12px;
+  flex-wrap: nowrap;   /* ← これが最重要。折り返し防止 */
 }
 
 .special-btn {
@@ -144,7 +147,7 @@ body {
   height: auto;
   max-width: 38px;
   cursor: pointer;
-  margin: 6px 8px;
+  margin: 4px 2px;
 }
 
 /* ===============================
