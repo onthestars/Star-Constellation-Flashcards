@@ -20,6 +20,17 @@ const specialClear  = document.getElementById("special-clear");
 const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
 
+// =====================================
+// ★ 実画面高さで special-viewer を覆う（スマホのvh問題対策）
+// =====================================
+function adjustSpecialViewerHeight() {
+  const h = window.innerHeight;   // ← 実際の表示領域の高さ
+  specialViewer.style.height = h + "px";
+}
+
+// =====================================
+// 星座名を index から取得
+// =====================================
 function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
   if (season === "spring") return "Spring-Triangle";
@@ -33,6 +44,9 @@ function getSpecialFolder(starName) {
   return "image/other/Special/";
 }
 
+// =====================================
+// Special viewer のボタン状態更新
+// =====================================
 function updateSpecialButtons() {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) {
@@ -50,6 +64,9 @@ function updateSpecialButtons() {
   specialNext.style.opacity = (specialIndex >= total - 1 ? 0.4 : 1);
 }
 
+// =====================================
+// ★ Special viewer を開く
+// =====================================
 specialBtn.onclick = () => {
   if (!hasPhotoFor(index)) return;
 
@@ -66,6 +83,9 @@ specialBtn.onclick = () => {
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
 
+  // ★ 実画面高さでオーバーレイを覆う（最重要）
+  adjustSpecialViewerHeight();
+
   nextBtn.disabled = true;
   prevBtn.disabled = true;
   flipBtn.disabled = true;
@@ -76,6 +96,9 @@ specialBtn.onclick = () => {
   updateSpecialButtons();
 };
 
+// =====================================
+// ★ Special viewer を閉じる
+// =====================================
 specialClose.onclick = () => {
   specialViewer.style.display = "none";
   index = savedIndex;
@@ -91,6 +114,9 @@ specialClose.onclick = () => {
   updateViewer();
 };
 
+// =====================================
+// ★ アニメ適用（共通処理）
+// =====================================
 function applySpecialAnimation() {
   specialImg.classList.remove("sp-slide-next", "sp-slide-prev", "sp-fade");
   void specialImg.offsetWidth;
@@ -100,6 +126,9 @@ function applySpecialAnimation() {
   }
 }
 
+// =====================================
+// ★ 星座線なし
+// =====================================
 specialLines.onclick = () => {
   specialMode = "normal";
   const starName = getStarNameFromIndex(savedIndex);
@@ -111,6 +140,9 @@ specialLines.onclick = () => {
   updateSpecialButtons();
 };
 
+// =====================================
+// ★ 星座線あり
+// =====================================
 specialClear.onclick = () => {
   specialMode = "lines";
   const starName = getStarNameFromIndex(savedIndex);
@@ -122,6 +154,9 @@ specialClear.onclick = () => {
   updateSpecialButtons();
 };
 
+// =====================================
+// ★ Special写真：「次へ」
+// =====================================
 specialNext.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
@@ -140,6 +175,9 @@ specialNext.onclick = () => {
   updateSpecialButtons();
 };
 
+// =====================================
+// ★ Special写真：「前へ」
+// =====================================
 specialPrev.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
@@ -158,6 +196,9 @@ specialPrev.onclick = () => {
   updateSpecialButtons();
 };
 
+// =====================================
+// ★ Special viewer のスワイプ操作
+// =====================================
 let spStartX = 0;
 let spEndX = 0;
 
@@ -178,3 +219,8 @@ specialImg.addEventListener("touchend", (e) => {
     specialPrev.onclick();
   }
 });
+
+// =====================================
+// ★ 画面回転・アドレスバー変動にも対応
+// =====================================
+window.addEventListener("resize", adjustSpecialViewerHeight);
