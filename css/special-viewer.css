@@ -30,7 +30,8 @@
 
 /* ★ キャプション（固定高さ） */
 #special-caption {
-  height: 24px;          /* ← キャプション領域を固定 */
+  /* height: 24px;  ← 固定高さは絶対にNG */
+  min-height: 24px;       /* 1行なら24px、2行なら自動で伸びる */
   max-width: 90vw;
   color: #ffffff;
   font-size: 12px;
@@ -41,7 +42,7 @@
   /* 画像との距離を最小化 */
   margin: 1.0em 0 10px 0;
 
-  overflow: hidden;       /* ← 長くてもはみ出さない */
+  overflow: visible;       /* ← ここも重要：見切れ防止 */
 }
 
 /* ★ ボタンエリア（固定高さ） */
