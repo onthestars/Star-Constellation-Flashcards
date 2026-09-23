@@ -1,28 +1,30 @@
-    /* Special写真 viewer（画面全体に表示） */
-    #special-viewer {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.85);
-      z-index: 9999;
+/* special-viewer.css   */
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+/* Special写真 viewer（画面全体に表示） */
+#special-viewer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
 
-    #special-img {
-      max-width: 95vw;
-      max-height: 85vh;
-      object-fit: contain;
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-    #special-close {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 20px;
-    }
+#special-img {
+  max-width: 95vw;
+  max-height: 85vh;
+  object-fit: contain;
+}
+
+#special-close {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+}
