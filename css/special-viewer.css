@@ -34,7 +34,7 @@
   line-height: 1.6;
   opacity: 0.85;
   margin: 6px 0 10px 0;
-  /* overflow: hidden;       ← 長くてもはみ出さない */
+  overflow: hidden;       /* ← 長くてもはみ出さない */
 
   /* border: solid 1px white; */
 }
