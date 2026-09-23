@@ -53,3 +53,9 @@
   height: 60px;          /* ← ボタン行の高さを固定 */
   align-items: center;
 }
+
+/* 閉じるボタンだけ小さくする */
+#special-close {
+  width: 32px;   /* ← 他のボタンより少し小さくする */
+  height: 32px;  /* ← 必要なら調整可能 */
+}
