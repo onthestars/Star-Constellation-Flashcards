@@ -7,8 +7,11 @@ const specialPhotos = {
     ],
     lines: [
       "pic01-lines-Spring-Triangle.jpg"
+    ],
+    caption: [
+      "2026年4月24日／大阪府高槻市山中／谷に浮かぶ春の大三角",
     ]
-  },  // ← このカンマが超重要
+  },
 
   "Summer-Triangle": {
     normal: [
@@ -18,6 +21,10 @@ const specialPhotos = {
     lines: [
       "pic01-lines-Summer-Triangle.jpg",
       "pic02-lines-Summer-Triangle.jpg"
+    ],
+    caption: [
+      "2026年8月13～14日／紀伊半島南部／ペルセウス座流星群と共演",
+      "2026年8月13～14日／紀伊半島南部／ペルセウス座流星群と共演"
     ]
   }
 };
