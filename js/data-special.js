@@ -1,19 +1,23 @@
 // data-special.js
 
-// Special viewer 用の写真データ
 const specialPhotos = {
   "Spring-Triangle": {
     normal: [
-      "pic01-Spring-Triangle.jpg",
-      "pic02-Spring-Triangle.jpg"
+      "pic01-Spring-Triangle.jpg"
     ],
     lines: [
-      "pic01-lines-Spring-Triangle.jpg",
-      "pic02-lines-Spring-Triangle.jpg"
+      "pic01-lines-Spring-Triangle.jpg"
+    ]
+  },  // ← このカンマが超重要
+
+  "Summer-Triangle": {
+    normal: [
+      "pic01-Summer-Triangle.jpg",
+      "pic02-Summer-Triangle.jpg"
+    ],
+    lines: [
+      "pic01-lines-Summer-Triangle.jpg",
+      "pic02-lines-Summer-Triangle.jpg"
     ]
   }
-
-  // ★ 今後、写真を増やすときはここに追加するだけ
-  // "Summer-Triangle": { ... },
-  // "Winter-Diamond": { ... },
 };

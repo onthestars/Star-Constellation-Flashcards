@@ -1,3 +1,5 @@
+// main.js
+
 // ===============================
 // カード画像パス（遅延読み込み）
 // ===============================
@@ -233,10 +235,8 @@ function updateSeasonButtons() {
 // ===============================
 function jumpToSeason(season) {
 
-  // ★ flip-rotate を必ず除去（これが重要）
   viewer.classList.remove("flip-rotate");
 
-  // ★ ① 現カードをフェードアウト
   viewer.classList.remove("fade-out", "fade-in", "slide-out-left", "slide-out-right");
   void viewer.offsetWidth;
   viewer.classList.add("fade-out");
@@ -265,7 +265,10 @@ function jumpToSeason(season) {
 // Special viewer が存在するカードか
 // ===============================
 function hasPhotoFor(i) {
-  return images[i].includes("Spring-Triangle");
+  return (
+    images[i].includes("Spring-Triangle") ||
+    images[i].includes("Summer-Triangle")
+  );
 }
 
 // ===============================
@@ -284,7 +287,6 @@ function updateSpecialButton() {
 // ===============================
 function updateViewer() {
 
-  // ★ 新アニメ適用（slide-out-left / fade-in）
   if (animationClass) {
     viewer.classList.remove("slide-out-left", "fade-in");
     void viewer.offsetWidth;
@@ -292,7 +294,6 @@ function updateViewer() {
     animationClass = null;
   }
 
-  // ★ 最終カード
   if (isFinalNull) {
     viewer.src = "image/common/card-null.png";
     nextBtn.disabled = true;
@@ -303,7 +304,6 @@ function updateViewer() {
     return;
   }
 
-  // ★ 通常カード
   viewer.src = isBack ? backs[index] : images[index];
   nextBtn.disabled = false;
   nextBtn.style.opacity = 1;
@@ -313,7 +313,6 @@ function updateViewer() {
 
   updateSpecialButton();
 
-  // ★ 季節自動判定
   const autoSeason = detectSeasonByIndex(index);
   if (autoSeason !== currentSeason) {
     currentSeason = autoSeason;
@@ -347,12 +346,10 @@ nextBtn.onclick = () => {
 
   nextBtn.disabled = true;
 
-  // ① 現カードを左へスライドアウト
   viewer.classList.remove("slide-out-left", "fade-in");
   void viewer.offsetWidth;
   viewer.classList.add("slide-out-left");
 
-  // ② アニメ終了後に画像切替 → フェードイン
   setTimeout(() => {
 
     let next = findNextIndex(index);
@@ -383,12 +380,10 @@ nextBtn.onclick = () => {
 // ===============================
 prevBtn.onclick = () => {
 
-  // ★ 表紙なら何もせず終了（これが重要）
   if (index === 0) return;
   
   prevBtn.disabled = true;
 
-  // ★ 前へは右へスライドアウト
   viewer.classList.remove("slide-out-left", "slide-out-right", "fade-in");
   void viewer.offsetWidth;
   viewer.classList.add("slide-out-right");
@@ -420,7 +415,6 @@ prevBtn.onclick = () => {
   }, 400);
 };
 
-
 // ===============================
 // 表／裏（Y軸回転アニメ）
 // ===============================
@@ -433,18 +427,15 @@ flipBtn.onclick = () => {
 
   flipBtn.disabled = true;
 
-  // アニメ開始
   viewer.classList.remove("flip-rotate");
   void viewer.offsetWidth;
   viewer.classList.add("flip-rotate");
 
-  // 画像切替（updateViewer は呼ばない）
   setTimeout(() => {
     isBack = !isBack;
     viewer.src = isBack ? backs[index] : images[index];
   }, 400);
 
-  // flip クラス除去＋ボタン復帰
   setTimeout(() => {
     viewer.classList.remove("flip-rotate");
     flipBtn.disabled = false;
