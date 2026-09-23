@@ -13,30 +13,32 @@
 
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* ← スクロールバー禁止 */
+  overflow: hidden;
 }
 
-/* ★ 画像エリア（flexで残り全部を使う） */
+/* ★ 画像エリア（flex + 最大高さで暴走を防ぐ） */
 #special-img {
   max-width: 95vw;
-  flex: 1 1 auto;        /* ← 画像は残りの高さを全部使う */
+  flex: 1 1 auto;
   object-fit: contain;
   margin-top: 10px;
+
+  /* Xperia 5V 対策：画像が伸びすぎないようにする */
+  max-height: 60vh;   /* ← これが決定的に効く */
 }
 
 /* ★ キャプション（固定高さ） */
 #special-caption {
-  height: 24px;          /* ← キャプション領域を固定 */
+  height: 24px;
   max-width: 90vw;
   color: #ffffff;
   font-size: 12px;
   text-align: center;
   line-height: 1.6;
   opacity: 0.85;
-  margin: 6px 0 10px 0;
-  overflow: hidden;       /* ← 長くてもはみ出さない */
 
-  /* border: solid 1px white; */
+  margin: 6px 0 30px 0;  /* ← ボタン高さの半分 */
+  overflow: hidden;
 }
 
 /* ★ ボタンエリア（固定高さ） */
@@ -44,6 +46,6 @@
   display: flex;
   justify-content: center;
   gap: 20px;
-  height: 60px;          /* ← ボタン行の高さを固定 */
+  height: 60px;
   align-items: center;
 }
