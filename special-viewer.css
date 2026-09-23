@@ -1,0 +1,49 @@
+/* special-viewer.css */
+
+/* Special写真 viewer（画面全体に表示） */
+#special-viewer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+/* ★ 画像エリア（flexで残り全部を使う） */
+#special-img {
+  max-width: 95vw;
+  flex: 1 1 auto;        /* ← 画像は残りの高さを全部使う */
+  object-fit: contain;
+  margin-top: 10px;
+}
+
+/* ★ キャプション（固定高さ） */
+#special-caption {
+  height: 24px;          /* ← キャプション領域を固定 */
+  max-width: 90vw;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin: 6px 0 10px 0;
+  overflow: hidden;       /* ← 長くてもはみ出さない */
+
+  /* border: solid 1px white; */
+}
+
+/* ★ ボタンエリア（固定高さ） */
+.special-controls-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  height: 60px;          /* ← ボタン行の高さを固定 */
+  align-items: center;
+}
