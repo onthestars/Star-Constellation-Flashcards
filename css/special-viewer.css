@@ -25,15 +25,18 @@
 #special-img {
   max-width: 95vw;
 
-  /* ★ iPhone8対応：縦長画像の描画停止を防ぐ */
-  max-height: 100vh;
+  /* ★ iPhone8対策：画像が画面を占領しないようにする */
+  max-height: calc(100vh - 100px);
 
   object-fit: contain;
 
-  flex: 0 0 auto;
+  /* ★ flex:0 0 auto は旧Safariで見切れを起こす */
+  flex: 1 1 auto;
+
   margin-top: 10px;
   margin-bottom: 0;
 }
+
 
 /* ★ キャプション（固定高さはNG → 自動伸縮） */
 #special-caption {
