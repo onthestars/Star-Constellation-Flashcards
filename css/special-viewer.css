@@ -7,13 +7,16 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+      min-height: 100vh;   /* ← これだけで高さ計算が壊れなくなる */
+  height: auto;        /* ← 固定高さを解除 */
   background: rgba(0, 0, 0, 0.85);
   z-index: 9999;
 
   display: flex;
   flex-direction: column;
   overflow: hidden; /* ← スクロールバー禁止 */
+
+
 }
 
 /* ★ 画像エリア（内容サイズに合わせて縮む） */
@@ -21,8 +24,10 @@
   max-width: 95vw;
   object-fit: contain;
 
-  /* flex: 1 1 auto を廃止 → 空白が消える */
-  flex: 0 0 auto;
+#special-img {
+  flex: 1 1 auto;      /* ← 旧Safariの見切れを防ぐ決定打 */
+}
+
 
   margin-top: 10px;
   margin-bottom: 0; /* 画像直下の余白をゼロに */
