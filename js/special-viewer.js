@@ -20,18 +20,23 @@ const specialClear  = document.getElementById("special-clear");
 const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
 
+
+// ★★★スペシャルビューアページ写真追加の際に編集↓↓↓
 function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
   if (season === "spring") return "Spring-Triangle";
   if (season === "summer") return "Summer-Triangle";
+    if (season === "winter") return "Winter-Triangle";
   return null;
 }
 
 function getSpecialFolder(starName) {
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
+    if (starName === "Winter-Triangle") return "image/winter/Special/";
   return "image/other/Special/";
 }
+// ★★★スペシャルビューアページ写真追加の際に編集↑↑↑
 
 function updateSpecialButtons() {
   const starName = getStarNameFromIndex(savedIndex);

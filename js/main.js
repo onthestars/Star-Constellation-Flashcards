@@ -261,15 +261,18 @@ function jumpToSeason(season) {
   }, 300);
 }
 
+// ★★★スペシャルビューアページ写真追加の際に編集↓↓↓
 // ===============================
 // Special viewer が存在するカードか
 // ===============================
 function hasPhotoFor(i) {
   return (
     images[i].includes("Spring-Triangle") ||
-    images[i].includes("Summer-Triangle")
+    images[i].includes("Summer-Triangle") ||
+        images[i].includes("Winter-Triangle")
   );
 }
+// ★★★スペシャルビューアページ写真追加の際に編集↑↑↑
 
 // ===============================
 function updateSpecialButton() {
