@@ -269,8 +269,7 @@ function hasPhotoFor(i) {
   return (
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Summer-Triangle") ||
-    images[i].includes("Pisces")||
-    images[i].includes("Winter-Triangle")
+        images[i].includes("Winter-Triangle")
   );
 }
 // ★★★スペシャルビューアページ写真追加の際に編集↑↑↑

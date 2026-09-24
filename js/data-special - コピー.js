@@ -22,7 +22,7 @@ const specialPhotos = {
       "pic01-lines-Pisces.jpg"
     ],
     caption: [
-      "2025年11月16日／紀伊半島南部／うお座（左）と秋の四辺形",
+      "＊＊＊＊＊＊＊＊"
     ]
   },
 
