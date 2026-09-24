@@ -7,31 +7,37 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+
+  /* ★ iPhone8対応：100vhの誤動作を防ぐ */
+  min-height: 100vh;
+  height: auto;
+
   background: rgba(0, 0, 0, 0.85);
   z-index: 9999;
 
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* ← スクロールバー禁止 */
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch; /* ← Safari旧版の描画安定化 */
 }
 
 /* ★ 画像エリア（内容サイズに合わせて縮む） */
 #special-img {
   max-width: 95vw;
+
+  /* ★ iPhone8対応：縦長画像の描画停止を防ぐ */
+  max-height: 100vh;
+
   object-fit: contain;
 
-  /* flex: 1 1 auto を廃止 → 空白が消える */
   flex: 0 0 auto;
-
   margin-top: 10px;
-  margin-bottom: 0; /* 画像直下の余白をゼロに */
+  margin-bottom: 0;
 }
 
-/* ★ キャプション（固定高さ） */
+/* ★ キャプション（固定高さはNG → 自動伸縮） */
 #special-caption {
-  /* height: 24px;  ← 固定高さは絶対にNG */
-  min-height: 24px;       /* 1行なら24px、2行なら自動で伸びる */
+  min-height: 24px;
   max-width: 90vw;
   color: #ffffff;
   font-size: 12px;
@@ -39,10 +45,9 @@
   line-height: 1.6;
   opacity: 0.85;
 
-  /* 画像との距離を最小化 */
   margin: 1.0em 0 10px 0;
 
-  overflow: visible;       /* ← ここも重要：見切れ防止 */
+  overflow: visible; /* ← 見切れ防止 */
 }
 
 /* ★ ボタンエリア（固定高さ） */
@@ -50,12 +55,12 @@
   display: flex;
   justify-content: center;
   gap: 20px;
-  height: 60px;          /* ← ボタン行の高さを固定 */
+  height: 60px;
   align-items: center;
 }
 
 /* 閉じるボタンだけ小さくする */
 #special-close {
-  width: 32px;   /* ← 他のボタンより少し小さくする */
-  height: 32px;  /* ← 必要なら調整可能 */
+  width: 32px;
+  height: 32px;
 }
