@@ -64,8 +64,8 @@ body {
   display: flex;
   flex-direction: column;   /* 縦置きでは縦並び */
   align-items: center;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 4px;
+  margin-top: 6px;
 }
 
 /* ===============================
@@ -82,7 +82,7 @@ body {
   width: 8vw;
   max-width: 56px;
   min-width: 32px;
-  margin: 6px 0;
+  margin: 6px 6px;
 }
 
 .btn-season.active-season {
