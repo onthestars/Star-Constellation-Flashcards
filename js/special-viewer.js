@@ -34,7 +34,8 @@ function getStarNameFromIndex(i) {
 
 if (season === "autumn") {
   if (i === 53 || i === 66) return "Pegasus";
-  if (i === 54 || i === 67) return "Pisces"; // 必要なら Pisces の index も追加
+  if (i === 54 || i === 67) return "Pisces";
+    if (i === 57 || i === 70) return "Cassiopeia";
 }
 
   if (season === "winter") return "Winter-Triangle";
@@ -48,6 +49,7 @@ function getSpecialFolder(starName) {
   if (starName === "Summer-Triangle") return "image/summer/Special/";
   if (starName === "Pegasus") return "image/autumn/Special/";
   if (starName === "Pisces") return "image/autumn/Special/";
+    if (starName === "Cassiopeia") return "image/autumn/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
   return null;
 }

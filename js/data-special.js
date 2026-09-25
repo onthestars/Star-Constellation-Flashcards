@@ -53,7 +53,19 @@ const specialPhotos = {
   ]
 },
 
-    "Pisces": {
+    "Cassiopeia": {
+    normal: [
+      "Cassiopeia-noline-pic01.jpg"
+    ],
+    lines: [
+      "Cassiopeia-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年10月28日／大阪府北摂／カシオペヤ座",
+    ]
+  },
+
+      "Pisces": {
     normal: [
       "Pisces-noline-pic01.jpg"
     ],

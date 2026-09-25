@@ -272,6 +272,7 @@ function hasPhotoFor(i) {
     images[i].includes("Summer-Triangle") ||
         images[i].includes("Pegasus") ||
     images[i].includes("Pisces") ||
+        images[i].includes("Cassiopeia") ||
     images[i].includes("Winter-Triangle")
   );
 }
