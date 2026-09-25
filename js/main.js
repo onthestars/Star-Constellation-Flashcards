@@ -197,8 +197,6 @@ const specialBtn = document.getElementById("specialBtn");
 // ===============================
 const soundFlip = document.getElementById("soundFlip");
 const soundPage = document.getElementById("soundPage");
-const soundSeason = document.getElementById("soundSeason");
-const soundSpecial = document.getElementById("soundSpecial"); // ★追加
 
 // ===============================
 // カレント季節ボタン画像
@@ -239,7 +237,7 @@ function updateSeasonButtons() {
 }
 
 // ===============================
-// 季節ジャンプ（新アニメ方式）
+// 季節ジャンプ（新アニメ方式：フェードアウト → フェードイン）
 // ===============================
 function jumpToSeason(season) {
 
@@ -467,51 +465,11 @@ flipBtn.onclick = () => {
 // ===============================
 // 季節ボタン（フェードイン）
 // ===============================
-springBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
-  animationClass = "fade-in";
-  jumpToSeason("spring");
-};
-
-summerBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
-  animationClass = "fade-in";
-  jumpToSeason("summer");
-};
-
-autumnBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
-  animationClass = "fade-in";
-  jumpToSeason("autumn");
-};
-
-winterBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
-  animationClass = "fade-in";
-  jumpToSeason("winter");
-};
-
-southBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
-  animationClass = "fade-in";
-  jumpToSeason("south");
-};
-
-// ===============================
-// ★ Special viewer ボタン（サウンド＋表示）
-// ===============================
-specialBtn.onclick = () => {
-  soundSpecial.currentTime = 0;
-  soundSpecial.play();
-
-  // Special viewer を開く処理（special-viewer.js 側）
-  openSpecialViewer(index);
-};
+springBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("spring"); };
+summerBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("summer"); };
+autumnBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("autumn"); };
+winterBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("winter"); };
+southBtn.onclick  = () => { animationClass = "fade-in"; jumpToSeason("south"); };
 
 // ===============================
 updateViewer();
@@ -538,4 +496,3 @@ viewer.addEventListener("touchend", (e) => {
     prevBtn.onclick();
   }
 });
-
