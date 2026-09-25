@@ -193,6 +193,12 @@ const southBtn  = document.getElementById("southBtn");
 const specialBtn = document.getElementById("specialBtn");
 
 // ===============================
+// ★ 効果音
+// ===============================
+const soundFlip = document.getElementById("soundFlip");
+const soundPage = document.getElementById("soundPage");
+
+// ===============================
 // カレント季節ボタン画像
 // ===============================
 const seasonImages = {
@@ -261,25 +267,20 @@ function jumpToSeason(season) {
   }, 300);
 }
 
-// ★★★スペシャルビューアページ写真追加の際に編集↓↓↓
 // ===============================
 // Special viewer が存在するカードか
 // ===============================
-
 function hasPhotoFor(i) {
   return (
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Summer-Triangle") ||
-        images[i].includes("Pegasus") ||
+    images[i].includes("Pegasus") ||
     images[i].includes("Pisces") ||
-        images[i].includes("Cassiopeia") ||
+    images[i].includes("Cassiopeia") ||
     images[i].includes("Winter-Triangle")
   );
 }
 
-// ★★★スペシャルビューアページ写真追加の際に編集↑↑↑
-
-// ===============================
 function updateSpecialButton() {
   if (hasPhotoFor(index)) {
     specialBtn.disabled = false;
@@ -350,6 +351,10 @@ function findPrevIndex(i) {
 // ★ 次へ（新アニメ方式）
 // ===============================
 nextBtn.onclick = () => {
+
+  soundPage.currentTime = 0;
+  soundPage.play();
+
   if (isFinalNull) return;
 
   nextBtn.disabled = true;
@@ -387,6 +392,9 @@ nextBtn.onclick = () => {
 // ★ 前へ（新アニメ方式）
 // ===============================
 prevBtn.onclick = () => {
+
+  soundPage.currentTime = 0;
+  soundPage.play();
 
   if (index === 0) return;
   
@@ -427,6 +435,10 @@ prevBtn.onclick = () => {
 // 表／裏（Y軸回転アニメ）
 // ===============================
 flipBtn.onclick = () => {
+
+  soundFlip.currentTime = 0;
+  soundFlip.play();
+
   if (isFinalNull) {
     isBack = true;
     updateViewer();
