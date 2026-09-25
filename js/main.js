@@ -197,6 +197,8 @@ const specialBtn = document.getElementById("specialBtn");
 // ===============================
 const soundFlip = document.getElementById("soundFlip");
 const soundPage = document.getElementById("soundPage");
+const soundSeason = document.getElementById("soundSeason");
+const soundSpecial = document.getElementById("soundSpecial");
 
 // ===============================
 // カレント季節ボタン画像
@@ -465,11 +467,50 @@ flipBtn.onclick = () => {
 // ===============================
 // 季節ボタン（フェードイン）
 // ===============================
-springBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("spring"); };
-summerBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("summer"); };
-autumnBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("autumn"); };
-winterBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("winter"); };
-southBtn.onclick  = () => { animationClass = "fade-in"; jumpToSeason("south"); };
+springBtn.onclick = () => {
+  soundSeason.currentTime = 0;
+  soundSeason.play();
+  animationClass = "fade-in";
+  jumpToSeason("spring");
+};
+
+summerBtn.onclick = () => {
+  soundSeason.currentTime = 0;
+  soundSeason.play();
+  animationClass = "fade-in";
+  jumpToSeason("summer");
+};
+
+autumnBtn.onclick = () => {
+  soundSeason.currentTime = 0;
+  soundSeason.play();
+  animationClass = "fade-in";
+  jumpToSeason("autumn");
+};
+
+winterBtn.onclick = () => {
+  soundSeason.currentTime = 0;
+  soundSeason.play();
+  animationClass = "fade-in";
+  jumpToSeason("winter");
+};
+
+southBtn.onclick = () => {
+  soundSeason.currentTime = 0;
+  soundSeason.play();
+  animationClass = "fade-in";
+  jumpToSeason("south");
+};
+
+// ===============================
+// ★ Special viewer ボタン（効果音付き）
+// ===============================
+specialBtn.onclick = () => {
+  soundSpecial.currentTime = 0;
+  soundSpecial.play();
+
+  window.location.href = "special-viewer.html?index=" + index;
+};
 
 // ===============================
 updateViewer();
