@@ -28,26 +28,25 @@ function getStarNameFromIndex(i) {
   if (season === "spring") return "Spring-Triangle";
 
   if (season === "summer") {
-    // Sagittarius のカード
     if (i === 27 || i === 36) return "Sagittarius";
-
-    // Summer-Triangle のカード
     if (i === 35) return "Summer-Triangle";
-
-    return null;
   }
 
-  if (season === "autumn") return "Pisces";
+if (season === "autumn") {
+  if (i === 53 || i === 66) return "Pegasus";
+  if (i === 54 || i === 67) return "Pisces"; // 必要なら Pisces の index も追加
+}
+
   if (season === "winter") return "Winter-Triangle";
 
   return null;
 }
 
-
 function getSpecialFolder(starName) {
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
+  if (starName === "Pegasus") return "image/autumn/Special/";
   if (starName === "Pisces") return "image/autumn/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
   return null;

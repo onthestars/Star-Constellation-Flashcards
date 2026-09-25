@@ -265,15 +265,17 @@ function jumpToSeason(season) {
 // ===============================
 // Special viewer が存在するカードか
 // ===============================
+
 function hasPhotoFor(i) {
   return (
     images[i].includes("Spring-Triangle") ||
-            images[i].includes("Sagittarius")||
     images[i].includes("Summer-Triangle") ||
-    images[i].includes("Pisces")||
+        images[i].includes("Pegasus") ||
+    images[i].includes("Pisces") ||
     images[i].includes("Winter-Triangle")
   );
 }
+
 // ★★★スペシャルビューアページ写真追加の際に編集↑↑↑
 
 // ===============================

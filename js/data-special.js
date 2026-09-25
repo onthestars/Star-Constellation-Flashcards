@@ -41,6 +41,18 @@ const specialPhotos = {
     ]
   },
 
+  "Pegasus": {
+  normal: [
+    "Pegasus-nolines-pic01.jpg"
+  ],
+  lines: [
+    "Pegasus-lines-pic01.jpg"
+  ],
+  caption: [
+    "2026年9月12日／紀伊半島中部／秋の四辺形（ペガスス座の一部）"
+  ]
+},
+
     "Pisces": {
     normal: [
       "Pisces-noline-pic01.jpg"
