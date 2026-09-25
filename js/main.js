@@ -183,8 +183,8 @@ const links = new Array(images.length).fill(null);
 
 // ▼ 必要に応じて自由に追加していく
 links[2] = "https://peteworden.github.io/Soleil/chart.html?ra=234.773&dec=77.915&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
-links[3] = "https://peteworden.github.io/Soleil/chart.html?ra=185.347&dec=-18.148&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
-links[4] = "https://peteworden.github.io/Soleil/chart.html?ra=170.336&dec=-15.146&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
+links[3] = "https://peteworden.github.io/Soleil/chart.html?ra=170.336&dec=-15.146&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
+links[4] = "https://peteworden.github.io/Soleil/chart.html?ra=185.347&dec=-18.148&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
 links[22] = "https://peteworden.github.io/Soleil/chart.html?ra=281.487&dec=36.029&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
 links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
 links[75] = "https://peteworden.github.io/Soleil/chart.html?ra=105.4&dec=21.961&lat=34.79&lon=135.52&time=20260926-013549&fov=53.28";
