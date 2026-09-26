@@ -213,16 +213,50 @@ links[9] = "https://www.study-style.com/seiza/Vir.html";
 links[10] = "https://www.study-style.com/seiza/Leo.html";
 
 // 夏の星座
-// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+links[22] = "https://www.study-style.com/seiza/Lyr.html";
+links[23] = "https://www.study-style.com/seiza/Aql.html";
+links[24] = "https://www.study-style.com/seiza/Cyg.html";
+links[25] = "https://www.study-style.com/seiza/Del.html";
+links[26] = "https://www.study-style.com/seiza/Sge.html";
+links[27] = "https://www.study-style.com/seiza/Sgr.html";
+links[28] = "https://www.study-style.com/seiza/Sco.html";
+links[29] = "https://www.study-style.com/seiza/Lib.html";
+links[30] = "https://www.study-style.com/seiza/Dra.html";
+links[31] = "https://www.study-style.com/seiza/Her.html";
+links[32] = "https://www.study-style.com/seiza/Oph.html";
+links[33] = "https://www.study-style.com/seiza/CrB.html";
+links[34] = "https://www.study-style.com/seiza/CrA.html";
 
 // 秋の星座
-// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+links[49] = "https://www.study-style.com/seiza/Aqr.html";
+links[50] = "https://www.study-style.com/seiza/PsA.html";
+links[51] = "https://www.study-style.com/seiza/Cap.html";
+links[52] = "https://www.study-style.com/seiza/Equ.html";
+links[53] = "https://www.study-style.com/seiza/Peg.html";
+links[54] = "https://www.study-style.com/seiza/Psc.html";
+links[55] = "https://www.study-style.com/seiza/And.html";
+links[56] = "https://www.study-style.com/seiza/Cep.html";
+links[57] = "https://www.study-style.com/seiza/Cas.html";
+links[58] = "https://www.study-style.com/seiza/Cet.html";
+links[59] = "https://www.study-style.com/seiza/Per.html";
+links[60] = "https://www.study-style.com/seiza/Ari.html";
+links[61] = "https://www.study-style.com/seiza/Tri.html";
 
 // 冬の星座
-// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+links[75] = "https://www.study-style.com/seiza/Gem.html";
+links[76] = "https://www.study-style.com/seiza/Aur.html";
+links[77] = "https://www.study-style.com/seiza/Tau.html";
+links[78] = "https://www.study-style.com/seiza/Ori.html";
+links[79] = "https://www.study-style.com/seiza/CMa.html";
+links[80] = "https://www.study-style.com/seiza/CMi.html";
+links[81] = "https://www.study-style.com/seiza/Eri.html";
+links[82] = "https://www.study-style.com/seiza/Lep.html";
 
 // 南の星座
-// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+links[92] = "https://www.study-style.com/seiza/Lup.html";
+links[93] = "https://www.study-style.com/seiza/Cen.html";
+links[94] = "https://www.study-style.com/seiza/Ara.html";
+links[95] = "https://www.study-style.com/seiza/Arg.html";
 
 // ===============================
 // DOM
