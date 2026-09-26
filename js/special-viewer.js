@@ -1,5 +1,8 @@
 // special-viewer.js
 
+// 効果音 Sound
+const soundKirakira = document.getElementById("soundKirakira");
+
 // =====================================
 // Special Viewer（写真ビューアー）
 // =====================================
@@ -86,6 +89,12 @@ specialBtn.onclick = () => {
   const folder = getSpecialFolder(starName);
   specialImg.src = folder + specialPhotos[starName].normal[0];
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
+  specialViewer.style.display = "flex";
+
+  // ★★★ キラキラ音を再生（追加部分）
+  soundKirakira.currentTime = 0;
+  soundKirakira.play();
+
   specialViewer.style.display = "flex";
 
   nextBtn.disabled = true;
