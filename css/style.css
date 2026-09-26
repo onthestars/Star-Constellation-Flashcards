@@ -481,7 +481,7 @@ body {
   100% { opacity: 0; transform: scale(0.4); }
 }
 
-/* 効果音 ON/OFF ボタン */
+/* 効果音・音声 ON/OFF ボタン */
 #sound-global-buttons {
   position: fixed;
   top: 10px;
@@ -493,4 +493,12 @@ body {
   width: 32px;
   height: 32px;
   cursor: pointer;
+}
+
+/* スマホ向け（幅 640px 以下） */
+@media (max-width: 640px) {
+  #sound-global-buttons img {
+    transform: scale(0.8);       /* ← 60% に縮小 */
+    transform-origin: top right; /* ← 右上基準で縮小（位置ズレ防止） */
+  }
 }
