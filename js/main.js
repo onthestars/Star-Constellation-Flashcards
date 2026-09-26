@@ -1,5 +1,24 @@
 // main.js
 
+// ★ アプリ全体のサウンド設定（初期ON）
+let soundEnabled = true;
+
+// ★ 音声ON/OFFボタン（画面右上の試験用）
+const soundOnBtn  = document.getElementById("soundOnBtn");
+const soundOffBtn = document.getElementById("soundOffBtn");
+
+soundOnBtn.onclick = () => {
+  soundEnabled = false;
+  soundOnBtn.style.display  = "none";
+  soundOffBtn.style.display = "inline";
+};
+
+soundOffBtn.onclick = () => {
+  soundEnabled = true;
+  soundOnBtn.style.display  = "inline";
+  soundOffBtn.style.display = "none";
+};
+
 // ===============================
 // カード画像パス（遅延読み込み）
 // ===============================
@@ -362,8 +381,10 @@ function findPrevIndex(i) {
 // ===============================
 nextBtn.onclick = () => {
 
-  soundPage.currentTime = 0;
-  soundPage.play();
+  if (soundEnabled) {
+    soundPage.currentTime = 0;
+    soundPage.play();
+  }
 
   if (isFinalNull) return;
 
@@ -403,8 +424,10 @@ nextBtn.onclick = () => {
 // ===============================
 prevBtn.onclick = () => {
 
-  soundPage.currentTime = 0;
-  soundPage.play();
+  if (soundEnabled) {
+    soundPage.currentTime = 0;
+    soundPage.play();
+  }
 
   if (index === 0) return;
   
@@ -446,8 +469,10 @@ prevBtn.onclick = () => {
 // ===============================
 flipBtn.onclick = () => {
 
-  soundFlip.currentTime = 0;
-  soundFlip.play();
+  if (soundEnabled) {
+    soundFlip.currentTime = 0;
+    soundFlip.play();
+  }
 
   if (isFinalNull) {
     isBack = true;
@@ -475,43 +500,48 @@ flipBtn.onclick = () => {
 // ===============================
 // 季節ボタン（フェードイン）
 // ===============================
-// springBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("spring"); };
-// summerBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("summer"); };
-// autumnBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("autumn"); };
-// winterBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("winter"); };
-// southBtn.onclick  = () => { animationClass = "fade-in"; jumpToSeason("south"); };
 
 springBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
   animationClass = "fade-in";
   jumpToSeason("spring");
 };
 
 summerBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
   animationClass = "fade-in";
   jumpToSeason("summer");
 };
 
 autumnBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
   animationClass = "fade-in";
   jumpToSeason("autumn");
 };
 
 winterBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
   animationClass = "fade-in";
   jumpToSeason("winter");
 };
 
 southBtn.onclick = () => {
-  soundSeason.currentTime = 0;
-  soundSeason.play();
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
   animationClass = "fade-in";
   jumpToSeason("south");
 };

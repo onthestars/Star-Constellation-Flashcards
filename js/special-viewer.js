@@ -91,11 +91,11 @@ specialBtn.onclick = () => {
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
 
-  // ★★★ キラキラ音を再生（追加部分）
+  // ★★★ キラキラ音を再生（音声ONのときだけ）
+if (soundEnabled) {
   soundKirakira.currentTime = 0;
   soundKirakira.play();
-
-  specialViewer.style.display = "flex";
+}
 
   nextBtn.disabled = true;
   prevBtn.disabled = true;
