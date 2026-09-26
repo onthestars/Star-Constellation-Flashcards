@@ -1,5 +1,24 @@
 // main.js
 
+// ★ アプリ全体のサウンド設定（初期ON）
+let soundEnabled = true;
+
+// ★ 音声ON/OFFボタン（画面右上の試験用）
+const soundOnBtn  = document.getElementById("soundOnBtn");
+const soundOffBtn = document.getElementById("soundOffBtn");
+
+soundOnBtn.onclick = () => {
+  soundEnabled = false;
+  soundOnBtn.style.display  = "none";
+  soundOffBtn.style.display = "inline";
+};
+
+soundOffBtn.onclick = () => {
+  soundEnabled = true;
+  soundOnBtn.style.display  = "inline";
+  soundOffBtn.style.display = "none";
+};
+
 // ===============================
 // カード画像パス（遅延読み込み）
 // ===============================
@@ -177,6 +196,35 @@ let isFinalNull = false;
 let animationClass = null;
 
 // ===============================
+// ★ カードごとのリンク配列（ここが追加部分）
+// ===============================
+const links = new Array(images.length).fill(null);
+
+// ▼ 必要に応じて自由に追加していく
+// 春の星座
+links[2] = "https://www.study-style.com/seiza/UMi.html";
+links[3] = "https://www.study-style.com/seiza/Crt.html";
+links[4] = "https://www.study-style.com/seiza/Crv.html";
+links[5] = "https://www.study-style.com/seiza/Hya.html";
+links[6] = "https://www.study-style.com/seiza/Cnc.html";
+links[7] = "https://www.study-style.com/seiza/UMa.html";
+links[8] = "https://www.study-style.com/seiza/Boo.html";
+links[9] = "https://www.study-style.com/seiza/Vir.html";
+links[10] = "https://www.study-style.com/seiza/Leo.html";
+
+// 夏の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// 秋の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// 冬の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// 南の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// ===============================
 // DOM
 // ===============================
 const viewer = document.getElementById("card-img");
@@ -193,10 +241,11 @@ const southBtn  = document.getElementById("southBtn");
 const specialBtn = document.getElementById("specialBtn");
 
 // ===============================
-// ★ 効果音
+// ★ 効果音 Sound
 // ===============================
 const soundFlip = document.getElementById("soundFlip");
 const soundPage = document.getElementById("soundPage");
+const soundSeason = document.getElementById("soundSeason");
 
 // ===============================
 // カレント季節ボタン画像
@@ -352,8 +401,10 @@ function findPrevIndex(i) {
 // ===============================
 nextBtn.onclick = () => {
 
-  soundPage.currentTime = 0;
-  soundPage.play();
+  if (soundEnabled) {
+    soundPage.currentTime = 0;
+    soundPage.play();
+  }
 
   if (isFinalNull) return;
 
@@ -393,8 +444,10 @@ nextBtn.onclick = () => {
 // ===============================
 prevBtn.onclick = () => {
 
-  soundPage.currentTime = 0;
-  soundPage.play();
+  if (soundEnabled) {
+    soundPage.currentTime = 0;
+    soundPage.play();
+  }
 
   if (index === 0) return;
   
@@ -436,8 +489,10 @@ prevBtn.onclick = () => {
 // ===============================
 flipBtn.onclick = () => {
 
-  soundFlip.currentTime = 0;
-  soundFlip.play();
+  if (soundEnabled) {
+    soundFlip.currentTime = 0;
+    soundFlip.play();
+  }
 
   if (isFinalNull) {
     isBack = true;
@@ -465,14 +520,64 @@ flipBtn.onclick = () => {
 // ===============================
 // 季節ボタン（フェードイン）
 // ===============================
-springBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("spring"); };
-summerBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("summer"); };
-autumnBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("autumn"); };
-winterBtn.onclick = () => { animationClass = "fade-in"; jumpToSeason("winter"); };
-southBtn.onclick  = () => { animationClass = "fade-in"; jumpToSeason("south"); };
+
+springBtn.onclick = () => {
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
+  animationClass = "fade-in";
+  jumpToSeason("spring");
+};
+
+summerBtn.onclick = () => {
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
+  animationClass = "fade-in";
+  jumpToSeason("summer");
+};
+
+autumnBtn.onclick = () => {
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
+  animationClass = "fade-in";
+  jumpToSeason("autumn");
+};
+
+winterBtn.onclick = () => {
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
+  animationClass = "fade-in";
+  jumpToSeason("winter");
+};
+
+southBtn.onclick = () => {
+  if (soundEnabled) {
+    soundSeason.currentTime = 0;
+    soundSeason.play();
+  }
+  animationClass = "fade-in";
+  jumpToSeason("south");
+};
 
 // ===============================
 updateViewer();
+
+// ===============================
+// ★ カードクリックでリンクを開く（ここが追加部分）
+// ===============================
+viewer.addEventListener("click", () => {
+  const url = links[index];
+  if (url) {
+    window.open(url, "_self");
+  }
+});
 
 // ===============================
 // ★ スワイプ操作（左右で前後カード）

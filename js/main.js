@@ -201,8 +201,28 @@ let animationClass = null;
 const links = new Array(images.length).fill(null);
 
 // ▼ 必要に応じて自由に追加していく
+// 春の星座
 links[2] = "https://www.study-style.com/seiza/UMi.html";
-links[22] = "https://www.yahoo.co.jp/";
+links[3] = "https://www.study-style.com/seiza/Crt.html";
+links[4] = "https://www.study-style.com/seiza/Crv.html";
+links[5] = "https://www.study-style.com/seiza/Hya.html";
+links[6] = "https://www.study-style.com/seiza/Cnc.html";
+links[7] = "https://www.study-style.com/seiza/UMa.html";
+links[8] = "https://www.study-style.com/seiza/Boo.html";
+links[9] = "https://www.study-style.com/seiza/Vir.html";
+links[10] = "https://www.study-style.com/seiza/Leo.html";
+
+// 夏の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// 秋の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// 冬の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
+
+// 南の星座
+// links[＊＊＊＊] = "＊＊＊＊＊＊＊＊";
 
 // ===============================
 // DOM
@@ -554,9 +574,13 @@ updateViewer();
 // ===============================
 viewer.addEventListener("click", () => {
   const url = links[index];
-  if (url) {
-    window.open(url, "_blank");
-  }
+  if (!url) return;
+
+  // ★ 現在のカード index を保存
+  localStorage.setItem("lastCardIndex", index);
+
+  // ★ 同じタブで移動
+  location.href = url;
 });
 
 // ===============================
@@ -580,4 +604,19 @@ viewer.addEventListener("touchend", (e) => {
   } else {
     prevBtn.onclick();
   }
+});
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("lastCardIndex");
+
+  if (saved !== null) {
+    index = Number(saved);   // ★ 保存していたカードへ復帰
+    isBack = false;
+    isFinalNull = false;
+  } else {
+    index = 0;               // ★ 表紙
+  }
+
+  viewer.src = images[index];
+  updateViewer();
 });
