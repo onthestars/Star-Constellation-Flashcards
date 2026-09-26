@@ -201,7 +201,7 @@ let animationClass = null;
 const links = new Array(images.length).fill(null);
 
 // ▼ 必要に応じて自由に追加していく
-links[2] = "https://www.yahoo.co.jp/";
+links[2] = "https://www.study-style.com/seiza/UMi.html";
 links[22] = "https://www.yahoo.co.jp/";
 
 // ===============================
