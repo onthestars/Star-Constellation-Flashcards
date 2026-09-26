@@ -3,24 +3,24 @@
 /* ===============================
    ★ 画面全体：カードを中央に固定
    =============================== */
-html {
-  height: 100%;
+body {
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
+
   background-image: url("../image/common/back-ground-image.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 }
-
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: transparent; /* ← 背景は html に任せる */
-}
-
 
 /* ===============================
    ★ カード枠（縦置き）
@@ -501,4 +501,17 @@ body {
     transform: scale(0.8);       /* ← 60% に縮小 */
     transform-origin: top right; /* ← 右上基準で縮小（位置ズレ防止） */
   }
+}
+
+/* コピーライト表記 */
+#copyright {
+  position: fixed;
+  bottom: 6px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(0, 9, 95, 0.7);
+  pointer-events: none; /* 誤タップ防止 */
+  z-index: 9999;
 }
