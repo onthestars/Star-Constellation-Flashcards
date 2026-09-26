@@ -105,6 +105,10 @@ specialBtn.onclick = () => {
   flipBtn.style.opacity = 0.4;
 
   updateSpecialButtons();
+
+// ★★★ 星が散らばって瞬くエフェクト
+playStarTwinkle();
+
 };
 
 specialClose.onclick = () => {
@@ -209,3 +213,34 @@ specialImg.addEventListener("touchend", (e) => {
     specialPrev.onclick();
   }
 });
+
+// 表示した瞬間の、星の瞬き効果
+function playStarTwinkle() {
+  const overlay = document.getElementById("stars-overlay");
+
+  // 既存の星を消す
+  overlay.innerHTML = "";
+
+  // 星を 20 個生成（必要なら増減可能）
+  for (let i = 0; i < 20; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+
+    // ランダム位置
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+
+    star.style.left = x + "vw";
+    star.style.top  = y + "vh";
+
+    // ランダムな開始ディレイ
+    star.style.animationDelay = (Math.random() * 1.5) + "s";
+
+    overlay.appendChild(star);
+  }
+
+  // 2秒後に星を消す（次回のため）
+  setTimeout(() => {
+    overlay.innerHTML = "";
+  }, 2000);
+}
