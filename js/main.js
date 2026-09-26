@@ -202,61 +202,63 @@ const links = new Array(images.length).fill(null);
 
 // ▼ 必要に応じて自由に追加していく
 // 春の星座
-links[2] = "https://peteworden.github.io/Soleil/chart.html?ra=234.777&dec=77.916&lat=34.81&lon=135.53&time=20260401-200000&fov=53.28";
-links[3] = "https://peteworden.github.io/Soleil/chart.html?ra=170.33&dec=-15.144&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[4] = "https://peteworden.github.io/Soleil/chart.html?ra=185.341&dec=-18.145&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[5] = "https://peteworden.github.io/Soleil/chart.html?ra=157.816&dec=-20.135&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[6] = "https://peteworden.github.io/Soleil/chart.html?ra=127.367&dec=14.912&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[7] = "https://peteworden.github.io/Soleil/chart.html?ra=165.396&dec=57.859&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[8] = "https://peteworden.github.io/Soleil/chart.html?ra=219.034&dec=29.886&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[9] = "https://peteworden.github.io/Soleil/chart.html?ra=200.338&dec=-2.137&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
-links[10] = "https://peteworden.github.io/Soleil/chart.html?ra=157.851&dec=14.865&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
+/* 春の星座 */
+links[2] = "https://peteworden.github.io/Soleil/chart.html?ra=234.777&dec=77.916&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[3] = "https://peteworden.github.io/Soleil/chart.html?ra=170.33&dec=-15.144&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[4] = "https://peteworden.github.io/Soleil/chart.html?ra=185.341&dec=-18.145&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[5] = "https://peteworden.github.io/Soleil/chart.html?ra=157.816&dec=-20.135&lat=34.81&lon=135.53&time=20260401-200000&fov=90.00";
+links[6] = "https://peteworden.github.io/Soleil/chart.html?ra=127.367&dec=14.912&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[7] = "https://peteworden.github.io/Soleil/chart.html?ra=165.396&dec=57.859&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[8] = "https://peteworden.github.io/Soleil/chart.html?ra=219.034&dec=29.886&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[9] = "https://peteworden.github.io/Soleil/chart.html?ra=200.338&dec=-2.137&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[10] = "https://peteworden.github.io/Soleil/chart.html?ra=157.851&dec=14.865&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
 
-// 夏の星座
-links[22] = "https://peteworden.github.io/Soleil/chart.html?ra=281.485&dec=36.029&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[23] = "https://peteworden.github.io/Soleil/chart.html?ra=292.835&dec=2.057&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[24] = "https://peteworden.github.io/Soleil/chart.html?ra=307.731&dec=43.09&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[25] = "https://peteworden.github.io/Soleil/chart.html?ra=310.316&dec=12.095&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[26] = "https://peteworden.github.io/Soleil/chart.html?ra=297.797&dec=18.068&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[27] = "https://peteworden.github.io/Soleil/chart.html?ra=285.406&dec=-24.961&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[28] = "https://peteworden.github.io/Soleil/chart.html?ra=247.906&dec=-26.056&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[29] = "https://peteworden.github.io/Soleil/chart.html?ra=227.867&dec=-14.099&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[30] = "https://peteworden.github.io/Soleil/chart.html?ra=255.093&dec=59.962&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[31] = "https://peteworden.github.io/Soleil/chart.html?ra=257.766&dec=26.968&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[32] = "https://peteworden.github.io/Soleil/chart.html?ra=257.852&dec=-5.031&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[33] = "https://peteworden.github.io/Soleil/chart.html?ra=235.27&dec=29.916&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
-links[34] = "https://peteworden.github.io/Soleil/chart.html?ra=277.966&dec=-40.98&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+/* 夏の星座 */
+links[22] = "https://peteworden.github.io/Soleil/chart.html?ra=281.485&dec=36.029&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[23] = "https://peteworden.github.io/Soleil/chart.html?ra=292.835&dec=2.057&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[24] = "https://peteworden.github.io/Soleil/chart.html?ra=307.731&dec=43.09&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[25] = "https://peteworden.github.io/Soleil/chart.html?ra=310.316&dec=12.095&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[26] = "https://peteworden.github.io/Soleil/chart.html?ra=297.797&dec=18.068&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[27] = "https://peteworden.github.io/Soleil/chart.html?ra=285.406&dec=-24.961&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[28] = "https://peteworden.github.io/Soleil/chart.html?ra=247.906&dec=-26.056&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[29] = "https://peteworden.github.io/Soleil/chart.html?ra=227.867&dec=-14.099&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[30] = "https://peteworden.github.io/Soleil/chart.html?ra=255.093&dec=59.962&lat=34.81&lon=135.53&time=20260701-200000&fov=70.00";
+links[31] = "https://peteworden.github.io/Soleil/chart.html?ra=257.766&dec=26.968&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[32] = "https://peteworden.github.io/Soleil/chart.html?ra=257.852&dec=-5.031&lat=34.81&lon=135.53&time=20260701-200000&fov=60.00";
+links[33] = "https://peteworden.github.io/Soleil/chart.html?ra=235.27&dec=29.916&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[34] = "https://peteworden.github.io/Soleil/chart.html?ra=277.966&dec=-40.98&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
 
-// 秋の星座
-links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[50] = "https://peteworden.github.io/Soleil/chart.html?ra=332.885&dec=-31.868&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[51] = "https://peteworden.github.io/Soleil/chart.html?ra=312.882&dec=-19.899&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[52] = "https://peteworden.github.io/Soleil/chart.html?ra=317.832&dec=6.11&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[53] = "https://peteworden.github.io/Soleil/chart.html?ra=337.822&dec=20.137&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[54] = "https://peteworden.github.io/Soleil/chart.html?ra=5.345&dec=10.148&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[55] = "https://peteworden.github.io/Soleil/chart.html?ra=10.363&dec=38.146&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[56] = "https://peteworden.github.io/Soleil/chart.html?ra=330.138&dec=70.129&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[57] = "https://peteworden.github.io/Soleil/chart.html?ra=15.411&dec=60.143&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[58] = "https://peteworden.github.io/Soleil/chart.html?ra=26.579&dec=-11.867&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[59] = "https://peteworden.github.io/Soleil/chart.html?ra=50.446&dec=42.095&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[60] = "https://peteworden.github.io/Soleil/chart.html?ra=37.876&dec=20.118&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
-links[61] = "https://peteworden.github.io/Soleil/chart.html?ra=30.39&dec=32.128&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+/* 秋の星座 */
+links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[50] = "https://peteworden.github.io/Soleil/chart.html?ra=332.885&dec=-31.868&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[51] = "https://peteworden.github.io/Soleil/chart.html?ra=312.882&dec=-19.899&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[52] = "https://peteworden.github.io/Soleil/chart.html?ra=317.832&dec=6.11&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[53] = "https://peteworden.github.io/Soleil/chart.html?ra=337.822&dec=20.137&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[54] = "https://peteworden.github.io/Soleil/chart.html?ra=5.345&dec=10.148&lat=34.81&lon=135.53&time=20261001-200000&fov=60.00";
+links[55] = "https://peteworden.github.io/Soleil/chart.html?ra=10.363&dec=38.146&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[56] = "https://peteworden.github.io/Soleil/chart.html?ra=330.138&dec=70.129&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[57] = "https://peteworden.github.io/Soleil/chart.html?ra=15.411&dec=60.143&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[58] = "https://peteworden.github.io/Soleil/chart.html?ra=26.579&dec=-11.867&lat=34.81&lon=135.53&time=20261001-200000&fov=60.00";
+links[59] = "https://peteworden.github.io/Soleil/chart.html?ra=50.446&dec=42.095&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[60] = "https://peteworden.github.io/Soleil/chart.html?ra=37.876&dec=20.118&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[61] = "https://peteworden.github.io/Soleil/chart.html?ra=30.39&dec=32.128&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
 
-// 冬の星座
-links[75] = "https://peteworden.github.io/Soleil/chart.html?ra=105.401&dec=21.961&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[76] = "https://peteworden.github.io/Soleil/chart.html?ra=90.477&dec=41.999&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[77] = "https://peteworden.github.io/Soleil/chart.html?ra=67.888&dec=18.056&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[78] = "https://peteworden.github.io/Soleil/chart.html?ra=80.351&dec=3.025&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[79] = "https://peteworden.github.io/Soleil/chart.html?ra=100.278&dec=-24.026&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[80] = "https://peteworden.github.io/Soleil/chart.html?ra=112.857&dec=5.943&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[81] = "https://peteworden.github.io/Soleil/chart.html?ra=57.77&dec=-29.92&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
-links[82] = "https://peteworden.github.io/Soleil/chart.html?ra=81.539&dec=-19.978&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+/* 冬の星座 */
+links[75] = "https://peteworden.github.io/Soleil/chart.html?ra=105.401&dec=21.961&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[76] = "https://peteworden.github.io/Soleil/chart.html?ra=90.477&dec=41.999&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[77] = "https://peteworden.github.io/Soleil/chart.html?ra=67.888&dec=18.056&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[78] = "https://peteworden.github.io/Soleil/chart.html?ra=80.351&dec=3.025&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[79] = "https://peteworden.github.io/Soleil/chart.html?ra=100.278&dec=-24.026&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[80] = "https://peteworden.github.io/Soleil/chart.html?ra=112.857&dec=5.943&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[81] = "https://peteworden.github.io/Soleil/chart.html?ra=57.77&dec=-29.92&lat=34.81&lon=135.53&time=20260101-200000&fov=60.00";
+links[82] = "https://peteworden.github.io/Soleil/chart.html?ra=81.539&dec=-19.978&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
 
-// 南の星座
-links[92] = "https://peteworden.github.io/Soleil/chart.html?ra=225.425&dec=-40.103&lat=34.81&lon=135.53&time=20260501-000000&fov=3.11";
-links[93] = "https://peteworden.github.io/Soleil/chart.html?ra=200.39&dec=-47.137&lat=34.81&lon=135.53&time=20260401-000000&fov=5.02";
-links[94] = "https://peteworden.github.io/Soleil/chart.html?ra=258.045&dec=-55.031&lat=34.81&lon=135.53&time=20260701-200000&fov=8.11";
-links[95] = "https://peteworden.github.io/Soleil/chart.html?ra=130.126&dec=-62.094&lat=34.81&lon=135.53&time=20260301-200000&fov=13.09";
+/* 南の星座 */
+links[92] = "https://peteworden.github.io/Soleil/chart.html?ra=225.425&dec=-40.103&lat=34.81&lon=135.53&time=20260501-000000&fov=40.00";
+links[93] = "https://peteworden.github.io/Soleil/chart.html?ra=200.39&dec=-47.137&lat=34.81&lon=135.53&time=20260401-000000&fov=40.00";
+links[94] = "https://peteworden.github.io/Soleil/chart.html?ra=258.045&dec=-55.031&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[95] = "https://peteworden.github.io/Soleil/chart.html?ra=130.126&dec=-62.094&lat=34.81&lon=135.53&time=20260301-200000&fov=70.00";
+
 
 // ===============================
 // DOM
