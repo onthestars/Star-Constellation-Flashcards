@@ -229,7 +229,7 @@ links[33] = "https://peteworden.github.io/Soleil/chart.html?ra=235.27&dec=29.916
 links[34] = "https://peteworden.github.io/Soleil/chart.html?ra=277.966&dec=-40.98&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
 
 /* 秋の星座 */
-links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.81&lon=135.53&time=20261001-200000&fov=60.00";
 links[50] = "https://peteworden.github.io/Soleil/chart.html?ra=332.885&dec=-31.868&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
 links[51] = "https://peteworden.github.io/Soleil/chart.html?ra=312.882&dec=-19.899&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
 links[52] = "https://peteworden.github.io/Soleil/chart.html?ra=317.832&dec=6.11&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
