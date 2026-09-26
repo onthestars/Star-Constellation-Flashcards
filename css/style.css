@@ -506,7 +506,7 @@ body {
 /* コピーライト表記 */
 #copyright {
   position: fixed;
-  bottom: 30px;
+  bottom: 24px;
   left: 0;
   width: 100%;
   text-align: center;
