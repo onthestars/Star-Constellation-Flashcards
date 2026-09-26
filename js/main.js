@@ -213,50 +213,50 @@ links[9] = "https://peteworden.github.io/Soleil/chart.html?ra=200.338&dec=-2.137
 links[10] = "https://peteworden.github.io/Soleil/chart.html?ra=157.851&dec=14.865&lat=34.81&lon=135.53&time=20260401-200000&fov=20.25";
 
 // 夏の星座
-links[22] = "https://www.study-style.com/seiza/Lyr.html";
-links[23] = "https://www.study-style.com/seiza/Aql.html";
-links[24] = "https://www.study-style.com/seiza/Cyg.html";
-links[25] = "https://www.study-style.com/seiza/Del.html";
-links[26] = "https://www.study-style.com/seiza/Sge.html";
-links[27] = "https://www.study-style.com/seiza/Sgr.html";
-links[28] = "https://www.study-style.com/seiza/Sco.html";
-links[29] = "https://www.study-style.com/seiza/Lib.html";
-links[30] = "https://www.study-style.com/seiza/Dra.html";
-links[31] = "https://www.study-style.com/seiza/Her.html";
-links[32] = "https://www.study-style.com/seiza/Oph.html";
-links[33] = "https://www.study-style.com/seiza/CrB.html";
-links[34] = "https://www.study-style.com/seiza/CrA.html";
+links[22] = "https://peteworden.github.io/Soleil/chart.html?ra=281.485&dec=36.029&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[23] = "https://peteworden.github.io/Soleil/chart.html?ra=292.835&dec=2.057&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[24] = "https://peteworden.github.io/Soleil/chart.html?ra=307.731&dec=43.09&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[25] = "https://peteworden.github.io/Soleil/chart.html?ra=310.316&dec=12.095&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[26] = "https://peteworden.github.io/Soleil/chart.html?ra=297.797&dec=18.068&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[27] = "https://peteworden.github.io/Soleil/chart.html?ra=285.406&dec=-24.961&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[28] = "https://peteworden.github.io/Soleil/chart.html?ra=247.906&dec=-26.056&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[29] = "https://peteworden.github.io/Soleil/chart.html?ra=227.867&dec=-14.099&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[30] = "https://peteworden.github.io/Soleil/chart.html?ra=255.093&dec=59.962&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[31] = "https://peteworden.github.io/Soleil/chart.html?ra=257.766&dec=26.968&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[32] = "https://peteworden.github.io/Soleil/chart.html?ra=257.852&dec=-5.031&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[33] = "https://peteworden.github.io/Soleil/chart.html?ra=235.27&dec=29.916&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
+links[34] = "https://peteworden.github.io/Soleil/chart.html?ra=277.966&dec=-40.98&lat=34.81&lon=135.53&time=20260701-200000&fov=20.25";
 
 // 秋の星座
-links[49] = "https://www.study-style.com/seiza/Aqr.html";
-links[50] = "https://www.study-style.com/seiza/PsA.html";
-links[51] = "https://www.study-style.com/seiza/Cap.html";
-links[52] = "https://www.study-style.com/seiza/Equ.html";
-links[53] = "https://www.study-style.com/seiza/Peg.html";
-links[54] = "https://www.study-style.com/seiza/Psc.html";
-links[55] = "https://www.study-style.com/seiza/And.html";
-links[56] = "https://www.study-style.com/seiza/Cep.html";
-links[57] = "https://www.study-style.com/seiza/Cas.html";
-links[58] = "https://www.study-style.com/seiza/Cet.html";
-links[59] = "https://www.study-style.com/seiza/Per.html";
-links[60] = "https://www.study-style.com/seiza/Ari.html";
-links[61] = "https://www.study-style.com/seiza/Tri.html";
+links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[50] = "https://peteworden.github.io/Soleil/chart.html?ra=332.885&dec=-31.868&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[51] = "https://peteworden.github.io/Soleil/chart.html?ra=312.882&dec=-19.899&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[52] = "https://peteworden.github.io/Soleil/chart.html?ra=317.832&dec=6.11&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[53] = "https://peteworden.github.io/Soleil/chart.html?ra=337.822&dec=20.137&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[54] = "https://peteworden.github.io/Soleil/chart.html?ra=5.345&dec=10.148&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[55] = "https://peteworden.github.io/Soleil/chart.html?ra=10.363&dec=38.146&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[56] = "https://peteworden.github.io/Soleil/chart.html?ra=330.138&dec=70.129&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[57] = "https://peteworden.github.io/Soleil/chart.html?ra=15.411&dec=60.143&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[58] = "https://peteworden.github.io/Soleil/chart.html?ra=26.579&dec=-11.867&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[59] = "https://peteworden.github.io/Soleil/chart.html?ra=50.446&dec=42.095&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[60] = "https://peteworden.github.io/Soleil/chart.html?ra=37.876&dec=20.118&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
+links[61] = "https://peteworden.github.io/Soleil/chart.html?ra=30.39&dec=32.128&lat=34.81&lon=135.53&time=20261001-200000&fov=13.09";
 
 // 冬の星座
-links[75] = "https://www.study-style.com/seiza/Gem.html";
-links[76] = "https://www.study-style.com/seiza/Aur.html";
-links[77] = "https://www.study-style.com/seiza/Tau.html";
-links[78] = "https://www.study-style.com/seiza/Ori.html";
-links[79] = "https://www.study-style.com/seiza/CMa.html";
-links[80] = "https://www.study-style.com/seiza/CMi.html";
-links[81] = "https://www.study-style.com/seiza/Eri.html";
-links[82] = "https://www.study-style.com/seiza/Lep.html";
+links[75] = "https://peteworden.github.io/Soleil/chart.html?ra=105.401&dec=21.961&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[76] = "https://peteworden.github.io/Soleil/chart.html?ra=90.477&dec=41.999&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[77] = "https://peteworden.github.io/Soleil/chart.html?ra=67.888&dec=18.056&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[78] = "https://peteworden.github.io/Soleil/chart.html?ra=80.351&dec=3.025&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[79] = "https://peteworden.github.io/Soleil/chart.html?ra=100.278&dec=-24.026&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[80] = "https://peteworden.github.io/Soleil/chart.html?ra=112.857&dec=5.943&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[81] = "https://peteworden.github.io/Soleil/chart.html?ra=57.77&dec=-29.92&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
+links[82] = "https://peteworden.github.io/Soleil/chart.html?ra=81.539&dec=-19.978&lat=34.81&lon=135.53&time=20260101-200000&fov=20.25";
 
 // 南の星座
-links[92] = "https://www.study-style.com/seiza/Lup.html";
-links[93] = "https://www.study-style.com/seiza/Cen.html";
-links[94] = "https://www.study-style.com/seiza/Ara.html";
-links[95] = "https://www.study-style.com/seiza/Arg.html";
+links[92] = "https://peteworden.github.io/Soleil/chart.html?ra=225.425&dec=-40.103&lat=34.81&lon=135.53&time=20260501-000000&fov=3.11";
+links[93] = "https://peteworden.github.io/Soleil/chart.html?ra=200.39&dec=-47.137&lat=34.81&lon=135.53&time=20260401-000000&fov=5.02";
+links[94] = "https://peteworden.github.io/Soleil/chart.html?ra=258.045&dec=-55.031&lat=34.81&lon=135.53&time=20260701-200000&fov=8.11";
+links[95] = "https://peteworden.github.io/Soleil/chart.html?ra=130.126&dec=-62.094&lat=34.81&lon=135.53&time=20260301-200000&fov=13.09";
 
 // ===============================
 // DOM
