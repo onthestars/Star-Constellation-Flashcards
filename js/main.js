@@ -668,3 +668,8 @@ window.addEventListener("load", () => {
   viewer.src = images[index];
   updateViewer();
 });
+
+// Special Thanks
+document.getElementById("specialThanksBtn").addEventListener("click", () => {
+  window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
+});
