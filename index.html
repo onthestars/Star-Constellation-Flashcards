@@ -8,30 +8,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>星座カード</title>
 
+  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/special-viewer.css">
 </head>
 
 <body>
 
-  <!-- ★ 試験用：画面右上に音声ON/OFFボタンを固定表示 -->
+  <!-- 音声 ON/OFF（画面右上固定） -->
   <div id="sound-global-buttons">
     <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
     <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
   </div>
 
+  <!-- 星の瞬きオーバーレイ -->
   <div id="stars-overlay"></div>
 
+  <!-- 星座カード本体 -->
   <div id="card-frame" class="card-frame">
 
+    <!-- カード画像（アニメーション用ラッパ） -->
     <div class="card-image-area">
       <div id="card-anim-wrapper">
         <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
       </div>
     </div>
 
+    <!-- ボタン群 -->
     <div class="button-block">
 
+      <!-- 季節ボタン -->
       <div class="season-group">
         <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
         <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
@@ -40,12 +46,14 @@
         <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
       </div>
 
+      <!-- カード操作ボタン -->
       <div class="control-group">
         <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
         <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
         <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
       </div>
 
+      <!-- スペシャルビューアー起動 -->
       <div class="special-group">
         <img src="image/common/btn-3stars.png" class="btn-special" id="specialBtn" alt="Special">
       </div>
@@ -53,20 +61,22 @@
     </div>
   </div>
 
+  <!-- コピーライト -->
   <div id="copyright">
     ©トレミーの48星座カード All rights reserved. 2026
   </div>
 
+  <!-- Special Thanks -->
   <div id="specialThanksBtn" class="special-thanks-btn">
     Special Thanks:『ぴーとの星図』
   </div>
 
-  <!-- ★ Special viewer -->
+  <!-- スペシャルビューアー -->
   <div id="special-viewer" style="display:none;">
     <img id="special-img" src="" alt="Special画像">
-
     <div id="special-caption"></div>
 
+    <!-- スペシャルビューアー操作ボタン -->
     <div class="special-controls-row">
       <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
       <img src="image/common/btn-3stars.png" id="special-lines" class="special-btn" alt="星座線あり">
@@ -75,14 +85,13 @@
       <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
     </div>
 
-    <!-- サウンドファイル指定 -->
+    <!-- サウンド -->
     <audio id="soundFlip" src="sound/sound-flipping-paper.mp3" preload="auto"></audio>
     <audio id="soundPage" src="sound/sound-flipping-paper2.mp3" preload="auto"></audio>
     <audio id="soundSeason" src="sound/sound-season.mp3" preload="auto"></audio>
     <audio id="soundKirakira" src="sound/sound-kirakira.mp3" preload="auto"></audio>
 
-
-    <!-- ジャバスクリプト読み込み -->
+    <!-- JavaScript -->
     <script src="js/main.js"></script>
     <script src="js/data-special.js"></script>
     <script src="js/special-viewer.js"></script>
