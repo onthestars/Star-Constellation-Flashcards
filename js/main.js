@@ -207,70 +207,87 @@ let isFinalNull = false;
 // ★ アニメーション用（旧方式は削除）
 let animationClass = null;
 
+// 現在時刻を生成する関数
+function getCurrentTimeString() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    return `${y}${m}${d}-${hh}${mm}${ss}`;
+}
+
+// 星図 URL を動的生成する関数を追加
+function makeLink(ra, dec, lat, lon, fov) {
+    const time = getCurrentTimeString();
+    return `https://peteworden.github.io/Soleil/chart.html?ra=${ra}&dec=${dec}&lat=${lat}&lon=${lon}&time=${time}&fov=${fov}`;
+}
+
 // ===============================
 // ★ カードごとのリンク配列（ここが追加部分）
 // ===============================
 const links = new Array(images.length).fill(null);
 
 // ▼ 必要に応じて自由に追加していく
-// 春の星座
+// リンク先は『ぴーとの星図』
 /* 春の星座 */
-links[2] = "https://peteworden.github.io/Soleil/chart.html?ra=234.777&dec=77.916&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[3] = "https://peteworden.github.io/Soleil/chart.html?ra=170.33&dec=-15.144&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[4] = "https://peteworden.github.io/Soleil/chart.html?ra=185.341&dec=-18.145&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[5] = "https://peteworden.github.io/Soleil/chart.html?ra=157.816&dec=-20.135&lat=34.81&lon=135.53&time=20260401-200000&fov=90.00";
-links[6] = "https://peteworden.github.io/Soleil/chart.html?ra=127.367&dec=14.912&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[7] = "https://peteworden.github.io/Soleil/chart.html?ra=165.396&dec=57.859&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[8] = "https://peteworden.github.io/Soleil/chart.html?ra=219.034&dec=29.886&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[9] = "https://peteworden.github.io/Soleil/chart.html?ra=200.338&dec=-2.137&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
-links[10] = "https://peteworden.github.io/Soleil/chart.html?ra=157.851&dec=14.865&lat=34.81&lon=135.53&time=20260401-200000&fov=40.00";
+links[2]  = makeLink(234.777, 77.916, 34.81, 135.53, 40.00);
+links[3]  = makeLink(170.33, -15.144, 34.81, 135.53, 40.00);
+links[4]  = makeLink(185.341, -18.145, 34.81, 135.53, 40.00);
+links[5]  = makeLink(157.816, -20.135, 34.81, 135.53, 90.00);
+links[6]  = makeLink(127.367, 14.912, 34.81, 135.53, 40.00);
+links[7]  = makeLink(165.396, 57.859, 34.81, 135.53, 40.00);
+links[8]  = makeLink(219.034, 29.886, 34.81, 135.53, 40.00);
+links[9]  = makeLink(200.338, -2.137, 34.81, 135.53, 40.00);
+links[10] = makeLink(157.851, 14.865, 34.81, 135.53, 40.00);
 
 /* 夏の星座 */
-links[22] = "https://peteworden.github.io/Soleil/chart.html?ra=281.485&dec=36.029&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[23] = "https://peteworden.github.io/Soleil/chart.html?ra=292.835&dec=2.057&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[24] = "https://peteworden.github.io/Soleil/chart.html?ra=307.731&dec=43.09&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[25] = "https://peteworden.github.io/Soleil/chart.html?ra=310.316&dec=12.095&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[26] = "https://peteworden.github.io/Soleil/chart.html?ra=297.797&dec=18.068&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[27] = "https://peteworden.github.io/Soleil/chart.html?ra=285.406&dec=-24.961&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[28] = "https://peteworden.github.io/Soleil/chart.html?ra=247.906&dec=-26.056&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[29] = "https://peteworden.github.io/Soleil/chart.html?ra=227.867&dec=-14.099&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[30] = "https://peteworden.github.io/Soleil/chart.html?ra=255.093&dec=59.962&lat=34.81&lon=135.53&time=20260701-200000&fov=70.00";
-links[31] = "https://peteworden.github.io/Soleil/chart.html?ra=257.766&dec=26.968&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[32] = "https://peteworden.github.io/Soleil/chart.html?ra=257.852&dec=-5.031&lat=34.81&lon=135.53&time=20260701-200000&fov=60.00";
-links[33] = "https://peteworden.github.io/Soleil/chart.html?ra=235.27&dec=29.916&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[34] = "https://peteworden.github.io/Soleil/chart.html?ra=277.966&dec=-40.98&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
+links[22] = makeLink(281.485, 36.029, 34.81, 135.53, 40.00);
+links[23] = makeLink(292.835, 2.057, 34.81, 135.53, 40.00);
+links[24] = makeLink(307.731, 43.09, 34.81, 135.53, 40.00);
+links[25] = makeLink(310.316, 12.095, 34.81, 135.53, 40.00);
+links[26] = makeLink(297.797, 18.068, 34.81, 135.53, 40.00);
+links[27] = makeLink(285.406, -24.961, 34.81, 135.53, 40.00);
+links[28] = makeLink(247.906, -26.056, 34.81, 135.53, 40.00);
+links[29] = makeLink(227.867, -14.099, 34.81, 135.53, 40.00);
+links[30] = makeLink(255.093, 59.962, 34.81, 135.53, 70.00);
+links[31] = makeLink(257.766, 26.968, 34.81, 135.53, 40.00);
+links[32] = makeLink(257.852, -5.031, 34.81, 135.53, 60.00);
+links[33] = makeLink(235.27, 29.916, 34.81, 135.53, 40.00);
+links[34] = makeLink(277.966, -40.98, 34.81, 135.53, 40.00);
 
 /* 秋の星座 */
-links[49] = "https://peteworden.github.io/Soleil/chart.html?ra=335.357&dec=-12.865&lat=34.81&lon=135.53&time=20261001-200000&fov=60.00";
-links[50] = "https://peteworden.github.io/Soleil/chart.html?ra=332.885&dec=-31.868&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[51] = "https://peteworden.github.io/Soleil/chart.html?ra=312.882&dec=-19.899&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[52] = "https://peteworden.github.io/Soleil/chart.html?ra=317.832&dec=6.11&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[53] = "https://peteworden.github.io/Soleil/chart.html?ra=337.822&dec=20.137&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[54] = "https://peteworden.github.io/Soleil/chart.html?ra=5.345&dec=10.148&lat=34.81&lon=135.53&time=20261001-200000&fov=60.00";
-links[55] = "https://peteworden.github.io/Soleil/chart.html?ra=10.363&dec=38.146&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[56] = "https://peteworden.github.io/Soleil/chart.html?ra=330.138&dec=70.129&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[57] = "https://peteworden.github.io/Soleil/chart.html?ra=15.411&dec=60.143&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[58] = "https://peteworden.github.io/Soleil/chart.html?ra=26.579&dec=-11.867&lat=34.81&lon=135.53&time=20261001-200000&fov=60.00";
-links[59] = "https://peteworden.github.io/Soleil/chart.html?ra=50.446&dec=42.095&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[60] = "https://peteworden.github.io/Soleil/chart.html?ra=37.876&dec=20.118&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
-links[61] = "https://peteworden.github.io/Soleil/chart.html?ra=30.39&dec=32.128&lat=34.81&lon=135.53&time=20261001-200000&fov=40.00";
+links[49] = makeLink(335.357, -12.865, 34.81, 135.53, 60.00);
+links[50] = makeLink(332.885, -31.868, 34.81, 135.53, 40.00);
+links[51] = makeLink(312.882, -19.899, 34.81, 135.53, 40.00);
+links[52] = makeLink(317.832, 6.11, 34.81, 135.53, 40.00);
+links[53] = makeLink(337.822, 20.137, 34.81, 135.53, 40.00);
+links[54] = makeLink(5.345, 10.148, 34.81, 135.53, 60.00);
+links[55] = makeLink(10.363, 38.146, 34.81, 135.53, 40.00);
+links[56] = makeLink(330.138, 70.129, 34.81, 135.53, 40.00);
+links[57] = makeLink(15.411, 60.143, 34.81, 135.53, 40.00);
+links[58] = makeLink(26.579, -11.867, 34.81, 135.53, 60.00);
+links[59] = makeLink(50.446, 42.095, 34.81, 135.53, 40.00);
+links[60] = makeLink(37.876, 20.118, 34.81, 135.53, 40.00);
+links[61] = makeLink(30.39, 32.128, 34.81, 135.53, 40.00);
 
 /* 冬の星座 */
-links[75] = "https://peteworden.github.io/Soleil/chart.html?ra=105.401&dec=21.961&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
-links[76] = "https://peteworden.github.io/Soleil/chart.html?ra=90.477&dec=41.999&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
-links[77] = "https://peteworden.github.io/Soleil/chart.html?ra=67.888&dec=18.056&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
-links[78] = "https://peteworden.github.io/Soleil/chart.html?ra=80.351&dec=3.025&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
-links[79] = "https://peteworden.github.io/Soleil/chart.html?ra=100.278&dec=-24.026&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
-links[80] = "https://peteworden.github.io/Soleil/chart.html?ra=112.857&dec=5.943&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
-links[81] = "https://peteworden.github.io/Soleil/chart.html?ra=57.77&dec=-29.92&lat=34.81&lon=135.53&time=20260101-200000&fov=60.00";
-links[82] = "https://peteworden.github.io/Soleil/chart.html?ra=81.539&dec=-19.978&lat=34.81&lon=135.53&time=20260101-200000&fov=40.00";
+links[75] = makeLink(105.401, 21.961, 34.81, 135.53, 40.00);
+links[76] = makeLink(90.477, 41.999, 34.81, 135.53, 40.00);
+links[77] = makeLink(67.888, 18.056, 34.81, 135.53, 40.00);
+links[78] = makeLink(80.351, 3.025, 34.81, 135.53, 40.00);
+links[79] = makeLink(100.278, -24.026, 34.81, 135.53, 40.00);
+links[80] = makeLink(112.857, 5.943, 34.81, 135.53, 40.00);
+links[81] = makeLink(57.77, -29.92, 34.81, 135.53, 60.00);
+links[82] = makeLink(81.539, -19.978, 34.81, 135.53, 40.00);
 
 /* 南の星座 */
-links[92] = "https://peteworden.github.io/Soleil/chart.html?ra=225.425&dec=-40.103&lat=34.81&lon=135.53&time=20260501-000000&fov=40.00";
-links[93] = "https://peteworden.github.io/Soleil/chart.html?ra=200.39&dec=-47.137&lat=34.81&lon=135.53&time=20260401-000000&fov=40.00";
-links[94] = "https://peteworden.github.io/Soleil/chart.html?ra=258.045&dec=-55.031&lat=34.81&lon=135.53&time=20260701-200000&fov=40.00";
-links[95] = "https://peteworden.github.io/Soleil/chart.html?ra=130.126&dec=-62.094&lat=34.81&lon=135.53&time=20260301-200000&fov=70.00";
-
+links[92] = makeLink(225.425, -40.103, 34.81, 135.53, 40.00);
+links[93] = makeLink(200.39, -47.137, 34.81, 135.53, 40.00);
+links[94] = makeLink(258.045, -55.031, 34.81, 135.53, 40.00);
+links[95] = makeLink(130.126, -62.094, 34.81, 135.53, 70.00);
 
 // ===============================
 // DOM
