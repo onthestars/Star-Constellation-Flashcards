@@ -624,10 +624,10 @@ viewer.addEventListener("click", () => {
   const url = links[index];
   if (!url) return;
 
-  // ★ 現在のカード index を保存
-  localStorage.setItem("lastCardIndex", index);
+  // ★ 外部リンクへ移動する前にフラグと index を保存
+  sessionStorage.setItem("fromExternal", "true");
+  sessionStorage.setItem("lastCardIndex", index);
 
-  // ★ 同じタブで移動
   location.href = url;
 });
 
@@ -655,15 +655,28 @@ viewer.addEventListener("touchend", (e) => {
 });
 
 window.addEventListener("load", () => {
-  const saved = localStorage.getItem("lastCardIndex");
 
-  if (saved !== null) {
-    index = Number(saved);   // ★ 保存していたカードへ復帰
-    isBack = false;
-    isFinalNull = false;
+  // ★ 外部リンクから戻った場合だけ復帰
+  if (sessionStorage.getItem("fromExternal") === "true") {
+
+    const saved = sessionStorage.getItem("lastCardIndex");
+
+    if (saved !== null) {
+      index = Number(saved);
+    } else {
+      index = 0;
+    }
+
+    // ★ 一度復帰したらフラグを消す
+    sessionStorage.removeItem("fromExternal");
+
   } else {
-    index = 0;               // ★ 表紙
+    // ★ 新規訪問は必ず表紙
+    index = 0;
   }
+
+  isBack = false;
+  isFinalNull = false;
 
   viewer.src = images[index];
   updateViewer();
