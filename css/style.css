@@ -2,7 +2,7 @@
 
 /* 画面全体：カードを中央に固定 */
 body {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   margin: 0;
   padding: 0;
   display: flex;
@@ -24,7 +24,7 @@ body {
 #card-frame {
   width: 95vw;
   max-width: 480px;
-  background-color: #ffffff;
+  background-color: #red;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -39,7 +39,6 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: transparent;
 }
 
 .card-img {
