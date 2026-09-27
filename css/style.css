@@ -526,23 +526,20 @@ body {
 }
 
 /* Special Thanks */
-#special-thanks {
+.special-thanks-btn {
   position: fixed;
   bottom: 6px;
   left: 0;
   width: 100%;
   text-align: center;
 
-  /* ▼ 改行させない（必須） */
   white-space: nowrap;
-
-  /* ▼ はみ出し対策（省略記号は出さない） */
   overflow: hidden;
-
-  /* ▼ 画面幅に応じて自動縮小（スマホ対応） */
   font-size: clamp(9px, 3vw, 12px);
 
   color: rgba(0, 9, 95, 0.7);
-  pointer-events: none; /* 誤タップ防止 */
   z-index: 9999;
+
+  /* 誤タップ防止は padding で調整 */
+  padding: 2px 0;
 }
