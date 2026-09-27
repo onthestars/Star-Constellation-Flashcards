@@ -1,20 +1,32 @@
 // main.js
 
-// ★ アプリ全体のサウンド設定（初期ON）
-let soundEnabled = true;
+// ★ アプリ全体のサウンド設定（localStorage から読み込む）
+let soundEnabled = localStorage.getItem("soundEnabled") === "false" ? false : true;
 
 // ★ 音声ON/OFFボタン（画面右上の試験用）
 const soundOnBtn  = document.getElementById("soundOnBtn");
 const soundOffBtn = document.getElementById("soundOffBtn");
 
+// ★ 初期表示を反映
+if (soundEnabled) {
+  soundOnBtn.style.display  = "inline";
+  soundOffBtn.style.display = "none";
+} else {
+  soundOnBtn.style.display  = "none";
+  soundOffBtn.style.display = "inline";
+}
+
+// ★ ボタン動作（localStorage に保存）
 soundOnBtn.onclick = () => {
   soundEnabled = false;
+  localStorage.setItem("soundEnabled", "false");
   soundOnBtn.style.display  = "none";
   soundOffBtn.style.display = "inline";
 };
 
 soundOffBtn.onclick = () => {
   soundEnabled = true;
+  localStorage.setItem("soundEnabled", "true");
   soundOnBtn.style.display  = "inline";
   soundOffBtn.style.display = "none";
 };
