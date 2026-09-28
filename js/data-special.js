@@ -1,5 +1,6 @@
 // data-special.js
 
+//▼Special画像追加時に編集//
 // スペシャルビューアー用：星空写真データ
 const specialPhotos = {
   "Spring-Triangle": {
@@ -74,6 +75,18 @@ const specialPhotos = {
     ],
     caption: [
       "2025年11月16日／紀伊半島南部／うお座（左）と秋の四辺形"
+    ]
+  },
+
+    "Orion": {
+    normal: [
+      "Orion-noline-pic01.jpg"
+    ],
+    lines: [
+      "Orion-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年1月26日／紀伊半島南部／吊り橋とオリオン"
     ]
   },
 

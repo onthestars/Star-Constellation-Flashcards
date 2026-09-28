@@ -222,6 +222,7 @@ function makeLink(ra, dec, lat, lon, fov) {
 // カードごとのリンク配列
 const links = new Array(images.length).fill(null);
 
+/* ぴーとの星図へリンク（クリック時座標へ） */
 /* 春の星座 */
 links[2]  = makeLink(234.777, 77.916, 34.81, 135.53, 40.00);
 links[3]  = makeLink(170.33, -15.144, 34.81, 135.53, 40.00);
@@ -351,6 +352,7 @@ function jumpToSeason(season) {
   }, 300);
 }
 
+//▼Special画像追加時に編集//
 // Special viewer 対応カードか判定
 function hasPhotoFor(i) {
   return (
@@ -359,6 +361,7 @@ function hasPhotoFor(i) {
     images[i].includes("Pegasus") ||
     images[i].includes("Pisces") ||
     images[i].includes("Cassiopeia") ||
+    images[i].includes("Orion") ||
     images[i].includes("Winter-Triangle")
   );
 }

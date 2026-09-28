@@ -20,7 +20,8 @@ const specialClear  = document.getElementById("special-clear");
 const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
 
-// 星座ID → Specialフォルダ名
+//▼Special画像追加時に編集//
+// 星座ID → Specialフォルダ名 ※ID番号は仕様書
 function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
@@ -37,11 +38,15 @@ function getStarNameFromIndex(i) {
     if (i === 57 || i === 70) return "Cassiopeia";
   }
 
-  if (season === "winter") return "Winter-Triangle";
+    if (season === "winter") {
+    if (i === 78 || i === 87) return "Orion";
+    if (i === 83) return "Winter-Triangle";
+  }
 
   return null;
 }
 
+//▼Special画像追加時に編集//
 // Special画像フォルダ
 function getSpecialFolder(starName) {
   if (starName === "Spring-Triangle") return "image/spring/Special/";
@@ -50,6 +55,7 @@ function getSpecialFolder(starName) {
   if (starName === "Pegasus") return "image/autumn/Special/";
   if (starName === "Pisces") return "image/autumn/Special/";
   if (starName === "Cassiopeia") return "image/autumn/Special/";
+  if (starName === "Orion") return "image/winter/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
   return null;
 }
