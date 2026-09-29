@@ -12,8 +12,8 @@
   <link rel="icon" href="image/icon/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="image/icon/icon512.png">
 
-  <!-- PWA化 -->
-  <link rel="manifest" href="manifest.json">
+  <!-- アプリ（PWA）化 ※アプリ化した場合、キャッシュに注意
+  <link rel="manifest" href="manifest.json"> -->
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
@@ -103,17 +103,6 @@
     <script src="js/background-image.js"></script>
     <script src="js/data-special.js"></script>
     <script src="js/special-viewer.js"></script>
-
-    <!-- スマホアプリキャッシュ対策（ネット優先） -->
-    <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js")
-        .then(reg => console.log("SW registered:", reg))
-        .catch(err => console.log("SW registration failed:", err));
-    });
-  }
-</script>
 
 </body>
 
