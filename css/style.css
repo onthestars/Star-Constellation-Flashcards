@@ -434,7 +434,7 @@ body {
     position: absolute;
     width: 60px;
     pointer-events: auto;
-    opacity: 1.0;
+    opacity: 0.0;
     filter: drop-shadow(0 0 6px #ffffff80);
     z-index: 5;
 }
