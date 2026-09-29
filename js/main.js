@@ -653,43 +653,46 @@ document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
 });
 
-function startMoonOrbit() {
-    const moon = document.getElementById("moon");
+let animationId = null;   // ★ アニメのIDを保持
+let resizeTimer = null;   // ★ resize連打対策
 
-    // ★ 2回目以降のために必ず opacity を 0 に戻す
-    moon.style.opacity = 0;
+// 月のアニメーション
+function startMoonOrbitSequence() {
+    const moon = document.getElementById("moon");
 
     const w = window.innerWidth;
     const h = window.innerHeight;
 
     const cx = w / 2;
-    const cy = h * 0.33;
-    const r  = w * 0.55;
+    const cy = h * 0.50; //月の高さ（画面サイズで変わる）
+const r = Math.min(w, h) * 0.70;
 
-    let theta = Math.PI;
+    const baseDeg = 10;
 
-    // 初期位置（東）
-    const x0 = cx + r * Math.cos(theta);
-    const y0 = cy - r * Math.sin(theta);
-    moon.style.left = x0 + "px";
-    moon.style.top  = y0 + "px";
+    const phases = [
+        "moon5-crescent.png",
+        "moon6-half.png",
+        "moon1-full.png",
+        "moon2-half.png",
+        "moon3-crescent.png",
+        "moon4-new.png"
+    ];
 
-    // 初期回転（東＝ -30°）
-    const orbitDeg0 = 30 * ((Math.PI/2 - theta) / (Math.PI/2));
-    moon.style.transform = `rotate(${orbitDeg0}deg)`;
+    let currentPhase = 0;
 
-    // ★ 3秒後にフェードイン開始
-    setTimeout(() => {
+    function runPhase(phaseIndex) {
 
-        // スマホ Chrome 対策：描画後に opacity=1 を適用
+        moon.style.opacity = 0;
+        moon.src = "image/common/" + phases[phaseIndex];
+
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                moon.style.transition = "opacity 1.5s ease";
                 moon.style.opacity = 1;
             });
         });
 
-        // 軌道アニメーション開始
+        let theta = Math.PI;
+
         function animate() {
             const x = cx + r * Math.cos(theta);
             const y = cy - r * Math.sin(theta);
@@ -697,19 +700,51 @@ function startMoonOrbit() {
             moon.style.left = x + "px";
             moon.style.top  = y + "px";
 
-            const orbitDeg = 30 * ((Math.PI/2 - theta) / (Math.PI/2));
-            moon.style.transform = `rotate(${orbitDeg}deg)`;
+            const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
+            const rotateDeg = baseDeg + orbitDeg;
+            moon.style.transform = `rotate(${rotateDeg}deg)`;
 
             theta -= 0.002;
-            if (theta <= 0) theta = Math.PI;
 
-            requestAnimationFrame(animate);
+            if (theta <= 0) {
+                currentPhase++;
+                if (currentPhase >= phases.length) {
+                    currentPhase = 0;
+                }
+
+                setTimeout(() => {
+                    runPhase(currentPhase);
+                }, 2000);
+
+                return;
+            }
+
+            animationId = requestAnimationFrame(animate); // ★ IDを保持
         }
 
         animate();
+    }
 
-    }, 3000);
+    runPhase(currentPhase);
 }
 
-window.onload = startMoonOrbit;
-window.onresize = startMoonOrbit;
+window.onload = startMoonOrbitSequence;
+
+// ★ resize時の安全な再起動
+window.onresize = () => {
+
+    // 連続resize対策（スマホで特に重要）
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+
+        // 古いアニメを完全停止
+        if (animationId !== null) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+
+        // 新しいアニメを開始
+        startMoonOrbitSequence();
+
+    }, 200);
+};
