@@ -20,6 +20,7 @@ const specialClear  = document.getElementById("special-clear");
 const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
 
+// ======== ======== ======== ======== ========
 //▼Special画像追加時に編集//
 // 星座ID → Specialフォルダ名に変換 ※ID番号は仕様書
 function getStarNameFromIndex(i) {
@@ -28,7 +29,7 @@ function getStarNameFromIndex(i) {
   if (season === "spring") return "Spring-Triangle";
 
   if (season === "summer") {
-    if (i === 27 || i === 36) return "Sagittarius";
+    if (i === 27 || i === 41) return "Sagittarius";
     if (i === 35) return "Summer-Triangle";
   }
 
@@ -65,6 +66,7 @@ function getSpecialFolder(starName) {
   if (starName === "Winter-Triangle") return "image/winter/Special/";
   return null;
 }
+// ======== ======== ======== ======== ========
 
 // ボタンの有効／無効
 function updateSpecialButtons() {

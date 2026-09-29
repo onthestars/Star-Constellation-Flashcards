@@ -1,5 +1,6 @@
 // data-special.js
 
+// ======== ======== ======== ======== ========
 //▼Special画像追加時に編集//
 // スペシャルビューアー用：星空写真データ
 // カンマ(,)の位置に注意。
@@ -39,7 +40,7 @@ const specialPhotos = {
       "Sagittarius-lines-pic01.jpg"
     ],
     caption: [
-      "2026年9月12日／紀伊半島中部／夏の天の川と、いて座"
+      "2026年9月12日／紀伊半島中部／夏の天の川といて座"
     ]
   },
 
@@ -52,18 +53,6 @@ const specialPhotos = {
     ],
     caption: [
       "2026年9月12日／紀伊半島中部／秋の四辺形（ペガスス座の一部）"
-    ]
-  },
-
-  "Cassiopeia": {
-    normal: [
-      "Cassiopeia-noline-pic01.jpg"
-    ],
-    lines: [
-      "Cassiopeia-lines-pic01.jpg"
-    ],
-    caption: [
-      "2025年10月28日／大阪府北摂／カシオペヤ座"
     ]
   },
 
@@ -124,6 +113,18 @@ const specialPhotos = {
     ]
   },
 
+    "Cassiopeia": {
+    normal: [
+      "Cassiopeia-noline-pic01.jpg"
+    ],
+    lines: [
+      "Cassiopeia-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年10月28日／大阪府北摂／カシオペヤ座"
+    ]
+  },
+
     "Orion": {
     normal: [
       "Orion-noline-pic01.jpg"
@@ -151,3 +152,4 @@ const specialPhotos = {
     ]
   }
 };
+// ======== ======== ======== ======== ========

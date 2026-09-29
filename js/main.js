@@ -160,8 +160,6 @@ const images = [
   "image/south/A/card-Argo-Puppis-Vela-Carina-Pyxis-A.png"
 ];
 
-// main.js
-
 // 裏面パス生成
 const backs = images.map((img, i) => {
   if (i === 0 || i === 1) return "image/common/card-null.png";
@@ -351,12 +349,14 @@ function jumpToSeason(season) {
   }, 300);
 }
 
+// ======== ======== ======== ======== ========
 //▼Special画像追加時に編集//
 // Special viewer 対応カードか判定
 // パイプ(||)の位置に注意。※最終行には付けないこと。
 function hasPhotoFor(i) {
   return (
     images[i].includes("Spring-Triangle") ||
+    images[i].includes("Sagittarius") ||
     images[i].includes("Summer-Triangle") ||
     images[i].includes("Pegasus") ||
     images[i].includes("Aquarius") ||
@@ -368,6 +368,7 @@ function hasPhotoFor(i) {
     images[i].includes("Winter-Triangle")
   );
 }
+// ======== ======== ======== ======== ========
 
 function updateSpecialButton() {
   if (hasPhotoFor(index)) {
