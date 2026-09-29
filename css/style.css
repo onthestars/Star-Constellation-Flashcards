@@ -8,7 +8,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100dvh;
 
   overflow-x: hidden;
   overscroll-behavior-x: none;
@@ -24,7 +24,7 @@ body {
 #card-frame {
   width: 95vw;
   max-width: 480px;
-  background-color: #red;
+  /* background-color: white; */
   border-radius: 12px;
   display: flex;
   flex-direction: column;
