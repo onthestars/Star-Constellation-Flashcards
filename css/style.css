@@ -1,7 +1,6 @@
 /* style.css */
 
 /* 画面全体：カードを中央に固定 */
-/* 画面全体：カードを中央に固定 */
 body {
   margin: 0;
   padding: 0;
@@ -37,7 +36,6 @@ body {
 #card-frame {
   width: 95vw;
   max-width: 480px;
-  background-color: #red;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -430,6 +428,17 @@ body {
   border-left: 10px solid transparent;
   transform: rotate(-70deg);
 }
+
+/* アニメーションする月の位置指定など ※アニメ設定は js ファイル */
+#moon {
+    position: absolute;
+    width: 80px;
+    pointer-events: auto;
+    opacity: 1.0;
+    filter: drop-shadow(0 0 6px #ffffff80);
+    z-index: 5;
+}
+
 
 @keyframes starTwinkle {
   0%   { opacity: 0; transform: scale(0.4); }
