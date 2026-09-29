@@ -1,30 +1,43 @@
 /* style.css */
 
 /* 画面全体：カードを中央に固定 */
+/* 画面全体：カードを中央に固定 */
 body {
-  /* background-color: #ffffff; */
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100dvh;
+  height: 100vh;
 
   overflow-x: hidden;
   overscroll-behavior-x: none;
   touch-action: pan-y;
 
-  background-image: url("../image/common/back-ground-image.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+/* 縦画面（スマホ） */
+@media (orientation: portrait) {
+  body {
+    /* 画像は JS で設定するため空のまま */
+  }
+}
+
+/* 横画面（PC・タブレット） */
+@media (orientation: landscape) {
+  body {
+    /* 画像は JS で設定するため空のまま */
+  }
 }
 
 /* カード枠（縦置き） */
 #card-frame {
   width: 95vw;
   max-width: 480px;
-  /* background-color: white; */
+  background-color: #red;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
