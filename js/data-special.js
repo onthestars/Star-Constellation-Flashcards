@@ -39,7 +39,7 @@ const specialPhotos = {
       "Sagittarius-lines-pic01.jpg"
     ],
     caption: [
-      "2026年9月12日／紀伊半島中部／夏の天の川といて座"
+      "2026年9月12日／紀伊半島中部／夏の天の川と、いて座"
     ]
   },
 
