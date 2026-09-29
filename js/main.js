@@ -653,38 +653,43 @@ document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
 });
 
-// 月のアニメーション（東=-30° → 南=0° → 西=+30°）
 function startMoonOrbit() {
     const moon = document.getElementById("moon");
+
+    // ★ 2回目以降のために必ず opacity を 0 に戻す
+    moon.style.opacity = 0;
 
     const w = window.innerWidth;
     const h = window.innerHeight;
 
     const cx = w / 2;
-    const cy = h * 0.33;     // 図と一致する高さ
+    const cy = h * 0.33;
     const r  = w * 0.55;
 
-    let theta = Math.PI;     // 東（左端）からスタート
+    let theta = Math.PI;
 
-    // ★ 初期状態は非表示（CSSで opacity:0 を指定しておく）
-    moon.style.opacity = 0;
-
-    // ★ 初期位置（東の軌道上）に月を置く
+    // 初期位置（東）
     const x0 = cx + r * Math.cos(theta);
     const y0 = cy - r * Math.sin(theta);
     moon.style.left = x0 + "px";
     moon.style.top  = y0 + "px";
 
-    // ★ 初期回転（東で -30°）
+    // 初期回転（東＝ -30°）
     const orbitDeg0 = 30 * ((Math.PI/2 - theta) / (Math.PI/2));
     moon.style.transform = `rotate(${orbitDeg0}deg)`;
 
-    // ★ 3秒後にフレームイン開始（opacity を 1 に）
+    // ★ 3秒後にフェードイン開始
     setTimeout(() => {
-        moon.style.transition = "opacity 1.5s ease";
-        moon.style.opacity = 1;
 
-        // ★ フレームインと同時に軌道アニメーション開始
+        // スマホ Chrome 対策：描画後に opacity=1 を適用
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                moon.style.transition = "opacity 1.5s ease";
+                moon.style.opacity = 1;
+            });
+        });
+
+        // 軌道アニメーション開始
         function animate() {
             const x = cx + r * Math.cos(theta);
             const y = cy - r * Math.sin(theta);
@@ -692,15 +697,11 @@ function startMoonOrbit() {
             moon.style.left = x + "px";
             moon.style.top  = y + "px";
 
-            // ★ 東=-30° → 南=0° → 西=+30° の傾きを線形に再現
             const orbitDeg = 30 * ((Math.PI/2 - theta) / (Math.PI/2));
             moon.style.transform = `rotate(${orbitDeg}deg)`;
 
             theta -= 0.002;
-
-            if (theta <= 0) {
-                theta = Math.PI;
-            }
+            if (theta <= 0) theta = Math.PI;
 
             requestAnimationFrame(animate);
         }
