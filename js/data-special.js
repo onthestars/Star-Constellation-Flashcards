@@ -2,6 +2,7 @@
 
 //▼Special画像追加時に編集//
 // スペシャルビューアー用：星空写真データ
+// カンマ(,)の位置に注意。
 const specialPhotos = {
   "Spring-Triangle": {
     normal: [
@@ -66,6 +67,21 @@ const specialPhotos = {
     ]
   },
 
+  "Aquarius": {
+    normal: [
+      "Aquarius-noline-pic01.jpg",
+      "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Aquarius-lines-pic01.jpg",
+      "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年11月16日／紀伊半島南部／伐採地の立木とみずがめ座",
+      "2025年11月16日／紀伊半島南部／伐採地の立木とみずがめ座"
+    ]
+  },
+
   "Pisces": {
     normal: [
       "Pisces-noline-pic01.jpg"
@@ -75,6 +91,36 @@ const specialPhotos = {
     ],
     caption: [
       "2025年11月16日／紀伊半島南部／うお座（左）と秋の四辺形"
+    ]
+  },
+
+    "Capricornus": {
+    normal: [
+      "Capricornus-noline-pic01.jpg",
+      "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Capricornus-lines-pic01.jpg",
+    　"Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年11月16日／紀伊半島南部／やぎ座",
+      "2025年11月16日／紀伊半島南部／伐採地の立木とやぎ座"
+    ]
+  },
+
+    "Equuleus": {
+    normal: [
+      "Equuleus-noline-pic01.jpg",
+      "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Equuleus-lines-pic01.jpg",
+            "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年11月16日／紀伊半島南部／こうま座",
+      "2025年11月16日／紀伊半島南部／伐採地の立木とこうま座"
     ]
   },
 

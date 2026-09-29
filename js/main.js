@@ -353,12 +353,16 @@ function jumpToSeason(season) {
 
 //▼Special画像追加時に編集//
 // Special viewer 対応カードか判定
+// パイプ(||)の位置に注意。※最終行には付けないこと。
 function hasPhotoFor(i) {
   return (
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Summer-Triangle") ||
     images[i].includes("Pegasus") ||
+    images[i].includes("Aquarius") ||
     images[i].includes("Pisces") ||
+    images[i].includes("Capricornus") ||
+    images[i].includes("Equuleus") ||
     images[i].includes("Cassiopeia") ||
     images[i].includes("Orion") ||
     images[i].includes("Winter-Triangle")
