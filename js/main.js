@@ -653,9 +653,7 @@ document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
 });
 
-let moonInitialized = false;  // ← 初回だけフェードインするためのフラグ
-
-// 月のアニメーション
+// 月のアニメーション（東=-30° → 南=0° → 西=+30°）
 function startMoonOrbit() {
     const moon = document.getElementById("moon");
 
@@ -663,20 +661,30 @@ function startMoonOrbit() {
     const h = window.innerHeight;
 
     const cx = w / 2;
-    const cy = h * 0.33;
+    const cy = h * 0.33;     // 図と一致する高さ
     const r  = w * 0.55;
 
-    let theta = Math.PI;
+    let theta = Math.PI;     // 東（左端）からスタート
 
-    const baseDeg = 10;
+    // ★ 初期状態は非表示（CSSで opacity:0 を指定しておく）
+    moon.style.opacity = 0;
 
-    // ★ 初期位置を画面外に退避（中央に出る問題を防ぐ）
-    moon.style.left = "-9999px";
-    moon.style.top  = "-9999px";
+    // ★ 初期位置（東の軌道上）に月を置く
+    const x0 = cx + r * Math.cos(theta);
+    const y0 = cy - r * Math.sin(theta);
+    moon.style.left = x0 + "px";
+    moon.style.top  = y0 + "px";
 
-    // ★ 3秒後にフレームイン開始
+    // ★ 初期回転（東で -30°）
+    const orbitDeg0 = 30 * ((Math.PI/2 - theta) / (Math.PI/2));
+    moon.style.transform = `rotate(${orbitDeg0}deg)`;
+
+    // ★ 3秒後にフレームイン開始（opacity を 1 に）
     setTimeout(() => {
+        moon.style.transition = "opacity 1.5s ease";
+        moon.style.opacity = 1;
 
+        // ★ フレームインと同時に軌道アニメーション開始
         function animate() {
             const x = cx + r * Math.cos(theta);
             const y = cy - r * Math.sin(theta);
@@ -684,10 +692,9 @@ function startMoonOrbit() {
             moon.style.left = x + "px";
             moon.style.top  = y + "px";
 
-            const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
-            const rotateDeg = baseDeg + orbitDeg;
-
-            moon.style.transform = `rotate(${rotateDeg}deg)`;
+            // ★ 東=-30° → 南=0° → 西=+30° の傾きを線形に再現
+            const orbitDeg = 30 * ((Math.PI/2 - theta) / (Math.PI/2));
+            moon.style.transform = `rotate(${orbitDeg}deg)`;
 
             theta -= 0.002;
 
@@ -698,7 +705,7 @@ function startMoonOrbit() {
             requestAnimationFrame(animate);
         }
 
-        animate();  // ← 3秒後に開始
+        animate();
 
     }, 3000);
 }
