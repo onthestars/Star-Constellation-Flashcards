@@ -1,5 +1,4 @@
 // main.js
-
 // サウンド設定（localStorage）
 let soundEnabled = localStorage.getItem("soundEnabled") === "false" ? false : true;
 
