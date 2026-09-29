@@ -431,19 +431,21 @@ body {
 
 /* アニメーションする月の位置指定など ※アニメ設定は js ファイル */
 #moon {
-    position: absolute;
-    width: 80px;
+    position: fixed;        /* ← これが最重要（Chromeのレイアウト揺れ防止） */
+    top: 0;
+    left: 0;
+
+    width: 75px;
     height: auto;
-    z-index: 5;
+
+    z-index: 2;             /* ← 背景の上、カードの下 */
     pointer-events: none;
     filter: drop-shadow(0 0 6px #ffffff80);
 
-    /* ★ 初期状態は透明 */
     opacity: 0;
-
-    /* ★ フェードイン用の transition */
     transition: opacity 2s ease;
 }
+
 
 @keyframes starTwinkle {
   0%   { opacity: 0; transform: scale(0.4); }
