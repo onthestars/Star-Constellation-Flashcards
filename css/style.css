@@ -432,7 +432,7 @@ body {
 /* アニメーションする月の位置指定など ※アニメ設定は js ファイル */
 #moon {
     position: absolute;
-    width: 80px;
+    width: 60px;
     pointer-events: auto;
     opacity: 1.0;
     filter: drop-shadow(0 0 6px #ffffff80);
