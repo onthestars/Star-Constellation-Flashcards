@@ -103,6 +103,19 @@ specialBtn.onclick = () => {
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
 
+  // 月専用のSpecialビューワー
+  document.getElementById("moon").onclick = () => {
+    savedIndex = "moon";
+    specialIndex = 0;
+    specialMode = "normal";
+
+    const starName = "Moon";
+    specialImg.src = "image/special/moon/" + specialPhotos[starName].normal[0];
+
+    specialViewer.style.display = "flex";
+    updateSpecialButtons();
+};
+
   // キラキラ音（音声ON時のみ）
   if (soundEnabled) {
     soundKirakira.currentTime = 0;

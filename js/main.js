@@ -652,3 +652,56 @@ window.addEventListener("load", () => {
 document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
 });
+
+let moonInitialized = false;  // ← 初回だけフェードインするためのフラグ
+
+// 月のアニメーション
+function startMoonOrbit() {
+    const moon = document.getElementById("moon");
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    const cx = w / 2;
+    const cy = h * 0.33;
+    const r  = w * 0.55;
+
+    let theta = Math.PI;
+
+    const baseDeg = 10;
+
+    // ★ 初期位置を画面外に退避（中央に出る問題を防ぐ）
+    moon.style.left = "-9999px";
+    moon.style.top  = "-9999px";
+
+    // ★ 3秒後にフレームイン開始
+    setTimeout(() => {
+
+        function animate() {
+            const x = cx + r * Math.cos(theta);
+            const y = cy - r * Math.sin(theta);
+
+            moon.style.left = x + "px";
+            moon.style.top  = y + "px";
+
+            const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
+            const rotateDeg = baseDeg + orbitDeg;
+
+            moon.style.transform = `rotate(${rotateDeg}deg)`;
+
+            theta -= 0.002;
+
+            if (theta <= 0) {
+                theta = Math.PI;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();  // ← 3秒後に開始
+
+    }, 3000);
+}
+
+window.onload = startMoonOrbit;
+window.onresize = startMoonOrbit;
