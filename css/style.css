@@ -14,26 +14,26 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative; /* ← これで十分 */
+  position: relative;
 }
 
 /* ▼ Safariでも確実に背景が表示されるレイヤー */
 body::before {
   content: "";
-  position: fixed;     /* ← 背景は固定でOK */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 
+  background-image: var(--bg-image);   /* ← JSから受け取る */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 
-  z-index: -1;         /* ← カードより後ろに配置 */
+  z-index: -1;
   pointer-events: none;
 }
-
 
 /* 縦画面（スマホ） */
 @media (orientation: portrait) {
