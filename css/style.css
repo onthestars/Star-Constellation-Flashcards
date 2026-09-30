@@ -1,13 +1,12 @@
 /* style.css */
 
-/* 画面全体：カードを中央に固定 */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  /* position: fixed; ← Safariで背景が消える原因なので削除 */
+  /* position: fixed; ← これが背景を消していたので削除 */
 }
 
 body {
@@ -26,7 +25,7 @@ body::before {
   width: 100%;
   height: 100%;
 
-  background-image: var(--bg-image);   /* ← JSから受け取る */
+  background-image: var(--bg-image);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -34,6 +33,7 @@ body::before {
   z-index: -1;
   pointer-events: none;
 }
+
 
 /* 縦画面（スマホ） */
 @media (orientation: portrait) {
