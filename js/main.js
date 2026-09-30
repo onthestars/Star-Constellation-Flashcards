@@ -660,22 +660,12 @@ let resizeTimer = null;   // ★ resize連打対策
 function startMoonOrbitSequence() {
     const moon = document.getElementById("moon");
 
-    // CSS変数を読み込む（高さと半径のみ）
-    const rootStyle = getComputedStyle(document.documentElement);
-    const moonStartY = parseFloat(rootStyle.getPropertyValue('--moon-start-y')); 
-    const moonRadius = parseFloat(rootStyle.getPropertyValue('--moon-radius')); 
-
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    // 円軌道の中心（cx は固定：画面中央）
     const cx = w / 2;
-
-    // 高さだけ CSS 変数で調整（スマホとPCで切り替わる）
-    const cy = h * (moonStartY / 100);
-
-    // 半径も CSS 変数で調整（スマホとPCで切り替わる）
-    const r = Math.min(w, h) * moonRadius;
+    const cy = h * 0.50; //月の高さ（画面サイズで変わる）
+const r = Math.min(w, h) * 0.70;
 
     const baseDeg = 10;
 
@@ -692,55 +682,47 @@ function startMoonOrbitSequence() {
 
     function runPhase(phaseIndex) {
 
-        // ★ まず透明にして画像切り替え
         moon.style.opacity = 0;
         moon.src = "image/common/" + phases[phaseIndex];
 
-        // ★ 3秒遅らせてフェードイン＋アニメ開始
-        setTimeout(() => {
-
-            // フェードイン（CSSの transition と同期）
+        requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    moon.style.opacity = 1;
-                });
+                moon.style.opacity = 1;
             });
+        });
 
-            let theta = Math.PI;
+        let theta = Math.PI;
 
-            function animate() {
-                const x = cx + r * Math.cos(theta);
-                const y = cy - r * Math.sin(theta);
+        function animate() {
+            const x = cx + r * Math.cos(theta);
+            const y = cy - r * Math.sin(theta);
 
-                moon.style.left = x + "px";
-                moon.style.top  = y + "px";
+            moon.style.left = x + "px";
+            moon.style.top  = y + "px";
 
-                const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
-                const rotateDeg = baseDeg + orbitDeg;
-                moon.style.transform = `rotate(${rotateDeg}deg)`;
+            const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
+            const rotateDeg = baseDeg + orbitDeg;
+            moon.style.transform = `rotate(${rotateDeg}deg)`;
 
-                theta -= 0.003;
+            theta -= 0.002;
 
-                if (theta <= 0) {
-                    currentPhase++;
-                    if (currentPhase >= phases.length) {
-                        currentPhase = 0;
-                    }
-
-                    // 次のフェーズへ（既存の 2 秒待ちを維持）
-                    setTimeout(() => {
-                        runPhase(currentPhase);
-                    }, 2000);
-
-                    return;
+            if (theta <= 0) {
+                currentPhase++;
+                if (currentPhase >= phases.length) {
+                    currentPhase = 0;
                 }
 
-                animationId = requestAnimationFrame(animate);
+                setTimeout(() => {
+                    runPhase(currentPhase);
+                }, 2000);
+
+                return;
             }
 
-            animate(); // ← ★ここが 3 秒遅れて実行される
+            animationId = requestAnimationFrame(animate); // ★ IDを保持
+        }
 
-        }, 3000); // ★ 3秒遅延
+        animate();
     }
 
     runPhase(currentPhase);
@@ -751,14 +733,17 @@ window.onload = startMoonOrbitSequence;
 // ★ resize時の安全な再起動
 window.onresize = () => {
 
+    // 連続resize対策（スマホで特に重要）
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
 
+        // 古いアニメを完全停止
         if (animationId !== null) {
             cancelAnimationFrame(animationId);
             animationId = null;
         }
 
+        // 新しいアニメを開始
         startMoonOrbitSequence();
 
     }, 200);
