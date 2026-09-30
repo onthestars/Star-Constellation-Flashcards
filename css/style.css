@@ -437,21 +437,23 @@ body {
 
 /* アニメーションする月の位置指定など ※アニメ設定は js ファイル */
 #moon {
-      z-index: 1;             /* ← 背景の上、カードの下 */
-    position: fixed;        /* ← これが最重要（Chromeのレイアウト揺れ防止） */
+    position: fixed;        /* ← これはそのままでOK（Chromeのレイアウト揺れ防止） */
     top: 0;
     left: 0;
 
     width: 75px;
     height: auto;
 
-
     pointer-events: auto;
     filter: drop-shadow(0 0 6px #ffffff80);
 
     opacity: 0;
     transition: opacity 2s ease;
+
+    /* ▼ Safari対策：カードより後ろに固定する */
+    z-index: -1;            /* ← これが最重要（iPhoneで前に出る問題の解決） */
 }
+
 
 
 @keyframes starTwinkle {
