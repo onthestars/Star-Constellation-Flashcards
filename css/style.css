@@ -10,17 +10,31 @@ html, body {
   position: fixed;      /* ← スマホでの上下揺れを完全に止める */
 }
 
+/* 背景色（画像読み込み前に表示される） */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /* background-color: #060740; */
+  background-color: #060740; /* ← 深い青を先に表示させる */
+}
+
+/* 背景画像は擬似要素に貼る（Safariでも確実に画像が優先される） */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-image: url("../image/common/back-ground-image.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-}
 
+  z-index: -1; /* ← 月アニメより下、カードより下 */
+}
 
 /* 縦画面（スマホ） */
 @media (orientation: portrait) {
