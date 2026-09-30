@@ -1,23 +1,5 @@
 /* style.css */
 
-/* 画面全体：カードを中央に固定 */
-/* body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-
-  overflow-x: hidden;
-  overscroll-behavior-x: none;
-  touch-action: pan-y;
-
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-} */
-
 html, body {
   margin: 0;
   padding: 0;
@@ -56,6 +38,7 @@ body {
 
 /* カード枠（縦置き） */
 #card-frame {
+   z-index: 3;
   width: 95vw;
   max-width: 480px;
   border-radius: 12px;
@@ -84,6 +67,7 @@ body {
 
 /* ボタン群（縦置き） */
 .button-block {
+    z-index: 4;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -398,13 +382,14 @@ body {
 
 /* Special viewer：星のキラキラオーバーレイ */
 #stars-overlay {
+    z-index: 10000;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 10000;
+
   overflow: hidden;
 }
 
@@ -453,19 +438,22 @@ body {
 
 /* アニメーションする月の位置指定など ※アニメ設定は js ファイル */
 #moon {
-    position: absolute;
-    width: 80px;
+      z-index: 1;             /* ← 背景の上、カードの下 */
+    position: fixed;        /* ← これが最重要（Chromeのレイアウト揺れ防止） */
+    top: 0;
+    left: 0;
+
+    width: 75px;
     height: auto;
-    z-index: 5;
-    pointer-events: none;
+
+
+    pointer-events: auto;
     filter: drop-shadow(0 0 6px #ffffff80);
 
-    /* ★ 初期状態は透明 */
     opacity: 0;
-
-    /* ★ フェードイン用の transition */
     transition: opacity 2s ease;
 }
+
 
 @keyframes starTwinkle {
   0%   { opacity: 0; transform: scale(0.4); }
@@ -476,10 +464,10 @@ body {
 
 /* 音声 ON/OFF ボタン */
 #sound-global-buttons {
+    z-index: 6;
   position: fixed;
   top: 10px;
   right: 10px;
-  z-index: 9999;
 }
 
 #sound-global-buttons img {
@@ -498,6 +486,7 @@ body {
 
 /* コピーライト表記 */
 #copyright {
+    z-index: 5;
   position: fixed;
   bottom: 24px;
   left: 0;
@@ -508,11 +497,11 @@ body {
   font-size: clamp(9px, 3vw, 12px);
   color: rgba(0, 9, 95, 0.7);
   pointer-events: none;
-  z-index: 9999;
 }
 
 /* Special Thanks 表記 */
 .special-thanks-btn {
+    z-index: 5;
   position: fixed;
   bottom: 6px;
   left: 0;
@@ -522,6 +511,5 @@ body {
   overflow: hidden;
   font-size: clamp(9px, 3vw, 12px);
   color: rgba(0, 9, 95, 0.7);
-  z-index: 9999;
   padding: 2px 0;
 }
