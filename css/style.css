@@ -1,7 +1,7 @@
 /* style.css */
 
 /* 画面全体：カードを中央に固定 */
-body {
+/* body {
   margin: 0;
   padding: 0;
   display: flex;
@@ -16,6 +16,28 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+} */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* ← 上下スクロールを完全に禁止 */
+}
+
+/* 画面全体：カードを中央に固定 */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
 }
 
 /* 縦画面（スマホ） */
