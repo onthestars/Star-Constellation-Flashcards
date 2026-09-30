@@ -6,19 +6,25 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;     /* ← スクロール完全禁止 */
-  position: fixed;      /* ← スマホでの上下揺れを完全に止める */
+  /* position: fixed; ← Safariで背景が描画されなくなるので削除 */
+  /* overflow: hidden; ← html側は削除 */
 }
 
 body {
+  overflow: hidden; /* ← body側だけ残す（上下揺れ防止） */
+
   display: flex;
   justify-content: center;
   align-items: center;
 
+  /* 通常の背景画像表示に戻す */
+  background-image: url("./image/common/background-image-vertical1.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-attachment: scroll; /* ← Safariで安定 */
 }
+
 
 
 /* 縦画面（スマホ） */
