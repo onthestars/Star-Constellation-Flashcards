@@ -1,4 +1,3 @@
-// 背景画像ランダム読み込み
 const portraitImages = [
   "./image/common/background-image-vertical1.jpg",
   "./image/common/background-image-vertical2.jpg",
@@ -15,7 +14,9 @@ function setRandomBackground() {
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
   const images = isPortrait ? portraitImages : landscapeImages;
   const randomImage = images[Math.floor(Math.random() * images.length)];
-  document.body.style.backgroundImage = `url(${randomImage})`;
+
+  document.body.style.setProperty("--bg-image", `url(${randomImage})`);
 }
 
 setRandomBackground();
+window.addEventListener("orientationchange", setRandomBackground);
