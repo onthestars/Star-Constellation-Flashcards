@@ -16,8 +16,8 @@ function setRandomBackground() {
   const images = isPortrait ? portraitImages : landscapeImages;
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
-  // ★ Safari対応：CSS変数に渡す
   document.body.style.setProperty("--bg-image", `url(${randomImage})`);
 }
+
 
 setRandomBackground();
