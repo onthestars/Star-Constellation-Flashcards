@@ -6,18 +6,32 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;     /* ← スクロール完全禁止 */
-  position: fixed;      /* ← スマホでの上下揺れを完全に止める */
+  overflow: hidden;
+  /* position: fixed; ← Safariで背景が消える原因なので削除 */
 }
 
 body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative; /* ← これで十分 */
+}
+
+/* ▼ Safariでも確実に背景が表示されるレイヤー */
+body::before {
+  content: "";
+  position: fixed;     /* ← 背景は固定でOK */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
+  z-index: -1;         /* ← カードより後ろに配置 */
+  pointer-events: none;
 }
 
 
