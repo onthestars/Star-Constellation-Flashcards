@@ -15,7 +15,6 @@ body {
   justify-content: center;
   align-items: center;
 
-  /* background-color: #060740; */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -436,6 +435,25 @@ body {
   transform: rotate(-70deg);
 }
 
+/* アニメーションする月の位置指定など ※アニメ設定は js ファイル */
+#moon {
+      z-index: 1;             /* ← 背景の上、カードの下 */
+    position: fixed;        /* ← これが最重要（Chromeのレイアウト揺れ防止） */
+    top: 0;
+    left: 0;
+
+    width: 75px;
+    height: auto;
+
+
+    pointer-events: auto;
+    filter: drop-shadow(0 0 6px #ffffff80);
+
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+
 @keyframes starTwinkle {
   0%   { opacity: 0; transform: scale(0.4); }
   30%  { opacity: 1; transform: scale(1); }
@@ -493,36 +511,4 @@ body {
   font-size: clamp(9px, 3vw, 12px);
   color: rgba(0, 9, 95, 0.7);
   padding: 2px 0;
-}
-
-/* 月の位置指定など ※アニメ設定は js ファイル */
-#moon {
-      z-index: 1;             /* ← 背景の上、カードの下 */
-    position: fixed;        /* ← これが最重要（Chromeのレイアウト揺れ防止） */
-    top: 0;
-    left: 0;
-
-    width: 75px;
-    height: auto;
-
-
-    pointer-events: auto;
-    filter: drop-shadow(0 0 6px #ffffff80);
-
-    opacity: 0;
-    transition: opacity 2s ease;
-}
-
-/* 月アニメ：スマホ用（初期値） */
-:root {
-  --moon-start-y: 40%;   /* スマホ：高めの軌跡 */
-  --moon-radius: 0.70;   /* スマホ：やや大きい円 */
-}
-
-/* PC版：月の軌跡を変更する */
-@media (min-width: 900px) {
-  :root {
-    --moon-start-y: 30%;  /* PC：低い軌跡 */
-    --moon-radius: 0.2;  /* PC：大きめの円でゆったり */
-  }
 }
