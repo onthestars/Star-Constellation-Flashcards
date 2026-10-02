@@ -1,10 +1,23 @@
 // data-special.js
 
 // ======== ======== ======== ======== ========
-//▼Special画像追加時に編集//
+//▼▼▼Special画像追加時に編集//
 // スペシャルビューアー用：星空写真データ
 // カンマ(,)の位置に注意。
 const specialPhotos = {
+
+  "ursa-minor": {
+    normal: [
+      "ursa-minor-noline-pic01.jpg"
+    ],
+    lines: [
+      "ursa-minor-lines-pic01.jpg"
+    ],
+    caption: [
+      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座"
+    ]
+  },
+
   "Spring-Triangle": {
     normal: [
       "Spring-Triangle-noline-pic01.jpg"

@@ -1,4 +1,5 @@
 // main.js
+
 // サウンド設定（localStorage）
 let soundEnabled = localStorage.getItem("soundEnabled") === "false" ? false : true;
 
@@ -350,11 +351,12 @@ function jumpToSeason(season) {
 }
 
 // ======== ======== ======== ======== ========
-//▼Special画像追加時に編集//
+//▼▼▼Special画像追加時に編集//
 // Special viewer 対応カードか判定
 // パイプ(||)の位置に注意。※最終行には付けないこと。
 function hasPhotoFor(i) {
   return (
+    images[i].includes("ursa-minor") ||
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Sagittarius") ||
     images[i].includes("Summer-Triangle") ||
