@@ -14,7 +14,7 @@ const specialPhotos = {
     ],
     lines: [
       "Ursa-Minor-lines-pic01.jpg",
-       "Ursa-Minor-noline-pic02.jpg"
+      "Ursa-Minor-lines-pic02.jpg"
     ],
     caption: [
       "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座",
