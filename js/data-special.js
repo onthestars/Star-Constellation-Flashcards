@@ -8,13 +8,16 @@ const specialPhotos = {
 
   "ursa-minor": {
     normal: [
-      "ursa-minor-noline-pic01.jpg"
+      "ursa-minor-noline-pic01.jpg",
+            "ursa-minor-noline-pic02.jpg"
     ],
     lines: [
-      "ursa-minor-lines-pic01.jpg"
+      "ursa-minor-lines-pic01.jpg",
+            "ursa-minor-noline-pic02.jpg"
     ],
     caption: [
-      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座"
+      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座",
+            "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座"
     ]
   },
 
