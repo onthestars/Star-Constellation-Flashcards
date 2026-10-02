@@ -56,8 +56,9 @@ function getStarNameFromIndex(i) {
 
 //▼▼▼Special画像追加時に編集//
 // Special画像フォルダ
+// 大文字小文字厳密に合わせること
 function getSpecialFolder(starName) {
-  if (starName === "ursa-minor") return "image/spring/Special/";
+  if (starName === "Ursa-Minor") return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
