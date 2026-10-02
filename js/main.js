@@ -653,10 +653,11 @@ document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
 });
 
+// 月のアニメーション
+
 let animationId = null;   // ★ アニメのIDを保持
 let resizeTimer = null;   // ★ resize連打対策
 
-// 月のアニメーション
 function startMoonOrbitSequence() {
     const moon = document.getElementById("moon");
 
@@ -665,7 +666,7 @@ function startMoonOrbitSequence() {
 
     const cx = w / 2;
     const cy = h * 0.50; //月の高さ（画面サイズで変わる）
-const r = Math.min(w, h) * 0.70;
+    const r = Math.min(w, h) * 0.80;
 
     const baseDeg = 10;
 
@@ -682,9 +683,12 @@ const r = Math.min(w, h) * 0.70;
 
     function runPhase(phaseIndex) {
 
+        // ▼ フェードイン準備
+        moon.style.transition = "opacity 1.5s ease";
         moon.style.opacity = 0;
         moon.src = "image/common/" + phases[phaseIndex];
 
+        // ▼ フェードイン開始（軌道アニメと同時進行）
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 moon.style.opacity = 1;
@@ -692,6 +696,7 @@ const r = Math.min(w, h) * 0.70;
         });
 
         let theta = Math.PI;
+        let fadeOutStarted = false; // ★ フェードアウト開始済み判定
 
         function animate() {
             const x = cx + r * Math.cos(theta);
@@ -704,22 +709,32 @@ const r = Math.min(w, h) * 0.70;
             const rotateDeg = baseDeg + orbitDeg;
             moon.style.transform = `rotate(${rotateDeg}deg)`;
 
+            // ▼ フェードアウト開始（軌道アニメ中）
+            // theta が終盤に入ったらフェードアウト開始
+            if (theta < 0.3 && !fadeOutStarted) {
+                fadeOutStarted = true;
+                moon.style.opacity = 0;  // ← 動きながらフェードアウト
+            }
+
             theta -= 0.002;
 
+            // ▼ 軌道終了 → 次フェーズへ
             if (theta <= 0) {
+
                 currentPhase++;
                 if (currentPhase >= phases.length) {
                     currentPhase = 0;
                 }
 
+                // フェードアウト完了後に次フェーズ開始
                 setTimeout(() => {
                     runPhase(currentPhase);
-                }, 2000);
+                }, 1500);
 
                 return;
             }
 
-            animationId = requestAnimationFrame(animate); // ★ IDを保持
+            animationId = requestAnimationFrame(animate);
         }
 
         animate();
@@ -733,17 +748,14 @@ window.onload = startMoonOrbitSequence;
 // ★ resize時の安全な再起動
 window.onresize = () => {
 
-    // 連続resize対策（スマホで特に重要）
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
 
-        // 古いアニメを完全停止
         if (animationId !== null) {
             cancelAnimationFrame(animationId);
             animationId = null;
         }
 
-        // 新しいアニメを開始
         startMoonOrbitSequence();
 
     }, 200);
