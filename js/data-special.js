@@ -3,22 +3,22 @@
 // ======== ======== ======== ======== ========
 //▼▼▼Special画像追加時に編集//
 // スペシャルビューアー用：星空写真データ
-// カンマ(,)の位置に注意。
-// ファイル名大文字小文字厳密に合わせること
+// カンマ(,)の位置に注意
+// 大文字小文字は厳密一致
 const specialPhotos = {
 
-  "ursa-minor": {
+  "Ursa-Minor": {
     normal: [
       "Ursa-Minor-noline-pic01.jpg",
-      "Ursa-Minor-noline-pic02.jpg"
+            "Ursa-Minor-noline-pic02.jpg"
     ],
     lines: [
       "Ursa-Minor-lines-pic01.jpg",
-      "Ursa-Minor-lines-pic02.jpg"
+            "Ursa-Minor-lines-pic02.jpg"
     ],
     caption: [
-      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座",
-      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座"
+      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座と北極星",
+            "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座と北極星"
     ]
   },
 

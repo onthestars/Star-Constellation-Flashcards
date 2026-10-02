@@ -24,7 +24,7 @@ const specialPrev   = document.getElementById("special-prev");
 // ======== ======== ======== ======== ========
 //▼▼▼Special画像追加時に編集//
 // 星座ID → Specialフォルダ名に変換 ※ID番号は仕様書
-// 大文字小文字厳密に合わせること
+// 大文字小文字は厳密一致
 function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
@@ -57,7 +57,7 @@ function getStarNameFromIndex(i) {
 
 //▼▼▼Special画像追加時に編集//
 // Special画像フォルダ
-// 大文字小文字厳密に合わせること
+// 大文字小文字は厳密一致
 function getSpecialFolder(starName) {
   if (starName === "Ursa-Minor") return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
