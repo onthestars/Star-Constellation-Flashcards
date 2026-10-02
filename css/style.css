@@ -52,7 +52,7 @@ body {
   align-items: center;
   padding: 5px 4px;
 
-  margin-top: 80px;
+  margin-top: 80px; /* 画面内の高さ調整 */
 }
 
 /* カード画像領域 */
