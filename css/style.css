@@ -52,7 +52,7 @@ body {
   align-items: center;
 
   padding: 5px 4px;
-  margin-top: 200px;
+  margin-top: 80px; /* カード、ボタンの画面内の位置調整 */
 }
 
 /* カード画像領域 */
