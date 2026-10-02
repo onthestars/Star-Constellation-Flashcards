@@ -2,6 +2,7 @@
 
 // 効果音
 const soundKirakira = document.getElementById("soundKirakira");
+soundKirakira.volume = 0.4;   // ★ 音量を半分にする
 
 // Special Viewer（写真ビューアー）
 let specialIndex = 0;
@@ -21,12 +22,15 @@ const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
 
 // ======== ======== ======== ======== ========
-//▼Special画像追加時に編集//
+//▼▼▼Special画像追加時に編集//
 // 星座ID → Specialフォルダ名に変換 ※ID番号は仕様書
 function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
-  if (season === "spring") return "Spring-Triangle";
+  if (season === "spring") {
+    if (i === 2 || i === 13) return "ursa-minor";
+    if (i === 12) return "Spring-Triangle";
+    }
 
   if (season === "summer") {
     if (i === 27 || i === 41) return "Sagittarius";
@@ -50,9 +54,10 @@ function getStarNameFromIndex(i) {
   return null;
 }
 
-//▼Special画像追加時に編集//
+//▼▼▼Special画像追加時に編集//
 // Special画像フォルダ
 function getSpecialFolder(starName) {
+  if (starName === "ursa-minor") return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
