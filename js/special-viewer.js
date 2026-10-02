@@ -24,11 +24,12 @@ const specialPrev   = document.getElementById("special-prev");
 // ======== ======== ======== ======== ========
 //▼▼▼Special画像追加時に編集//
 // 星座ID → Specialフォルダ名に変換 ※ID番号は仕様書
+// 大文字小文字厳密に合わせること
 function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
   if (season === "spring") {
-    if (i === 2 || i === 13) return "ursa-minor";
+    if (i === 2 || i === 13) return "Ursa-Minor";
     if (i === 12) return "Spring-Triangle";
     }
 

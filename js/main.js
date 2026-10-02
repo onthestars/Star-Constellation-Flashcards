@@ -353,8 +353,8 @@ function jumpToSeason(season) {
 // ======== ======== ======== ======== ========
 //▼▼▼Special画像追加時に編集//
 // Special viewer 対応カードか判定
-//カード画像の星座名と、大文字小文字まで厳密一致させること。
-// パイプ(||)の位置に注意。※最終行には付けないこと。
+//カード画像の星座名と、大文字小文字まで厳密一致させること
+// パイプ(||)の位置に注意。※最終行には付けないこと
 function hasPhotoFor(i) {
   return (
     images[i].includes("Ursa-Minor") ||
