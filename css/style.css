@@ -50,9 +50,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   padding: 5px 4px;
-  margin-top: 80px; /* カード、ボタンの画面内の位置調整 */
+
+  /* margin-top: 80px; カード、ボタンの画面内の位置調整 */
 }
 
 /* カード画像領域 */
