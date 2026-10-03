@@ -29,6 +29,7 @@ function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
   if (season === "spring") {
+        if (i === 10 || i === 21) return "Leo";
     if (i === 2 || i === 13) return "Ursa-Minor";
     if (i === 12) return "Spring-Triangle";
     }
@@ -60,6 +61,7 @@ function getStarNameFromIndex(i) {
 // 大文字小文字は厳密一致
 function getSpecialFolder(starName) {
   if (starName === "Ursa-Minor") return "image/spring/Special/";
+  if (starName === "Leo") return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";

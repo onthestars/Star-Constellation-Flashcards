@@ -358,6 +358,7 @@ function jumpToSeason(season) {
 function hasPhotoFor(i) {
   return (
     images[i].includes("Ursa-Minor") ||
+        images[i].includes("Leo") ||
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Sagittarius") ||
     images[i].includes("Summer-Triangle") ||

@@ -22,6 +22,18 @@ const specialPhotos = {
     ]
   },
 
+    "Leo": {
+    normal: [
+      "Leo-noline-pic01.jpg"
+    ],
+    lines: [
+      "Leo-lines-pic01.jpg"
+    ],
+    caption: [
+      "2026年5月29日／兵庫県猪名川町／大野山頂から望むしし座",
+    ]
+  },
+
   "Spring-Triangle": {
     normal: [
       "Spring-Triangle-noline-pic01.jpg"
