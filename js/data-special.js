@@ -54,7 +54,7 @@ const specialPhotos = {
       "Ophiuchus-lines-pic01.jpg"
     ],
     caption: [
-      "2025年8月22日／兵庫県旧青垣町／へび座とへびつかい座"
+      "2025年8月22日／兵庫県旧青垣町／へび座・へびつかい座(一部)"
     ]
   },
 
