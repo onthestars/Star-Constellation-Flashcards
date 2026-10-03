@@ -22,18 +22,6 @@ const specialPhotos = {
     ]
   },
 
-    "Leo": {
-    normal: [
-      "Leo-noline-pic01.jpg"
-    ],
-    lines: [
-      "Leo-lines-pic01.jpg"
-    ],
-    caption: [
-      "2026年5月29日／兵庫県猪名川町／大野山頂から望むしし座",
-    ]
-  },
-
   "Spring-Triangle": {
     normal: [
       "Spring-Triangle-noline-pic01.jpg"
@@ -43,18 +31,6 @@ const specialPhotos = {
     ],
     caption: [
       "2026年4月24日／大阪府高槻市山中／谷に浮かぶ春の大三角"
-    ]
-  },
-
-    "Ophiuchus": {
-    normal: [
-      "Ophiuchus-noline-pic01.jpg"
-    ],
-    lines: [
-      "Ophiuchus-lines-pic01.jpg"
-    ],
-    caption: [
-      "2025年8月22日／兵庫県旧青垣町／へび座・へびつかい座(一部)"
     ]
   },
 
@@ -70,6 +46,18 @@ const specialPhotos = {
     caption: [
       "2026年8月13～14日／紀伊半島南部／ペルセウス座流星群と共演",
       "2026年8月13～14日／紀伊半島南部／ペルセウス座流星群と共演"
+    ]
+  },
+
+  "Sagittarius": {
+    normal: [
+      "Sagittarius-noline-pic01.jpg"
+    ],
+    lines: [
+      "Sagittarius-lines-pic01.jpg"
+    ],
+    caption: [
+      "2026年9月12日／紀伊半島中部／夏の天の川といて座"
     ]
   },
 
