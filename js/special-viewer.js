@@ -36,7 +36,7 @@ function getStarNameFromIndex(i) {
 
   if (season === "summer") {
     if (i === 27 || i === 41) return "Sagittarius";
-        if (i === 32 || i === 46) return "Ophiuchus";
+    if (i === 32 || i === 46) return "Ophiuchus";
     if (i === 35) return "Summer-Triangle";
   }
 
@@ -50,6 +50,7 @@ function getStarNameFromIndex(i) {
   }
 
     if (season === "winter") {
+    if (i === 75 || i === 84) return "Gemini";
     if (i === 78 || i === 87) return "Orion";
     if (i === 83) return "Winter-Triangle";
   }
@@ -73,6 +74,7 @@ function getSpecialFolder(starName) {
   if (starName === "Capricornus") return "image/autumn/Special/";
   if (starName === "Equuleus") return "image/autumn/Special/";
   if (starName === "Cassiopeia") return "image/autumn/Special/";
+  if (starName === "Gemini") return "image/winter/Special/";
   if (starName === "Orion") return "image/winter/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
   return null;

@@ -361,7 +361,7 @@ function hasPhotoFor(i) {
     images[i].includes("Leo") ||
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Sagittarius") ||
-        images[i].includes("Ophiuchus") ||
+    images[i].includes("Ophiuchus") ||
     images[i].includes("Summer-Triangle") ||
     images[i].includes("Pegasus") ||
     images[i].includes("Aquarius") ||
@@ -369,6 +369,7 @@ function hasPhotoFor(i) {
     images[i].includes("Capricornus") ||
     images[i].includes("Equuleus") ||
     images[i].includes("Cassiopeia") ||
+    images[i].includes("Gemini") ||
     images[i].includes("Orion") ||
     images[i].includes("Winter-Triangle")
   );
