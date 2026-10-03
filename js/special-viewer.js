@@ -29,13 +29,14 @@ function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
   if (season === "spring") {
-        if (i === 10 || i === 21) return "Leo";
+    if (i === 10 || i === 21) return "Leo";
     if (i === 2 || i === 13) return "Ursa-Minor";
     if (i === 12) return "Spring-Triangle";
     }
 
   if (season === "summer") {
     if (i === 27 || i === 41) return "Sagittarius";
+        if (i === 32 || i === 46) return "Ophiuchus";
     if (i === 35) return "Summer-Triangle";
   }
 
@@ -64,6 +65,7 @@ function getSpecialFolder(starName) {
   if (starName === "Leo") return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
+    if (starName === "Ophiuchus") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
   if (starName === "Pegasus") return "image/autumn/Special/";
   if (starName === "Aquarius") return "image/autumn/Special/";

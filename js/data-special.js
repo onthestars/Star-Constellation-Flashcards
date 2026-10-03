@@ -46,6 +46,18 @@ const specialPhotos = {
     ]
   },
 
+    "Ophiuchus": {
+    normal: [
+      "Ophiuchus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Ophiuchus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年8月22日／兵庫県旧青垣町／へび座とへびつかい座"
+    ]
+  },
+
   "Summer-Triangle": {
     normal: [
       "Summer-Triangle-noline-pic01.jpg",
@@ -58,18 +70,6 @@ const specialPhotos = {
     caption: [
       "2026年8月13～14日／紀伊半島南部／ペルセウス座流星群と共演",
       "2026年8月13～14日／紀伊半島南部／ペルセウス座流星群と共演"
-    ]
-  },
-
-  "Sagittarius": {
-    normal: [
-      "Sagittarius-noline-pic01.jpg"
-    ],
-    lines: [
-      "Sagittarius-lines-pic01.jpg"
-    ],
-    caption: [
-      "2026年9月12日／紀伊半島中部／夏の天の川といて座"
     ]
   },
 
