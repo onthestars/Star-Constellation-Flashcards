@@ -204,6 +204,17 @@ specialPrev.onclick = () => {
 };
 
 // ================================
+// 月モード：ボタン制御（逆順対応）
+// ================================
+function updateMoonButtons() {
+  moonSpecialPrev.disabled = (moonSpecialIndex === 0);
+  moonSpecialPrev.style.opacity = (moonSpecialIndex === 0 ? 0.4 : 1);
+
+  moonSpecialNext.disabled = (moonSpecialIndex >= moonImagesReversed.length - 1);
+  moonSpecialNext.style.opacity = (moonSpecialIndex >= moonImagesReversed.length - 1 ? 0.4 : 1);
+}
+
+// ================================
 // 月モード：Special Viewer 起動（逆順対応）
 // ================================
 function openMoonSpecialViewer() {
@@ -211,11 +222,11 @@ function openMoonSpecialViewer() {
   moonSpecialViewer.style.display = "flex";
   moonSpecialIndex = 0;
 
-  // ★ 逆順配列を使用
   moonSpecialImg.src = moonImagesReversed[0];
   moonSpecialCaption.innerText = `月の写真（1/${moonImagesReversed.length})`;
 
-  // 星座カード操作ボタン無効化
+  updateMoonButtons();
+
   nextBtn.disabled = true;
   prevBtn.disabled = true;
   flipBtn.disabled = true;
@@ -240,6 +251,8 @@ moonSpecialNext.onclick = () => {
     moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
     moonSpecialCaption.innerText = `月の写真（${moonSpecialIndex + 1}/${moonImagesReversed.length})`;
   }
+
+  updateMoonButtons();
 };
 
 moonSpecialPrev.onclick = () => {
@@ -248,6 +261,8 @@ moonSpecialPrev.onclick = () => {
     moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
     moonSpecialCaption.innerText = `月の写真（${moonSpecialIndex + 1}/${moonImagesReversed.length})`;
   }
+
+  updateMoonButtons();
 };
 
 // ================================
