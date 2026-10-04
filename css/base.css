@@ -50,10 +50,8 @@ body {
 
 #rotate-warning {
   position: fixed;
-  top: 10vh;              /* ← ここで上からの位置を調整（もっと上に） */
-  left: 0;
-  width: 100vw;
-  height: auto;           /* ← 全画面ではなく必要な高さだけ */
+  justify-content: center;
+  align-items: center;
   background: rgba(0,0,0,0.85);
   color: #fff;
   font-size: 0.8rem;
@@ -65,5 +63,5 @@ body {
   justify-content: center;
   align-items: center;
 
-  z-index: 999999;        /* ← 最前面に固定 */
+  z-index: 999999;
 }
