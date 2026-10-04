@@ -137,6 +137,11 @@ southBtn.onclick = () => {
   jumpToSeason("south");
 };
 
+// ▼ 星座専用スペシャルビューア起動（★これを追加）
+specialBtn.onclick = () => {
+  openSpecialViewer();   // 星座モード
+};
+
 // 初期表示
 updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn);
 

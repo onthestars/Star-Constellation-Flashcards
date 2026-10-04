@@ -6,6 +6,7 @@ let resizeTimer = null;   // resize連打対策
 
 function startMoonOrbitSequence() {
     const moon = document.getElementById("moon");
+    const moonAnime = document.getElementById("moonAnime");
 
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -26,6 +27,18 @@ function startMoonOrbitSequence() {
     ];
 
     let currentPhase = 0;
+
+    // ★ 月の当たり判定を月に追従させる
+    function syncMoonHitbox() {
+        const rect = moon.getBoundingClientRect();
+        moonAnime.style.position = "absolute";
+        moonAnime.style.left = rect.left + "px";
+        moonAnime.style.top = rect.top + "px";
+        moonAnime.style.width = rect.width + "px";
+        moonAnime.style.height = rect.height + "px";
+        moonAnime.style.zIndex = 9999;
+        moonAnime.style.cursor = "pointer";
+    }
 
     function runPhase(phaseIndex) {
 
@@ -50,6 +63,9 @@ function startMoonOrbitSequence() {
 
             moon.style.left = x + "px";
             moon.style.top  = y + "px";
+
+            // ★ 月の位置に当たり判定を追従させる
+            syncMoonHitbox();
 
             const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
             const rotateDeg = baseDeg + orbitDeg;

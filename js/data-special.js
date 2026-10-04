@@ -10,19 +10,19 @@ const specialPhotos = {
   "Ursa-Minor": {
     normal: [
       "Ursa-Minor-noline-pic01.jpg",
-            "Ursa-Minor-noline-pic02.jpg"
+      "Ursa-Minor-noline-pic02.jpg"
     ],
     lines: [
       "Ursa-Minor-lines-pic01.jpg",
-            "Ursa-Minor-lines-pic02.jpg"
+      "Ursa-Minor-lines-pic02.jpg"
     ],
     caption: [
       "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座と北極星",
-            "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座と北極星"
+      "2026年10月1日／大阪府茨木市山中／竹林に潜むこぐま座と北極星"
     ]
   },
 
-    "Leo": {
+  "Leo": {
     normal: [
       "Leo-noline-pic01.jpg"
     ],
@@ -30,7 +30,7 @@ const specialPhotos = {
       "Leo-lines-pic01.jpg"
     ],
     caption: [
-      "2026年5月29日／兵庫県猪名川町／大野山頂から望むしし座",
+      "2026年5月29日／兵庫県猪名川町／大野山頂から望むしし座"
     ]
   },
 
@@ -46,7 +46,7 @@ const specialPhotos = {
     ]
   },
 
-    "Ophiuchus": {
+  "Ophiuchus": {
     normal: [
       "Ophiuchus-noline-pic01.jpg"
     ],
@@ -58,7 +58,7 @@ const specialPhotos = {
     ]
   },
 
-    "Sagittarius": {
+  "Sagittarius": {
     normal: [
       "Sagittarius-noline-pic01.jpg"
     ],
@@ -124,14 +124,14 @@ const specialPhotos = {
     ]
   },
 
-    "Capricornus": {
+  "Capricornus": {
     normal: [
       "Capricornus-noline-pic01.jpg",
       "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
     ],
     lines: [
       "Capricornus-lines-pic01.jpg",
-    　"Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+      "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
     ],
     caption: [
       "2025年11月16日／紀伊半島南部／やぎ座",
@@ -139,14 +139,14 @@ const specialPhotos = {
     ]
   },
 
-    "Equuleus": {
+  "Equuleus": {
     normal: [
       "Equuleus-noline-pic01.jpg",
       "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
     ],
     lines: [
       "Equuleus-lines-pic01.jpg",
-            "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+      "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
     ],
     caption: [
       "2025年11月16日／紀伊半島南部／こうま座",
@@ -154,7 +154,7 @@ const specialPhotos = {
     ]
   },
 
-    "Cassiopeia": {
+  "Cassiopeia": {
     normal: [
       "Cassiopeia-noline-pic01.jpg"
     ],
@@ -166,7 +166,7 @@ const specialPhotos = {
     ]
   },
 
-      "Gemini": {
+  "Gemini": {
     normal: [
       "Gemini-noline-pic01.jpg"
     ],
@@ -178,7 +178,7 @@ const specialPhotos = {
     ]
   },
 
-    "Orion": {
+  "Orion": {
     normal: [
       "Orion-noline-pic01.jpg"
     ],
@@ -205,4 +205,17 @@ const specialPhotos = {
     ]
   }
 };
+
+// ======== ======== ======== ======== ========
+// ▼▼▼ 月モード画像（昇順で管理 → 表示は逆順） ▼▼▼
+
+const moonImages = [
+  "image/moon/Special/Moon-pic01.jpg",
+  "image/moon/Special/Moon-pic02.jpg",
+  "image/moon/Special/Moon-pic03.jpg" // 今後追加はここに書くだけ
+];
+
+// ★ 表示は逆順（新しい → 古い）
+const moonImagesReversed = [...moonImages].reverse();
+
 // ======== ======== ======== ======== ========
