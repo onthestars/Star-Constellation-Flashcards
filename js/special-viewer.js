@@ -14,26 +14,26 @@ let savedIsBack  = null;
 
 let spAnimationClass = null;
 
-const specialViewer = document.getElementById("special-viewer");
-const specialImg    = document.getElementById("special-img");
-const specialCaption = document.getElementById("special-caption");
-const specialClose  = document.getElementById("special-close");
-const specialLines  = document.getElementById("special-lines");
-const specialClear  = document.getElementById("special-clear");
-const specialNext   = document.getElementById("special-next");
-const specialPrev   = document.getElementById("special-prev");
+const specialViewer   = document.getElementById("special-viewer");
+const specialImg      = document.getElementById("special-img");
+const specialCaption  = document.getElementById("special-caption");
+const specialClose    = document.getElementById("special-close");
+const specialLines    = document.getElementById("special-lines");
+const specialClear    = document.getElementById("special-clear");
+const specialNext     = document.getElementById("special-next");
+const specialPrev     = document.getElementById("special-prev");
 
 // ================================
 // 月モード専用 Special Viewer
 // ================================
 let moonSpecialIndex = 0;
 
-const moonSpecialViewer = document.getElementById("moon-special-viewer");
-const moonSpecialImg    = document.getElementById("moon-special-img");
+const moonSpecialViewer  = document.getElementById("moon-special-viewer");
+const moonSpecialImg     = document.getElementById("moon-special-img");
 const moonSpecialCaption = document.getElementById("moon-special-caption");
-const moonSpecialPrev   = document.getElementById("moon-special-prev");
-const moonSpecialNext   = document.getElementById("moon-special-next");
-const moonSpecialClose  = document.getElementById("moon-special-close");
+const moonSpecialPrev    = document.getElementById("moon-special-prev");
+const moonSpecialNext    = document.getElementById("moon-special-next");
+const moonSpecialClose   = document.getElementById("moon-special-close");
 
 // ================================
 // 星座モード：星座名取得
@@ -70,20 +70,20 @@ function getStarNameFromIndex(i) {
 
 // 星座モード：フォルダ
 function getSpecialFolder(starName) {
-  if (starName === "Ursa-Minor") return "image/spring/Special/";
-  if (starName === "Leo") return "image/spring/Special/";
+  if (starName === "Ursa-Minor")       return "image/spring/Special/";
+  if (starName === "Leo")             return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
-  if (starName === "Sagittarius") return "image/summer/Special/";
-  if (starName === "Ophiuchus") return "image/summer/Special/";
+  if (starName === "Sagittarius")     return "image/summer/Special/";
+  if (starName === "Ophiuchus")       return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
-  if (starName === "Pegasus") return "image/autumn/Special/";
-  if (starName === "Aquarius") return "image/autumn/Special/";
-  if (starName === "Pisces") return "image/autumn/Special/";
-  if (starName === "Capricornus") return "image/autumn/Special/";
-  if (starName === "Equuleus") return "image/autumn/Special/";
-  if (starName === "Cassiopeia") return "image/autumn/Special/";
-  if (starName === "Gemini") return "image/winter/Special/";
-  if (starName === "Orion") return "image/winter/Special/";
+  if (starName === "Pegasus")         return "image/autumn/Special/";
+  if (starName === "Aquarius")        return "image/autumn/Special/";
+  if (starName === "Pisces")          return "image/autumn/Special/";
+  if (starName === "Capricornus")     return "image/autumn/Special/";
+  if (starName === "Equuleus")        return "image/autumn/Special/";
+  if (starName === "Cassiopeia")      return "image/autumn/Special/";
+  if (starName === "Gemini")          return "image/winter/Special/";
+  if (starName === "Orion")           return "image/winter/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
   return null;
 }
@@ -130,7 +130,8 @@ function openSpecialViewer(target) {
   const folder = getSpecialFolder(starName);
 
   specialImg.src = folder + specialPhotos[starName].normal[0];
-  specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
+  specialCaption.innerHTML =
+    specialPhotos[starName].caption[0].replace(/　/g, "<br>");
 
   nextBtn.disabled = true;
   prevBtn.disabled = true;
@@ -138,6 +139,11 @@ function openSpecialViewer(target) {
   nextBtn.style.opacity = 0.4;
   prevBtn.style.opacity = 0.4;
   flipBtn.style.opacity = 0.4;
+
+  if (soundEnabled) {
+    soundKirakira.currentTime = 0;
+    soundKirakira.play();
+  }
 
   updateSpecialButtons();
   playStarTwinkle();
@@ -165,6 +171,39 @@ specialClose.onclick = () => {
 };
 
 // ================================
+// 星座モード：線あり／線なし切り替え
+// ================================
+specialLines.onclick = () => {
+  specialMode = "lines";
+
+  const starName = getStarNameFromIndex(savedIndex);
+  if (!starName || !specialPhotos[starName]) return;
+
+  const folder = getSpecialFolder(starName);
+
+  specialImg.src = folder + specialPhotos[starName].lines[specialIndex];
+  specialCaption.innerHTML =
+    specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
+
+  updateSpecialButtons();
+};
+
+specialClear.onclick = () => {
+  specialMode = "normal";
+
+  const starName = getStarNameFromIndex(savedIndex);
+  if (!starName || !specialPhotos[starName]) return;
+
+  const folder = getSpecialFolder(starName);
+
+  specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
+  specialCaption.innerHTML =
+    specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
+
+  updateSpecialButtons();
+};
+
+// ================================
 // 星座モード：次へ／前へ
 // ================================
 specialNext.onclick = () => {
@@ -172,14 +211,18 @@ specialNext.onclick = () => {
   if (!starName || !specialPhotos[starName]) return;
 
   const folder = getSpecialFolder(starName);
+  const arr = (specialMode === "lines")
+    ? specialPhotos[starName].lines
+    : specialPhotos[starName].normal;
 
-  if (specialIndex < specialPhotos[starName].normal.length - 1) {
+  if (specialIndex < arr.length - 1) {
     specialIndex++;
     spAnimationClass = "sp-slide-next";
     applySpecialAnimation();
 
-    specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
-    specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
+    specialImg.src = folder + arr[specialIndex];
+    specialCaption.innerHTML =
+      specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
   }
 
   updateSpecialButtons();
@@ -190,14 +233,18 @@ specialPrev.onclick = () => {
   if (!starName || !specialPhotos[starName]) return;
 
   const folder = getSpecialFolder(starName);
+  const arr = (specialMode === "lines")
+    ? specialPhotos[starName].lines
+    : specialPhotos[starName].normal;
 
   if (specialIndex > 0) {
     specialIndex--;
     spAnimationClass = "sp-slide-prev";
     applySpecialAnimation();
 
-    specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
-    specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
+    specialImg.src = folder + arr[specialIndex];
+    specialCaption.innerHTML =
+      specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
   }
 
   updateSpecialButtons();
@@ -210,8 +257,10 @@ function updateMoonButtons() {
   moonSpecialPrev.disabled = (moonSpecialIndex === 0);
   moonSpecialPrev.style.opacity = (moonSpecialIndex === 0 ? 0.4 : 1);
 
-  moonSpecialNext.disabled = (moonSpecialIndex >= moonImagesReversed.length - 1);
-  moonSpecialNext.style.opacity = (moonSpecialIndex >= moonImagesReversed.length - 1 ? 0.4 : 1);
+  moonSpecialNext.disabled =
+    (moonSpecialIndex >= moonImagesReversed.length - 1);
+  moonSpecialNext.style.opacity =
+    (moonSpecialIndex >= moonImagesReversed.length - 1 ? 0.4 : 1);
 }
 
 // ================================
@@ -224,7 +273,7 @@ function openMoonSpecialViewer() {
 
   moonSpecialImg.src = moonImagesReversed[0];
   moonSpecialCaption.innerText =
-    `${moonCaptionsReversed[0]}（1/${moonImagesReversed.length}）`;
+    `月の写真（1/${moonImagesReversed.length})`;
 
   updateMoonButtons();
 
@@ -249,10 +298,9 @@ function openMoonSpecialViewer() {
 moonSpecialNext.onclick = () => {
   if (moonSpecialIndex < moonImagesReversed.length - 1) {
     moonSpecialIndex++;
-
     moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
     moonSpecialCaption.innerText =
-      `${moonCaptionsReversed[moonSpecialIndex]}（${moonSpecialIndex + 1}/${moonImagesReversed.length}）`;
+      `月の写真（${moonSpecialIndex + 1}/${moonImagesReversed.length})`;
   }
 
   updateMoonButtons();
@@ -261,10 +309,9 @@ moonSpecialNext.onclick = () => {
 moonSpecialPrev.onclick = () => {
   if (moonSpecialIndex > 0) {
     moonSpecialIndex--;
-
     moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
     moonSpecialCaption.innerText =
-      `${moonCaptionsReversed[moonSpecialIndex]}（${moonSpecialIndex + 1}/${moonImagesReversed.length}）`;
+      `月の写真（${moonSpecialIndex + 1}/${moonImagesReversed.length})`;
   }
 
   updateMoonButtons();
