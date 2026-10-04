@@ -223,7 +223,8 @@ function openMoonSpecialViewer() {
   moonSpecialIndex = 0;
 
   moonSpecialImg.src = moonImagesReversed[0];
-  moonSpecialCaption.innerText = `月の写真（1/${moonImagesReversed.length})`;
+  moonSpecialCaption.innerText =
+    `${moonCaptionsReversed[0]}（1/${moonImagesReversed.length}）`;
 
   updateMoonButtons();
 
@@ -248,8 +249,10 @@ function openMoonSpecialViewer() {
 moonSpecialNext.onclick = () => {
   if (moonSpecialIndex < moonImagesReversed.length - 1) {
     moonSpecialIndex++;
+
     moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
-    moonSpecialCaption.innerText = `月の写真（${moonSpecialIndex + 1}/${moonImagesReversed.length})`;
+    moonSpecialCaption.innerText =
+      `${moonCaptionsReversed[moonSpecialIndex]}（${moonSpecialIndex + 1}/${moonImagesReversed.length}）`;
   }
 
   updateMoonButtons();
@@ -258,8 +261,10 @@ moonSpecialNext.onclick = () => {
 moonSpecialPrev.onclick = () => {
   if (moonSpecialIndex > 0) {
     moonSpecialIndex--;
+
     moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
-    moonSpecialCaption.innerText = `月の写真（${moonSpecialIndex + 1}/${moonImagesReversed.length})`;
+    moonSpecialCaption.innerText =
+      `${moonCaptionsReversed[moonSpecialIndex]}（${moonSpecialIndex + 1}/${moonImagesReversed.length}）`;
   }
 
   updateMoonButtons();

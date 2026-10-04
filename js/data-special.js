@@ -213,18 +213,33 @@ const moonImages = [
   "image/moon/Special/Moon-pic001.jpg",
   "image/moon/Special/Moon-pic002.jpg",
   "image/moon/Special/Moon-pic003.jpg",
-  "image/moon/Special/Moon-pic003.jpg",
-"image/moon/Special/Moon-pic004.jpg",
-"image/moon/Special/Moon-pic005.jpg",
-"image/moon/Special/Moon-pic006.jpg",
-"image/moon/Special/Moon-pic007.jpg",
-"image/moon/Special/Moon-pic008.jpg",
-"image/moon/Special/Moon-pic009.jpg",
-"image/moon/Special/Moon-pic010.jpg",
-"image/moon/Special/Moon-pic011.jpg"
+  "image/moon/Special/Moon-pic004.jpg",
+  "image/moon/Special/Moon-pic005.jpg",
+  "image/moon/Special/Moon-pic006.jpg",
+  "image/moon/Special/Moon-pic007.jpg",
+  "image/moon/Special/Moon-pic008.jpg",
+  "image/moon/Special/Moon-pic009.jpg",
+  "image/moon/Special/Moon-pic010.jpg",
+  "image/moon/Special/Moon-pic011.jpg"
+];
+
+// ★ 月モード：キャプション（昇順）
+const moonCaptions = [
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/",
+  "撮影/"
 ];
 
 // ★ 表示は逆順（新しい → 古い）
-const moonImagesReversed = [...moonImages].reverse();
+const moonImagesReversed   = [...moonImages].reverse();
+const moonCaptionsReversed = [...moonCaptions].reverse();
 
 // ======== ======== ======== ======== ========
