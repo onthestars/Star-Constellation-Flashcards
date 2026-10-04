@@ -1,7 +1,19 @@
-// orientation-warning.js
-
+// スマホ判定（2026年仕様：AndroidはMobileが無くてもスマホ扱い）
 function isSmartphone() {
-  return /iPhone|Android.+Mobile/.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+
+  // iPad（iOS13以降はMacintoshを名乗る）を確実に除外
+  const isIpad = (/iPad|Macintosh/.test(ua) && 'ontouchend' in document);
+  if (isIpad) return false;
+
+  // iPhone
+  if (/iPhone/.test(ua)) return true;
+
+  // Androidスマホ（Mobile が無くてもスマホ扱い）
+  if (/Android/.test(ua)) return true;
+
+  // それ以外はPC・タブレット扱い
+  return false;
 }
 
 function updateOrientationWarning() {
@@ -9,7 +21,7 @@ function updateOrientationWarning() {
   const copyright = document.getElementById("copyright");
   const specialThanks = document.getElementById("specialThanksBtn");
 
-  // PC・タブレットは常に表示
+  // PC・タブレットは常に非警告
   if (!isSmartphone()) {
     warn.style.display = "none";
     copyright.style.display = "";
