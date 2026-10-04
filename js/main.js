@@ -172,18 +172,30 @@ function isSmartphone() {
 
 function updateOrientationWarning() {
   const warn = document.getElementById("rotate-warning");
+  const copyright = document.getElementById("copyright");
+  const specialThanks = document.getElementById("specialThanksBtn");
 
-  // PC・タブレットは常に非表示
+  // PC・タブレットは常に表示
   if (!isSmartphone()) {
     warn.style.display = "none";
+    copyright.style.display = "";
+    specialThanks.style.display = "";
     return;
   }
 
-  // スマホだけ横画面判定
+  // スマホ横画面
   if (window.innerWidth > window.innerHeight) {
     warn.style.display = "flex";
+
+    // 横画面スマホ → 非表示
+    copyright.style.display = "none";
+    specialThanks.style.display = "none";
+
   } else {
+    // スマホ縦画面 → 表示
     warn.style.display = "none";
+    copyright.style.display = "";
+    specialThanks.style.display = "";
   }
 }
 
