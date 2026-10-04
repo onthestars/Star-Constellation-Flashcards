@@ -115,3 +115,16 @@
     justify-content: center;
   }
 }
+
+/* 月アニメーションの当たり判定（クリック領域） */
+#moonAnime {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  cursor: pointer;
+  /* background: rgba(255,0,0,0.2); ← 一時的に赤くして当たり判定を確認 */
+}
+

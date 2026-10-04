@@ -86,3 +86,78 @@
   width: 32px;
   height: 32px;
 }
+
+/* ================================
+   月専用 Special Viewer
+   ================================ */
+
+#moon-special-viewer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 8, 8, 0.80);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+#moon-special-img {
+  max-width: 95vw;
+  max-height: 75vh;              /* ★ 画像がボタンを覆わない */
+  object-fit: contain;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  position: relative;
+  z-index: 1;
+}
+
+#moon-special-caption {
+  min-height: 24px;
+  max-width: 90vw;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0.85;
+
+  margin: 1.0em 0 10px 0;
+
+  position: relative;
+  z-index: 10000;
+}
+
+/* 月ビューアのボタン行 */
+#moon-special-viewer .special-controls-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+  height: 60px;
+
+  position: relative;
+  z-index: 10000;
+}
+
+/* 月ビューアのボタン */
+#moon-special-viewer .special-btn {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  cursor: pointer;
+  margin: 4px 2px;
+
+  position: relative;
+  z-index: 10000;
+}
+
