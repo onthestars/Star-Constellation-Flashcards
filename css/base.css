@@ -48,20 +48,23 @@ body {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
+/* 横画面警告（スマホ横置き時に最前面で全画面を覆う） */
 #rotate-warning {
-  position: fixed;
+  position: fixed !important;
+  inset: 0; /* top, right, bottom, left を完全固定して全画面化 */
+  width: 100vw;
+  height: 100dvh; /* iPhone Safari の高さ揺れ対策：安定した表示領域 */
+
+  display: none !important; /* 初期は非表示。JSで flex に切り替え */
   justify-content: center;
   align-items: center;
+
   background: rgba(0,0,0,0.85);
   color: #fff;
   font-size: 0.8rem;
-  padding: 12px;
   text-align: center;
+  padding: 12px;
   font-family: "Yu Gothic", "Meiryo", sans-serif;
 
-  display: none;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 999999;
+  z-index: 999999 !important; /* flex stacking contextに負けない最前面 */
 }
