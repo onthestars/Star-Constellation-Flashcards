@@ -1,3 +1,5 @@
+// background-image.js
+
 // 背景画像ランダム読み込み
 const portraitImages = [
   "./image/common/background-image-vertical1.jpg",
