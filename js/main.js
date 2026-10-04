@@ -164,3 +164,31 @@ window.addEventListener("load", () => {
 document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
 });
+
+// スマホ横画面警告表示
+function isSmartphone() {
+  return /iPhone|Android.+Mobile/.test(navigator.userAgent);
+}
+
+function updateOrientationWarning() {
+  const warn = document.getElementById("rotate-warning");
+
+  // PC・タブレットは常に非表示
+  if (!isSmartphone()) {
+    warn.style.display = "none";
+    return;
+  }
+
+  // スマホだけ横画面判定
+  if (window.innerWidth > window.innerHeight) {
+    warn.style.display = "flex";
+  } else {
+    warn.style.display = "none";
+  }
+}
+
+window.addEventListener("resize", updateOrientationWarning);
+window.addEventListener("orientationchange", updateOrientationWarning);
+
+// 初期実行
+updateOrientationWarning();
