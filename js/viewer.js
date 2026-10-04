@@ -72,8 +72,8 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
     prevBtn.disabled = false;
     prevBtn.style.opacity = 1;
 
-    // special viewer は非表示
-    specialBtn.style.display = "none";
+    // ★ special viewer ボタンは消さない（バグ修正）
+    updateSpecialButton(index, specialBtn);
 
     return;
   }
@@ -81,7 +81,10 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
   // ★ 季節ジャンプ時の nullカード
   if (images[index] === null) {
     viewer.src = "image/common/null-card.png";
-    specialBtn.style.display = "none";
+
+    // special viewer は季節ジャンプ時は非表示
+    specialBtn.style.opacity = 0.2;
+    specialBtn.disabled = true;
 
     updatePrevNextButtons(index, prevBtn, nextBtn);
     return;
