@@ -1,7 +1,7 @@
 // viewer.js
 // カード表示ロジック（画像切替・裏返し・specialボタン・星図リンク・prev/next状態制御）
 
-// ▼ special viewer 判定（main.js の完全版ロジックを移植）
+// ▼ special viewer 判定
 function hasPhotoFor(i) {
   return (
     images[i].includes("Ursa-Minor") ||
@@ -55,36 +55,43 @@ function updatePrevNextButtons(index, prevBtn, nextBtn) {
   }
 }
 
-// ▼ カード表示更新（完全版）
+// ▼ カード表示更新（★完全版：最終ページ対応）
 function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
 
-  // nullカード（季節ジャンプ時の空白）
-  if (images[index] === null) {
-    viewer.src = "image/common/null-card.png";
-    viewer.style.transform = "none";
-    specialBtn.style.display = "none";
+  applyViewerAnimation(viewer);
 
-    // prev/next 状態更新
-    updatePrevNextButtons(index, prevBtn, nextBtn);
+  // ★ 最終ページ（nullカード）
+  if (isFinalNull) {
+    viewer.src = "image/common/card-null.png";
+
+    // next は無効
+    nextBtn.disabled = true;
+    nextBtn.style.opacity = 0.4;
+
+    // prev は有効
+    prevBtn.disabled = false;
+    prevBtn.style.opacity = 1;
+
+    // special viewer は非表示
+    specialBtn.style.display = "none";
 
     return;
   }
 
-  // 裏面表示
-  if (isBack) {
-    viewer.src = backs[index];
-  } else {
-    viewer.src = images[index];
+  // ★ 季節ジャンプ時の nullカード
+  if (images[index] === null) {
+    viewer.src = "image/common/null-card.png";
+    specialBtn.style.display = "none";
+
+    updatePrevNextButtons(index, prevBtn, nextBtn);
+    return;
   }
 
-  // special viewer ボタン更新
+  // ★ 通常カード（表／裏）
+  viewer.src = isBack ? backs[index] : images[index];
+
   updateSpecialButton(index, specialBtn);
-
-  // prev/next 状態更新
   updatePrevNextButtons(index, prevBtn, nextBtn);
-
-  // カードアニメーション適用
-  applyViewerAnimation(viewer);
 }
 
 // ▼ カードクリック → 星図リンクを開く
@@ -98,25 +105,34 @@ function setupViewerClick(viewer, indexGetter) {
   });
 }
 
-// ▼ 裏返しボタン（完全版）
-function setupFlipButton(flipBtn, viewer, indexGetter, isBackGetter, isBackSetter, specialBtn, prevBtn, nextBtn) {
+// ▼ 裏返しボタン（★完全版：nullページでは裏返し禁止）
+function setupFlipButton(
+  flipBtn,
+  viewer,
+  indexGetter,
+  isBackGetter,
+  isBackSetter,
+  specialBtn,
+  prevBtn,
+  nextBtn
+) {
 
   flipBtn.addEventListener("click", () => {
 
-    // サウンド
     if (soundEnabled) {
       soundFlip.currentTime = 0;
       soundFlip.play();
     }
 
+    // ★ nullページでは裏返し禁止
+    if (isFinalNull) return;
+
     flipBtn.disabled = true;
 
-    // アニメ前半
     viewer.classList.remove("flip-rotate");
     void viewer.offsetWidth;
     viewer.classList.add("flip-rotate");
 
-    // 裏表切替
     setTimeout(() => {
       const current = isBackGetter();
       isBackSetter(!current);
@@ -131,7 +147,6 @@ function setupFlipButton(flipBtn, viewer, indexGetter, isBackGetter, isBackSette
       );
     }, 400);
 
-    // アニメ後半
     setTimeout(() => {
       viewer.classList.remove("flip-rotate");
       flipBtn.disabled = false;
