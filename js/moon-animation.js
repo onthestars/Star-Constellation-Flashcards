@@ -11,11 +11,11 @@ function startMoonOrbitSequence() {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    const cx = w / 2;
-    const cy = h * 0.50; // 月の高さ（画面サイズで変わる）
-    const r = Math.min(w, h) * 0.80;
+    const cx = w / 2; //画面幅 w のちょうど中央を軌道の中心 X 座標にする
+    const cy = h * 0.50; // 画面高さ h の 50%（中央より少し上）を軌道の中心 Y 座標にする
+    const r = Math.min(w, h) * 0.70; //円軌道の半径 r 
 
-    const baseDeg = 10;
+    const baseDeg = 10; //月画像の回転角の基準値
 
     const phases = [
         "moon5-crescent.png",
@@ -89,7 +89,7 @@ function startMoonOrbitSequence() {
 
                 setTimeout(() => {
                     runPhase(currentPhase);
-                }, 1500);
+                }, 1200); //次の月フェーズを開始する前に待つ秒数(ms)
 
                 return;
             }
