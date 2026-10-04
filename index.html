@@ -1,4 +1,4 @@
-﻿<!-- index.html -->
+﻿<!-- index.html 完全版 -->
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -8,20 +8,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>トレミーの48星座カード</title>
 
+  <!-- アイコン -->
   <link rel="icon" href="image/icon/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="image/icon/icon-512.png">
 
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/buttons.css">
-<link rel="stylesheet" href="css/special-viewer.css">
-<link rel="stylesheet" href="css/animation.css">
-<link rel="stylesheet" href="css/effects.css">
-<link rel="stylesheet" href="css/ui.css">
+  <!-- CSS（読み込み順最適化） -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="css/special-viewer.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/ui.css">
 
+  <!-- 横画面警告 -->
+  <style>
+    @media screen and (orientation: landscape) {
+      #rotate-warning {
+        display: flex;
+      }
+    }
+    @media screen and (orientation: portrait) {
+      #rotate-warning {
+        display: none;
+      }
+    }
+    #rotate-warning {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      font-size: 1.6rem;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
 </head>
 
 <body>
+
+  <!-- 横画面警告 -->
+  <div id="rotate-warning">
+    このアプリは縦画面でご覧ください
+  </div>
 
   <!-- 音声 ON/OFF -->
   <div id="sound-global-buttons">
@@ -75,6 +108,7 @@
     Special Thanks:『ぴーとの星図』
   </div>
 
+  <!-- スペシャルビューア -->
   <div id="special-viewer" style="display:none;">
     <img id="special-img" src="" alt="Special画像">
     <div id="special-caption"></div>
@@ -93,36 +127,29 @@
     <audio id="soundKirakira" src="sound/sound-kirakira.mp3" preload="auto"></audio>
   </div>
 
-  <!-- 最重要：画像データ -->
+  <!-- JS（依存関係順に最適化） -->
   <script src="js/images.js"></script>
 
-  <!-- UI補助 -->
   <script src="js/sound-controls.js"></script>
   <script src="js/animation-controls.js"></script>
 
-  <!-- データ -->
   <script src="js/data-links.js"></script>
   <script src="js/data-season.js"></script>
 
-  <!-- 季節ボタン画像切替 -->
   <script src="js/update-season-buttons.js"></script>
 
-  <!-- 表示・移動 -->
   <script src="js/viewer.js"></script>
   <script src="js/navigation.js"></script>
 
-  <!-- 背景・月 -->
   <script src="js/background-image.js"></script>
   <script src="js/moon-animation.js"></script>
 
-  <!-- スペシャル表示 -->
   <script src="js/data-special.js"></script>
   <script src="js/special-viewer.js"></script>
 
-  <!-- 外部リンク -->
   <script src="js/external-links.js"></script>
 
-  <!-- 初期化（最後） -->
+  <!-- 初期化（最終） -->
   <script src="js/main.js"></script>
 
 </body>
