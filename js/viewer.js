@@ -72,7 +72,7 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
     prevBtn.disabled = false;
     prevBtn.style.opacity = 1;
 
-    // ★ special viewer ボタンは消さない（バグ修正）
+    // ★ special viewer ボタンは消さない（Argo Q の状態を維持）
     updateSpecialButton(index, specialBtn);
 
     return;
@@ -108,7 +108,7 @@ function setupViewerClick(viewer, indexGetter) {
   });
 }
 
-// ▼ 裏返しボタン（★完全版：nullページでは裏返し禁止）
+// ▼ 裏返しボタン（★完全版：nullカードでもアニメーションだけ動かす）
 function setupFlipButton(
   flipBtn,
   viewer,
@@ -127,15 +127,29 @@ function setupFlipButton(
       soundFlip.play();
     }
 
-    // ★ nullページでは裏返し禁止
-    if (isFinalNull) return;
-
     flipBtn.disabled = true;
 
+    // アニメ前半
     viewer.classList.remove("flip-rotate");
     void viewer.offsetWidth;
     viewer.classList.add("flip-rotate");
 
+    // ★ nullカードの場合：裏面に切り替えず、同じ画像を維持する
+    if (isFinalNull) {
+
+      setTimeout(() => {
+        viewer.src = "image/common/card-null.png"; // 裏面も同じ
+      }, 400);
+
+      setTimeout(() => {
+        viewer.classList.remove("flip-rotate");
+        flipBtn.disabled = false;
+      }, 800);
+
+      return;
+    }
+
+    // ★ 通常カードの裏返し処理
     setTimeout(() => {
       const current = isBackGetter();
       isBackSetter(!current);
