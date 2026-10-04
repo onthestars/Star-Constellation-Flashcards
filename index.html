@@ -11,25 +11,31 @@
   <link rel="icon" href="image/icon/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="image/icon/icon-512.png">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/special-viewer.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/buttons.css">
+<link rel="stylesheet" href="css/viewer.css">
+<link rel="stylesheet" href="css/animation.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/ui.css">
+
 </head>
 
 <body>
 
-  <!-- 音声 ON/OFF（画面右上固定） -->
+  <!-- 音声 ON/OFF -->
   <div id="sound-global-buttons">
     <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
     <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
   </div>
 
-  <!-- 星の瞬きオーバーレイ -->
+  <!-- 星の瞬き -->
   <div id="stars-overlay"></div>
 
-  <!-- ★ アニメーションする月（追加） -->
-<img id="moon" src="image/common/moon5-crescent.png" alt="月">
+  <!-- 月アニメーション -->
+  <img id="moon" src="image/common/moon5-crescent.png" alt="月">
 
-  <!-- 星座カード本体 -->
+  <!-- 星座カード -->
   <div id="card-frame" class="card-frame">
 
     <div class="card-image-area">
@@ -85,20 +91,39 @@
     <audio id="soundPage" src="sound/sound-flipping-paper2.mp3" preload="auto"></audio>
     <audio id="soundSeason" src="sound/sound-season.mp3" preload="auto"></audio>
     <audio id="soundKirakira" src="sound/sound-kirakira.mp3" preload="auto"></audio>
- </div>
+  </div>
 
-    <script src="js/images.js"></script>
-    <script src="js/sound-controls.js"></script>
-    <script src="js/animation-controls.js"></script>
-    <script src="js/data-links.js"></script>
-    <script src="js/data-season.js"></script>
-    <script src="js/viewer.js"></script>
-    <script src="js/navigation.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/background-image.js"></script>
-    <script src="js/moon-animation.js"></script>
-    <script src="js/data-special.js"></script>
-    <script src="js/special-viewer.js"></script>
+  <!-- 最重要：画像データ -->
+  <script src="js/images.js"></script>
+
+  <!-- UI補助 -->
+  <script src="js/sound-controls.js"></script>
+  <script src="js/animation-controls.js"></script>
+
+  <!-- データ -->
+  <script src="js/data-links.js"></script>
+  <script src="js/data-season.js"></script>
+
+  <!-- 季節ボタン画像切替 -->
+  <script src="js/update-season-buttons.js"></script>
+
+  <!-- 表示・移動 -->
+  <script src="js/viewer.js"></script>
+  <script src="js/navigation.js"></script>
+
+  <!-- 背景・月 -->
+  <script src="js/background-image.js"></script>
+  <script src="js/moon-animation.js"></script>
+
+  <!-- スペシャル表示 -->
+  <script src="js/data-special.js"></script>
+  <script src="js/special-viewer.js"></script>
+
+  <!-- 外部リンク -->
+  <script src="js/external-links.js"></script>
+
+  <!-- 初期化（最後） -->
+  <script src="js/main.js"></script>
 
 </body>
 </html>
