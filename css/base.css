@@ -56,9 +56,10 @@ body {
   height: auto;           /* ← 全画面ではなく必要な高さだけ */
   background: rgba(0,0,0,0.85);
   color: #fff;
-  font-size: 0.8rem;      /* ← 文字サイズを半分に */
-  padding: 20px;
+  font-size: 0.6rem;      /* ← 文字サイズを半分に */
+  padding: 12px;
   text-align: center;
+  font-family: "Yu Gothic", "Meiryo", sans-serif;
 
   display: none;
   justify-content: center;
