@@ -48,30 +48,19 @@ body {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-/* 横画面のときだけ表示 */
-@media screen and (orientation: landscape) {
-  #rotate-warning {
-    display: flex;
-  }
-}
-
-/* 縦画面のときは非表示 */
-@media screen and (orientation: portrait) {
-  #rotate-warning {
-    display: none;
-  }
-}
-
 #rotate-warning {
   position: fixed;
-  inset: 0;
-  background: rgba(6,6,6,0.85);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
   color: #fff;
   font-size: 1.6rem;
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 99999;
+  z-index: 999999;
   text-align: center;
   padding: 20px;
 }
