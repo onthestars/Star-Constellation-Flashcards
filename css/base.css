@@ -50,17 +50,19 @@ body {
 
 #rotate-warning {
   position: fixed;
-  top: 0;
+  top: 10vh;              /* ← ここで上からの位置を調整（もっと上に） */
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: auto;           /* ← 全画面ではなく必要な高さだけ */
   background: rgba(0,0,0,0.85);
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 0.8rem;      /* ← 文字サイズを半分に */
+  padding: 20px;
+  text-align: center;
+
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999999;
-  text-align: center;
-  padding: 20px;
+
+  z-index: 999999;        /* ← 最前面に固定 */
 }
