@@ -1,0 +1,49 @@
+/* buttons.css */
+
+/* ボタン群 */
+.button-block {
+  z-index: 4;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+/* ボタン共通 */
+.btn-season,
+.btn-control,
+.btn-special {
+  height: auto;
+}
+
+/* 季節ボタン */
+.btn-season {
+  width: 8vw;
+  max-width: 56px;
+  min-width: 32px;
+  margin: 6px 6px;
+}
+
+.btn-season.active-season {
+  border: 3px solid gold;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+/* 操作ボタン */
+.btn-control {
+  width: 16vw;
+  max-width: 80px;
+  min-width: 42px;
+  margin: 6px 0;
+}
+
+/* Special ボタン */
+.btn-special {
+  width: 12vw;
+  max-width: 64px;
+  min-width: 38px;
+  margin: 6px 0;
+}
