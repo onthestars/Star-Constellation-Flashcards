@@ -32,16 +32,6 @@ const soundFlip   = document.getElementById("soundFlip");
 const soundPage   = document.getElementById("soundPage");
 const soundSeason = document.getElementById("soundSeason");
 
-// 季節ボタンの画像切替
-function updateSeasonButtons() {
-  document.querySelectorAll('.btn-season').forEach(btn => {
-    const season = btn.dataset.season;
-    btn.src = (season === currentSeason)
-      ? seasonImages[season].active
-      : seasonImages[season].normal;
-  });
-}
-
 // 季節ジャンプ（フェードアウト → フェードイン）
 function jumpToSeason(season) {
 
@@ -53,7 +43,7 @@ function jumpToSeason(season) {
   setTimeout(() => {
 
     currentSeason = season;
-    updateSeasonButtons();
+    updateSeasonButtons(currentSeason, seasonImages);
 
     index = seasonStart[season];
     isBack = false;
@@ -98,7 +88,7 @@ setupNavigation(
   () => animationClass,
   (v) => { animationClass = v; },
   (idx, back) => updateViewer(idx, back, viewer, specialBtn, prevBtn, nextBtn),
-  updateSeasonButtons
+  () => updateSeasonButtons(currentSeason, seasonImages)
 );
 
 // ▼ 季節ボタン
