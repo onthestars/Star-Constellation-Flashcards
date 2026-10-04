@@ -1,8 +1,11 @@
 /* special-viewer.css */
 
-/* スペシャルビューアー（画面全体表示） */
+/* ================================
+   Special Viewer (Full-Screen Mode)
+   ================================ */
+
 #special-viewer {
-  display: none;
+  display: none;                 /* 初期非表示 */
   position: fixed;
   top: 0;
   left: 0;
@@ -11,25 +14,36 @@
   background: rgba(0, 0, 0, 0.85);
   z-index: 9999;
 
-  display: flex;
+  display: flex;                 /* Flexレイアウト */
   flex-direction: column;
-  overflow: hidden; /* スクロール禁止 */
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;              /* スクロール禁止 */
 }
 
-/* 画像エリア（内容サイズに合わせて縮む） */
+/* ================================
+   Image Area
+   ================================ */
+
 #special-img {
-  max-width: 95vw;
+  max-width: 95vw;               /* 画面に合わせて縮む */
+  max-height: 85vh;
   object-fit: contain;
-  flex: 0 0 auto; /* 空白防止 */
 
   margin-top: 10px;
   margin-bottom: 0;
+  flex: 0 0 auto;                /* 空白防止 */
 }
 
-/* キャプション（最小高さ24px） */
+/* ================================
+   Caption
+   ================================ */
+
 #special-caption {
   min-height: 24px;
   max-width: 90vw;
+
   color: #ffffff;
   font-size: 12px;
   text-align: center;
@@ -37,19 +51,36 @@
   opacity: 0.85;
 
   margin: 1.0em 0 10px 0;
-  overflow: visible; /* 見切れ防止 */
+  overflow: visible;             /* 見切れ防止 */
 }
 
-/* ボタン行（固定高さ） */
+/* ================================
+   Control Buttons Row
+   ================================ */
+
 .special-controls-row {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  height: 60px;
   align-items: center;
+
+  gap: 20px;                     /* ゆとりのある間隔 */
+  height: 60px;                  /* 固定高さ */
+  flex-wrap: nowrap;
 }
 
-/* 閉じるボタン（小さめ） */
+/* ================================
+   Buttons
+   ================================ */
+
+.special-btn {
+  width: 48px;
+  height: auto;
+  max-width: 38px;
+  cursor: pointer;
+  margin: 4px 2px;
+}
+
+/* Close Button (Small) */
 #special-close {
   width: 32px;
   height: 32px;
