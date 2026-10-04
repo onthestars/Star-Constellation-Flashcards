@@ -22,14 +22,17 @@ function hasPhotoFor(i) {
   );
 }
 
-// ▼ special viewer ボタンの表示制御
+// ▼ special viewer ボタンの表示制御（★完全修正版）
 function updateSpecialButton(index, specialBtn) {
+
   if (hasPhotoFor(index)) {
-    specialBtn.disabled = false;
+    // ★ 写真がある → 押せる
     specialBtn.style.opacity = 1;
+    specialBtn.style.pointerEvents = "auto";   // ← img を押せる状態にする
   } else {
-    specialBtn.disabled = true;
+    // ★ 写真がない → 押せない（最重要）
     specialBtn.style.opacity = 0.2;
+    specialBtn.style.pointerEvents = "none";   // ← img を完全に無効化
   }
 }
 
@@ -64,17 +67,13 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
   if (isFinalNull) {
     viewer.src = "image/common/card-null.png";
 
-    // next は無効
     nextBtn.disabled = true;
     nextBtn.style.opacity = 0.4;
 
-    // prev は有効
     prevBtn.disabled = false;
     prevBtn.style.opacity = 1;
 
-    // ★ special viewer ボタンは消さない（Argo Q の状態を維持）
     updateSpecialButton(index, specialBtn);
-
     return;
   }
 
@@ -82,9 +81,8 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
   if (images[index] === null) {
     viewer.src = "image/common/null-card.png";
 
-    // special viewer は季節ジャンプ時は非表示
     specialBtn.style.opacity = 0.2;
-    specialBtn.disabled = true;
+    specialBtn.style.pointerEvents = "none";   // ← ★季節ジャンプ時も無効化
 
     updatePrevNextButtons(index, prevBtn, nextBtn);
     return;
@@ -129,16 +127,14 @@ function setupFlipButton(
 
     flipBtn.disabled = true;
 
-    // アニメ前半
     viewer.classList.remove("flip-rotate");
     void viewer.offsetWidth;
     viewer.classList.add("flip-rotate");
 
-    // ★ nullカードの場合：裏面に切り替えず、同じ画像を維持する
     if (isFinalNull) {
 
       setTimeout(() => {
-        viewer.src = "image/common/card-null.png"; // 裏面も同じ
+        viewer.src = "image/common/card-null.png";
       }, 400);
 
       setTimeout(() => {
@@ -149,7 +145,6 @@ function setupFlipButton(
       return;
     }
 
-    // ★ 通常カードの裏返し処理
     setTimeout(() => {
       const current = isBackGetter();
       isBackSetter(!current);
