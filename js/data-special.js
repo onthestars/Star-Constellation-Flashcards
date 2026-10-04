@@ -210,9 +210,18 @@ const specialPhotos = {
 // ▼▼▼ 月モード画像（昇順で管理 → 表示は逆順） ▼▼▼
 
 const moonImages = [
-  "image/moon/Special/Moon-pic01.jpg",
-  "image/moon/Special/Moon-pic02.jpg",
-  "image/moon/Special/Moon-pic03.jpg" // 今後追加はここに書くだけ
+  "image/moon/Special/Moon-pic001.jpg",
+  "image/moon/Special/Moon-pic002.jpg",
+  "image/moon/Special/Moon-pic003.jpg",
+  "image/moon/Special/Moon-pic003.jpg",
+"image/moon/Special/Moon-pic004.jpg",
+"image/moon/Special/Moon-pic005.jpg",
+"image/moon/Special/Moon-pic006.jpg",
+"image/moon/Special/Moon-pic007.jpg",
+"image/moon/Special/Moon-pic008.jpg",
+"image/moon/Special/Moon-pic009.jpg",
+"image/moon/Special/Moon-pic010.jpg",
+"image/moon/Special/Moon-pic011.jpg"
 ];
 
 // ★ 表示は逆順（新しい → 古い）
