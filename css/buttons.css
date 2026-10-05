@@ -1,0 +1,35 @@
+/* ============================
+   buttons.css
+   季節ボタン・操作ボタン・Specialボタン
+   ============================ */
+
+/* 季節ボタン（縦置きの基本サイズ） */
+.btn-season {
+  width: 8vw;
+  max-width: 56px;
+  min-width: 32px;
+  margin: 6px 6px;
+}
+
+/* 季節ボタン：選択状態 */
+.btn-season.active-season {
+  border: 3px solid gold;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+/* 操作ボタン（縦置きの基本サイズ） */
+.btn-control {
+  width: 16vw;
+  max-width: 80px;
+  min-width: 42px;
+  margin: 6px 0;
+}
+
+/* Special ボタン（縦置きの基本サイズ） */
+.btn-special {
+  width: 12vw;
+  max-width: 64px;
+  min-width: 38px;
+  margin: 6px 0;
+}

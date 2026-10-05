@@ -1,0 +1,90 @@
+/* ============================
+   base.css
+   画面の基礎レイアウト・カード枠・画像領域・ボタンブロック
+   ============================ */
+
+/* 画面全体：カードを中央に固定 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow: hidden; /* 上下揺れ防止 */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* 通常の背景画像表示 */
+  background-image: url("./image/common/background-image-vertical1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll; /* Safariで安定 */
+}
+
+/* カード枠（縦置き） */
+#card-frame {
+  z-index: 3;
+  width: 95vw;
+  max-width: 480px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 4px;
+}
+
+/* カード画像領域 */
+.card-image-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.card-img {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  object-fit: contain;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* ボタンブロック（縦置き） */
+.button-block {
+  z-index: 4;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+/* ボタン共通 */
+.btn-season,
+.btn-control,
+.btn-special {
+  height: auto;
+}
+
+#rotate-warning {
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 16px;
+  text-align: center;
+  font-family: "Yu Gothic", "Meiryo", sans-serif;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999999;
+}

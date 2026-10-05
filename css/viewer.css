@@ -1,0 +1,125 @@
+/* ============================
+   viewer.css（完全統合版）
+   Special Viewer（全画面表示）
+   ============================ */
+
+/* スペシャルビューアー（画面全体表示） */
+#special-viewer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden; /* スクロール禁止 */
+}
+
+/* 画像エリア（内容サイズに合わせて縮む） */
+#special-img {
+  max-width: 95vw;
+  max-height: 80vh;
+  height: auto;
+  object-fit: contain;
+
+  flex: 0 0 auto; /* 空白防止 */
+
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+/* キャプション（最小高さ24px） */
+#special-caption {
+  min-height: 24px;
+  max-width: 90vw;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0.85;
+
+  margin: 1.0em 0 10px 0;
+  overflow: visible; /* 見切れ防止 */
+}
+
+/* ボタン行（固定高さ） */
+.special-controls-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+  height: 60px;
+  flex-wrap: nowrap; /* 折り返し防止 */
+}
+
+/* 閉じるボタン（小さめ） */
+#special-close {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+/* Special viewer のボタン（既存） */
+.special-btn {
+  width: 48px;
+  height: auto;
+  max-width: 38px;
+  cursor: pointer;
+  margin: 4px 2px;
+}
+
+/* 月専用スペシャルビューア（画面全体表示） */
+#moon-special-viewer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+/* 月ビューア画像 */
+#moon-special-img {
+  max-width: 95vw;
+  max-height: 80vh;
+  height: auto;
+  object-fit: contain;
+
+  flex: 0 0 auto;
+  margin-top: 10px;
+  margin-bottom: 0;
+
+  transition: opacity 0.4s ease;
+  opacity: 1;
+}
+
+/* 月ビューアキャプション */
+#moon-special-caption {
+  min-height: 24px;
+  max-width: 90vw;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0.85;
+
+  margin: 1.0em 0 10px 0;
+  overflow: visible;
+}

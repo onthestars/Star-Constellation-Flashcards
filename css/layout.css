@@ -1,0 +1,133 @@
+/* ============================
+   layout.css
+   縦置き・横置き・PCレイアウト
+   ============================ */
+
+/* 縦画面（スマホ） */
+@media (orientation: portrait) {
+  body {
+    /* JSで背景を設定するため空 */
+  }
+
+  /* ボタンブロック：縦方向の段組み */
+  .button-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* 季節ボタン段（横並び） */
+  .season-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* 操作ボタン段（横並び） */
+  .control-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Special ボタン段（単独） */
+  .special-group {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* 横画面（PC・タブレット） */
+@media (orientation: landscape) {
+  body {
+    /* JSで背景を設定するため空 */
+  }
+}
+
+/* 横置きレイアウト（Landscape, 幅900px以下） */
+@media (orientation: landscape) and (max-width: 900px) {
+
+  body {
+    height: 100vh;
+  }
+
+  #card-frame {
+    width: 80vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: column; /* 上：カード、下：ボタン */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* カード画像：上側中央 */
+  .card-image-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+  }
+
+  .card-img {
+    width: 60vw;
+    max-height: 50vh;
+    height: auto;
+  }
+
+  /* ボタン群：横並び */
+  .button-block {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 2vh;
+  }
+
+  /* 横置き専用ボタンサイズ */
+  .btn-season,
+  .btn-control,
+  .btn-special {
+    width: 8vw;
+    max-width: 32px;
+    min-width: 24px;
+    margin: 0;
+  }
+}
+
+/* PC専用レイアウト（幅1000px以上） */
+@media (min-width: 1000px) {
+
+  .btn-season {
+    width: 8vw;
+    max-width: 42px;
+    min-width: 24px;
+  }
+
+  .btn-control {
+    width: 12vw;
+    max-width: 64px;
+    min-width: 32px;
+  }
+
+  .btn-special {
+    width: 10vw;
+    max-width: 56px;
+    min-width: 28px;
+  }
+
+  #card-frame {
+    max-width: 800px;
+    width: 70vw;
+  }
+
+  .card-img {
+    max-width: 800px;
+  }
+}

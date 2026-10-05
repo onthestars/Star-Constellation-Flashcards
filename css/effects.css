@@ -1,0 +1,99 @@
+/* ============================
+   effects.css（完成版）
+   星オーバーレイ・CSS星・月オブジェクト
+   ============================ */
+
+/* 星のキラキラオーバーレイ（Special Viewer用） */
+#stars-overlay {
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* CSSで描く星型（軽量） */
+.star {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  animation: starTwinkle 0.6s ease-out forwards;
+  color: gold;
+
+  border-right: 10px solid transparent;
+  border-bottom: 7px solid gold;
+  border-left: 10px solid transparent;
+  transform: rotate(35deg);
+}
+
+.star:before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -7px;
+  width: 0;
+  height: 0;
+
+  border-bottom: 8px solid gold;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  transform: rotate(-35deg);
+}
+
+.star:after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: -10px;
+  width: 0;
+  height: 0;
+
+  border-right: 10px solid transparent;
+  border-bottom: 7px solid gold;
+  border-left: 10px solid transparent;
+  transform: rotate(-70deg);
+}
+
+/* 星のアニメーション */
+@keyframes starTwinkle {
+  0%   { opacity: 0; transform: scale(0.4); }
+  30%  { opacity: 1; transform: scale(1); }
+  70%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.4); }
+}
+
+/* 月オブジェクト（アニメ設定は JS 側） */
+#moon {
+  position: fixed; /* Chromeのレイアウト揺れ防止 */
+  top: 0;
+  left: 0;
+
+  width: 75px;
+  height: auto;
+
+  pointer-events: auto;
+  filter: drop-shadow(0 0 6px #ffffff80);
+
+  opacity: 0;
+  transition: opacity 2s ease;
+
+  /* Safari対策：カードより後ろに固定 */
+  z-index: -1;
+}
+
+/* 月のクリック判定レイヤー（アニメに追従） */
+#moonAnime {
+  position: fixed;
+  width: 75px;
+  height: 75px;
+
+  /* デバッグ用：半透明の赤（位置確認用） */
+  /* background-color: rgba(255, 0, 0, 0.4); */
+
+  z-index: 9999;
+  pointer-events: auto;
+}
