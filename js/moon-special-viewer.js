@@ -52,6 +52,10 @@ const moonSpecialClose   = document.getElementById("moon-special-close");
 let touchStartX = 0;
 let touchEndX = 0;
 
+moonSpecialViewer.addEventListener("touchstart", (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
 moonSpecialViewer.addEventListener("touchend", (e) => {
   touchEndX = e.changedTouches[0].screenX;
 
@@ -67,7 +71,6 @@ moonSpecialViewer.addEventListener("touchend", (e) => {
     }
   }
 });
-
 
 // ================================
 // ボタン制御
