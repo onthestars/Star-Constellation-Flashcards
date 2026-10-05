@@ -1,0 +1,147 @@
+﻿<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トレミーの48星座カード</title>
+
+  <link rel="icon" href="image/icon/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="image/icon/icon-512.png">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="css/viewer.css">
+  <link rel="stylesheet" href="css/animation.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/ui.css">
+
+</head>
+
+<body>
+
+  <!-- 音声 ON/OFF（画面右上固定） -->
+  <div id="sound-global-buttons">
+    <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
+    <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
+  </div>
+
+    <div id="rotate-warning">このアプリは縦画面でご利用ください</div>
+
+  <!-- 星の瞬きオーバーレイ -->
+  <div id="stars-overlay"></div>
+
+  <!-- 月の背景アニメーション -->
+  <img id="moon" src="image/common/moon5-crescent.png" alt="月">
+  <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
+
+  <!-- ★★★★★ 月専用 Special Viewer ★★★★★ -->
+  <div id="moon-special-viewer" style="display:none;">
+    <img id="moon-special-img" src="">
+    <div id="moon-special-caption"></div>
+
+    <div class="special-controls-row">
+      <img src="image/common/btn-back.png" id="moon-special-prev" class="special-btn">
+      <img src="image/common/btn-close.png" id="moon-special-close" class="special-btn">
+      <img src="image/common/btn-next.png" id="moon-special-next" class="special-btn">
+    </div>
+  </div>
+
+  <!-- 星座カード本体 -->
+  <div id="card-frame" class="card-frame">
+
+    <div class="card-image-area">
+      <div id="card-anim-wrapper">
+        <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
+      </div>
+    </div>
+
+    <div class="button-block">
+
+      <div class="season-group">
+        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
+        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
+        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
+        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
+        <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
+      </div>
+
+      <div class="control-group">
+        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
+        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
+        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
+      </div>
+
+      <div class="special-group">
+        <img src="image/common/btn-3stars.png" class="btn-special" id="specialBtn" alt="Special">
+      </div>
+
+    </div>
+  </div>
+
+  <div id="copyright">
+    ©トレミーの48星座カード All rights reserved. 2026
+  </div>
+
+  <div id="specialThanksBtn" class="special-thanks-btn">
+    Special Thanks:『ぴーとの星図』
+  </div>
+
+  <div id="special-viewer" style="display:none;">
+    <img id="special-img" src="" alt="Special画像">
+    <div id="special-caption"></div>
+
+    <div class="special-controls-row">
+      <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
+      <img src="image/common/btn-3stars.png" id="special-lines" class="special-btn" alt="星座線あり">
+      <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
+      <img src="image/common/btn-3stars-lines.png" id="special-clear" class="special-btn" alt="星座線なし">
+      <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
+    </div>
+
+    <audio id="soundFlip" src="sound/sound-flipping-paper.mp3" preload="auto"></audio>
+    <audio id="soundPage" src="sound/sound-flipping-paper2.mp3" preload="auto"></audio>
+    <audio id="soundSeason" src="sound/sound-season.mp3" preload="auto"></audio>
+    <audio id="soundKirakira" src="sound/sound-kirakira.mp3" preload="auto"></audio>
+  </div>
+
+  <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
+  <script src="js/images.js"></script>
+
+  <!-- ▼ サウンド・アニメーションなどのUI補助 -->
+  <script src="js/sound-controls.js"></script>
+  <script src="js/animation-controls.js"></script>
+
+  <!-- ▼ データ系（リンク・季節データ） -->
+  <script src="js/data-links.js"></script>
+  <script src="js/data-season.js"></script>
+
+  <script src="js/update-season-buttons.js"></script>
+
+  <!-- ▼ viewer / navigation（カード表示と移動の中核） -->
+  <script src="js/viewer.js"></script>
+  <script src="js/navigation.js"></script>
+
+  <!-- ▼ 背景・月アニメーションなどの視覚効果 -->
+  <script src="js/background-image.js"></script>
+
+  <!-- ▼ 星座カード専用スペシャルビューア（特別カード表示） -->
+  <script src="js/data-special.js"></script>
+  <script src="js/star-special-viewer.js"></script>
+
+  <!-- ▼月専用スペシャルビューア -->
+  <script src="js/moon-animation.js"></script>
+  <script src="js/moon-special-viewer.js"></script>
+
+  <!-- ▼ 外部リンク（依存なし） -->
+  <script src="js/external-links.js"></script>
+
+  <!-- ▼ 最後に main.js（全ての初期化を行う） -->
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>
