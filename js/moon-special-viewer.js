@@ -4,8 +4,8 @@
 // 月スペシャルビューア：状態
 // ================================
 
-// 月写真の配列（正しいパス）
-const moonImagesReversed = [
+// ★ 月写真の配列（昇順で管理）
+const moonImages = [
   "image/moon/Special/Moon-pic001.jpg",
   "image/moon/Special/Moon-pic002.jpg",
   "image/moon/Special/Moon-pic003.jpg",
@@ -19,8 +19,11 @@ const moonImagesReversed = [
   "image/moon/Special/Moon-pic011.jpg"
 ];
 
-// キャプション（必要なら）
-const moonCaptionsReversed = [
+// ★ 表示は逆順（最新 → 古い）
+const moonImagesReversed = [...moonImages].reverse();
+
+// キャプション（昇順で管理）
+const moonCaptions = [
   "撮影/ 筏 正明さん",
   "撮影/ 筏 正明さん",
   "撮影/ 筏 正明さん",
@@ -33,6 +36,9 @@ const moonCaptionsReversed = [
   "撮影/ 筏 正明さん",
   "撮影/ 筏 正明さん"
 ];
+
+// ★ キャプションも逆順にする
+const moonCaptionsReversed = [...moonCaptions].reverse();
 
 let moonSpecialIndex = 0;
 
