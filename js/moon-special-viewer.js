@@ -16,7 +16,7 @@ const moonImages = [
   "image/moon/Special/Moon-pic008.jpg",
   "image/moon/Special/Moon-pic009.jpg",
   "image/moon/Special/Moon-pic010.jpg",
-  "image/moon/Special/Moon-pic011.jpg"
+  "image/moon/Special/Moon-pic011.jpg",
     "image/moon/Special/Moon-pic012.jpg",
   "image/moon/Special/Moon-pic013.jpg"
 ];
@@ -36,8 +36,8 @@ const moonCaptions = [
   "撮影/ 筏 正明さん",
   "撮影/ 筏 正明さん",
   "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん"
-    "撮影/ 筏 正明さん"
+  "撮影/ 筏 正明さん",
+    "撮影/ 筏 正明さん",
       "撮影/ 筏 正明さん"
 ];
 
