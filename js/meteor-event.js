@@ -150,7 +150,7 @@ if (r < 0.60) {
 // 体感１０秒に１回流れる
 setInterval(() => {
 
-  if (Math.random() < 0.50) {
+  if (Math.random() < 0.30) {
     launchMeteor();
   }
 
