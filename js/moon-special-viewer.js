@@ -85,10 +85,15 @@ function updateMoonButtons() {
 
 function fadeChangeMoonImage(newIndex) {
 
+  // どちら方向に動くか判定
+  const direction = (newIndex > moonSpecialIndex) ? "right" : "left";
+
+  // 既存アニメーションのリセット
+  moonSpecialImg.classList.remove("moon-slide-in-right", "moon-slide-in-left");
+
   // フェードアウト開始
   moonSpecialImg.style.opacity = 0;
 
-  // 画像切り替えは少し遅らせる（重要）
   setTimeout(() => {
 
     moonSpecialIndex = newIndex;
@@ -97,12 +102,22 @@ function fadeChangeMoonImage(newIndex) {
     moonSpecialCaption.innerText =
       `${moonCaptionsReversed[moonSpecialIndex]}（${moonSpecialIndex + 1}/${moonImagesReversed.length}）`;
 
+    // アニメーション再適用のためのリセット
+    void moonSpecialImg.offsetWidth;
+
+    // 方向に応じてクラス付与
+    if (direction === "right") {
+      moonSpecialImg.classList.add("moon-slide-in-right");
+    } else {
+      moonSpecialImg.classList.add("moon-slide-in-left");
+    }
+
     // フェードイン
     moonSpecialImg.style.opacity = 1;
 
     updateMoonButtons();
 
-  }, 200); // ← この遅延がないとアニメしない
+  }, 200);
 }
 
 // ================================
