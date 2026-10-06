@@ -19,6 +19,13 @@
   <link rel="stylesheet" href="css/effects.css">
   <link rel="stylesheet" href="css/ui.css">
 
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="theme-color" content="#000000">
+
 </head>
 
 <body>
@@ -29,7 +36,7 @@
     <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
   </div>
 
-    <div id="rotate-warning">このアプリは縦画面でご利用ください</div>
+  <div id="rotate-warning">このアプリは縦画面でご利用ください</div>
 
   <!-- 星の瞬きオーバーレイ -->
   <div id="stars-overlay"></div>
@@ -140,7 +147,7 @@
   <script src="js/external-links.js"></script>
 
   <!-- ▼ 画面向き警告 -->
-<script src="js/orientation-warning.js"></script>
+  <script src="js/orientation-warning.js"></script>
 
   <!-- ▼ 最後に main.js（全ての初期化を行う） -->
   <script src="js/main.js"></script>
