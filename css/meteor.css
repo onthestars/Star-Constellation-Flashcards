@@ -8,12 +8,68 @@
 
   border-radius: 50%;
 
-  background: #fff;
+  background: rgba(255,255,255,0.85);
+
+  /* left,top を核の中心として扱う */
+  transform: translate(-50%, -50%);
 
   box-shadow:
-    0 0 6px #fff,
-    0 0 12px #fff,
-    0 0 18px #9fd8ff;
+    0 0 4px rgba(255,255,255,0.6),
+    0 0 8px rgba(255,255,255,0.45),
+    0 0 16px rgba(159,216,255,0.35);
 
-  z-index: 5000;
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+.meteor-tail {
+  position: fixed;
+
+  pointer-events: none;
+
+  transform-origin: left center;
+
+  z-index: 2;
+
+  /* 笹の葉型（核側がわずかに太い） */
+  clip-path: polygon(
+     0% 50%,
+    10% 47%,
+    25% 38%,
+    40% 25%,
+    55% 15%,
+    70% 12%,
+    85% 18%,
+   100% 30%,
+   100% 70%,
+    85% 82%,
+    70% 88%,
+    55% 85%,
+    40% 75%,
+    25% 62%,
+    10% 53%
+  );
+
+  /* 核側に向かって少し明るくなる */
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.00) 0%,
+    rgba(255,255,255,0.02) 15%,
+    rgba(255,255,255,0.10) 35%,
+    rgba(255,255,255,0.22) 55%,
+    rgba(255,255,255,0.38) 75%,
+    rgba(255,255,255,0.50) 90%,
+    rgba(255,255,255,0.60) 100%
+  );
+
+  opacity: 0.7;
+
+  /* 残光感 */
+  filter: blur(3px);
+
+  box-shadow:
+    0 0 6px rgba(255,255,255,0.15),
+    0 0 12px rgba(255,255,255,0.10),
+    0 0 24px rgba(159,216,255,0.08);
 }
