@@ -2,6 +2,7 @@
 
 // ================================
 // 月スペシャルビューア：状態
+// コンマ（'）の振り方に注意
 // ================================
 
 // ★ 月写真の配列（昇順で管理）
@@ -17,8 +18,10 @@ const moonImages = [
   "image/moon/Special/Moon-pic009.jpg",
   "image/moon/Special/Moon-pic010.jpg",
   "image/moon/Special/Moon-pic011.jpg",
-    "image/moon/Special/Moon-pic012.jpg",
-  "image/moon/Special/Moon-pic013.jpg"
+  "image/moon/Special/Moon-pic012.jpg",
+  "image/moon/Special/Moon-pic013.jpg",
+  "image/moon/Special/Moon-pic014.jpg",
+  "image/moon/Special/Moon-pic015.jpg"
 ];
 
 // ★ 表示は逆順（最新 → 古い）
@@ -26,19 +29,21 @@ const moonImagesReversed = [...moonImages].reverse();
 
 // キャプション（昇順で管理）
 const moonCaptions = [
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-  "撮影/ 筏 正明さん",
-    "撮影/ 筏 正明さん",
-      "撮影/ 筏 正明さん"
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん", // 005
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん", // 010
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん",
+  "撮影／筏 正明さん" // 015
 ];
 
 // ★ キャプションも逆順にする
