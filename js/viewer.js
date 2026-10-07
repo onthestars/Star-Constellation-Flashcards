@@ -1,16 +1,19 @@
 // viewer.js
 // カード表示ロジック（画像切替・裏返し・specialボタン・星図リンク・prev/next状態制御）
 
+// ======== ======== ======== ======== ========
+//▼▼▼Special画像追加時に編集//
 // ▼ special viewer 判定
+
 function hasPhotoFor(i) {
   return (
     images[i].includes("Ursa-Minor") ||
-        images[i].includes("Ursa-Major") ||
+    images[i].includes("Ursa-Major") ||
     images[i].includes("Leo") ||
     images[i].includes("Spring-Triangle") ||
     images[i].includes("Sagittarius") ||
     images[i].includes("Ophiuchus") ||
-        images[i].includes("Corona-Borealis") ||
+    images[i].includes("Corona-Borealis") ||
     images[i].includes("Summer-Triangle") ||
     images[i].includes("Pegasus") ||
     images[i].includes("Aquarius") ||
@@ -23,6 +26,7 @@ function hasPhotoFor(i) {
     images[i].includes("Winter-Triangle")
   );
 }
+// ======== ======== ======== ======== ========
 
 // ▼ special viewer ボタンの表示制御
 function updateSpecialButton(index, specialBtn) {

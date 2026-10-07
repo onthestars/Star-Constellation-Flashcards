@@ -82,6 +82,18 @@ const specialPhotos = {
     ]
   },
 
+      "Corona-Borealis": {
+    normal: [
+      "Corona-Borealis-noline-pic01.jpg"
+    ],
+    lines: [
+      "Corona-Borealis-lines-pic01.jpg"
+    ],
+    caption: [
+      "2026年9月12日／紀伊半島中部／かんむり座"
+    ]
+  },
+
   "Summer-Triangle": {
     normal: [
       "Summer-Triangle-noline-pic01.jpg",

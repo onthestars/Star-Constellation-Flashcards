@@ -38,6 +38,7 @@ function getStarNameFromIndex(i) {
   if (season === "summer") {
     if (i === 27 || i === 41) return "Sagittarius";
     if (i === 32 || i === 46) return "Ophiuchus";
+    if (i === 33 || i === 47) return "Corona-Borealis";
     if (i === 35) return "Summer-Triangle";
   }
 
@@ -70,6 +71,7 @@ function getSpecialFolder(starName) {
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
   if (starName === "Ophiuchus") return "image/summer/Special/";
+  if (starName === "Corona-Borealis") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
   if (starName === "Aquarius") return "image/autumn/Special/";
   if (starName === "Capricornus") return "image/autumn/Special/";
@@ -120,18 +122,18 @@ specialBtn.onclick = () => {
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
 
-  // 月専用のSpecialビューワー
-  document.getElementById("moon").onclick = () => {
-    savedIndex = "moon";
-    specialIndex = 0;
-    specialMode = "normal";
+//   // 月専用のSpecialビューワー
+//   document.getElementById("moon").onclick = () => {
+//     savedIndex = "moon";
+//     specialIndex = 0;
+//     specialMode = "normal";
 
-    const starName = "Moon";
-    specialImg.src = "image/special/moon/" + specialPhotos[starName].normal[0];
+//     const starName = "Moon";
+//     specialImg.src = "image/special/moon/" + specialPhotos[starName].normal[0];
 
-    specialViewer.style.display = "flex";
-    updateSpecialButtons();
-};
+//     specialViewer.style.display = "flex";
+//     updateSpecialButtons();
+// };
 
   // キラキラ音（音声ON時のみ）
   if (soundEnabled) {
