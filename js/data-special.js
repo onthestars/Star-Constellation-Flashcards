@@ -22,7 +22,7 @@ const specialPhotos = {
     ]
   },
 
-      "Ursa-Major": {
+  "Ursa-Major": {
     normal: [
       "Ursa-Major-noline-pic01.jpg"
     ],
@@ -30,7 +30,7 @@ const specialPhotos = {
       "Ursa-Major-lines-pic01.jpg"
     ],
     caption: [
-      "2026年3月21日／京都府亀岡市山中／北斗七星（おおぐま座の一部）",
+      "2026年3月21日／京都府亀岡市山中／北斗七星（おおぐま座の一部）"
     ]
   },
 
@@ -42,7 +42,7 @@ const specialPhotos = {
       "Leo-lines-pic01.jpg"
     ],
     caption: [
-      "2026年5月29日／兵庫県猪名川町／大野山頂から望むしし座",
+      "2026年5月29日／兵庫県猪名川町／大野山頂から望むしし座"
     ]
   },
 
