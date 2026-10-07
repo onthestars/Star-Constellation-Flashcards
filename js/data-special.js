@@ -22,6 +22,18 @@ const specialPhotos = {
     ]
   },
 
+      "Ursa-Major": {
+    normal: [
+      "Ursa-Major-noline-pic01.jpg"
+    ],
+    lines: [
+      "Ursa-Major-lines-pic01.jpg"
+    ],
+    caption: [
+      "2026年3月21日／京都府亀岡市山中／北斗七星（おおぐま座の一部）",
+    ]
+  },
+
     "Leo": {
     normal: [
       "Leo-noline-pic01.jpg"

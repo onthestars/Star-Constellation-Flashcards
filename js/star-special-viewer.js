@@ -1,8 +1,8 @@
-// special-viewer.js
+// stara-special-viewer.js
 
 // 効果音
 const soundKirakira = document.getElementById("soundKirakira");
-soundKirakira.volume = 0.4;   // ★ 音量を半分にする
+soundKirakira.volume = 0.4;   // ★ 音量調節
 
 // Special Viewer（写真ビューアー）
 let specialIndex = 0;
@@ -29,8 +29,9 @@ function getStarNameFromIndex(i) {
   const season = detectSeasonByIndex(i);
 
   if (season === "spring") {
-    if (i === 10 || i === 21) return "Leo";
     if (i === 2 || i === 13) return "Ursa-Minor";
+    if (i === 7 || i === 18) return "Ursa-Major";
+    if (i === 10 || i === 21) return "Leo";
     if (i === 12) return "Spring-Triangle";
     }
 
@@ -41,11 +42,12 @@ function getStarNameFromIndex(i) {
   }
 
   if (season === "autumn") {
-    if (i === 53 || i === 66) return "Pegasus";
+
     if (i === 49 || i === 62) return "Aquarius";
-    if (i === 54 || i === 67) return "Pisces";
     if (i === 51 || i === 64) return "Capricornus";
     if (i === 52 || i === 65) return "Equuleus";
+    if (i === 53 || i === 66) return "Pegasus";
+    if (i === 54 || i === 67) return "Pisces";
     if (i === 57 || i === 70) return "Cassiopeia";
   }
 
@@ -63,20 +65,22 @@ function getStarNameFromIndex(i) {
 // 大文字小文字は厳密一致
 function getSpecialFolder(starName) {
   if (starName === "Ursa-Minor") return "image/spring/Special/";
+  if (starName === "Ursa-Major") return "image/spring/Special/";
   if (starName === "Leo") return "image/spring/Special/";
   if (starName === "Spring-Triangle") return "image/spring/Special/";
   if (starName === "Sagittarius") return "image/summer/Special/";
-    if (starName === "Ophiuchus") return "image/summer/Special/";
+  if (starName === "Ophiuchus") return "image/summer/Special/";
   if (starName === "Summer-Triangle") return "image/summer/Special/";
-  if (starName === "Pegasus") return "image/autumn/Special/";
   if (starName === "Aquarius") return "image/autumn/Special/";
-  if (starName === "Pisces") return "image/autumn/Special/";
   if (starName === "Capricornus") return "image/autumn/Special/";
   if (starName === "Equuleus") return "image/autumn/Special/";
+  if (starName === "Pegasus") return "image/autumn/Special/";
+  if (starName === "Pisces") return "image/autumn/Special/";
   if (starName === "Cassiopeia") return "image/autumn/Special/";
   if (starName === "Gemini") return "image/winter/Special/";
   if (starName === "Orion") return "image/winter/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
+
   return null;
 }
 // ======== ======== ======== ======== ========
