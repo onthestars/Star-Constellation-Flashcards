@@ -2,7 +2,7 @@
 
 // 効果音
 const soundKirakira = document.getElementById("soundKirakira");
-soundKirakira.volume = 0.4;   // ★ 音量調節
+soundKirakira.volume = 0.3;   // ★ 音量調節
 
 // Special Viewer（写真ビューアー）
 let specialIndex = 0;
