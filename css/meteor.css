@@ -1,0 +1,19 @@
+/* meteor.css */
+
+.meteor-core {
+  position: fixed;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  box-shadow:
+    0 0 6px #fff,
+    0 0 12px #fff,
+    0 0 18px #9fd8ff;
+
+  z-index: 5000;
+}
