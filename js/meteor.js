@@ -109,6 +109,7 @@ const duration =
       (endY - startY) *
       progress;
 
+      // 核の大きさ
 const coreSize =
   3 + Math.sin(progress * Math.PI) * 6;
 
@@ -206,7 +207,7 @@ const coreSize =
         animate
       );
 
-    } else {
+        } else {
 
       core.remove();
 
@@ -220,16 +221,21 @@ const coreSize =
           }
         ],
         {
-          duration: 1200,
+
+          // 数が多いとゆっくりと透明に（少ないと唐突に消える）
+          duration: 2000,
           fill: "forwards"
         }
       );
 
+      // 尾が消えるまでの秒数
       setTimeout(() => {
         tail.remove();
-      }, 1200);
+      }, 3200);
 
     }
+
+    
 
   }
 
@@ -245,13 +251,13 @@ const coreSize =
 
 setInterval(() => {
 
-  // 毎秒判定
-  if (Math.random() < 0.12) {
+  // 毎秒判定（数値を増やせば一度に複数流れる）
+  if (Math.random() < 0.24) {
 
     spawnMeteorCore();
 
-    // 20%の確率で連続出現
-    if (Math.random() < 0.20) {
+    // 連続出現確率
+    if (Math.random() < 0.1) {
 
       setTimeout(() => {
 
