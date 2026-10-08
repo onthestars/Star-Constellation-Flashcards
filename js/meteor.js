@@ -67,16 +67,18 @@ function spawnMeteorCore() {
   const angle =
     Math.atan2(dy, dx);
 
+    // 尾の長さ
 const moveDistance =
   Math.min(
-    700,
-    60 + distanceFromRadiant * 0.9
+    500,
+    60 + distanceFromRadiant * 0.7
   );
 
+// 流星速度
 const duration =
   Math.max(
-    150,
-    650 - distanceFromRadiant * 0.35
+    600,
+    1200 - distanceFromRadiant * 0.4
   );
 
   const endX =
@@ -162,12 +164,13 @@ const coreSize =
         distance
       );
 
+      // 尾の太さ
     const trailHeight =
       Math.max(
-        2,
-        8 -
+        1.5,
+        5 -
         distanceFromRadiant /
-        120
+        180
       );
 
     tail.style.left =
