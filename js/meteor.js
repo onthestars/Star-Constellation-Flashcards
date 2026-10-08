@@ -67,23 +67,23 @@ function spawnMeteorCore() {
   const angle =
     Math.atan2(dy, dx);
 
-  const moveDistance =
-    Math.min(
-      700,
-      150 + distanceFromRadiant * 0.7
-    );
+const moveDistance =
+  Math.min(
+    700,
+    60 + distanceFromRadiant * 0.9
+  );
+
+const duration =
+  Math.max(
+    150,
+    650 - distanceFromRadiant * 0.35
+  );
 
   const endX =
     startX + Math.cos(angle) * moveDistance;
 
   const endY =
     startY + Math.sin(angle) * moveDistance;
-
-  const duration =
-    Math.max(
-      400,
-      1200 - distanceFromRadiant * 0.8
-    );
 
   const startTime =
     performance.now();
@@ -107,8 +107,8 @@ function spawnMeteorCore() {
       (endY - startY) *
       progress;
 
-    const coreSize =
-      3 + progress * 6;
+const coreSize =
+  3 + Math.sin(progress * Math.PI) * 6;
 
     core.style.left =
       currentX + "px";
