@@ -111,7 +111,7 @@ const duration =
 
       // 核の大きさ
 const coreSize =
-  3 + Math.sin(progress * Math.PI) * 6;
+  2 + Math.sin(progress * Math.PI) * 4;
 
     core.style.left =
       currentX + "px";
@@ -128,6 +128,7 @@ const coreSize =
     core.style.background =
       meteorColor.core;
 
+      // 核の輝き
     const glow =
       6 + progress * 16;
 
