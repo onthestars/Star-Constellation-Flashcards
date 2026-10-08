@@ -21,8 +21,10 @@ function hasPhotoFor(i) {
     images[i].includes("Capricornus") ||
     images[i].includes("Equuleus") ||
     images[i].includes("Cassiopeia") ||
+    images[i].includes("Perseus") ||
     images[i].includes("Gemini") ||
-    images[i].includes("Orion") ||
+    images[i].includes("Gemini") ||
+    images[i].includes("Taurus") ||
     images[i].includes("Winter-Triangle")
   );
 }

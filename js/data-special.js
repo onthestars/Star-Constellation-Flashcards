@@ -190,6 +190,21 @@ const specialPhotos = {
     ]
   },
 
+      "Perseus": {
+    normal: [
+      "Perseus-noline-pic01.jpg",
+            "Perseus-Taurus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Perseus-lines-pic01.jpg",
+            "Perseus-Taurus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年12月14日／紀伊半島中部／ペルセウス座",
+            "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）"
+    ]
+  },
+
       "Gemini": {
     normal: [
       "Gemini-noline-pic01.jpg"
@@ -202,6 +217,36 @@ const specialPhotos = {
     ]
   },
 
+      "Equuleus": {
+    normal: [
+      "Equuleus-noline-pic01.jpg",
+      "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Equuleus-lines-pic01.jpg",
+            "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年11月16日／紀伊半島南部／こうま座",
+      "2025年11月16日／紀伊半島南部／伐採地の立木とこうま座"
+    ]
+  },
+
+        "Taurus": {
+    normal: [
+      "Taurus-noline-pic01.jpg",
+            "Perseus-Taurus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Taurus-lines-pic01.jpg",
+            "Perseus-Taurus-lines-pic01.jpg"
+    ],
+    caption: [
+      "2025年12月14日／紀伊半島中部／おうし座（ふたご座流星）",
+            "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）"
+    ]
+  },
+  
     "Orion": {
     normal: [
       "Orion-noline-pic01.jpg"

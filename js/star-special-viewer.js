@@ -1,4 +1,4 @@
-// stara-special-viewer.js
+// star-special-viewer.js
 
 // 効果音
 const soundKirakira = document.getElementById("soundKirakira");
@@ -50,10 +50,12 @@ function getStarNameFromIndex(i) {
     if (i === 53 || i === 66) return "Pegasus";
     if (i === 54 || i === 67) return "Pisces";
     if (i === 57 || i === 70) return "Cassiopeia";
+        if (i === 59 || i === 72) return "Perseus";
   }
 
     if (season === "winter") {
     if (i === 75 || i === 84) return "Gemini";
+        if (i === 77 || i === 86) return "Taurus";
     if (i === 78 || i === 87) return "Orion";
     if (i === 83) return "Winter-Triangle";
   }
@@ -79,7 +81,9 @@ function getSpecialFolder(starName) {
   if (starName === "Pegasus") return "image/autumn/Special/";
   if (starName === "Pisces") return "image/autumn/Special/";
   if (starName === "Cassiopeia") return "image/autumn/Special/";
+    if (starName === "Perseus") return "image/autumn/Special/";
   if (starName === "Gemini") return "image/winter/Special/";
+    if (starName === "Taurus") return "image/winter/Special/";
   if (starName === "Orion") return "image/winter/Special/";
   if (starName === "Winter-Triangle") return "image/winter/Special/";
 
