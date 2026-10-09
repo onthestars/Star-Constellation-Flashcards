@@ -217,6 +217,18 @@ const specialPhotos = {
     ]
   },
 
+        "Auriga": {
+    normal: [
+      "Auriga-noline-pic01.jpg"
+    ],
+    lines: [
+      "Auriga-lines-pic01.jpg"
+    ],
+    caption: [
+      "2026年10月9日／大阪府高槻市山中／谷を昇るぎょしゃ座"
+    ]
+  },
+
       "Equuleus": {
     normal: [
       "Equuleus-noline-pic01.jpg",

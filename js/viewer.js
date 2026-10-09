@@ -23,7 +23,7 @@ function hasPhotoFor(i) {
     images[i].includes("Cassiopeia") ||
     images[i].includes("Perseus") ||
     images[i].includes("Gemini") ||
-    images[i].includes("Gemini") ||
+    images[i].includes("Auriga") ||
     images[i].includes("Taurus") ||
     images[i].includes("Winter-Triangle")
   );
