@@ -152,7 +152,7 @@ function openMoonSpecialViewer() {
 
 if (soundEnabled) {
   soundKirakira.currentTime = 0;
-  soundKirakira.volume = 0.1; //音量調整（最大1.0‐最小0.0）
+  soundKirakira.volume = 0.2; //音量調整（最大1.0‐最小0.0）
   soundKirakira.play();
 }
 
