@@ -8,64 +8,71 @@
 const moonData = [
   {
     image: "image/moon/Special/Moon-pic001.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic002.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic003.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic004.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic005.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic006.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic007.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic008.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic009.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic010.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic011.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic012.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic013.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic014.jpg",
-    caption: "撮影／筏 正明さん"
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic015.jpg",
-    caption: "撮影／筏 正明さん"
-  }
+    photographer: "筏 正明さん"
+  },
+    {
+    image: "image/moon/Special/Moon-pic016.jpg",
+    caption: "中秋の名月",
+    date: "2020年10月1日",
+    location: "大阪府吹田市千里ニュータウン",
+    photographer: "KAZ"
+    }
 ];
 
 // ▼ 配列シャッフル
