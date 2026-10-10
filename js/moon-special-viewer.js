@@ -24,9 +24,6 @@ const moonImages = [
   "image/moon/Special/Moon-pic015.jpg"
 ];
 
-// ★ 表示は逆順（最新 → 古い）
-const moonImagesReversed = [...moonImages].reverse();
-
 // キャプション（昇順で管理）
 const moonCaptions = [
   "撮影／筏 正明さん",
@@ -46,8 +43,49 @@ const moonCaptions = [
   "撮影／筏 正明さん" // 015
 ];
 
-// ★ キャプションも逆順にする
-const moonCaptionsReversed = [...moonCaptions].reverse();
+// ▼ 配列シャッフル
+function shuffleArray(array) {
+  const result = [...array];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+// ▼ 画像とキャプションをペア化
+const moonData = moonImages.map((image, index) => ({
+  image,
+  caption: moonCaptions[index]
+}));
+
+// ▼ 最新順へ
+const moonDataReversed = [...moonData].reverse();
+
+// ▼ 最新5枚
+const latestMoonData = moonDataReversed.slice(0, 5);
+
+// ▼ 残り
+const oldMoonData = moonDataReversed.slice(5);
+
+// ▼ 旧画像のみシャッフル
+const shuffledOldMoonData = shuffleArray(oldMoonData);
+
+// ▼ 最終表示順
+const displayMoonData = [
+  ...latestMoonData,
+  ...shuffledOldMoonData
+];
+
+// ▼ 表示用配列
+const moonImagesReversed =
+  displayMoonData.map(item => item.image);
+
+const moonCaptionsReversed =
+  displayMoonData.map(item => item.caption);
 
 let moonSpecialIndex = 0;
 
