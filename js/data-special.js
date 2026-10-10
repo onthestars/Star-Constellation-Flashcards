@@ -247,7 +247,7 @@ const specialPhotos = {
     ]
   },
 
-      "Alies": {
+      "Aries": {
     normal: [
             "Triangulum-Aries-Perseus-noline-pic01.jpg",
             "Triangulum-Aries-noline-pic01.jpg"
