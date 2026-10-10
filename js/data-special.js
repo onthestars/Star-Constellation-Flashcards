@@ -221,19 +221,22 @@ const specialPhotos = {
     normal: [
       "Perseus-Taurus-noline-pic01.jpg",
       "Perseus-noline-pic01.jpg",
-      "Perseus-noline-pic02.jpg"
+      "Perseus-noline-pic02.jpg",
+            "Perseus-Cassiopeia-Triangulum-Aries-noline-pic01.jpg"
 
     ],
     lines: [
       "Perseus-Taurus-lines-pic01.jpg",
       "Perseus-lines-pic01.jpg",
-      "Perseus-lines-pic02.jpg"
+      "Perseus-lines-pic02.jpg",
+                  "Perseus-Cassiopeia-Triangulum-Aries-lines-pic01.jpg"
 
     ],
     caption: [
       "ペルセウス座とおうし座（ふたご座流星）／2025年12月14日／紀伊半島中部",
       "ペルセウス座／2025年12月14日／紀伊半島中部",
-      "ペルセウス座／2026年10月9日／大阪府高槻市"
+      "ペルセウス座／2026年10月9日／大阪府高槻市",
+      "（左から）カシオペヤ座、ペルセウス座、さんかく座、おひつじ座。丸囲みはプレアデス星団（すばる）／2026年10月9日／大阪府高槻市"
     ]
   },
 
