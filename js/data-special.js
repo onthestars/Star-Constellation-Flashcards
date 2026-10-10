@@ -250,11 +250,12 @@ const specialPhotos = {
   "Taurus": {
     normal: [
       "Taurus-noline-pic01.jpg",
-            "Perseus-Taurus-noline-pic01.jpg"
+            "Taurus-noline-pic02.jpg"
     ],
     lines: [
       "Taurus-lines-pic01.jpg",
-            "Perseus-Taurus-lines-pic01.jpg"
+            "Taurus-lines-pic02.jpg"
+
     ],
     caption: [
       "2025年12月14日／紀伊半島中部／おうし座（ふたご座流星）",
