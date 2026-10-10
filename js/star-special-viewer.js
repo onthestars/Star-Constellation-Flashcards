@@ -38,35 +38,17 @@ function getStarNameFromIndex(i) {
   return cardName;
 }
 
-// ======== ======== ======== ======== ========
-//▼▼▼Special画像追加時に編集//
-// Special画像フォルダ
-// 大文字小文字は厳密一致
-function getSpecialFolder(starName) {
-  if (starName === "Ursa-Minor") return "image/spring/Special/";
-  if (starName === "Ursa-Major") return "image/spring/Special/";
-  if (starName === "Leo") return "image/spring/Special/";
-  if (starName === "Spring-Triangle") return "image/spring/Special/";
-  if (starName === "Sagittarius") return "image/summer/Special/";
-  if (starName === "Ophiuchus") return "image/summer/Special/";
-  if (starName === "Corona-Borealis") return "image/summer/Special/";
-  if (starName === "Summer-Triangle") return "image/summer/Special/";
-  if (starName === "Aquarius") return "image/autumn/Special/";
-  if (starName === "Capricornus") return "image/autumn/Special/";
-  if (starName === "Equuleus") return "image/autumn/Special/";
-  if (starName === "Pegasus") return "image/autumn/Special/";
-  if (starName === "Pisces") return "image/autumn/Special/";
-  if (starName === "Cassiopeia") return "image/autumn/Special/";
-  if (starName === "Perseus") return "image/autumn/Special/";
-  if (starName === "Gemini") return "image/winter/Special/";
-  if (starName === "Auriga") return "image/winter/Special/";
-  if (starName === "Taurus") return "image/winter/Special/";
-  if (starName === "Orion") return "image/winter/Special/";
-  if (starName === "Winter-Triangle") return "image/winter/Special/";
+// ▼ Special画像フォルダを取得
+function getSpecialFolder(index) {
 
-  return null;
+  const season = detectSeasonByIndex(index);
+
+  if (!season) {
+    return null;
+  }
+
+  return `image/${season}/Special/`;
 }
-// ======== ======== ======== ======== ========
 
 // ボタンの有効／無効
 function updateSpecialButtons() {
@@ -98,7 +80,7 @@ specialBtn.onclick = () => {
   const starName = getStarNameFromIndex(index);
   if (!starName || !specialPhotos[starName]) return;
 
-  const folder = getSpecialFolder(starName);
+const folder = getSpecialFolder(savedIndex);
   specialImg.src = folder + specialPhotos[starName].normal[0];
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
@@ -166,7 +148,7 @@ specialLines.onclick = () => {
   specialMode = "lines";
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
-  const folder = getSpecialFolder(starName);
+const folder = getSpecialFolder(savedIndex);
 
   specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
   specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
@@ -178,7 +160,7 @@ specialClear.onclick = () => {
   specialMode = "normal";
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
-  const folder = getSpecialFolder(starName);
+const folder = getSpecialFolder(savedIndex);
 
   specialImg.src = folder + specialPhotos[starName].lines[specialIndex];
   specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
@@ -189,7 +171,7 @@ specialClear.onclick = () => {
 specialNext.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
-  const folder = getSpecialFolder(starName);
+const folder = getSpecialFolder(savedIndex);
 
   if (specialIndex < specialPhotos[starName].normal.length - 1) {
     specialIndex++;
@@ -208,7 +190,7 @@ specialNext.onclick = () => {
 specialPrev.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
-  const folder = getSpecialFolder(starName);
+const folder = getSpecialFolder(savedIndex);
 
   if (specialIndex > 0) {
     specialIndex--;

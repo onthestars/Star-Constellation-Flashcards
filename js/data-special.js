@@ -34,7 +34,7 @@ const specialPhotos = {
     ]
   },
 
-    "Leo": {
+  "Leo": {
     normal: [
       "Leo-noline-pic01.jpg"
     ],
@@ -58,7 +58,7 @@ const specialPhotos = {
     ]
   },
 
-    "Ophiuchus": {
+  "Ophiuchus": {
     normal: [
       "Ophiuchus-noline-pic01.jpg"
     ],
@@ -70,7 +70,7 @@ const specialPhotos = {
     ]
   },
 
-    "Sagittarius": {
+  "Sagittarius": {
     normal: [
       "Sagittarius-noline-pic01.jpg"
     ],
@@ -82,7 +82,7 @@ const specialPhotos = {
     ]
   },
 
-      "Corona-Borealis": {
+  "Corona-Borealis": {
     normal: [
       "Corona-Borealis-noline-pic01.jpg"
     ],
@@ -148,7 +148,7 @@ const specialPhotos = {
     ]
   },
 
-    "Capricornus": {
+  "Capricornus": {
     normal: [
       "Capricornus-noline-pic01.jpg",
       "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
@@ -163,7 +163,7 @@ const specialPhotos = {
     ]
   },
 
-    "Equuleus": {
+  "Equuleus": {
     normal: [
       "Equuleus-noline-pic01.jpg",
       "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
@@ -178,7 +178,7 @@ const specialPhotos = {
     ]
   },
 
-    "Cassiopeia": {
+  "Cassiopeia": {
     normal: [
       "Cassiopeia-noline-pic01.jpg"
     ],
@@ -190,7 +190,7 @@ const specialPhotos = {
     ]
   },
 
-      "Perseus": {
+  "Perseus": {
     normal: [
       "Perseus-noline-pic01.jpg",
             "Perseus-Taurus-noline-pic01.jpg"
@@ -205,7 +205,7 @@ const specialPhotos = {
     ]
   },
 
-      "Gemini": {
+  "Gemini": {
     normal: [
       "Gemini-noline-pic01.jpg"
     ],
@@ -217,7 +217,7 @@ const specialPhotos = {
     ]
   },
 
-        "Auriga": {
+  "Auriga": {
     normal: [
       "Auriga-noline-pic01.jpg"
     ],
@@ -229,7 +229,7 @@ const specialPhotos = {
     ]
   },
 
-      "Equuleus": {
+  "Equuleus": {
     normal: [
       "Equuleus-noline-pic01.jpg",
       "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
@@ -244,7 +244,7 @@ const specialPhotos = {
     ]
   },
 
-        "Taurus": {
+  "Taurus": {
     normal: [
       "Taurus-noline-pic01.jpg",
             "Perseus-Taurus-noline-pic01.jpg"
@@ -259,7 +259,7 @@ const specialPhotos = {
     ]
   },
   
-    "Orion": {
+  "Orion": {
     normal: [
       "Orion-noline-pic01.jpg"
     ],

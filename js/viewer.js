@@ -1,7 +1,6 @@
 // viewer.js
 // カード表示ロジック（画像切替・裏返し・specialボタン・星図リンク・prev/next状態制御）
 
-// ======== ======== ======== ======== ========
 // ▼ Special画像の有無を判定
 function hasPhotoFor(i) {
 
@@ -13,7 +12,6 @@ function hasPhotoFor(i) {
 
   return !!specialPhotos[cardName];
 }
-// ======== ======== ======== ======== ========
 
 // ▼ special viewer ボタンの表示制御
 function updateSpecialButton(index, specialBtn) {
@@ -92,13 +90,25 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
 
 // ▼ カードクリック → 星図リンクを開く
 function setupViewerClick(viewer, indexGetter) {
+
   viewer.addEventListener("click", () => {
+
     const i = indexGetter();
-    const url = links[i];
+
+    const cardName = getCardName(i);
+
+    if (!cardName) {
+      return;
+    }
+
+    const url = links[cardName];
+
     if (url) {
       window.open(url, "_blank");
     }
+
   });
+
 }
 
 // ▼ 裏返しボタン（★完全版：nullカードでもアニメーションだけ動かす）

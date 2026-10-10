@@ -139,8 +139,6 @@ window.backs = window.images.map((img, i) => {
   return "image/common/card-null.png";
 });
 
-// images.js
-
 // ▼ カード名から index を取得
 window.findCardIndex = function(cardName) {
   return images.findIndex(
