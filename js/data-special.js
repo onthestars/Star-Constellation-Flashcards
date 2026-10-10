@@ -183,29 +183,35 @@ const specialPhotos = {
 
   "Cassiopeia": {
     normal: [
-      "Cassiopeia-noline-pic01.jpg"
+      "Cassiopeia-noline-pic01.jpg",
+      "Cassiopeia-noline-pic02.jpg",
+      "Cassiopeia-noline-pic03.jpg"
     ],
     lines: [
-      "Cassiopeia-lines-pic01.jpg"
+      "Cassiopeia-lines-pic01.jpg",
+      "Cassiopeia-lines-pic02.jpg",
+      "Cassiopeia-lines-pic03.jpg"
     ],
     caption: [
-      "2025年10月28日／大阪府吹田市市街地／カシオペヤ座"
+      "2025年10月28日／大阪府吹田市千里ニュータウン／カシオペヤ座",
+      "2026年10月10日／大阪府高槻市／カシオペヤ座とアンドロメダ銀河（丸囲み）",
+      "2026年10月10日／大阪府高槻市／カシオペヤ座"
     ]
   },
 
     "Cepheus": {
     normal: [
-                  "Cepheus-Cassiopeia-noline-pic01.jpg",
+      "Cepheus-Cassiopeia-noline-pic01.jpg",
       "Cepheus-noline-pic01.jpg"
 
     ],
     lines: [
-                        "Cepheus-Cassiopeia-lines-pic01.jpg",
+      "Cepheus-Cassiopeia-lines-pic01.jpg",
       "Cepheus-lines-pic01.jpg"
 
     ],
     caption: [
-                  "2026年10月9日／大阪府高槻市山中／ケフェウス座（王）とカシオペヤ座（妃）",
+      "2026年10月9日／大阪府高槻市山中／ケフェウス座（王）とカシオペヤ座（妃）",
       "2026年10月9日／大阪府高槻市山中／ケフェウス座"
 
     ]
@@ -213,19 +219,19 @@ const specialPhotos = {
 
   "Perseus": {
     normal: [
-            "Perseus-Taurus-noline-pic01.jpg",
+      "Perseus-Taurus-noline-pic01.jpg",
       "Perseus-noline-pic01.jpg",
-            "Perseus-noline-pic02.jpg"
+      "Perseus-noline-pic02.jpg"
 
     ],
     lines: [
-            "Perseus-Taurus-lines-pic01.jpg",
+      "Perseus-Taurus-lines-pic01.jpg",
       "Perseus-lines-pic01.jpg",
-            "Perseus-lines-pic02.jpg"
+      "Perseus-lines-pic02.jpg"
 
     ],
     caption: [
-                  "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）",
+      "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）",
       "2025年12月14日／紀伊半島中部／ペルセウス座",
       "2026年10月9日／大阪府高槻市／ペルセウス座"
 
@@ -234,16 +240,16 @@ const specialPhotos = {
 
     "Triangulum": {
     normal: [
-            "Triangulum-Aries-Perseus-noline-pic01.jpg",
-            "Triangulum-Aries-noline-pic01.jpg"
+      "Triangulum-Aries-Perseus-noline-pic01.jpg",
+      "Triangulum-Aries-noline-pic01.jpg"
     ],
     lines: [
-            "Triangulum-Aries-Perseus-lines-pic01.jpg",
-            "Triangulum-Aries-lines-pic01.jpg"
+      "Triangulum-Aries-Perseus-lines-pic01.jpg",
+      "Triangulum-Aries-lines-pic01.jpg"
     ],
     caption: [
-            "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座",
-                  "2026年10月9日／高槻市山中／さんかく座（上）とおひつじ座"
+      "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座",
+      "2026年10月9日／高槻市山中／さんかく座（上）とおひつじ座"
     ]
   },
 
