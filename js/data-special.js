@@ -11,15 +11,18 @@ const specialPhotos = {
   "Ursa-Minor": {
     normal: [
       "Ursa-Minor-noline-pic01.jpg",
-      "Ursa-Minor-noline-pic02.jpg"
+      "Ursa-Minor-noline-pic02.jpg",
+      "Ursa-Minor-Polaris-noline-pic01.jpg"
     ],
     lines: [
       "Ursa-Minor-lines-pic01.jpg",
-      "Ursa-Minor-lines-pic02.jpg"
+      "Ursa-Minor-lines-pic02.jpg",
+      "Ursa-Minor-Polaris-lines-pic01.jpg"
     ],
     caption: [
       "竹林に潜む、こぐま座と北極星（ポラリス）／2026年10月1日／大阪府茨木市山中",
-      "竹林に潜む、こぐま座と北極星（ポラリス）／2026年10月1日／大阪府茨木市山中"
+      "竹林に潜む、こぐま座と北極星（ポラリス）／2026年10月1日／大阪府茨木市山中",
+      "反射望遠鏡で観た北極星（ポラリス）／2025年12月6日／大阪府吹田市千里ニュータウン"      
     ]
   },
 
