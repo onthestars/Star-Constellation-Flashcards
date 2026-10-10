@@ -215,7 +215,7 @@ const specialPhotos = {
     normal: [
             "Perseus-Taurus-noline-pic01.jpg",
       "Perseus-noline-pic01.jpg",
-            "Perseus-noline-pic02.jpg",
+            "Perseus-noline-pic02.jpg"
 
     ],
     lines: [
@@ -228,6 +228,24 @@ const specialPhotos = {
                   "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）",
       "2025年12月14日／紀伊半島中部／ペルセウス座",
       "2026年10月9日／大阪府高槻市／ペルセウス座"
+
+    ]
+  },
+
+    "Triangulum": {
+    normal: [
+            "Triangulum-Alies-noline^pic01.jpg",
+      "Triangulum-Alies-Perseus-noline-pic01.jpg"
+
+    ],
+    lines: [
+            "Triangulum-Alies-lines-pic01.jpg",
+      "Triangulum-Alies-Perseus-lines-pic01.jpg"
+
+    ],
+    caption: [
+                  "2026年10月9日／高槻市山中／さんかく座（上）とおひつじ座",
+      "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座"
 
     ]
   },
