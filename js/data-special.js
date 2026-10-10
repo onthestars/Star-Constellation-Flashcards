@@ -196,12 +196,12 @@ const specialPhotos = {
   "Perseus": {
     normal: [
       "Perseus-noline-pic01.jpg",
-      "Perseus-noline-pic02.jpg",
+      "Perseus-Taurus-noline-pic02.jpg",
       "Perseus-noline-pic03.jpg"
     ],
     lines: [
       "Perseus-lines-pic01.jpg",
-      "Perseus-lines-pic02.jpg",
+      "Perseus-Taurus-lines-pic02.jpg",
       "Perseus-lines-pic03.jpg"
     ],
     caption: [
