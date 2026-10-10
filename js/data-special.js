@@ -193,15 +193,18 @@ const specialPhotos = {
   "Perseus": {
     normal: [
       "Perseus-noline-pic01.jpg",
-            "Perseus-Taurus-noline-pic01.jpg"
+      "Perseus-noline-pic02.jpg",
+      "Perseus-Taurus-noline-pic01.jpg"
     ],
     lines: [
       "Perseus-lines-pic01.jpg",
-            "Perseus-Taurus-lines-pic01.jpg"
+      "Perseus-lines-pic02.jpg",
+      "Perseus-Taurus-lines-pic01.jpg"
     ],
     caption: [
+      "2026年10月9日／大阪府高槻市／ペルセウス座",
       "2025年12月14日／紀伊半島中部／ペルセウス座",
-            "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）"
+      "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）"
     ]
   },
 
