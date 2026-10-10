@@ -2,31 +2,16 @@
 // カード表示ロジック（画像切替・裏返し・specialボタン・星図リンク・prev/next状態制御）
 
 // ======== ======== ======== ======== ========
-//▼▼▼Special画像追加時に編集//
-// ▼ special viewer 判定
-
+// ▼ Special画像の有無を判定
 function hasPhotoFor(i) {
-  return (
-    images[i].includes("Ursa-Minor") ||
-    images[i].includes("Ursa-Major") ||
-    images[i].includes("Leo") ||
-    images[i].includes("Spring-Triangle") ||
-    images[i].includes("Sagittarius") ||
-    images[i].includes("Ophiuchus") ||
-    images[i].includes("Corona-Borealis") ||
-    images[i].includes("Summer-Triangle") ||
-    images[i].includes("Pegasus") ||
-    images[i].includes("Aquarius") ||
-    images[i].includes("Pisces") ||
-    images[i].includes("Capricornus") ||
-    images[i].includes("Equuleus") ||
-    images[i].includes("Cassiopeia") ||
-    images[i].includes("Perseus") ||
-    images[i].includes("Gemini") ||
-    images[i].includes("Auriga") ||
-    images[i].includes("Taurus") ||
-    images[i].includes("Winter-Triangle")
-  );
+
+  const cardName = getCardName(i);
+
+  if (!cardName) {
+    return false;
+  }
+
+  return !!specialPhotos[cardName];
 }
 // ======== ======== ======== ======== ========
 

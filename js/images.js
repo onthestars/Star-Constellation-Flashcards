@@ -139,6 +139,42 @@ window.backs = window.images.map((img, i) => {
   return "image/common/card-null.png";
 });
 
+// images.js
+
+// ▼ カード名から index を取得
+window.findCardIndex = function(cardName) {
+  return images.findIndex(
+    img => img && img.includes(cardName)
+  );
+};
+
+// ▼ index からカード名を取得
+// Q/Aカードと補助カードの両方に対応
+window.getCardName = function(index) {
+
+  const img = images[index];
+
+  if (!img) return null;
+
+  // 通常のQ/Aカード
+  const qaMatch =
+    img.match(/card-(.+?)-(Q|A)\.png$/);
+
+  if (qaMatch) {
+    return qaMatch[1];
+  }
+
+  // Spring-Triangleなどの補助カード
+  const otherMatch =
+    img.match(/card-(.+)\.png$/);
+
+  if (otherMatch) {
+    return otherMatch[1];
+  }
+
+  return null;
+};
+
 // ▼ 季節開始 index
 window.seasonStart = {
   spring: 2,

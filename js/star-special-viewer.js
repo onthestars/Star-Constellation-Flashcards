@@ -21,11 +21,6 @@ const specialClear  = document.getElementById("special-clear");
 const specialNext   = document.getElementById("special-next");
 const specialPrev   = document.getElementById("special-prev");
 
-// ======== ======== ======== ======== ========
-//▼▼▼Special画像追加時に編集//
-// 星座ID → Specialフォルダ名に変換 ※ID番号は仕様書
-// 大文字小文字は厳密一致
-
 // ▼ indexからSpecial対象名を取得
 function getStarNameFromIndex(i) {
 
@@ -43,6 +38,7 @@ function getStarNameFromIndex(i) {
   return cardName;
 }
 
+// ======== ======== ======== ======== ========
 //▼▼▼Special画像追加時に編集//
 // Special画像フォルダ
 // 大文字小文字は厳密一致
