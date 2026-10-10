@@ -252,8 +252,8 @@ const coreSize =
 
 setInterval(() => {
 
-  // 毎秒判定（数値を増やせば一度に複数流れる）
-  if (Math.random() < 0.24) {
+  // 毎秒判定（数値を増やせば一度に複数流れる 例：0.12→1秒ごとの判定で12%）
+  if (Math.random() < 0.12) {
 
     spawnMeteorCore();
 
