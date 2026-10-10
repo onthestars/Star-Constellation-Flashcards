@@ -5,6 +5,7 @@
 // ================================
 
 // ▼ 月写真データ（昇順管理）
+// カンマ（,）忘れに注意
 const moonData = [
   {
     image: "image/moon/Special/Moon-pic001.jpg",
@@ -72,7 +73,7 @@ const moonData = [
     date: "2020年10月1日",
     location: "大阪府吹田市千里ニュータウン",
     photographer: "KAZ"
-    }
+    },
 ];
 
 // ▼ 配列シャッフル
