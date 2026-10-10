@@ -67,13 +67,20 @@ const moonData = [
     image: "image/moon/Special/Moon-pic015.jpg",
     photographer: "筏 正明さん"
   },
-    {
+  {
     image: "image/moon/Special/Moon-pic016.jpg",
     caption: "中秋の名月",
     date: "2020年10月1日",
     location: "大阪府吹田市千里ニュータウン",
-    photographer: "KAZ"
-    },
+    photographer: "K-A-Z"
+  },
+  {
+    image: "image/moon/Special/Moon-pic017.jpg",
+    caption: "大人が子どもの頭を両手で優しくなでているように見えたフラワームーン",
+    date: "2025年5月13日",
+    location: "大阪府吹田市千里ニュータウン",
+    photographer: "K-A-Z"
+  },
 ];
 
 // ▼ 配列シャッフル
