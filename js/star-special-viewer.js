@@ -25,43 +25,22 @@ const specialPrev   = document.getElementById("special-prev");
 //▼▼▼Special画像追加時に編集//
 // 星座ID → Specialフォルダ名に変換 ※ID番号は仕様書
 // 大文字小文字は厳密一致
+
+// ▼ indexからSpecial対象名を取得
 function getStarNameFromIndex(i) {
-  const season = detectSeasonByIndex(i);
 
-  if (season === "spring") {
-    if (i === 2 || i === 13) return "Ursa-Minor";
-    if (i === 7 || i === 18) return "Ursa-Major";
-    if (i === 10 || i === 21) return "Leo";
-    if (i === 12) return "Spring-Triangle";
-    }
+  const cardName = getCardName(i);
 
-  if (season === "summer") {
-    if (i === 27 || i === 41) return "Sagittarius";
-    if (i === 32 || i === 46) return "Ophiuchus";
-    if (i === 33 || i === 47) return "Corona-Borealis";
-    if (i === 35) return "Summer-Triangle";
+  if (!cardName) {
+    return null;
   }
 
-  if (season === "autumn") {
-
-    if (i === 49 || i === 62) return "Aquarius";
-    if (i === 51 || i === 64) return "Capricornus";
-    if (i === 52 || i === 65) return "Equuleus";
-    if (i === 53 || i === 66) return "Pegasus";
-    if (i === 54 || i === 67) return "Pisces";
-    if (i === 57 || i === 70) return "Cassiopeia";
-    if (i === 59 || i === 72) return "Perseus";
+  // Special画像未登録のカードは除外
+  if (!specialPhotos[cardName]) {
+    return null;
   }
 
-    if (season === "winter") {
-    if (i === 75 || i === 84) return "Gemini";
-    if (i === 76 || i === 85) return "Auriga";
-    if (i === 77 || i === 86) return "Taurus";
-    if (i === 78 || i === 87) return "Orion";
-    if (i === 83) return "Winter-Triangle";
-  }
-
-  return null;
+  return cardName;
 }
 
 //▼▼▼Special画像追加時に編集//
