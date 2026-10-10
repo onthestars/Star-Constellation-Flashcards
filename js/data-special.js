@@ -234,19 +234,16 @@ const specialPhotos = {
 
     "Triangulum": {
     normal: [
-            "Triangulum-Alies-noline^pic01.jpg",
-      "Triangulum-Alies-Perseus-noline-pic01.jpg"
-
+            "Triangulum-Alies-Perseus-noline-pic01.jpg",
+            "Triangulum-Alies-noline^pic01.jpg"
     ],
     lines: [
-            "Triangulum-Alies-lines-pic01.jpg",
-      "Triangulum-Alies-Perseus-lines-pic01.jpg"
-
+            "Triangulum-Alies-Perseus-lines-pic01.jpg",
+            "Triangulum-Alies-lines-pic01.jpg"
     ],
     caption: [
-                  "2026年10月9日／高槻市山中／さんかく座（上）とおひつじ座",
-      "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座"
-
+            "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座",
+                  "2026年10月9日／高槻市山中／さんかく座（上）とおひつじ座"
     ]
   },
 
