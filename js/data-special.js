@@ -285,13 +285,16 @@ const specialPhotos = {
   // ▼冬の星座
   "Gemini": {
     normal: [
-      "Gemini-noline-pic01.jpg"
+      "Gemini-noline-pic01.jpg",
+      "Gemini-noline-pic02.jpg"
     ],
     lines: [
-      "Gemini-lines-pic01.jpg"
+      "Gemini-lines-pic01.jpg",
+      "Gemini-lines-pic02.jpg"      
     ],
     caption: [
-      "ふたご座と木星／2026年3月21日／京都府亀岡市山中"
+      "ふたご座と木星／2026年3月21日／京都府亀岡市山中",
+      "ふたご座と電力鉄塔／2024年1月31日未明／大阪府吹田市千里ニュータウン"      
     ]
   },
 
