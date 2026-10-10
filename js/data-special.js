@@ -7,7 +7,7 @@
 // 大文字小文字は厳密一致
 const specialPhotos = {
 
-  // 春の星座
+  // ▼春の星座
   "Ursa-Minor": {
     normal: [
       "Ursa-Minor-noline-pic01.jpg",
@@ -59,7 +59,7 @@ const specialPhotos = {
     ]
   },
 
-  // 夏の星座
+  // ▼夏の星座
   "Ophiuchus": {
     normal: [
       "Ophiuchus-noline-pic01.jpg"
@@ -111,7 +111,7 @@ const specialPhotos = {
     ]
   },
 
-  // 秋の星座
+  // ▼秋の星座
   "Pegasus": {
     normal: [
       "Pegasus-nolines-pic01.jpg"
@@ -189,7 +189,25 @@ const specialPhotos = {
       "Cassiopeia-lines-pic01.jpg"
     ],
     caption: [
-      "2025年10月28日／大阪府北摂／カシオペヤ座"
+      "2025年10月28日／大阪府吹田市市街地／カシオペヤ座"
+    ]
+  },
+
+    "Cepheus": {
+    normal: [
+                  "Cepheus-Cassiopeia-noline-pic01.jpg",
+      "Cepheus-noline-pic01.jpg"
+
+    ],
+    lines: [
+                        "Cepheus-Cassiopeia-lines-pic01.jpg",
+      "Cepheus-lines-pic01.jpg"
+
+    ],
+    caption: [
+                  "2026年10月9日／大阪府高槻市山中／ケフェウス座（王）とカシオペヤ座（妃）",
+      "2026年10月9日／大阪府高槻市山中／ケフェウス座"
+
     ]
   },
 
@@ -211,7 +229,7 @@ const specialPhotos = {
     ]
   },
 
-  // 冬の星座
+  // ▼冬の星座
   "Gemini": {
     normal: [
       "Gemini-noline-pic01.jpg"
