@@ -234,12 +234,12 @@ const specialPhotos = {
 
     "Triangulum": {
     normal: [
-            "Triangulum-Alies-Perseus-noline-pic01.jpg",
-            "Triangulum-Alies-noline-pic01.jpg"
+            "Triangulum-Aries-Perseus-noline-pic01.jpg",
+            "Triangulum-Aries-noline-pic01.jpg"
     ],
     lines: [
-            "Triangulum-Alies-Perseus-lines-pic01.jpg",
-            "Triangulum-Alies-lines-pic01.jpg"
+            "Triangulum-Aries-Perseus-lines-pic01.jpg",
+            "Triangulum-Aries-lines-pic01.jpg"
     ],
     caption: [
             "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座",
@@ -249,12 +249,12 @@ const specialPhotos = {
 
       "Alies": {
     normal: [
-            "Triangulum-Alies-Perseus-noline-pic01.jpg",
-            "Triangulum-Alies-noline-pic01.jpg"
+            "Triangulum-Aries-Perseus-noline-pic01.jpg",
+            "Triangulum-Aries-noline-pic01.jpg"
     ],
     lines: [
-            "Triangulum-Alies-Perseus-lines-pic01.jpg",
-            "Triangulum-Alies-lines-pic01.jpg"
+            "Triangulum-Aries-Perseus-lines-pic01.jpg",
+            "Triangulum-Aries-lines-pic01.jpg"
     ],
     caption: [
             "2026年10月9日／高槻市山中／(左から）＠ペルセウス座、さんかく座、おひつじ座",
