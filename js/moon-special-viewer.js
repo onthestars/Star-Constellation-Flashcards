@@ -1,46 +1,71 @@
-//moon-special-viewer.js
+// moon-special-viewer.js
 
 // ================================
 // 月スペシャルビューア：状態
-// カンマ（,）の位置に注意
 // ================================
 
-// ★ 月写真の配列（昇順で管理）
-const moonImages = [
-  "image/moon/Special/Moon-pic001.jpg",
-  "image/moon/Special/Moon-pic002.jpg",
-  "image/moon/Special/Moon-pic003.jpg",
-  "image/moon/Special/Moon-pic004.jpg",
-  "image/moon/Special/Moon-pic005.jpg",
-  "image/moon/Special/Moon-pic006.jpg",
-  "image/moon/Special/Moon-pic007.jpg",
-  "image/moon/Special/Moon-pic008.jpg",
-  "image/moon/Special/Moon-pic009.jpg",
-  "image/moon/Special/Moon-pic010.jpg",
-  "image/moon/Special/Moon-pic011.jpg",
-  "image/moon/Special/Moon-pic012.jpg",
-  "image/moon/Special/Moon-pic013.jpg",
-  "image/moon/Special/Moon-pic014.jpg",
-  "image/moon/Special/Moon-pic015.jpg"
-];
-
-// キャプション（昇順で管理）
-const moonCaptions = [
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん", // 005
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん", // 010
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん",
-  "撮影／筏 正明さん" // 015
+// ▼ 月写真データ（昇順管理）
+const moonData = [
+  {
+    image: "image/moon/Special/Moon-pic001.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic002.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic003.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic004.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic005.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic006.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic007.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic008.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic009.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic010.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic011.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic012.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic013.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic014.jpg",
+    caption: "撮影／筏 正明さん"
+  },
+  {
+    image: "image/moon/Special/Moon-pic015.jpg",
+    caption: "撮影／筏 正明さん"
+  }
 ];
 
 // ▼ 配列シャッフル
@@ -56,22 +81,40 @@ function shuffleArray(array) {
   return result;
 }
 
-// ▼ 画像とキャプションをペア化
-const moonData = moonImages.map((image, index) => ({
-  image,
-  caption: moonCaptions[index]
-}));
+// ▼ キャプション生成
+function buildMoonCaption(data) {
 
-// ▼ 最新順へ
+  const parts = [];
+
+  if (data.caption) {
+    parts.push(data.caption);
+  }
+
+  if (data.date) {
+    parts.push(data.date);
+  }
+
+  if (data.location) {
+    parts.push(data.location);
+  }
+
+  if (data.photographer) {
+    parts.push(`${data.photographer}撮影`);
+  }
+
+  return parts.join("／");
+}
+
+// ▼ 最新順
 const moonDataReversed = [...moonData].reverse();
 
-// ▼ 最新5枚
+// ▼ 最新5枚固定
 const latestMoonData = moonDataReversed.slice(0, 5);
 
 // ▼ 残り
 const oldMoonData = moonDataReversed.slice(5);
 
-// ▼ 旧画像のみシャッフル
+// ▼ 残りのみシャッフル
 const shuffledOldMoonData = shuffleArray(oldMoonData);
 
 // ▼ 最終表示順
@@ -80,27 +123,20 @@ const displayMoonData = [
   ...shuffledOldMoonData
 ];
 
-// ▼ 表示用配列
-const moonImagesReversed =
-  displayMoonData.map(item => item.image);
-
-const moonCaptionsReversed =
-  displayMoonData.map(item => item.caption);
-
 let moonSpecialIndex = 0;
 
 // ================================
 // 月スペシャルビューア：DOM
 // ================================
-const moonSpecialViewer  = document.getElementById("moon-special-viewer");
-const moonSpecialImg     = document.getElementById("moon-special-img");
+const moonSpecialViewer = document.getElementById("moon-special-viewer");
+const moonSpecialImg = document.getElementById("moon-special-img");
 const moonSpecialCaption = document.getElementById("moon-special-caption");
-const moonSpecialPrev    = document.getElementById("moon-special-prev");
-const moonSpecialNext    = document.getElementById("moon-special-next");
-const moonSpecialClose   = document.getElementById("moon-special-close");
+const moonSpecialPrev = document.getElementById("moon-special-prev");
+const moonSpecialNext = document.getElementById("moon-special-next");
+const moonSpecialClose = document.getElementById("moon-special-close");
 
 // ================================
-// スワイプ操作（スマホ用） ← ★ここに置く
+// スワイプ操作
 // ================================
 let touchStartX = 0;
 let touchEndX = 0;
@@ -110,62 +146,78 @@ moonSpecialViewer.addEventListener("touchstart", (e) => {
 });
 
 moonSpecialViewer.addEventListener("touchend", (e) => {
+
   touchEndX = e.changedTouches[0].screenX;
 
   const diff = touchEndX - touchStartX;
 
   if (diff > 50) {
+
     if (moonSpecialIndex > 0) {
       fadeChangeMoonImage(moonSpecialIndex - 1);
     }
+
   } else if (diff < -50) {
-    if (moonSpecialIndex < moonImagesReversed.length - 1) {
+
+    if (moonSpecialIndex < displayMoonData.length - 1) {
       fadeChangeMoonImage(moonSpecialIndex + 1);
     }
+
   }
+
 });
 
 // ================================
 // ボタン制御
 // ================================
 function updateMoonButtons() {
-  moonSpecialPrev.disabled = (moonSpecialIndex === 0);
-  moonSpecialPrev.style.opacity = moonSpecialPrev.disabled ? 0.4 : 1;
 
-  moonSpecialNext.disabled = (moonSpecialIndex >= moonImagesReversed.length - 1);
-  moonSpecialNext.style.opacity = moonSpecialNext.disabled ? 0.4 : 1;
+  moonSpecialPrev.disabled = (moonSpecialIndex === 0);
+  moonSpecialPrev.style.opacity =
+    moonSpecialPrev.disabled ? 0.4 : 1;
+
+  moonSpecialNext.disabled =
+    (moonSpecialIndex >= displayMoonData.length - 1);
+
+  moonSpecialNext.style.opacity =
+    moonSpecialNext.disabled ? 0.4 : 1;
 }
 
+// ================================
+// 画像切替
+// ================================
 function fadeChangeMoonImage(newIndex) {
 
-  // どちら方向に動くか判定
-  const direction = (newIndex > moonSpecialIndex) ? "right" : "left";
+  const direction =
+    (newIndex > moonSpecialIndex) ? "right" : "left";
 
-  // 既存アニメーションのリセット
-  moonSpecialImg.classList.remove("moon-slide-in-right", "moon-slide-in-left");
+  moonSpecialImg.classList.remove(
+    "moon-slide-in-right",
+    "moon-slide-in-left"
+  );
 
-  // フェードアウト開始
   moonSpecialImg.style.opacity = 0;
 
   setTimeout(() => {
 
     moonSpecialIndex = newIndex;
 
-    moonSpecialImg.src = moonImagesReversed[moonSpecialIndex];
-    moonSpecialCaption.innerText =
-      `${moonCaptionsReversed[moonSpecialIndex]}（${moonSpecialIndex + 1}/${moonImagesReversed.length}）`;
+    const currentData =
+      displayMoonData[moonSpecialIndex];
 
-    // アニメーション再適用のためのリセット
+    moonSpecialImg.src = currentData.image;
+
+    moonSpecialCaption.innerText =
+      `${buildMoonCaption(currentData)}（${moonSpecialIndex + 1}/${displayMoonData.length}）`;
+
     void moonSpecialImg.offsetWidth;
 
-    // 方向に応じてクラス付与
     if (direction === "right") {
       moonSpecialImg.classList.add("moon-slide-in-right");
     } else {
       moonSpecialImg.classList.add("moon-slide-in-left");
     }
 
-    // フェードイン
     moonSpecialImg.style.opacity = 1;
 
     updateMoonButtons();
@@ -179,22 +231,24 @@ function fadeChangeMoonImage(newIndex) {
 function openMoonSpecialViewer() {
 
   moonSpecialViewer.style.display = "flex";
+
   moonSpecialIndex = 0;
 
-  // 最初の画像と説明文
-  moonSpecialImg.src = moonImagesReversed[0];
+  const currentData = displayMoonData[0];
+
+  moonSpecialImg.src = currentData.image;
+
   moonSpecialCaption.innerText =
-    `${moonCaptionsReversed[0]}（1/${moonImagesReversed.length}）`;
+    `${buildMoonCaption(currentData)}（1/${displayMoonData.length}）`;
 
   updateMoonButtons();
 
-if (soundEnabled) {
-  soundKirakira.currentTime = 0;
-  soundKirakira.volume = 0.2; //音量調整（最大1.0‐最小0.0）
-  soundKirakira.play();
-}
+  if (soundEnabled) {
+    soundKirakira.currentTime = 0;
+    soundKirakira.volume = 0.2;
+    soundKirakira.play();
+  }
 
-  // 星の瞬きエフェクト（星座ビューアと共通）
   playStarTwinkle();
 }
 
@@ -202,18 +256,22 @@ if (soundEnabled) {
 // 次へ
 // ================================
 moonSpecialNext.onclick = () => {
-  if (moonSpecialIndex < moonImagesReversed.length - 1) {
+
+  if (moonSpecialIndex < displayMoonData.length - 1) {
     fadeChangeMoonImage(moonSpecialIndex + 1);
   }
+
 };
 
 // ================================
 // 前へ
 // ================================
 moonSpecialPrev.onclick = () => {
+
   if (moonSpecialIndex > 0) {
     fadeChangeMoonImage(moonSpecialIndex - 1);
   }
+
 };
 
 // ================================
