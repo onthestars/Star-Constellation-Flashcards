@@ -60,6 +60,18 @@ const specialPhotos = {
   },
 
   // ▼夏の星座
+    "Aquila": {
+    normal: [
+      "Aquila-noline-pic01.jpg"
+    ],
+    lines: [
+      "Aquila-lines-pic01.jpg"
+    ],
+    caption: [
+      "田を飛び立つわし座／20206年10月9日／大阪府高槻市山中"
+    ]
+  },
+
   "Ophiuchus": {
     normal: [
       "Ophiuchus-noline-pic01.jpg"
