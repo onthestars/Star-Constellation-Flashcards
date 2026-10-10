@@ -7,6 +7,7 @@
 // 大文字小文字は厳密一致
 const specialPhotos = {
 
+  // 春の星座
   "Ursa-Minor": {
     normal: [
       "Ursa-Minor-noline-pic01.jpg",
@@ -58,6 +59,7 @@ const specialPhotos = {
     ]
   },
 
+  // 夏の星座
   "Ophiuchus": {
     normal: [
       "Ophiuchus-noline-pic01.jpg"
@@ -109,6 +111,7 @@ const specialPhotos = {
     ]
   },
 
+  // 秋の星座
   "Pegasus": {
     normal: [
       "Pegasus-nolines-pic01.jpg"
@@ -208,6 +211,7 @@ const specialPhotos = {
     ]
   },
 
+  // 冬の星座
   "Gemini": {
     normal: [
       "Gemini-noline-pic01.jpg"
@@ -249,17 +253,18 @@ const specialPhotos = {
 
   "Taurus": {
     normal: [
-      "Taurus-noline-pic01.jpg",
-            "Taurus-noline-pic02.jpg"
+            "Perseus-Taurus-noline-pic01.jpg",
+      "Taurus-noline-pic02.jpg"
+
     ],
     lines: [
-      "Taurus-lines-pic01.jpg",
-            "Taurus-lines-pic02.jpg"
+            "Perseus-Taurus-lines-pic01.jpg",
+      "Taurus-lines-pic02.jpg"
 
     ],
     caption: [
-      "2025年12月14日／紀伊半島中部／おうし座（ふたご座流星）",
-            "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）"
+      "2025年12月14日／紀伊半島中部／ペルセウス座とおうし座（ふたご座流星）",
+      "2025年12月14日／紀伊半島中部／おうし座（ふたご座流星）"
     ]
   },
   
