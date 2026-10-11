@@ -95,6 +95,20 @@ const moonData = [
     location: "大阪府吹田市千里万博公園",
     photographer: "K-A-Z"
   },
+        {
+    image: "image/moon/Special/Moon-pic020.jpg",
+    caption: "部分月食と箕面の町",
+    date: "2021年11月19日",
+    location: "大阪府箕面市",
+    photographer: "K-A-Z"
+  },  
+ {
+    image: "image/moon/Special/Moon-pic021.jpg",
+    caption: "概ね皆既月食",
+    date: "2021年11月19日",
+    location: "大阪府箕面市",
+    photographer: "K-A-Z"
+  },
 ];
 
 // ▼ 配列シャッフル
