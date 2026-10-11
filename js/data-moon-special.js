@@ -105,4 +105,11 @@ const moonData = [
     location: "大阪府箕面市",
     photographer: "K-A-Z"
   },
+   {
+    image: "image/moon/Special/Moon-pic022.jpg",
+    caption: "中秋の名月",
+    date: "2021年9月22日",
+    location: "大阪府吹田市千里ニュータウン",
+    photographer: "K-A-Z"
+  },
 ];
