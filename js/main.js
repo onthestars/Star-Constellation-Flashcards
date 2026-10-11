@@ -160,6 +160,43 @@ window.addEventListener("load", () => {
   updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn);
 });
 
+// ▼ 凡例へ移動
+function jumpToExplanatoryNote() {
+
+  viewer.classList.remove(
+    "fade-out",
+    "fade-in",
+    "slide-out-left",
+    "slide-out-right"
+  );
+
+  void viewer.offsetWidth;
+
+  viewer.classList.add("fade-out");
+
+  setTimeout(() => {
+
+    index = 1;
+    isBack = false;
+    isFinalNull = false;
+
+    viewer.classList.remove("fade-out");
+
+    void viewer.offsetWidth;
+
+    viewer.classList.add("fade-in");
+
+    updateViewer(
+      index,
+      isBack,
+      viewer,
+      specialBtn,
+      prevBtn,
+      nextBtn
+    );
+
+  }, 300);
+}
 // Special Thanks
 document.getElementById("specialThanksBtn").addEventListener("click", () => {
   window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
