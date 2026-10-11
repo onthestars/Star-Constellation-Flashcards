@@ -26,14 +26,28 @@ function startMoonOrbitSequence() {
         "moon4-new.png"
     ];
 
-    let currentPhase = 0;
+// ▼ 開始月相をランダム化
+let currentPhase = Math.floor(Math.random() * phases.length);
 
     function runPhase(phaseIndex) {
+        
+        // ▼ スーパームーン判定（満月時のみ）
+const isSuperMoon =
+    phases[phaseIndex] === "moon1-full.png" &&
+    Math.random() < 0.05; // 確率（例0.05→5%）
 
         // フェードイン準備
         moon.style.transition = "opacity 1.5s ease";
         moon.style.opacity = 0;
         moon.src = "image/common/" + phases[phaseIndex];
+
+        // ▼ スーパームーン演出
+if (isSuperMoon) {
+    moon.style.filter =
+        "brightness(1.25) drop-shadow(0 0 12px rgba(255,240,180,0.8))";
+} else {
+    moon.style.filter = "";
+}
 
         // フェードイン開始
         requestAnimationFrame(() => {
@@ -60,7 +74,13 @@ function startMoonOrbitSequence() {
 
     const orbitDeg = -(theta - Math.PI/2) * (180 / Math.PI) / 3;
     const rotateDeg = baseDeg + orbitDeg;
-    moon.style.transform = `rotate(${rotateDeg}deg)`;
+if (isSuperMoon) {
+    moon.style.transform =
+        `rotate(${rotateDeg}deg) scale(1.15)`;
+} else {
+    moon.style.transform =
+        `rotate(${rotateDeg}deg)`;
+}
 
     if (theta < 0.3 && !fadeOutStarted) {
         fadeOutStarted = true;
