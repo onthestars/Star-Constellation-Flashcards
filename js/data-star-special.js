@@ -63,7 +63,19 @@ const specialPhotos = {
   },
 
   // ▼夏の星座
-    "Aquila": {
+      "Lyra": {
+    noline: [
+      "Lyra-noline-pic01.jpg"
+    ],
+    lines: [
+      "Lyra-lines-pic01.jpg"
+    ],
+    caption: [
+      "こと座（ベガ＝織姫星）／2026年7月12日／兵庫県猪名川町山中"
+    ]
+  },
+  
+      "Aquila": {
     noline: [
       "Aquila-noline-pic01.jpg"
     ],
@@ -71,7 +83,7 @@ const specialPhotos = {
       "Aquila-lines-pic01.jpg"
     ],
     caption: [
-      "田を飛び立つわし座／20206年10月9日／大阪府高槻市山中"
+      "田を飛び立つわし座／2026年10月9日／大阪府高槻市山中"
     ]
   },
 
