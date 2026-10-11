@@ -5,6 +5,9 @@
 let animationId = null;   // アニメーションID
 let resizeTimer = null;   // resize連打対策
 
+// ▼ 前回の満月が特殊イベントか
+let lastSpecialMoon = false;
+
 function startMoonOrbitSequence() {
     const moon = document.getElementById("moon");
 
@@ -29,17 +32,47 @@ function startMoonOrbitSequence() {
 // ▼ 開始月相をランダム化
 let currentPhase = Math.floor(Math.random() * phases.length);
 
-    function runPhase(phaseIndex) {
-        
-        // ▼ スーパームーン判定（満月時のみ）
-const isSuperMoon =
-    phases[phaseIndex] === "moon1-full.png" &&
-    Math.random() < 0.05; // 確率（例0.05→5%）
+function runPhase(phaseIndex) {
 
-        // フェードイン準備
-        moon.style.transition = "opacity 1.5s ease";
-        moon.style.opacity = 0;
-        moon.src = "image/common/" + phases[phaseIndex];
+    // ▼ 表示する月画像
+    let moonImage = phases[phaseIndex];
+
+    // ▼ スーパームーン判定
+    let isSuperMoon = false;
+
+    // ▼ 今回特殊満月か
+    let isSpecialMoon = false;
+
+    // ▼ 満月イベント抽選
+    if (moonImage === "moon1-full.png") {
+
+        // 前回特殊満月なら今回は通常満月固定
+        if (!lastSpecialMoon) {
+
+            const rand = Math.random();
+
+            // 5% スーパームーン
+            if (rand < 0.03) {
+
+                isSuperMoon = true;
+                isSpecialMoon = true;
+
+            // 10% ハーベストムーン
+            } else if (rand < 0.08) {
+
+                moonImage = "moon-harvest.png";
+                isSpecialMoon = true;
+            }
+        }
+
+// ▼ 特殊満月が出たら次回の満月抽選を1回休み
+lastSpecialMoon = isSpecialMoon;
+    }
+
+    // フェードイン準備
+    moon.style.transition = "opacity 1.5s ease";
+    moon.style.opacity = 0;
+    moon.src = "image/common/" + moonImage;
 
         // ▼ スーパームーン演出
 if (isSuperMoon) {
