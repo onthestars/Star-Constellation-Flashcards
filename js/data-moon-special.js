@@ -112,4 +112,26 @@ const moonData = [
     location: "大阪府吹田市千里ニュータウン",
     photographer: "K-A-Z"
   },
+     {
+    image: "image/moon/Special/Moon-pic023.jpg",
+    caption: "冷めない夜に、狂った月光",
+    date: "2020年8月24日",
+    location: "大阪府吹田市千里ニュータウン",
+    photographer: "K-A-Z"
+  },
+       {
+    image: "image/moon/Special/Moon-pic024.jpg",
+    caption: "この形のお月さんが、アザラシにしか見えなくて。",
+    date: "2024年8月17日頃",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+       {
+    image: "image/moon/Special/Moon-pic025.jpg",
+    caption: "今夜、月にクマさんがいました。",
+    date: "2025年6月6日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+
 ];
