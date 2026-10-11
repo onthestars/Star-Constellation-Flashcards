@@ -51,14 +51,14 @@ function runPhase(phaseIndex) {
 
             const rand = Math.random();
 
-            // 5% スーパームーン
-            if (rand < 0.03) {
+            // スーパームーン
+            if (rand < 0.03) { // 出現率設定
 
                 isSuperMoon = true;
                 isSpecialMoon = true;
 
-            // 10% ハーベストムーン
-            } else if (rand < 0.08) {
+            // ハーベストムーン
+            } else if (rand < 0.10) { //出現率設定
 
                 moonImage = "moon-harvest.png";
                 isSpecialMoon = true;
