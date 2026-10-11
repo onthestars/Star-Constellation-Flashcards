@@ -75,7 +75,7 @@ const moonData = [
     caption: "大人が子どもの頭を両手で優しくなでているように見えたフラワームーン",
     date: "2025年5月13日",
     location: "大阪府吹田市千里ニュータウン",
-    photographer: "K-A-Z"
+    photographer: "筏 正明さん"
   },
       {
     image: "image/moon/Special/Moon-pic019.jpg",
