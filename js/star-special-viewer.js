@@ -6,7 +6,7 @@ soundKirakira.volume = 0.2;   // ★ 音量調節（最大1.0-最小0.0）
 
 // Special Viewer（写真ビューアー）
 let specialIndex = 0;
-let specialMode  = "normal";
+let specialMode  = "noline";
 let savedIndex   = null;
 let savedIsBack  = null;
 
@@ -61,7 +61,7 @@ function updateSpecialButtons() {
     return;
   }
 
-  const total = specialPhotos[starName].normal.length;
+  const total = specialPhotos[starName].noline.length;
   specialPrev.disabled = (specialIndex === 0);
   specialPrev.style.opacity = (specialIndex === 0 ? 0.4 : 1);
   specialNext.disabled = (specialIndex >= total - 1);
@@ -75,28 +75,15 @@ specialBtn.onclick = () => {
   savedIndex = index;
   savedIsBack = isBack;
   specialIndex = 0;
-  specialMode  = "normal";
+  specialMode  = "noline";
 
   const starName = getStarNameFromIndex(index);
   if (!starName || !specialPhotos[starName]) return;
 
 const folder = getSpecialFolder(savedIndex);
-  specialImg.src = folder + specialPhotos[starName].normal[0];
+  specialImg.src = folder + specialPhotos[starName].noline[0];
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
-
-//   // 月専用のSpecialビューワー
-//   document.getElementById("moon").onclick = () => {
-//     savedIndex = "moon";
-//     specialIndex = 0;
-//     specialMode = "normal";
-
-//     const starName = "Moon";
-//     specialImg.src = "image/special/moon/" + specialPhotos[starName].normal[0];
-
-//     specialViewer.style.display = "flex";
-//     updateSpecialButtons();
-// };
 
   // キラキラ音（音声ON時のみ）
   if (soundEnabled) {
@@ -143,27 +130,43 @@ function applySpecialAnimation() {
   }
 }
 
-// 星座線あり
+// ▼ 星座線あり
 specialLines.onclick = () => {
   specialMode = "lines";
-  const starName = getStarNameFromIndex(savedIndex);
-  if (!starName || !specialPhotos[starName]) return;
-const folder = getSpecialFolder(savedIndex);
 
-  specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
-  specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
+  const starName = getStarNameFromIndex(savedIndex);
+
+  if (!starName || !specialPhotos[starName]) return;
+
+  const folder = getSpecialFolder(savedIndex);
+
+  specialImg.src =
+    folder + specialPhotos[starName].lines[specialIndex];
+
+  specialCaption.innerHTML =
+    specialPhotos[starName].caption[specialIndex]
+      .replace(/　/g, "<br>");
+
   updateSpecialButtons();
 };
 
-// 星座線なし
+// ▼ 星座線なし
 specialClear.onclick = () => {
-  specialMode = "normal";
-  const starName = getStarNameFromIndex(savedIndex);
-  if (!starName || !specialPhotos[starName]) return;
-const folder = getSpecialFolder(savedIndex);
+  specialMode = "noline";
 
-  specialImg.src = folder + specialPhotos[starName].lines[specialIndex];
-  specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
+  const starName = getStarNameFromIndex(savedIndex);
+
+  if (!starName || !specialPhotos[starName]) return;
+
+  const folder = getSpecialFolder(savedIndex);
+
+  specialImg.src =
+    folder + specialPhotos[starName].noline[specialIndex];
+
+  specialCaption.innerHTML =
+    specialPhotos[starName].caption[specialIndex]
+      .replace(/　/g, "<br>");
+
   updateSpecialButtons();
 };
 
@@ -173,13 +176,13 @@ specialNext.onclick = () => {
   if (!starName || !specialPhotos[starName]) return;
 const folder = getSpecialFolder(savedIndex);
 
-  if (specialIndex < specialPhotos[starName].normal.length - 1) {
+  if (specialIndex < specialPhotos[starName].noline.length - 1) {
     specialIndex++;
-    specialMode = "normal";
+    specialMode = "noline";
     spAnimationClass = "sp-slide-next";
     applySpecialAnimation();
 
-    specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
+    specialImg.src = folder + specialPhotos[starName].noline[specialIndex];
     specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
   }
 
@@ -194,11 +197,11 @@ const folder = getSpecialFolder(savedIndex);
 
   if (specialIndex > 0) {
     specialIndex--;
-    specialMode = "normal";
+    specialMode = "noline";
     spAnimationClass = "sp-slide-prev";
     applySpecialAnimation();
 
-    specialImg.src = folder + specialPhotos[starName].normal[specialIndex];
+    specialImg.src = folder + specialPhotos[starName].noline[specialIndex];
     specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
   }
 
