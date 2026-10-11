@@ -71,7 +71,7 @@ const specialPhotos = {
       "Lyra-lines-pic01.jpg"
     ],
     caption: [
-      "こと座（ベガ＝織姫星）／2026年7月12日／兵庫県猪名川町山中"
+      "こと座（1等星のベガ＝織姫星）／2026年7月12日／兵庫県猪名川町山中"
     ]
   },
   
@@ -366,6 +366,18 @@ const specialPhotos = {
     ],
     caption: [
       "吊り橋とオリオン／2025年1月26日／紀伊半島南部"
+    ]
+  },
+
+    "Canis-Major": {
+    noline: [
+      "Canis-Major-noline-pic01.jpg"
+    ],
+    lines: [
+      "Canis-Major-lines-pic01.jpg"
+    ],
+    caption: [
+      "ダム湖とおおいぬ座（1等星のシリウスは太陽を除き、全天で最も明るく見える恒星）／2024年2月9日／紀伊半島南部"
     ]
   },
 
