@@ -136,5 +136,19 @@ const moonData = [
     location: "大阪府",
     photographer: "筏 正明さん"
   },
+         {
+    image: "image/moon/Special/Moon-pic026.jpg",
+    caption: "中秋の名月",
+    date: "2025年10月6日",
+    location: "大阪府摂津市",
+    photographer: "K-A-Z"
+  },
+           {
+    image: "image/moon/Special/Moon-pic026.jpg",
+    caption: "中秋の名月（上）と翌日の月",
+    date: "2020年10月2日、3日",
+    location: "大阪府吹田市千里ニュータウン",
+    photographer: "K-A-Z"
+  },
 
 ];
