@@ -7,8 +7,8 @@ const moonData = [
     image: "image/moon/Special/Moon-pic001.jpg",
     caption: "皆既月食と、みずがめ座81番星（6.23等星、右下の白い点）",
     date: "2025年9月8日未明",
-    location: "筏 正明さん",
-    photographer: "K-A-Z"
+    location: "大阪府",
+    photographer: "筏 正明さん"
   },
   {
     image: "image/moon/Special/Moon-pic002.jpg",
