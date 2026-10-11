@@ -81,6 +81,20 @@ const moonData = [
     location: "大阪府吹田市千里ニュータウン",
     photographer: "K-A-Z"
   },
+      {
+    image: "image/moon/Special/Moon-pic019.jpg",
+    caption: "太陽の塔と、皆既食を終えた月",
+    date: "2025年9月8日",
+    location: "大阪府吹田市千里万博公園",
+    photographer: "K-A-Z"
+  },
+      {
+    image: "image/moon/Special/Moon-pic018.jpg",
+    caption: "太陽の塔と皆既月食",
+    date: "2025年9月8日",
+    location: "大阪府吹田市千里万博公園",
+    photographer: "K-A-Z"
+  },
 ];
 
 // ▼ 配列シャッフル
