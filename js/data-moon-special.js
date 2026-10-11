@@ -144,7 +144,7 @@ const moonData = [
     photographer: "K-A-Z"
   },
            {
-    image: "image/moon/Special/Moon-pic026.jpg",
+    image: "image/moon/Special/Moon-pic027.jpg",
     caption: "中秋の名月（上）と翌日の月",
     date: "2020年10月2日、3日",
     location: "大阪府吹田市千里ニュータウン",
