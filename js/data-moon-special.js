@@ -172,4 +172,12 @@ const moonData = [
     photographer: "K-A-Z"
   },
 
+                 {
+    image: "image/moon/Special/Moon-pic031.jpg",
+    caption: "‘ゴースト’も月のうち",
+    date: "2025年3月23日",
+    location: "紀伊半島南部",
+    photographer: "K-A-Z"
+  },
+
 ];
