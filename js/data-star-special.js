@@ -203,7 +203,7 @@ const specialPhotos = {
             "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
     ],
     caption: [
-      "2こうま座／025年11月16日／紀伊半島南部",
+      "こうま座／025年11月16日／紀伊半島南部",
       "伐採地の立木と、こうま座（上）、みずがめ座（中）、やぎ座（下）／2025年11月16日／紀伊半島南部"
     ]
   },
@@ -292,7 +292,7 @@ const specialPhotos = {
             "Triangulum-Aries-lines-pic01.jpg"
     ],
     caption: [
-            "(左から）＠ペルセウス座、さんかく座、おひつじ座／2026年10月9日／高槻市山中",
+            "(左から）ペルセウス座、さんかく座、おひつじ座／2026年10月9日／高槻市山中",
             "さんかく座（上）とおひつじ座／2026年10月9日／高槻市山中"
     ]
   },
@@ -322,21 +322,6 @@ const specialPhotos = {
     ],
     caption: [
       "谷を昇るぎょしゃ座／2026年10月9日／大阪府高槻市山中"
-    ]
-  },
-
-  "Equuleus": {
-    noline: [
-      "Equuleus-noline-pic01.jpg",
-      "Aquarius-Capricornus-Equuleus-noline-pic01.jpg"
-    ],
-    lines: [
-      "Equuleus-lines-pic01.jpg",
-            "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
-    ],
-    caption: [
-      "こうま座／2025年11月16日／紀伊半島南部",
-      "伐採地の立木と、こうま座（上）、みずがめ座（中）、やぎ座（下）／2025年11月16日／紀伊半島南部"
     ]
   },
 
