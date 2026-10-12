@@ -126,15 +126,21 @@ const specialPhotos = {
   "Summer-Triangle": {
     noline: [
       "Summer-Triangle-noline-pic01.jpg",
-      "Summer-Triangle-noline-pic02.jpg"
+      "Summer-Triangle-noline-pic02.jpg",
+            "Summer-Triangle-noline-pic03.jpg",
+                  "Summer-Triangle-noline-pic04.jpg"
     ],
     lines: [
       "Summer-Triangle-lines-pic01.jpg",
-      "Summer-Triangle-lines-pic02.jpg"
+      "Summer-Triangle-lines-pic02.jpg",
+            "Summer-Triangle-lines-pic03.jpg",
+      "Summer-Triangle-lines-pic04.jpg"
     ],
     caption: [
       "夏の大三角とペルセウス座流星群／2026年8月13～14日／紀伊半島南部",
-      "夏の大三角とペルセウス座流星群／2026年8月13～14日／紀伊半島南部"
+      "夏の大三角とペルセウス座流星群／2026年8月13～14日／紀伊半島南部",
+            "夏の大三角／撮影日不明／大阪府吹田市千里ニュータウン",
+                        "夏の大三角／2026年10月11日／大阪府高槻市山中"
     ]
   },
 
