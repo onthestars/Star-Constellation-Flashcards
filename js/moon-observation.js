@@ -1,230 +1,286 @@
-// moon-observation.js
+(function () {
+  "use strict";
 
-// ▼ 月情報マスター
-const moonDefinitions = [
+  const SYNODIC_MONTH = 29.530588853;
 
-  {
-    icon: "moon-phase-01.png",
-    alt: "新月",
-    name: "新月",
-    ruby: "しんげつ",
-    rank: "★★★★★",
-    observeTime: "日没後～明け方"
-  },
+  // 大阪の座標
+  const LATITUDE = 34.6937;
+  const LONGITUDE = 135.5023;
 
-  {
-    icon: "moon-phase-02.png",
-    alt: "繊月",
-    name: "繊月",
-    ruby: "せんげつ",
-    rank: "★★★★★",
-    observeTime: "日没後～明け方"
-  },
+  const MOON_IMAGES = [
+    "moon-phase-01.png", // 新月
+    "moon-phase-02.png", // 満ちていく月
+    "moon-phase-03.png", // 上弦の月
+    "moon-phase-04.png", // 満ちていく月
+    "moon-phase-05.png", // 満月
+    "moon-phase-06.png", // 欠けていく月
+    "moon-phase-07.png", // 下弦の月
+    "moon-phase-08.png"  // 欠けていく月
+  ];
 
-  {
-    icon: "moon-phase-02.png",
-    alt: "三日月",
-    name: "三日月",
-    ruby: "みかづき",
-    rank: "★★★★★",
-    observeTime: "日没後～明け方"
-  },
-
-  {
-    icon: "moon-phase-03.png",
-    alt: "上弦の月",
-    name: "上弦の月",
-    ruby: "じょうげんのつき",
-    rank: "★★★☆☆",
-    observeTime: "0時頃～明け方"
-  },
-
-  {
-    icon: "moon-phase-04.png",
-    alt: "十三夜",
-    name: "十三夜",
-    ruby: "じゅうさんや",
-    rank: "★★☆☆☆",
-    observeTime: "22時頃～明け方"
-  },
-
-  {
-    icon: "moon-phase-05.png",
-    alt: "満月",
-    name: "満月",
-    ruby: "まんげつ",
-    rank: "★☆☆☆☆",
-    observeTime: "月の観察がおすすめ"
-  },
-
-  {
-    icon: "moon-phase-06.png",
-    alt: "十六夜",
-    name: "十六夜",
-    ruby: "いざよい",
-    rank: "★★☆☆☆",
-    observeTime: "23時頃～明け方"
-  },
-
-  {
-    icon: "moon-phase-06.png",
-    alt: "立待月",
-    name: "立待月",
-    ruby: "たちまちづき",
-    rank: "★★★☆☆",
-    observeTime: "22時頃～明け方"
-  },
-
-  {
-    icon: "moon-phase-06.png",
-    alt: "居待月",
-    name: "居待月",
-    ruby: "いまちづき",
-    rank: "★★★☆☆",
-    observeTime: "21時頃～明け方"
-  },
-
-  {
-    icon: "moon-phase-06.png",
-    alt: "寝待月",
-    name: "寝待月",
-    ruby: "ねまちづき",
-    rank: "★★★★☆",
-    observeTime: "20時頃～2時頃"
-  },
-
-  {
-    icon: "moon-phase-07.png",
-    alt: "更待月",
-    name: "更待月",
-    ruby: "ふけまちづき",
-    rank: "★★★★☆",
-    observeTime: "19時頃～2時頃"
-  },
-
-  {
-    icon: "moon-phase-07.png",
-    alt: "下弦の月",
-    name: "下弦の月",
-    ruby: "かげんのつき",
-    rank: "★★★★☆",
-    observeTime: "18時頃～2時頃"
-  },
-
-  {
-    icon: "moon-phase-08.png",
-    alt: "有明の月",
-    name: "有明の月",
-    ruby: "ありあけのつき",
-    rank: "★★★★★",
-    observeTime: "18時頃～1時頃"
-  },
-
-  {
-    icon: "moon-phase-08.png",
-    alt: "晦日月",
-    name: "晦日月",
-    ruby: "みそかづき",
-    rank: "★★★★★",
-    observeTime: "日没後～明け方"
+  function getReferenceDate(date) {
+    // 月齢を毎日、日本標準時の正午で計算する
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      12, 0, 0, 0
+    );
   }
 
-];
+  function getPreviousNewMoon(date) {
+    const referenceDate = getReferenceDate(date);
+    const searchStart = Astronomy.MakeTime(referenceDate);
 
-// ▼ 仮の月齢判定
-function getMoonInfoByAge(age) {
+    const newMoon = Astronomy.SearchMoonPhase(
+      0,
+      searchStart,
+      -SYNODIC_MONTH - 2
+    );
 
-  if (age < 1) return moonDefinitions[0];
-  if (age < 2.5) return moonDefinitions[1];
-  if (age < 5) return moonDefinitions[2];
-  if (age < 9) return moonDefinitions[3];
-  if (age < 14) return moonDefinitions[4];
-  if (age < 16) return moonDefinitions[5];
-  if (age < 17) return moonDefinitions[6];
-  if (age < 18) return moonDefinitions[7];
-  if (age < 19) return moonDefinitions[8];
-  if (age < 20) return moonDefinitions[9];
-  if (age < 22) return moonDefinitions[10];
-  if (age < 26) return moonDefinitions[11];
-  if (age < 29) return moonDefinitions[12];
-
-  return moonDefinitions[13];
-
-}
-
-// ▼ 月齢取得
-function getMoonAge() {
-
-  if (typeof Astronomy === "undefined") {
-    console.error("Astronomy Engine が読み込まれていません。");
-    return 0;
+    return newMoon.date;
   }
 
-  const date = new Date();
+  function getMoonAge(date) {
+    const referenceDate = getReferenceDate(date);
+    const newMoonDate = getPreviousNewMoon(referenceDate);
 
-  // 月の位相角（度）
-  const phase = Astronomy.MoonPhase(date);
+    return (
+      (referenceDate.getTime() - newMoonDate.getTime()) /
+      (1000 * 60 * 60 * 24)
+    );
+  }
 
-  // 月齢（日数）の近似値
-  return phase / 360 * 29.530588853;
+
+  // 月相角から8種類の月画像を判定
+  function getMoonPhaseIndex(date) {
+    const referenceDate = getReferenceDate(date);
+    const time = Astronomy.MakeTime(referenceDate);
+    const phaseAngle = Astronomy.MoonPhase(time);
+
+    return Math.round(phaseAngle / 45) % 8;
+  }
+
+
+  // 指定日の間に起きた主要な月相を調べる
+  function getExactPhaseName(date) {
+    const phaseEvents = [
+      { angle: 0, name: "新月" },
+      { angle: 90, name: "上弦の月" },
+      { angle: 180, name: "満月" },
+      { angle: 270, name: "下弦の月" }
+    ];
+
+    const nextMidnight = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1,
+      0, 0, 0, 0
+    );
+
+    const searchStart = Astronomy.MakeTime(nextMidnight);
+
+    for (const event of phaseEvents) {
+      // 翌日0時から2日前までさかのぼってイベントを検索
+      const phaseTime = Astronomy.SearchMoonPhase(
+        event.angle,
+        searchStart,
+        -2
+      );
+
+      if (!phaseTime) {
+        continue;
+      }
+
+      const eventDate = phaseTime.date;
+
+      // 天文現象が発生した日だけ、主要な月相名を返す
+      if (
+        eventDate.getFullYear() === date.getFullYear() &&
+        eventDate.getMonth() === date.getMonth() &&
+        eventDate.getDate() === date.getDate()
+      ) {
+        return event.name;
+      }
+    }
+
+    return null;
+  }
+
+  // 主要な月相の日以外は、満ち欠けの方向で名称を決める
+  function getPhaseName(date) {
+    const exactName = getExactPhaseName(date);
+
+    if (exactName) {
+      return exactName;
+    }
+
+    const time = Astronomy.MakeTime(getReferenceDate(date));
+    const phaseAngle = Astronomy.MoonPhase(time);
+
+    return phaseAngle < 180
+      ? "満ちていく月"
+      : "欠けていく月";
+  }
+
+
+  function getObservationRating(age) {
+    // 月齢を基準にした星空観測度
+    const ageInCycle = ((age % SYNODIC_MONTH) + SYNODIC_MONTH)
+      % SYNODIC_MONTH;
+
+    let stars;
+    let message;
+
+    if (ageInCycle < 3 || ageInCycle >= 22.5) {
+      stars = 5;
+      message = "星空観測にとても適しています";
+    } else if (ageInCycle < 6) {
+      stars = 4;
+      message = "星空観測に適しています";
+    } else if (ageInCycle < 8) {
+      stars = 3;
+      message = "星空観測に比較的適しています";
+    } else if (ageInCycle < 11) {
+      stars = 2;
+      message = "月明かりの影響が出始めます";
+    } else if (ageInCycle < 14) {
+      stars = 1;
+      message = "月明かりの影響が大きくなります";
+    } else if (ageInCycle < 17) {
+      stars = 0;
+      message = "月明かりの影響が最も大きい時期です";
+    } else if (ageInCycle < 20) {
+      stars = 1;
+      message = "月明かりの影響が大きくなります";
+    } else if (ageInCycle < 22.5) {
+      stars = 2;
+      message = "月明かりの影響が少しずつ小さくなります";
+    }
+
+    return {
+      stars: "★".repeat(stars) + "☆".repeat(5 - stars),
+      message: message
+    };
+  }
+
+  function renderMoonObservation() {
+    const content = document.getElementById("moon-observation-content");
+
+    if (!content) {
+      return;
+    }
+
+    if (typeof Astronomy === "undefined") {
+      content.textContent = "月の情報を読み込めませんでした。";
+      return;
+    }
+
+    try {
+      // const today = new Date(); // 本日の年月日を取得
+      const today = new Date(2026, 9, 12); // テスト用年月日 ※月は、1月が0,2月が1,3月が2…である
+
+      const age = getMoonAge(today);
+
+// 月相角を使って画像と月の名称を判定
+const phaseIndex = getMoonPhaseIndex(today);
+
+// 実際の月相イベントの日付から表示名を決める
+const phaseName = getPhaseName(today);
+
+const rating = getObservationRating(age);
+
+// 新月・満月専用のコメント
+let observationMessage = rating.message;
+
+if (phaseName === "新月") {
+  observationMessage =
+    "月明かりが少なく、星空観測に絶好のタイミングです";
+} else if (phaseName === "満月") {
+  observationMessage =
+    "月が明るく輝く夜。月そのものの観察がおすすめです";
 }
 
-// ▼ 月情報取得
-function getMoonInfo() {
+const imagePath = "image/common/" + MOON_IMAGES[phaseIndex];
 
-  const age = getMoonAge();
 
-  return getMoonInfoByAge(age);
 
-}
+const dateText =
+  `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
 
-// ▼ 月情報表示
-function updateMoonObservation() {
+content.innerHTML = `
+  <div style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        line-height: 1.3;
+        font-size: 14px;
+      ">
+    <img
+      src="${imagePath}"
+      alt="${phaseName}"
+      style="
+        display: block;
+        flex: 0 0 64px; /* 横並びレイアウトで画像が占める幅 */
+        width: 48px; /* 月の幅 */
+        height: 48px; /* 月の高さ */
+        object-fit: contain;
+        margin: 0;
+        padding: 0;
+      "
+    >
 
-  const moonInfo = getMoonInfo();
+    <div style="min-width: 0; margin: 0; padding: 0;">
+      <div style="font-size:0.9em;margin: 0 0 3px 0;text-align: left;">
+        ${dateText}
+      </div>
 
-  const html = `
-    <div class="moon-line">
+      <div style="font-size:0.9em;margin: 0 0 3px 0;text-align: left;">
+        ${phaseName}（月齢 ${age.toFixed(1)}）
+      </div>
 
-      <img
-        src="image/common/${moonInfo.icon}"
-        class="moon-phase-icon"
-        alt="${moonInfo.alt}">
+      <div style="font-size:1.2em;margin: 8px 0 3px 0;text-align: left;">
+        星空観測度 ${rating.stars}
+      </div>
 
-      今夜は${moonInfo.name}(${moonInfo.ruby})
-
+      <div style="font-size:0.9em;margin: 0;text-align: left;">
+        ${observationMessage}
+      </div>
     </div>
+  </div>
+`;
 
-    <br>
 
-    星空観察ランク：${moonInfo.rank}<br>
-    おすすめ時間：${moonInfo.observeTime}
-  `;
-
-  const target =
-    document.getElementById("moon-observation-content");
-
-  if (target) {
-    target.innerHTML = html;
+    } catch (error) {
+      console.error("月の情報の取得に失敗しました:", error);
+      content.textContent = "月の情報を取得できませんでした。";
+    }
   }
 
-}
+  function initMoonObservationPanel() {
+    const panel = document.getElementById("moon-observation-panel");
+    const closeButton = document.getElementById("moon-panel-close");
 
-// ▼ 閉じるボタン
-function initMoonObservationPanel() {
+    if (closeButton && panel && !closeButton.dataset.initialized) {
+      closeButton.addEventListener("click", function () {
+        panel.style.display = "none";
+      });
 
-  const closeBtn =
-    document.getElementById("moon-panel-close");
-
-  const panel =
-    document.getElementById("moon-observation-panel");
-
-  if (!closeBtn || !panel) {
-    return;
+      closeButton.dataset.initialized = "true";
+    }
   }
 
-  closeBtn.addEventListener("click", () => {
-    panel.style.display = "none";
+  // 既存の main.js から呼び出せるようにする
+  window.updateMoonObservation = renderMoonObservation;
+  window.initMoonObservationPanel = initMoonObservationPanel;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMoonObservation();
+    initMoonObservationPanel();
   });
-
-}
+})();
