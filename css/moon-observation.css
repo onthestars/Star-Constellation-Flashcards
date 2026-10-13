@@ -28,6 +28,7 @@
 
 #moon-observation-content {
   font-size: 14px;
+    font-family: "Meiryo", sans-serif;
 }
 
 #moon-panel-close {
@@ -43,6 +44,7 @@
 
   font-size: 16px;
   font-weight: bold;
+    font-family:"Meiryo", sans-serif;
 
   cursor: pointer;
 }
@@ -61,6 +63,7 @@
   gap: 8px;
 
   font-size: 15px;
+    font-family: "Meiryo", sans-serif;
 }
 
 .moon-phase-icon {
