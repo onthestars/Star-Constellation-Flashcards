@@ -31,11 +31,13 @@
     font-family: "Meiryo", sans-serif;
 }
 
-#moon-panel-close {
+#moon-panel-close { /* 月齢表示スペースの閉じる×ボタン */
   position: absolute;
 
   top: 4px;
   right: 6px;
+
+  margin:0 0 4px 4px;
 
   background: none;
   border: none;
