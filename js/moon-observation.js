@@ -170,16 +170,16 @@ function getObservationRating(age) {
     // 主要な月相の日には専用メッセージを表示
     switch (phaseName) {
       case "新月":
-        return "月明かりの影響が最も少ない夜です。日没後から明け方にかけて、星空が広がるチャンス！";
+        return "日没後から明け方にかけ、満天の星空が広がるチャンス！";
 
       case "上弦の月":
-        return "満月へ向かう半月です。夜の後半、月が沈んでから星空が広がります。";
+        return "半月です。月が沈んでからの、夜の後半に望みがあります。";
 
       case "満月":
         return "星空よりも、明るく輝く月の観察にむきます。";
 
       case "下弦の月":
-        return "新月へ向かう半月です。月が昇る前の、夜の前半に星空が広がります。";
+        return "半月です。月が昇る前の、夜の前半に望みがあります。";
     }
 
     // 主要な月相の日以外は、月相角から案内を決める
@@ -191,14 +191,14 @@ function getObservationRating(age) {
     }
 
     if (phaseAngle < 135) {
-      return "夜の後半、月が沈んでから星空が広がります。";
+      return "夜の後半に、月が沈んでから星空が広がります。";
     }
 
     if (phaseAngle < 225) {
-      return "月の観察と同時に、星空観察が楽しめます。";
+      return "星空の観察は厳しいですが、月の観察が楽しめます。";
     }
 
-    return "月が昇る前の、夜の前半に星空が広がります。";
+      return "月が昇る前の、夜の前半に星空が広がります。";
   }
 
   function renderMoonObservation() {
@@ -325,7 +325,7 @@ const dateText =
     ${dateText}は、${phaseName}(月齢${age.toFixed(1)})
   </div>
 
-            <div style="font-size:1.1rem;font-weight:normal;margin: 8px 0 3px 0; text-align: left;">
+            <div style="font-size:1.1rem;font-weight:500;margin: 8px 0 6px 0; text-align: left;">
               星空レベル ${rating.stars}
             </div>
 
