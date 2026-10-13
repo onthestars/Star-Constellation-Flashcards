@@ -322,7 +322,10 @@ const dateText =
 
 <div style="min-width: 0; margin: 0; padding: 0;">
   <div style="font-size:0.9em;margin: 0 0 2px 0; text-align: left;">
-    ${dateText}は、${phaseName}(月齢${age.toFixed(1)})
+    ${dateText}は、
+      </div>
+      <div style="font-size:1.0em;margin: 0 0 2px 0; text-align: left;">
+    ${phaseName}(月齢${age.toFixed(1)})
   </div>
 
             <div style="font-size:1.1rem;font-weight:500;margin: 8px 0 6px 0; text-align: left;">
