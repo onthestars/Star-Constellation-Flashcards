@@ -22,6 +22,21 @@
             // 現在表示している観察対象日
   let selectedDate = null;
 
+  
+  // 月の日付移動時の効果音
+  const moonSelectSound = new Audio(
+    "sound/sound-select2.mp3"
+  );
+
+  moonSelectSound.volume = 0.3; // 月の上下ボタンボリューム
+
+  function playMoonSelectSound() {
+    moonSelectSound.currentTime = 0;
+    moonSelectSound.play().catch(function (error) {
+      console.warn("効果音を再生できませんでした:", error);
+    });
+  }
+
   // 月齢を計算する基準時刻（日本時間の正午）
   function getReferenceDate(date) {
     return new Date(
@@ -343,22 +358,24 @@ const dateText =
             // ▲ 翌日へ移動
       const nextButton = content.querySelector("#moon-date-next");
 
-      if (nextButton) {
-        nextButton.addEventListener("click", function () {
-          selectedDate.setDate(selectedDate.getDate() + 1);
-          renderMoonObservation();
-        });
-      }
+if (nextButton) {
+  nextButton.addEventListener("click", function () {
+    playMoonSelectSound();
+    selectedDate.setDate(selectedDate.getDate() + 1);
+    renderMoonObservation();
+  });
+}
 
       // ▼ 前日へ移動
       const previousButton = content.querySelector("#moon-date-previous");
 
-      if (previousButton) {
-        previousButton.addEventListener("click", function () {
-          selectedDate.setDate(selectedDate.getDate() - 1);
-          renderMoonObservation();
-        });
-      }
+if (previousButton) {
+  previousButton.addEventListener("click", function () {
+    playMoonSelectSound();
+    selectedDate.setDate(selectedDate.getDate() - 1);
+    renderMoonObservation();
+  });
+}
 
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
