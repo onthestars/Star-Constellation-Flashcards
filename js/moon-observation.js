@@ -355,27 +355,41 @@ const dateText =
         
       `;
 
-            // ▲ 翌日へ移動
+      // ▲ 翌日へ移動
       const nextButton = content.querySelector("#moon-date-next");
 
-if (nextButton) {
-  nextButton.addEventListener("click", function () {
-    playMoonSelectSound();
-    selectedDate.setDate(selectedDate.getDate() + 1);
-    renderMoonObservation();
-  });
-}
+      if (nextButton) {
+        nextButton.addEventListener("pointerdown", function (event) {
+          event.stopPropagation();
+        });
+
+        nextButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          playMoonSelectSound();
+          selectedDate.setDate(selectedDate.getDate() + 1);
+          renderMoonObservation();
+        });
+      }
 
       // ▼ 前日へ移動
       const previousButton = content.querySelector("#moon-date-previous");
 
-if (previousButton) {
-  previousButton.addEventListener("click", function () {
-    playMoonSelectSound();
-    selectedDate.setDate(selectedDate.getDate() - 1);
-    renderMoonObservation();
-  });
-}
+      if (previousButton) {
+        previousButton.addEventListener("pointerdown", function (event) {
+          event.stopPropagation();
+        });
+
+        previousButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          playMoonSelectSound();
+          selectedDate.setDate(selectedDate.getDate() - 1);
+          renderMoonObservation();
+        });
+      }
 
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
