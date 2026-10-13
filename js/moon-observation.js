@@ -191,14 +191,14 @@ function updateMoonObservation() {
         class="moon-phase-icon"
         alt="${moonInfo.alt}">
 
-      今夜は${moonInfo.name}（${moonInfo.ruby}）
+      今夜は${moonInfo.name}(${moonInfo.ruby})
 
     </div>
 
     <br>
 
     星空観察ランク：${moonInfo.rank}<br>
-    おすすめ時間帯：${moonInfo.observeTime}
+    おすすめ時間：${moonInfo.observeTime}
   `;
 
   const target =
