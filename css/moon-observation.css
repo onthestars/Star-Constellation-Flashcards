@@ -1,5 +1,18 @@
 /* moon-observation.css */
 
+#moon-date-previous, /* 月の上下の▲▼ボタンの当たり判定拡大 */
+#moon-date-next {
+  position: relative;
+  z-index: 10;
+}
+
+#moon-date-previous::before, /* 月の上下の▲▼ボタンの当たり判定拡大 */
+#moon-date-next::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
 #moon-observation-panel {
   position: fixed;
 
