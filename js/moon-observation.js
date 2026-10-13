@@ -289,9 +289,6 @@ const dateText =
   aria-label="前の日の月"
   title="前日"
               style="
-                width: 32px;
-                height: 18px;
-                padding: 0;
                 border: none;
                 background: transparent;
                 color: inherit;
@@ -355,41 +352,27 @@ const dateText =
         
       `;
 
-      // ▲ 翌日へ移動
+            // ▲ 前日へ移動
       const nextButton = content.querySelector("#moon-date-next");
 
-      if (nextButton) {
-        nextButton.addEventListener("pointerdown", function (event) {
-          event.stopPropagation();
-        });
+if (nextButton) {
+  nextButton.addEventListener("click", function () {
+    playMoonSelectSound();
+    selectedDate.setDate(selectedDate.getDate() + 1);
+    renderMoonObservation();
+  });
+}
 
-        nextButton.addEventListener("click", function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          playMoonSelectSound();
-          selectedDate.setDate(selectedDate.getDate() + 1);
-          renderMoonObservation();
-        });
-      }
-
-      // ▼ 前日へ移動
+      // ▼ 翌日へ移動
       const previousButton = content.querySelector("#moon-date-previous");
 
-      if (previousButton) {
-        previousButton.addEventListener("pointerdown", function (event) {
-          event.stopPropagation();
-        });
-
-        previousButton.addEventListener("click", function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          playMoonSelectSound();
-          selectedDate.setDate(selectedDate.getDate() - 1);
-          renderMoonObservation();
-        });
-      }
+if (previousButton) {
+  previousButton.addEventListener("click", function () {
+    playMoonSelectSound();
+    selectedDate.setDate(selectedDate.getDate() - 1);
+    renderMoonObservation();
+  });
+}
 
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
@@ -397,18 +380,24 @@ const dateText =
     }
   }
 
-  function initMoonObservationPanel() {
-    const panel = document.getElementById("moon-observation-panel");
-    const closeButton = document.getElementById("moon-panel-close");
+function initMoonObservationPanel() {
+  const panel = document.getElementById("moon-observation-panel");
+  const closeButton = document.getElementById("moon-panel-close");
 
-    if (closeButton && panel && !closeButton.dataset.initialized) {
-      closeButton.addEventListener("click", function () {
-        panel.style.display = "none";
-      });
-
-      closeButton.dataset.initialized = "true";
-    }
+  // 初回表示時にフェードイン
+  if (panel) {
+    panel.classList.add("moon-panel-fade-in");
   }
+
+  // 閉じるボタンの初期化
+  if (closeButton && panel && !closeButton.dataset.initialized) {
+    closeButton.addEventListener("click", function () {
+      panel.style.display = "none";
+    });
+
+    closeButton.dataset.initialized = "true";
+  }
+}
 
   // 既存の main.js から呼び出せるようにする
   window.updateMoonObservation = renderMoonObservation;
