@@ -267,12 +267,12 @@ const dateText =
             flex: 0 0 48px;
             gap: 0;
           ">
-            <!-- 上の▲：翌日へ -->
-            <button
-              type="button"
-              id="moon-date-next"
-              aria-label="次の日の月"
-              title="翌日"
+<!-- 上の▲：前の日へ -->
+<button
+  type="button"
+  id="moon-date-previous"
+  aria-label="前の日の月"
+  title="前日"
               style="
                 width: 32px;
                 height: 18px;
@@ -300,12 +300,12 @@ const dateText =
               "
             >
 
-            <!-- 下の▼：前日へ -->
-            <button
-              type="button"
-              id="moon-date-previous"
-              aria-label="前の日の月"
-              title="前日"
+<!-- 下の▼：翌日へ -->
+<button
+  type="button"
+  id="moon-date-next"
+  aria-label="次の日の月"
+  title="翌日"
               style="
                 width: 32px;
                 height: 18px;
@@ -325,7 +325,7 @@ const dateText =
     ${dateText}は、${phaseName}(月齢${age.toFixed(1)})
   </div>
 
-            <div style="font-size:1.1rem;font-weight:bold;margin: 8px 0 3px 0; text-align: left;">
+            <div style="font-size:1.1rem;font-weight:normal;margin: 8px 0 3px 0; text-align: left;">
               星空レベル ${rating.stars}
             </div>
 
