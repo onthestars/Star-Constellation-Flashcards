@@ -160,6 +160,10 @@ window.addEventListener("load", () => {
   updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn);
 });
 
+// ▼ 今夜の月ガイド
+updateMoonObservation();
+initMoonObservationPanel();
+
 // ▼ 凡例へ移動
 function jumpToExplanatoryNote() {
 
