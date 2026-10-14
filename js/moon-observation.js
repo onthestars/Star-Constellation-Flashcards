@@ -30,12 +30,19 @@
 
   moonSelectSound.volume = 0.3; // 月の上下ボタンボリューム
 
-  function playMoonSelectSound() {
-    moonSelectSound.currentTime = 0;
-    moonSelectSound.play().catch(function (error) {
-      console.warn("効果音を再生できませんでした:", error);
-    });
+function playMoonSelectSound() {
+
+  // ▼ サウンドOFFなら再生しない
+  if (!window.soundEnabled) {
+    return;
   }
+
+  moonSelectSound.currentTime = 0;
+
+  moonSelectSound.play().catch(function (error) {
+    console.warn("効果音を再生できませんでした:", error);
+  });
+}
 
   // 月齢を計算する基準時刻（日本時間の正午）
   function getReferenceDate(date) {
