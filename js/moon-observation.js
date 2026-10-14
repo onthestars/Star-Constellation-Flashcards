@@ -258,7 +258,7 @@ function getObservationRating(age) {
         "image/common/" + MOON_IMAGES[phaseIndex];
 
 const dateText =
-  `${String(today.getFullYear()).slice(-2)}年${today.getMonth() + 1}月${today.getDate()}日`;
+  `${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
 
       content.innerHTML = `
         <div style="
@@ -340,12 +340,18 @@ const dateText =
     ${phaseName}(月齢${age.toFixed(1)})
   </div>
 
-            <div style="font-size:1.1rem;font-weight:500;margin: 8px 0 6px 0; text-align: left;">
-              星空レベル ${rating.stars}
-            </div>
+<div style="font-size:1.1rem;font-weight:500;margin: 8px 0 6px 0; text-align: left;">
+  星空レベル
+  <span style="
+    color: rgb(255,215,0);
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
+  ">
+    ${rating.stars}
+  </span>
+</div>
 
             <div style="margin: 0; text-align: left;">
-              ${observationMessage}<span style="font-size:0.8em;"> ※天候などの環境による</span>
+              ${observationMessage}<span style="font-size:0.8em;"> ※天候などによる</span>
             </div>
           </div>
         </div>
