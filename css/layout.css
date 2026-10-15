@@ -25,6 +25,18 @@
     gap: 8px;
   }
 
+  /* ぴーとの星図ボタン：独立した上段 */
+.pete-chart-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 星図ボタンと操作ボタンの間隔 */
+.pete-chart-group + .control-group {
+  margin-top: 0;
+}
+
   /* 操作ボタン段（横並び） */
   .control-group {
     display: flex;
@@ -130,4 +142,9 @@
   .card-img {
     max-width: 800px;
   }
+}
+
+/* カードとボタン全体の位置調整 */
+#card-frame {
+  transform: translateY(20px);
 }
