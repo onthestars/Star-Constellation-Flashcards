@@ -184,15 +184,25 @@ function playMoonSelectSound() {
     0
   );
 
-  // 指定日の月の入り・月の出を取得
+  // 指定日の夜に対応する月の入り・月の出を取得
   function getMoonRiseSet(date, direction) {
-    const startOfDay = new Date(
+    // 観察対象日の18時を検索開始時刻とする
+    const searchStart = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
-      0, 0, 0, 0
+      18, 0, 0, 0
     );
 
+    // 翌日の正午を検索範囲の終了時刻とする
+    const searchEnd = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1,
+      12, 0, 0, 0
+    );
+
+    // 翌日午前0時（日付判定用）
     const nextDay = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -200,35 +210,35 @@ function playMoonSelectSound() {
       0, 0, 0, 0
     );
 
+    // 検索開始から最大1.5日以内のイベントを取得
     const event = Astronomy.SearchRiseSet(
       Astronomy.Body.Moon,
       MOON_OBSERVER,
       direction,
-      Astronomy.MakeTime(startOfDay),
-      2
+      Astronomy.MakeTime(searchStart),
+      1.5
     );
 
-    if (!event) {
+    // 月の出・月の入りが見つからない場合
+    if (!event || !event.date) {
       return null;
     }
 
     const eventDate = event.date;
+    const eventTime = eventDate.getTime();
 
-    // 指定日から翌日までのイベントだけを採用
+    // 指定した観察時間帯以外のイベントは採用しない
     if (
-      eventDate.getTime() < startOfDay.getTime() ||
-      eventDate.getTime() >= new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate() + 2
-      ).getTime()
+      eventTime < searchStart.getTime() ||
+      eventTime >= searchEnd.getTime()
     ) {
       return null;
     }
 
+    // 対象日の夜から翌日正午までのイベントを返す
     return {
       date: eventDate,
-      isNextDay: eventDate.getTime() >= nextDay.getTime()
+      isNextDay: eventTime >= nextDay.getTime()
     };
   }
 
