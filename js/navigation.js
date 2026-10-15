@@ -167,11 +167,11 @@ document.addEventListener("keydown", (e) => {
   // ▼ 月スペシャルビューア
   if (moonSpecialViewer.style.display === "flex") {
 
-    if (e.key === "ArrowLeft") {
+    if (e.key === "4") {
       moonSpecialPrev.click();
     }
 
-    if (e.key === "ArrowRight") {
+    if (e.key === "6") {
       moonSpecialNext.click();
     }
 
@@ -185,19 +185,19 @@ document.addEventListener("keydown", (e) => {
   // ▼ 星座スペシャルビューア
   if (specialViewer.style.display === "flex") {
 
-    if (e.key === "ArrowLeft") {
+    if (e.key === "4") {
       specialPrev.click();
     }
 
-    if (e.key === "ArrowRight") {
+    if (e.key === "6") {
       specialNext.click();
     }
 
-    if (e.key === "ArrowUp") {
+    if (e.key === "8") {
       specialLines.click();
     }
 
-    if (e.key === "ArrowDown") {
+    if (e.key === "2") {
       specialClear.click();
     }
 
