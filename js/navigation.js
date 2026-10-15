@@ -211,33 +211,33 @@ document.addEventListener("keydown", (e) => {
   // ▼ 通常の星座カード
 
   // 凡例カード：Z
-  if (e.key.toLowerCase() === "z") {
+  if (e.key.toLowerCase() === "q") {
     jumpToExplanatoryNote();
     return;
   }
 
   // 春：X
-  if (e.key.toLowerCase() === "x") {
+  if (e.key.toLowerCase() === "a") {
     springBtn.click();
   }
 
   // 夏：C
-  if (e.key.toLowerCase() === "c") {
+  if (e.key.toLowerCase() === "s") {
     summerBtn.click();
   }
 
   // 秋：V
-  if (e.key.toLowerCase() === "v") {
+  if (e.key.toLowerCase() === "d") {
     autumnBtn.click();
   }
 
   // 冬：B
-  if (e.key.toLowerCase() === "b") {
+  if (e.key.toLowerCase() === "f") {
     winterBtn.click();
   }
 
   // 南：N
-  if (e.key.toLowerCase() === "n") {
+  if (e.key.toLowerCase() === "g") {
     southBtn.click();
   }
 
