@@ -471,7 +471,7 @@ const dateText =
 </div>
 
             <div style="margin: 0; text-align: left;">
-              ${observationMessage}<span style="font-size:0.75em;"> ※星の見え方は天候や月の位置などにより変わります</span>
+              ${observationMessage}<span style="font-size:0.75em;"> ※レベルは天候や月の位置などを考慮していません</span>
             </div>
           </div>
         </div>
