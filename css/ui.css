@@ -3,17 +3,22 @@
    音声ボタン・コピーライト・Special Thanks
    ============================ */
 
-/* 音声 ON/OFF ボタン */
+/* 音声 ON/OFF・月パネル再表示ボタン */
 #sound-global-buttons {
   z-index: 6;
   position: fixed;
   top: 10px;
   right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px; /* ボタン同士の隙間 */
 }
 
 #sound-global-buttons img {
+  display: block;
   width: 32px;
   height: 32px;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
