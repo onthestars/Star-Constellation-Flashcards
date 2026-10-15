@@ -75,14 +75,7 @@ function setupNavigation(
       void viewer.offsetWidth;
       viewer.classList.add("fade-in");
 
-      updateViewer(
-        getIndex(),
-        getIsBack(),
-        viewer,
-        specialBtn,
-        prevBtn,
-        nextBtn
-      );
+  updateViewer(getIndex(), getIsBack());
 
       autoSeasonUpdate(getIndex());
 
@@ -126,14 +119,7 @@ function setupNavigation(
       void viewer.offsetWidth;
       viewer.classList.add("fade-in");
 
-      updateViewer(
-        getIndex(),
-        getIsBack(),
-        viewer,
-        specialBtn,
-        prevBtn,
-        nextBtn
-      );
+updateViewer(getIndex(), getIsBack());
 
       autoSeasonUpdate(getIndex());
 
@@ -166,6 +152,17 @@ function setupNavigation(
 
 // ▼ キーボード操作
 document.addEventListener("keydown", (e) => {
+
+  // 入力欄などを操作しているときは無視
+  if (
+    e.target instanceof HTMLElement &&
+    (
+      e.target.isContentEditable ||
+      ["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)
+    )
+  ) {
+    return;
+  }
 
   // ▼ 月スペシャルビューア
   if (moonSpecialViewer.style.display === "flex") {
@@ -213,59 +210,64 @@ document.addEventListener("keydown", (e) => {
 
   // ▼ 通常の星座カード
 
-// 春
-if (e.key === "1") {
-  springBtn.click();
-}
-
-// 夏
-if (e.key === "2") {
-  summerBtn.click();
-}
-
-// 秋
-if (e.key === "3") {
-  autumnBtn.click();
-}
-
-// 冬
-if (e.key === "4") {
-  winterBtn.click();
-}
-
-// 南
-if (e.key === "5") {
-  southBtn.click();
-}
-
-// 前
-if (e.key === "ArrowLeft") {
-  prevBtn.click();
-}
-
-// 次
-if (e.key === "ArrowRight") {
-  nextBtn.click();
-}
-
-// めくる
-if (e.key === "ArrowUp") {
-  flipBtn.click();
-}
-
-// スペシャルビューア
-if (e.key === "ArrowDown") {
-
-  if (!specialBtn.disabled) {
-    specialBtn.click();
+  // 凡例カード：Z
+  if (e.key.toLowerCase() === "z") {
+    jumpToExplanatoryNote();
+    return;
   }
 
-}
+  // 春：X
+  if (e.key.toLowerCase() === "x") {
+    springBtn.click();
+  }
 
-// 凡例
-if (e.key === "0") {
-  jumpToExplanatoryNote();
-  return;
-}
+  // 夏：C
+  if (e.key.toLowerCase() === "c") {
+    summerBtn.click();
+  }
+
+  // 秋：V
+  if (e.key.toLowerCase() === "v") {
+    autumnBtn.click();
+  }
+
+  // 冬：B
+  if (e.key.toLowerCase() === "b") {
+    winterBtn.click();
+  }
+
+  // 南：N
+  if (e.key.toLowerCase() === "n") {
+    southBtn.click();
+  }
+
+  // 星図ボタン：8
+  if (e.key === "8") {
+    if (!peteChartBtn.disabled) {
+      peteChartBtn.click();
+    }
+  }
+
+  // カード前へ：4
+  if (e.key === "4") {
+    prevBtn.click();
+  }
+
+  // カードをめくる：5
+  if (e.key === "5") {
+    flipBtn.click();
+  }
+
+  // カード次へ：6
+  if (e.key === "6") {
+    nextBtn.click();
+  }
+
+  // 星座スペシャルビューア：7
+  if (e.key === "2") {
+    if (!specialBtn.disabled) {
+      specialBtn.click();
+    }
+  }
 
 });

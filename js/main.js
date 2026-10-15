@@ -26,6 +26,7 @@ const winterBtn = document.getElementById("winterBtn");
 const southBtn  = document.getElementById("southBtn");
 
 const specialBtn = document.getElementById("specialBtn");
+const peteChartBtn = document.getElementById("peteChartBtn");
 
 // 効果音
 const soundFlip   = document.getElementById("soundFlip");
@@ -53,13 +54,22 @@ function jumpToSeason(season) {
     void viewer.offsetWidth;
     viewer.classList.add("fade-in");
 
-    updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn);
+updateViewer(
+  index,
+  isBack,
+  viewer,
+  specialBtn,
+  prevBtn,
+  nextBtn,
+  peteChartBtn
+);
 
   }, 300);
 }
 
 // ▼ viewer.js のセットアップ
 setupViewerClick(viewer, () => index);
+setupPeteChartButton(peteChartBtn);
 
 setupFlipButton(
   flipBtn,
@@ -69,7 +79,8 @@ setupFlipButton(
   (v) => { isBack = v; },
   specialBtn,
   prevBtn,
-  nextBtn
+  nextBtn,
+  peteChartBtn
 );
 
 // ▼ navigation.js のセットアップ
@@ -87,7 +98,15 @@ setupNavigation(
   (v) => { currentSeason = v; },
   () => animationClass,
   (v) => { animationClass = v; },
-  (idx, back) => updateViewer(idx, back, viewer, specialBtn, prevBtn, nextBtn),
+  (idx, back) => updateViewer(
+  idx,
+  back,
+  viewer,
+  specialBtn,
+  prevBtn,
+  nextBtn,
+  peteChartBtn
+),
   () => updateSeasonButtons(currentSeason, seasonImages)
 );
 
@@ -138,7 +157,15 @@ southBtn.onclick = () => {
 };
 
 // 初期表示
-updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn);
+updateViewer(
+  index,
+  isBack,
+  viewer,
+  specialBtn,
+  prevBtn,
+  nextBtn,
+  peteChartBtn
+);
 
 // 外部リンクから戻った場合の復帰処理
 window.addEventListener("load", () => {
@@ -157,7 +184,15 @@ window.addEventListener("load", () => {
   isBack = false;
   isFinalNull = false;
 
-  updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn);
+updateViewer(
+  index,
+  isBack,
+  viewer,
+  specialBtn,
+  prevBtn,
+  nextBtn,
+  peteChartBtn
+);
 });
 
 // ▼ 今夜の月ガイド
@@ -190,14 +225,15 @@ function jumpToExplanatoryNote() {
 
     viewer.classList.add("fade-in");
 
-    updateViewer(
-      index,
-      isBack,
-      viewer,
-      specialBtn,
-      prevBtn,
-      nextBtn
-    );
+updateViewer(
+  index,
+  isBack,
+  viewer,
+  specialBtn,
+  prevBtn,
+  nextBtn,
+  peteChartBtn
+);
 
   }, 300);
 }

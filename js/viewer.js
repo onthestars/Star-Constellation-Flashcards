@@ -24,6 +24,32 @@ function updateSpecialButton(index, specialBtn) {
   }
 }
 
+
+// ▼ ぴーとの星図ボタンの表示・リンク制御
+function updatePeteChartButton(index, peteChartBtn) {
+  if (!peteChartBtn) return;
+
+  const cardName = getCardName(index);
+  const url = cardName ? links[cardName] : null;
+
+  peteChartBtn.disabled = !url;
+  peteChartBtn.style.opacity = url ? "1" : "0.2";
+  peteChartBtn.dataset.url = url || "";
+}
+
+// ▼ ぴーとの星図ボタンのクリック処理
+function setupPeteChartButton(peteChartBtn) {
+  if (!peteChartBtn) return;
+
+  peteChartBtn.addEventListener("click", () => {
+    const url = peteChartBtn.dataset.url;
+
+    if (url && !peteChartBtn.disabled) {
+      window.open(url, "_blank");
+    }
+  });
+}
+
 // ▼ prev/next ボタンの状態制御
 function updatePrevNextButtons(index, prevBtn, nextBtn) {
 
@@ -47,7 +73,15 @@ function updatePrevNextButtons(index, prevBtn, nextBtn) {
 }
 
 // ▼ カード表示更新（★完全版：最終ページ対応）
-function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
+function updateViewer(
+  index,
+  isBack,
+  viewer,
+  specialBtn,
+  prevBtn,
+  nextBtn,
+  peteChartBtn
+) {
 
   applyViewerAnimation(viewer);
 
@@ -63,10 +97,18 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
     prevBtn.disabled = false;
     prevBtn.style.opacity = 1;
 
-    // ★ special viewer ボタンは消さない（Argo Q の状態を維持）
-    updateSpecialButton(index, specialBtn);
+// ★ special viewer ボタンは消さない（Argo Q の状態を維持）
+updateSpecialButton(index, specialBtn);
 
-    return;
+// ★ 最終ページでは星図ボタンを無効化
+if (peteChartBtn) {
+  peteChartBtn.disabled = true;
+  peteChartBtn.style.opacity = "0.2";
+  peteChartBtn.dataset.url = "";
+}
+
+return;
+
   }
 
   // ★ 季節ジャンプ時の nullカード
@@ -77,6 +119,7 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
     specialBtn.style.opacity = 0.2;
     specialBtn.disabled = true;
 
+    updatePeteChartButton(index, peteChartBtn);
     updatePrevNextButtons(index, prevBtn, nextBtn);
     return;
   }
@@ -85,6 +128,7 @@ function updateViewer(index, isBack, viewer, specialBtn, prevBtn, nextBtn) {
   viewer.src = isBack ? backs[index] : images[index];
 
   updateSpecialButton(index, specialBtn);
+  updatePeteChartButton(index, peteChartBtn);
   updatePrevNextButtons(index, prevBtn, nextBtn);
 }
 
@@ -120,7 +164,8 @@ function setupFlipButton(
   isBackSetter,
   specialBtn,
   prevBtn,
-  nextBtn
+  nextBtn,
+  peteChartBtn
 ) {
 
   flipBtn.addEventListener("click", () => {
@@ -163,7 +208,8 @@ function setupFlipButton(
         viewer,
         specialBtn,
         prevBtn,
-        nextBtn
+        nextBtn,
+        peteChartBtn
       );
     }, 400);
 
