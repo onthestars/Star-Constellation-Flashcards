@@ -152,7 +152,7 @@ const moonData = [
   },
              {
     image: "image/moon/Special/Moon-pic028.jpg",
-    caption: "翌年には解体が始まるという旧公団UR千里津雲台団地の電灯と、沈みゆく月（月齢15.2）",
+    caption: "撮影翌年に解体が始まった旧公団UR千里津雲台団地の電灯と、沈みゆく月（月齢15.2）",
     date: "2024年2月25日深夜",
     location: "大阪府吹田市津雲台2丁目",
     photographer: "K-A-Z"
