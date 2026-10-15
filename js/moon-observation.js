@@ -177,6 +177,87 @@ function playMoonSelectSound() {
     };
   }
 
+  // 観測地点：大阪府大阪市
+  const MOON_OBSERVER = new Astronomy.Observer(
+    34.6937,
+    135.5023,
+    0
+  );
+
+  // 指定日の月の入り・月の出を取得
+  function getMoonRiseSet(date, direction) {
+    const startOfDay = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      0, 0, 0, 0
+    );
+
+    const nextDay = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1,
+      0, 0, 0, 0
+    );
+
+    const event = Astronomy.SearchRiseSet(
+      Astronomy.Body.Moon,
+      MOON_OBSERVER,
+      direction,
+      Astronomy.MakeTime(startOfDay),
+      2
+    );
+
+    if (!event) {
+      return null;
+    }
+
+    const eventDate = event.date;
+
+    // 指定日から翌日までのイベントだけを採用
+    if (
+      eventDate.getTime() < startOfDay.getTime() ||
+      eventDate.getTime() >= new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + 2
+      ).getTime()
+    ) {
+      return null;
+    }
+
+    return {
+      date: eventDate,
+      isNextDay: eventDate.getTime() >= nextDay.getTime()
+    };
+  }
+
+  // 月の出・月の入り時刻を日本語で表示
+  function formatMoonEvent(event) {
+    if (!event) {
+      return null;
+    }
+
+    const d = event.date;
+    const hour = d.getHours();
+    const minute = d.getMinutes();
+
+    const timeText = minute < 5
+      ? `${hour}時ごろ`
+      : minute < 15
+        ? `${hour}時10分ごろ`
+        : minute < 25
+          ? `${hour}時20分ごろ`
+          : minute < 35
+            ? `${hour}時30分ごろ`
+            : minute < 45
+              ? `${hour}時40分ごろ`
+              : minute < 55
+                ? `${hour}時50分ごろ`
+                : `${(hour + 1) % 24}時ごろ`;
+
+    return (event.isNextDay ? "翌日" : "") + timeText;
+  }
 
 // 今夜の観察対象日を取得（午前5時までは前日扱い）
   function getObservationDate() {
@@ -189,56 +270,70 @@ function playMoonSelectSound() {
     return now;
   }
 
-  // 月相に応じた具体的な観察アドバイス
+  // 実際の月の出・月の入りに応じた観察アドバイス
   function getObservationMessage(phaseName, date) {
-    // 主要な月相の日には専用メッセージを表示
-    switch (phaseName) {
-      case "新月":
-        return "一晩中月明かりが大変少なく、星空の観察には絶好のチャンス！";
-
-      case "上弦の月":
-        return "月は夕方に見えて深夜頃に沈むため、夜後半が観察のチャンス。";
-
-      case "満月":
-        return "夜空が明るくなるため、星空よりも月の観察に向いています。";
-
-      case "下弦の月":
-        return "月が深夜頃に昇ってくるため、夜の前半が星空観察のチャンス。";
+    // 新月：月明かりが少ない
+    if (phaseName === "新月") {
+      return "月明かりが少なく、星空観察に絶好のチャンス！";
     }
 
-    // 主要な月相の日以外は、月相角から案内を決める
-    const time = Astronomy.MakeTime(getReferenceDate(date));
-    const phaseAngle = Astronomy.MoonPhase(time);
-
-    if (phaseAngle < 22.5 || phaseAngle >= 337.5) {
-      return "月明かりがとても少なく、星空観察に絶好のチャンス！";
-    }
-
-    if (phaseAngle < 67.5) {
-      return "月が満ちていく時期です。夜遅くに月が沈むと、星空観察のチャンス。";
-    }
-
-    if (phaseAngle < 112.5) {
-      return "月が満ちていく時期です。深夜頃に月が沈み、その後は星空観察のチャンス。";
-    }
-
-    if (phaseAngle < 157.5) {
-      return "満月が近づき、月明かりが強まる時期です。";
-    }
-
-    if (phaseAngle < 202.5) {
+    // 満月：月明かりが強い
+    if (phaseName === "満月") {
       return "月明かりが強く、星空よりも月の観察に向いています。";
     }
 
-    if (phaseAngle < 247.5) {
-      return "月が欠けていく時期です。深夜頃に月が昇る前は、星空観察のチャンス。";
+    const time = Astronomy.MakeTime(getReferenceDate(date));
+    const phaseAngle = Astronomy.MoonPhase(time);
+
+    // 満ちていく月：月の入り時刻を基準にする
+    if (phaseAngle < 180) {
+      const moonset = getMoonRiseSet(date, -1);
+      const moonsetText = formatMoonEvent(moonset);
+
+      if (!moonsetText) {
+        return "月の入り時刻を確認できませんでした。月の位置を確かめながら観察しましょう。";
+      }
+
+      const hour = moonset.date.getHours();
+
+      if (moonset.isNextDay || hour < 5 || hour >= 23) {
+        return `月は${moonsetText}に沈みます。夜遅くまで月明かりがあるため、月が沈んだ後の観察がおすすめです。`;
+      }
+
+      if (hour < 18) {
+        return `月は${moonsetText}に沈みます。夜は月明かりの影響が少なく、星空観察のチャンスです。`;
+      }
+
+      if (hour < 21) {
+        return `月は${moonsetText}に沈みます。月が沈んだ後は、星空観察のチャンスです。`;
+      }
+
+      return `月は${moonsetText}に沈みます。沈むまでは月明かりがありますが、その後は星空観察のチャンスです。`;
     }
 
-    if (phaseAngle < 292.5) {
-      return "月が欠けていく時期です。月が昇る前の夜の前半は、星空観察のチャンス。";
+    // 欠けていく月：月の出時刻を基準にする
+    const moonrise = getMoonRiseSet(date, 1);
+    const moonriseText = formatMoonEvent(moonrise);
+
+    if (!moonriseText) {
+      return "月の出時刻を確認できませんでした。月の位置を確かめながら観察しましょう。";
     }
 
-    return "新月が近づき、月明かりが少なくなる時期です。";
+    const hour = moonrise.date.getHours();
+
+    if (moonrise.isNextDay || hour < 5 || hour >= 23) {
+      return `月は${moonriseText}に昇ります。月が昇るまでは、星空観察のチャンスです。`;
+    }
+
+    if (hour >= 21) {
+      return `月は${moonriseText}に昇ります。月が昇る前の夜は、星空観察のチャンスです。`;
+    }
+
+    if (hour >= 18) {
+      return `月は${moonriseText}に昇ります。月が昇るまでは、星空観察を楽しめます。`;
+    }
+
+    return `月は${moonriseText}に昇ります。夜は月明かりの影響があるため、月の観察もおすすめです。`;
   }
 
   function renderMoonObservation() {
