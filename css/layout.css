@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 4px;
   }
 
   /* 季節ボタン段（横並び） */
@@ -146,5 +146,5 @@
 
 /* カードとボタン全体の位置調整 */
 #card-frame {
-  transform: translateY(20px);
+  transform: translateY(24px);
 }
