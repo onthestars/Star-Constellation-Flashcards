@@ -37,7 +37,19 @@ function updatePeteChartButton(index, peteChartBtn) {
   peteChartBtn.dataset.url = url || "";
 }
 
-// ▼ ぴーとの星図ボタンのクリック処理
+
+ // ▼ ぴーとの星図を開く効果音
+function playWarpSound() {
+  if (!soundEnabled) return;
+
+  const warpSound = new Audio("sound/warp.m4a");
+
+  warpSound.play().catch(error => {
+    console.warn("星図の効果音を再生できませんでした:", error);
+  });
+}
+
+ // ▼ ぴーとの星図ボタンのクリック処理
 function setupPeteChartButton(peteChartBtn) {
   if (!peteChartBtn) return;
 
@@ -45,6 +57,7 @@ function setupPeteChartButton(peteChartBtn) {
     const url = peteChartBtn.dataset.url;
 
     if (url && !peteChartBtn.disabled) {
+      playWarpSound();
       window.open(url, "_blank");
     }
   });
@@ -132,13 +145,13 @@ return;
   updatePrevNextButtons(index, prevBtn, nextBtn);
 }
 
-// ▼ カードクリック → 星図リンクを開く
+
+ // ▼ カードクリック → 星図リンクを開く
 function setupViewerClick(viewer, indexGetter) {
 
   viewer.addEventListener("click", () => {
 
     const i = indexGetter();
-
     const cardName = getCardName(i);
 
     if (!cardName) {
@@ -148,6 +161,7 @@ function setupViewerClick(viewer, indexGetter) {
     const url = links[cardName];
 
     if (url) {
+      playWarpSound();
       window.open(url, "_blank");
     }
 
