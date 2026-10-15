@@ -34,6 +34,12 @@ links["Ursa-Major"] = makeLink(165.396, 57.859, 34.81, 135.53, 40.00);
 links["Bootes"]     = makeLink(219.034, 29.886, 34.81, 135.53, 40.00);
 links["Virgo"]      = makeLink(200.338, -2.137, 34.81, 135.53, 40.00);
 links["Leo"]        = makeLink(157.851, 14.865, 34.81, 135.53, 40.00);
+// 春の大曲線
+links["The-Big-Curve-of-Spring"] =
+  makeLink(212.916, 30.159, 34.81, 135.53, 114.47);
+// 春の大三角
+links["Spring-Triangle"] =
+  makeLink(197.111, 10.161, 34.81, 135.53, 70.00);
 
 // ▼ 夏の星座
 links["Lyra"]             = makeLink(281.485, 36.029, 34.81, 135.53, 40.00);
@@ -49,6 +55,9 @@ links["Hercules"]         = makeLink(257.766, 26.968, 34.81, 135.53, 40.00);
 links["Ophiuchus"]        = makeLink(257.852, -5.031, 34.81, 135.53, 60.00);
 links["Corona-Borealis"]  = makeLink(235.27, 29.916, 34.81, 135.53, 40.00);
 links["Corona-Australis"] = makeLink(277.966, -40.98, 34.81, 135.53, 40.00);
+// 夏の大三角
+links["Summer-Triangle"] =
+  makeLink(295.0, 35.0, 34.81, 135.53, 70.00);
 
 // ▼ 秋の星座
 links["Aquarius"]         = makeLink(335.357, -12.865, 34.81, 135.53, 60.00);
@@ -64,6 +73,9 @@ links["Cetus"]            = makeLink(26.579, -11.867, 34.81, 135.53, 60.00);
 links["Perseus"]          = makeLink(50.446, 42.095, 34.81, 135.53, 40.00);
 links["Aries"]            = makeLink(37.876, 20.118, 34.81, 135.53, 40.00);
 links["Triangulum"]       = makeLink(30.39, 32.128, 34.81, 135.53, 40.00);
+// 冬の大三角（冬のダイヤモンド）
+links["Winter-Triangle"] =
+  makeLink(90.0, 15.0, 34.81, 135.53, 100.00);
 
 // ▼ 冬の星座
 links["Gemini"]      = makeLink(105.401, 21.961, 34.81, 135.53, 40.00);
