@@ -509,6 +509,7 @@ const dateText =
 function initMoonObservationPanel() {
   const panel = document.getElementById("moon-observation-panel");
   const closeButton = document.getElementById("moon-panel-close");
+  const showButton = document.getElementById("moonObservationShowBtn");
 
   // 初回表示時にフェードイン
   if (panel) {
@@ -522,6 +523,15 @@ function initMoonObservationPanel() {
     });
 
     closeButton.dataset.initialized = "true";
+  }
+
+  // 月の満ち欠けパネル再表示ボタンの初期化
+  if (showButton && panel && !showButton.dataset.initialized) {
+    showButton.addEventListener("click", function () {
+      panel.style.display = "block";
+    });
+
+    showButton.dataset.initialized = "true";
   }
 }
 
