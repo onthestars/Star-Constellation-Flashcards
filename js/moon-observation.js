@@ -4,19 +4,24 @@
 
   const SYNODIC_MONTH = 29.530588853;
 
-  // 大阪の座標
-  const LATITUDE = 34.6937;
-  const LONGITUDE = 135.5023;
-
+  // 月相画像16枚（満月から始まる順番）
   const MOON_IMAGES = [
-    "moon-phase-01.png", // 新月
-    "moon-phase-02.png", // 満ちていく月
-    "moon-phase-03.png", // 上弦の月
-    "moon-phase-04.png", // 満ちていく月
-    "moon-phase-05.png", // 満月
-    "moon-phase-06.png", // 欠けていく月
-    "moon-phase-07.png", // 下弦の月
-    "moon-phase-08.png"  // 欠けていく月
+    "moon-phase-01.png", // 満月
+    "moon-phase-02.png", // 欠け始め
+    "moon-phase-03.png", // 欠けていく月
+    "moon-phase-04.png", // 下弦に近づく
+    "moon-phase-05.png", // 下弦の半月
+    "moon-phase-06.png", // 欠けていく三日月
+    "moon-phase-07.png", // 細い三日月
+    "moon-phase-08.png", // 新月に近づく
+    "moon-phase-09.png", // 新月
+    "moon-phase-10.png", // 満ち始め
+    "moon-phase-11.png", // 満ちていく月
+    "moon-phase-12.png", // 上弦に近づく
+    "moon-phase-13.png", // 上弦の半月
+    "moon-phase-14.png", // 満ちていく凸月
+    "moon-phase-15.png", // 満月に近づく
+    "moon-phase-16.png"  // 満月直前
   ];
 
             // 現在表示している観察対象日
@@ -79,12 +84,12 @@ function playMoonSelectSound() {
     );
   }
 
-  // 月相角から8種類の月画像を判定
+  // 月相角から16種類の月画像を判定（満月始まり）
   function getMoonPhaseIndex(date) {
     const time = Astronomy.MakeTime(getReferenceDate(date));
     const phaseAngle = Astronomy.MoonPhase(time);
 
-    return Math.round(phaseAngle / 45) % 8;
+    return Math.round((phaseAngle + 180) / 22.5) % 16;
   }
 
   // 主要な月相イベントが発生した日かを判定
@@ -146,35 +151,32 @@ function playMoonSelectSound() {
       : "欠けていく月";
   }
 
-// 月相に応じた星空レベル
-function getObservationRating(age) {
-  const ageInCycle =
-    ((age % SYNODIC_MONTH) + SYNODIC_MONTH) % SYNODIC_MONTH;
+  // 月相に応じた星空レベル
+  function getObservationRating(date) {
+    const time = Astronomy.MakeTime(getReferenceDate(date));
+    const phaseAngle = Astronomy.MoonPhase(time);
 
-  let stars;
+    let stars;
 
-  if (ageInCycle < 3 || ageInCycle >= 22.5) {
-    stars = 5;
-  } else if (ageInCycle < 6) {
-    stars = 4;
-  } else if (ageInCycle < 8) {
-    stars = 3;
-  } else if (ageInCycle < 11) {
-    stars = 2;
-  } else if (ageInCycle < 14) {
-    stars = 1;
-  } else if (ageInCycle < 17) {
-    stars = 0;
-  } else if (ageInCycle < 20) {
-    stars = 1;
-  } else {
-    stars = 2;
+    if (phaseAngle < 22.5 || phaseAngle >= 337.5) {
+      stars = 5;
+    } else if (phaseAngle < 45 || phaseAngle >= 315) {
+      stars = 4;
+    } else if (phaseAngle < 67.5 || phaseAngle >= 292.5) {
+      stars = 3;
+    } else if (phaseAngle < 90 || phaseAngle >= 270) {
+      stars = 2;
+    } else if (phaseAngle < 135 || phaseAngle >= 225) {
+      stars = 1;
+    } else {
+      stars = 0;
+    }
+
+    return {
+      stars: "★".repeat(stars) + "☆".repeat(5 - stars)
+    };
   }
 
-  return {
-    stars: "★".repeat(stars) + "☆".repeat(5 - stars)
-  };
-}
 
 // 今夜の観察対象日を取得（午前5時までは前日扱い）
   function getObservationDate() {
@@ -192,35 +194,51 @@ function getObservationRating(age) {
     // 主要な月相の日には専用メッセージを表示
     switch (phaseName) {
       case "新月":
-        return "日没後から明け方にかけ、満天の星空が広がるチャンス！";
+        return "一晩中月明かりが大変少なく、星空の観察には絶好のチャンス！";
 
       case "上弦の月":
-        return "半月です。月が沈んでからの、夜の後半に望みがあります。";
+        return "月は夕方に見えて深夜頃に沈むため、夜後半が観察のチャンス。";
 
       case "満月":
-        return "星空よりも、明るく輝く月の観察にむきます。";
+        return "夜空が明るくなるため、星空よりも月の観察に向いています。";
 
       case "下弦の月":
-        return "半月です。月が昇る前の、夜の前半に望みがあります。";
+        return "月が深夜頃に昇ってくるため、夜の前半が星空観察のチャンス。";
     }
 
     // 主要な月相の日以外は、月相角から案内を決める
     const time = Astronomy.MakeTime(getReferenceDate(date));
     const phaseAngle = Astronomy.MoonPhase(time);
 
-    if (phaseAngle < 45 || phaseAngle >= 315) {
-      return "日没後から明け方にかけて、星空が広がります。";
+    if (phaseAngle < 22.5 || phaseAngle >= 337.5) {
+      return "月明かりがとても少なく、星空観察に絶好のチャンス！";
     }
 
-    if (phaseAngle < 135) {
-      return "夜の後半に、月が沈んでから星空が広がります。";
+    if (phaseAngle < 67.5) {
+      return "月が満ちていく時期です。夜遅くに月が沈むと、星空観察のチャンス。";
     }
 
-    if (phaseAngle < 225) {
-      return "星空の観察は厳しいですが、月の観察が楽しめます。";
+    if (phaseAngle < 112.5) {
+      return "月が満ちていく時期です。深夜頃に月が沈み、その後は星空観察のチャンス。";
     }
 
-      return "月が昇る前の、夜の前半に星空が広がります。";
+    if (phaseAngle < 157.5) {
+      return "満月が近づき、月明かりが強まる時期です。";
+    }
+
+    if (phaseAngle < 202.5) {
+      return "月明かりが強く、星空よりも月の観察に向いています。";
+    }
+
+    if (phaseAngle < 247.5) {
+      return "月が欠けていく時期です。深夜頃に月が昇る前は、星空観察のチャンス。";
+    }
+
+    if (phaseAngle < 292.5) {
+      return "月が欠けていく時期です。月が昇る前の夜の前半は、星空観察のチャンス。";
+    }
+
+    return "新月が近づき、月明かりが少なくなる時期です。";
   }
 
   function renderMoonObservation() {
@@ -253,7 +271,7 @@ function getObservationRating(age) {
       const age = getMoonAge(today);
       const phaseIndex = getMoonPhaseIndex(today);
       const phaseName = getPhaseName(today);
-      const rating = getObservationRating(age);
+      const rating = getObservationRating(today);
 
       // 月相に応じた観察アドバイス
       const observationMessage = getObservationMessage(
@@ -358,34 +376,34 @@ const dateText =
 </div>
 
             <div style="margin: 0; text-align: left;">
-              ${observationMessage}<span style="font-size:0.8em;"> ※天候などによる</span>
+              ${observationMessage}<span style="font-size:0.8em;"> ※天候や月の位置などによって変わります</span>
             </div>
           </div>
         </div>
         
       `;
 
-            // ▲ 前日へ移動
-      const nextButton = content.querySelector("#moon-date-next");
-
-if (nextButton) {
-  nextButton.addEventListener("click", function () {
-    playMoonSelectSound();
-    selectedDate.setDate(selectedDate.getDate() + 1);
-    renderMoonObservation();
-  });
-}
-
-      // ▼ 翌日へ移動
+      // ▲ 前日へ移動
       const previousButton = content.querySelector("#moon-date-previous");
 
-if (previousButton) {
-  previousButton.addEventListener("click", function () {
-    playMoonSelectSound();
-    selectedDate.setDate(selectedDate.getDate() - 1);
-    renderMoonObservation();
-  });
-}
+      if (previousButton) {
+        previousButton.addEventListener("click", function () {
+          playMoonSelectSound();
+          selectedDate.setDate(selectedDate.getDate() - 1);
+          renderMoonObservation();
+        });
+      }
+
+      // ▼ 翌日へ移動
+      const nextButton = content.querySelector("#moon-date-next");
+
+      if (nextButton) {
+        nextButton.addEventListener("click", function () {
+          playMoonSelectSound();
+          selectedDate.setDate(selectedDate.getDate() + 1);
+          renderMoonObservation();
+        });
+      }
 
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
