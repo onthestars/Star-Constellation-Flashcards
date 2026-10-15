@@ -511,6 +511,18 @@ function initMoonObservationPanel() {
   const closeButton = document.getElementById("moon-panel-close");
   const showButton = document.getElementById("moonObservationShowBtn");
 
+  // 再表示ボタンの状態を更新
+  function updateShowButtonState() {
+    if (!panel || !showButton) {
+      return;
+    }
+
+    const isVisible = getComputedStyle(panel).display !== "none";
+
+    showButton.disabled = isVisible;
+    showButton.style.opacity = showButton.disabled ? 0.4 : 1;
+  }
+
   // 初回表示時にフェードイン
   if (panel) {
     panel.classList.add("moon-panel-fade-in");
@@ -520,6 +532,7 @@ function initMoonObservationPanel() {
   if (closeButton && panel && !closeButton.dataset.initialized) {
     closeButton.addEventListener("click", function () {
       panel.style.display = "none";
+      updateShowButtonState();
     });
 
     closeButton.dataset.initialized = "true";
@@ -529,10 +542,14 @@ function initMoonObservationPanel() {
   if (showButton && panel && !showButton.dataset.initialized) {
     showButton.addEventListener("click", function () {
       panel.style.display = "block";
+      updateShowButtonState();
     });
 
     showButton.dataset.initialized = "true";
   }
+
+  // 初期状態を反映
+  updateShowButtonState();
 }
 
   // 既存の main.js から呼び出せるようにする
