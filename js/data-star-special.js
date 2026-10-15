@@ -187,15 +187,18 @@ const specialPhotos = {
     "Andromeda": {
     noline: [
       "Andromeda-noline-pic01.jpg",
-      "Andromeda-noline-pic02.jpg"
+      "Andromeda-noline-pic02.jpg",
+            "Andromeda-noline-pic03.jpg"
     ],
     lines: [
       "Andromeda-lines-pic01.jpg",
-      "Andromeda-lines-pic02.jpg"
+      "Andromeda-lines-pic02.jpg",
+            "Andromeda-lines-pic03.jpg"
     ],
     caption: [
-      "アンドロメダ銀河／2025年11月16日／紀伊半島南部",
-      "アンドロメダ銀河／2025年11月16日／紀伊半島南部"
+      "地球から「唯一肉眼で見える銀河」といわれるアンドロメダ銀河。なんと約250万年前の光／2025年11月16日／紀伊半島南部",
+      "地球から「唯一肉眼で見える銀河」といわれるアンドロメダ銀河。なんと約250万年前の光／2025年11月16日／紀伊半島南部",
+            "アンドロメダ座（上）、アンドロメダ銀河（中）、カシオペヤ座（下）／2026年10月12日未明／大阪府高槻市山中"
     ]
   },
 
