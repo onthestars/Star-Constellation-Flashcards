@@ -184,6 +184,21 @@ const specialPhotos = {
     ]
   },
 
+    "Andromeda": {
+    noline: [
+      "Andromeda-noline-pic01.jpg",
+      "Andromeda-noline-pic02.jpg"
+    ],
+    lines: [
+      "Andromeda-lines-pic01.jpg",
+      "Andromeda-lines-pic02.jpg"
+    ],
+    caption: [
+      "アンドロメダ銀河／2025年11月16日／紀伊半島南部",
+      "アンドロメダ銀河／2025年11月16日／紀伊半島南部"
+    ]
+  },
+
   "Capricornus": {
     noline: [
       "Capricornus-noline-pic01.jpg",
