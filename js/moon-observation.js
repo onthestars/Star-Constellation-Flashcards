@@ -245,7 +245,7 @@ const timeText =
     return (event.isNextDay ? "翌日" : "") + timeText;
   }
 
-    // ▼ おすすめ時間帯を取得
+// ▼ おすすめ時間帯を取得
 function getObservationWindow(date) {
 
   const phaseAngle = Astronomy.MoonPhase(
@@ -255,31 +255,67 @@ function getObservationWindow(date) {
   const moonrise = getMoonRiseSet(date, 1);
   const moonset = getMoonRiseSet(date, -1);
 
-const twilight =
-  getAstronomicalTwilight(date);
+  const twilight =
+    getAstronomicalTwilight(date);
 
-if (phaseAngle < 180 && moonset && twilight) {
-
-  // ▼ 月没が天文薄明開始より後なら観測時間なし
+  // ▼ 新月～満月（満ちていく月）
   if (
-    moonset.date.getTime() >=
-    twilight.dawn.getTime()
+    phaseAngle < 180 &&
+    moonset &&
+    twilight &&
+    twilight.dusk &&
+    twilight.dawn
   ) {
-    return null;
+
+    const startTime =
+      moonset.date.getTime() > twilight.dusk.getTime()
+        ? moonset.date
+        : twilight.dusk;
+
+    const endTime = twilight.dawn;
+
+    if (
+      startTime.getTime() >=
+      endTime.getTime()
+    ) {
+      return null;
+    }
+
+    return {
+      start: startTime,
+      end: endTime
+    };
   }
 
-  return {
-    start: moonset.date,
-    end: twilight.dawn
-  };
-}
+  // ▼ 満月～新月（欠けていく月）
+  if (
+    phaseAngle >= 180 &&
+    moonrise &&
+    twilight &&
+    twilight.dusk &&
+    twilight.dawn
+  ) {
 
-if (phaseAngle >= 180 && moonrise && twilight) {
-  return {
-    start: twilight.dusk,
-    end: moonrise.date
-  };
-}
+    const startTime = twilight.dusk;
+
+    const endTime =
+      moonrise.date.getTime() < twilight.dawn.getTime()
+        ? moonrise.date
+        : twilight.dawn;
+
+    if (
+      endTime.getTime() <=
+      startTime.getTime()
+    ) {
+      return null;
+    }
+
+    return {
+      start: startTime,
+      end: endTime
+    };
+  }
+
   return null;
 }
 
