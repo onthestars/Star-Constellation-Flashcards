@@ -1,8 +1,82 @@
-
+// moon-observation.js
 (function () {
   "use strict";
 
   const SYNODIC_MONTH = 29.530588853;
+
+    // 月の出・月の入りデータ
+  const MOON_DATA_PATH =
+    "js/data/moon-rise-set-osaka-2026-2036.json";
+
+  const MOON_DATA_START = "2026-10-01";
+  const MOON_DATA_END = "2036-09-30";
+
+  let moonRiseSetData = null;
+  let moonRiseSetDataError = false;
+
+  // JSONを一度だけ読み込む
+  const moonRiseSetDataReady = fetch(MOON_DATA_PATH)
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error(
+          "月の出・月の入りデータを読み込めませんでした: " +
+          response.status
+        );
+      }
+
+      return response.json();
+    })
+    .then(function (json) {
+      moonRiseSetData = json;
+    })
+    .catch(function (error) {
+      moonRiseSetDataError = true;
+      console.error(error);
+    });
+
+  // 日付を YYYY-MM-DD 形式にする
+  function getDateKey(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  // JSON内の日付データを取得
+  function getMoonDataForDate(date) {
+    if (!moonRiseSetData) {
+      return null;
+    }
+
+    const key = getDateKey(date);
+
+    // 日付データが直下にある形式と days 内にある形式の両方に対応
+    const days =
+      moonRiseSetData.days ||
+      moonRiseSetData.data ||
+      moonRiseSetData;
+
+    return days[key] || null;
+  }
+
+  // データの対象期間外かどうか
+  function isMoonDataOutOfRange(date) {
+    const key = getDateKey(date);
+
+    return key < MOON_DATA_START || key > MOON_DATA_END;
+  }
+
+  // 対象期間外に表示するメッセージ
+  function getMoonDataRangeMessage(date) {
+    const key = getDateKey(date);
+
+    if (key < MOON_DATA_START) {
+      return "2026年9月30日以前の月の出・月の入りの時刻データはありません";
+    }
+
+    return "2036年10月1日以降の月の出・月の入りの時刻データはありません";
+  }
 
   // 月相画像16枚（満月から始まる順番）
   const MOON_IMAGES = [
@@ -151,120 +225,67 @@ function playMoonSelectSound() {
       : "欠けていく月";
   }
 
-  // 月相に応じた星空レベル
-  function getObservationRating(date) {
-    const time = Astronomy.MakeTime(getReferenceDate(date));
-    const phaseAngle = Astronomy.MoonPhase(time);
-
-    let stars;
-
-    if (phaseAngle < 22.5 || phaseAngle >= 337.5) {
-      stars = 5;
-    } else if (phaseAngle < 45 || phaseAngle >= 315) {
-      stars = 4;
-    } else if (phaseAngle < 67.5 || phaseAngle >= 292.5) {
-      stars = 3;
-    } else if (phaseAngle < 90 || phaseAngle >= 270) {
-      stars = 2;
-    } else if (phaseAngle < 135 || phaseAngle >= 225) {
-      stars = 1;
-    } else {
-      stars = 0;
-    }
-
-    return {
-      stars: "★".repeat(stars) + "☆".repeat(5 - stars)
-    };
-  }
-
-  // 観測地点：大阪府大阪市
-  const MOON_OBSERVER = new Astronomy.Observer(
-    34.6937,
-    135.5023,
-    0
-  );
-
-  // 指定日の夜に対応する月の入り・月の出を取得
+  // JSONから月の出・月の入りを取得
+  // direction: 1 = 月の出、-1 = 月の入り
   function getMoonRiseSet(date, direction) {
-    // 観察対象日の18時を検索開始時刻とする
-    const searchStart = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      18, 0, 0, 0
-    );
-
-    // 翌日の正午を検索範囲の終了時刻とする
-    const searchEnd = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() + 1,
-      12, 0, 0, 0
-    );
-
-    // 翌日午前0時（日付判定用）
-    const nextDay = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() + 1,
-      0, 0, 0, 0
-    );
-
-    // 検索開始から最大1.5日以内のイベントを取得
-    const event = Astronomy.SearchRiseSet(
-      Astronomy.Body.Moon,
-      MOON_OBSERVER,
-      direction,
-      Astronomy.MakeTime(searchStart),
-      1.5
-    );
-
-    // 月の出・月の入りが見つからない場合
-    if (!event || !event.date) {
+    if (isMoonDataOutOfRange(date)) {
       return null;
     }
 
-    const eventDate = event.date;
-    const eventTime = eventDate.getTime();
+    const dayData = getMoonDataForDate(date);
 
-    // 指定した観察時間帯以外のイベントは採用しない
-    if (
-      eventTime < searchStart.getTime() ||
-      eventTime >= searchEnd.getTime()
-    ) {
+    if (!dayData) {
       return null;
     }
 
-    // 対象日の夜から翌日正午までのイベントを返す
+    const timeText = direction === 1
+      ? dayData.moonrise
+      : dayData.moonset;
+
+    // null は、その日のデータに時刻が記録されていないことを表す
+    if (typeof timeText !== "string" || !/^\d{2}:\d{2}$/.test(timeText)) {
+      return null;
+    }
+
+    const parts = timeText.split(":").map(Number);
+    const hour = parts[0];
+    const minute = parts[1];
+
+    // データは対象日の正午から翌日正午までの時間帯。
+    // 正午より前の時刻は翌日のイベントとして扱う。
+    const isNextDay = hour < 12;
+
+    const eventDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + (isNextDay ? 1 : 0),
+      hour,
+      minute,
+      0,
+      0
+    );
+
     return {
       date: eventDate,
-      isNextDay: eventTime >= nextDay.getTime()
+      hour: hour,
+      minute: minute,
+      isNextDay: isNextDay,
+      timeText: timeText
     };
   }
 
-  // 月の出・月の入り時刻を日本語で表示
+  // 10分単位に丸め済みの時刻を日本語表示に変換
   function formatMoonEvent(event) {
     if (!event) {
       return null;
     }
 
-    const d = event.date;
-    const hour = d.getHours();
-    const minute = d.getMinutes();
+    const hour = event.hour;
+    const minute = event.minute;
 
-    const timeText = minute < 5
+    const timeText = minute === 0
       ? `${hour}時ごろ`
-      : minute < 15
-        ? `${hour}時10分ごろ`
-        : minute < 25
-          ? `${hour}時20分ごろ`
-          : minute < 35
-            ? `${hour}時30分ごろ`
-            : minute < 45
-              ? `${hour}時40分ごろ`
-              : minute < 55
-                ? `${hour}時50分ごろ`
-                : `${(hour + 1) % 24}時ごろ`;
+      : `${hour}時${minute}分ごろ`;
 
     return (event.isNextDay ? "翌日" : "") + timeText;
   }
@@ -278,72 +299,6 @@ function playMoonSelectSound() {
     }
 
     return now;
-  }
-
-  // 実際の月の出・月の入りに応じた観察アドバイス
-  function getObservationMessage(phaseName, date) {
-    // 新月：月明かりが少ない
-    if (phaseName === "新月") {
-      return "月明かりが少なく、星空観察に絶好のチャンス！";
-    }
-
-    // 満月：月明かりが強い
-    if (phaseName === "満月") {
-      return "月明かりが強く、星空よりも月の観察に向いています。";
-    }
-
-    const time = Astronomy.MakeTime(getReferenceDate(date));
-    const phaseAngle = Astronomy.MoonPhase(time);
-
-    // 満ちていく月：月の入り時刻を基準にする
-    if (phaseAngle < 180) {
-      const moonset = getMoonRiseSet(date, -1);
-      const moonsetText = formatMoonEvent(moonset);
-
-      if (!moonsetText) {
-        return "月の入り時刻を確認できませんでした。月の位置を確かめながら観察しましょう。";
-      }
-
-      const hour = moonset.date.getHours();
-
-      if (moonset.isNextDay || hour < 5 || hour >= 23) {
-        return `月は${moonsetText}に沈みます。夜遅くまで月明かりがあるため、月が沈んだ後の観察がおすすめです。`;
-      }
-
-      if (hour < 18) {
-        return `月は${moonsetText}に沈みます。夜は月明かりの影響が少なく、星空観察のチャンスです。`;
-      }
-
-      if (hour < 21) {
-        return `月は${moonsetText}に沈みます。月が沈んだ後は、星空観察のチャンスです。`;
-      }
-
-      return `月は${moonsetText}に沈みます。沈むまでは月明かりがありますが、その後は星空観察のチャンスです。`;
-    }
-
-    // 欠けていく月：月の出時刻を基準にする
-    const moonrise = getMoonRiseSet(date, 1);
-    const moonriseText = formatMoonEvent(moonrise);
-
-    if (!moonriseText) {
-      return "月の出時刻を確認できませんでした。月の位置を確かめながら観察しましょう。";
-    }
-
-    const hour = moonrise.date.getHours();
-
-    if (moonrise.isNextDay || hour < 5 || hour >= 23) {
-      return `月は${moonriseText}に昇ります。月が昇るまでは、星空観察のチャンスです。`;
-    }
-
-    if (hour >= 21) {
-      return `月は${moonriseText}に昇ります。月が昇る前の夜は、星空観察のチャンスです。`;
-    }
-
-    if (hour >= 18) {
-      return `月は${moonriseText}に昇ります。月が昇るまでは、星空観察を楽しめます。`;
-    }
-
-    return `月は${moonriseText}に昇ります。夜は月明かりの影響があるため、月の観察もおすすめです。`;
   }
 
   function renderMoonObservation() {
@@ -376,13 +331,29 @@ function playMoonSelectSound() {
       const age = getMoonAge(today);
       const phaseIndex = getMoonPhaseIndex(today);
       const phaseName = getPhaseName(today);
-      const rating = getObservationRating(today);
 
-      // 月相に応じた観察アドバイス
-      const observationMessage = getObservationMessage(
-        phaseName,
-        today
-      );
+      // 月の出・月の入りの時刻表示
+      let moonTimeMessage;
+
+      if (isMoonDataOutOfRange(today)) {
+        moonTimeMessage = getMoonDataRangeMessage(today);
+      } else if (moonRiseSetDataError) {
+        moonTimeMessage =
+          "月の出・月の入りの時刻データを読み込めませんでした。";
+      } else if (!moonRiseSetData) {
+        moonTimeMessage =
+          "月の出・月の入りの時刻データを読み込み中です。";
+      } else {
+        const rise = getMoonRiseSet(today, 1);
+        const set = getMoonRiseSet(today, -1);
+
+        const riseText = formatMoonEvent(rise);
+        const setText = formatMoonEvent(set);
+
+        moonTimeMessage =
+          `月の出：${riseText || "時刻データなし"}　` +
+          `月の入り：${setText || "時刻データなし"}`;
+      }
 
       const imagePath =
         "image/common/" + MOON_IMAGES[phaseIndex];
@@ -470,19 +441,11 @@ const dateText =
     ${phaseName}(月齢${age.toFixed(1)})
   </div>
 
-<div style="font-size:1.1rem;font-weight:500;margin: 8px 0 6px 0; text-align: left;">
-  星空レベル
-  <span style="
-    color: rgb(255,215,0);
-    text-shadow: 0 0 2px rgba(0,0,0,0.5);
-  ">
-    ${rating.stars}
-  </span>
+<!-- 月の出・月の入りの時刻 -->
+<div style="margin: 0 0 4px 0; text-align: left; font-size: 0.9em;">
+  ${moonTimeMessage}
 </div>
 
-            <div style="margin: 0; text-align: left;">
-              ${observationMessage}<span style="font-size:0.75em;"> ※レベルは天候や月の位置などを考慮していません</span>
-            </div>
           </div>
         </div>
         
@@ -567,7 +530,10 @@ function initMoonObservationPanel() {
   window.initMoonObservationPanel = initMoonObservationPanel;
 
   document.addEventListener("DOMContentLoaded", function () {
-    renderMoonObservation();
     initMoonObservationPanel();
+
+    moonRiseSetDataReady.then(function () {
+      renderMoonObservation();
+    });
   });
-})();
+  })();
