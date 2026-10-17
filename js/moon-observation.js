@@ -605,8 +605,9 @@ if (riseText && setText) {
       const imagePath =
         "image/common/" + MOON_IMAGES[phaseIndex];
 
+        // 年月日表示
       const dateText =
-        `${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
+        `（調整中）${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
 
       content.innerHTML = `
         <div style="
