@@ -606,7 +606,7 @@ if (riseText && setText) {
         "image/common/" + MOON_IMAGES[phaseIndex];
 
       const dateText =
-        `【調整中】${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
+        `${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
 
       content.innerHTML = `
         <div style="
