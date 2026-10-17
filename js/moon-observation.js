@@ -177,8 +177,7 @@
   // 観測地点：大阪府大阪市（緯度34.6937、経度135.5023、標高0m）
   const MOON_OBSERVER = new Astronomy.Observer(34.6937, 135.5023, 0);
 
-  // Astronomy Engineで月の出・月の入りを直接計算する。
-  // direction: 1 = 月の出、-1 = 月の入り
+    // direction: 1 = 月の出、-1 = 月の入り
   // 観察対象日の正午から翌日の正午直前までを検索対象にする。
   function getMoonRiseSet(date, direction) {
     if (isMoonDataOutOfRange(date)) {
@@ -458,71 +457,130 @@ function getAstronomicalTwilight(date) {
     return now;
   }
 
-  // 実際の月の出・月の入りに応じた観察アドバイス
-  function getObservationMessage(phaseName, date) {
-    // 新月：月明かりが少ない
-    if (phaseName === "新月") {
-      return "月明かりが少なく、星空観察に絶好のチャンス！";
-    }
 
-    // 満月：月明かりが強い
-    if (phaseName === "満月") {
-      return "月明かりが強く、星空よりも月の観察に向いています。";
-    }
+  // ▼ 月相・月齢・月の出入り・空が暗くなる時刻を考慮した観察コメント
+function getObservationMessage(phaseName, date) {
+  const age = getMoonAge(date);
+  const time = Astronomy.MakeTime(getReferenceDate(date));
+  const phaseAngle = Astronomy.MoonPhase(time);
 
-    const time = Astronomy.MakeTime(getReferenceDate(date));
-    const phaseAngle = Astronomy.MoonPhase(time);
+  // ▼ 空が十分暗くなる時刻（天文薄明の終わり）
+  const twilight = getAstronomicalTwilight(date);
+  const dusk = twilight ? twilight.dusk : null;
 
-    // 満ちていく月：月の入り時刻を基準にする
-    if (phaseAngle < 180) {
-      const moonset = getMoonRiseSet(date, -1);
-      const moonsetText = formatMoonEvent(moonset);
-
-      if (!moonsetText) {
-        return "月の入り時刻を確認できませんでした。月の位置を確かめながら観察しましょう。";
-      }
-
-      const hour = moonset.date.getHours();
-
-      if (moonset.isNextDay || hour < 5 || hour >= 23) {
-        return `夜遅くまで月明かりがあるため、月が沈んだ後の観察がおすすめです。`;
-      }
-
-      if (hour < 18) {
-        return `夜は月明かりの影響が少なく、星空観察のチャンスです。`;
-      }
-
-      if (hour < 21) {
-        return `月が沈んだ後は、星空が見やすくなります。`;
-      }
-
-      return `沈むまでは月明かりがありますが、その後は星空観察のチャンスです。`;
-    }
-
-    // 欠けていく月：月の出時刻を基準にする
-    const moonrise = getMoonRiseSet(date, 1);
-    const moonriseText = formatMoonEvent(moonrise);
-
-    if (!moonriseText) {
-      return "月の出時刻を確認できませんでした。月の位置を確かめながら観察しましょう。";
-    }
-
-    const hour = moonrise.date.getHours();
-
-    if (moonrise.isNextDay || hour < 5 || hour >= 23) {
-      return `月が昇るまでは、星空観察のチャンスです。`;
-    }
-
-    if (hour >= 21) {
-      return `月が昇る前の夜は、星空観察のチャンスです。`;
-    }
-
-    if (hour >= 18) {
-      return `月が昇るまでは、星空観察を楽しめます。`;
-    }
-
-    return `夜は月明かりの影響があるため、月の観察もおすすめです。`;
+  // ▼ 本当の新月
+  if (phaseName === "新月") {
+    return "今日は新月です。月明かりの影響が少ないため、星々が最も輝く夜です。星座や淡い星、天の川を見つけやすいでしょう。";
   }
+
+  // ▼ 本当の満月
+  if (phaseName === "満月") {
+    return "今日は満月です。夜空が大変明るいので、星空よりも月の観察にむくと言えます。";
+  }
+
+  // ▼ 新月に近い時期
+  if (age <= 1.5 || age >= SYNODIC_MONTH - 1.5) {
+    if (dusk && dusk.getHours() >= 21) {
+      return "月明かりが少ない時期です。空が十分暗くなってから星空を眺めるのもよさそうです。";
+    }
+
+    return "月明かりが少なく、一晩中星空を楽しみやすいでしょう。";
+  }
+
+  // ▼ 満月に近い時期
+  if (age >= 13.5 && age <= 16) {
+    return "月明かりが強く、星空の観察には余り向きません。月の模様やクレーターを観察するのが良さそうです。";
+  }
+
+  // ▼ 天文薄明の時刻を取得できない場合
+  if (!dusk) {
+    return "空の明るさや月の位置を確かめながら、月や星の様子を観察するのもよさそうです。";
+  }
+
+  // ▼ 月が満ちていく時期：月の入りを基準にする
+  if (phaseAngle < 180) {
+    const moonset = getMoonRiseSet(date, -1);
+
+    if (!moonset) {
+      return "月の入り時刻を確認できません。月の形や空の様子を観察するのもよさそうです。";
+    }
+
+    // ▼ 月が空の暗くなる時刻より前に沈む
+    if (moonset.date.getTime() <= dusk.getTime()) {
+      if (dusk.getHours() >= 21) {
+        return "月は先に沈みそうですが、空が十分暗くなるのは遅めです。暗くなってから星空を眺めるのもよさそうです。";
+      }
+
+      if (age < 6) {
+        return "細い月が沈んだ後に、星空が広がるでしょう。";
+      }
+
+      if (phaseName === "上弦の月") {
+        return "上弦の月は半月です。月が沈んだ後の星空も楽しめそうです。";
+      }
+
+      if (age < 9) {
+        return "半月に近い形の月が沈んだ後は、星空を観察するのもよさそうです。";
+      }
+
+      return "月が沈んだ後は、星空を楽しみやすくなりそうです。";
+    }
+
+    // ▼ 月が空の暗くなる時刻より後に沈む
+    if (age < 6) {
+      return "夕方の細い月を楽しめそうです。月が沈んだ後に星空が広がるでしょう。";
+    }
+
+    if (phaseName === "上弦の月") {
+      return "上弦の月は、満月に近づく半月を言います。月の模様やクレーターを観察するのに適しています。星空は夜遅くから広がるでしょう。";
+    }
+
+    if (age < 9) {
+      return "月の形は半月に近づいてゆきます。月のクレーターを観察するのに適しています。";
+    }
+
+    return "空が暗くなってからもしばらく月明かりがありそうです。星空の観察は、月が沈んだ後がより良いでしょう。";
+  }
+
+  // ▼ 月が欠けていく時期：月の出を基準にする
+  const moonrise = getMoonRiseSet(date, 1);
+
+  if (!moonrise) {
+    return "月の出時刻を確認できません。月の形や空の様子を観察するのもよさそうです。";
+  }
+
+  // ▼ 月が空の暗くなる時刻より後に昇る
+  if (moonrise.date.getTime() > dusk.getTime()) {
+    if (phaseName === "下弦の月") {
+      return "上弦の月は、新月に近づく半月を言います。月の模様やクレーターを観察するのに適しています。月が昇るまでの時間は、星空を楽しめそうです。";
+    }
+
+    if (age >= 21 && age < 24) {
+      return "月が昇るまでの時間は星空を楽しめそうです。半月に近く、クレーターの観察にもむきます。";
+    }
+
+    if (age >= 24) {
+      return "月が昇るまで星空を楽しめそうです。昇ってからの細い月にも注目するとよさそうです。";
+    }
+
+    return "空が暗くなってから月が昇るまでは星空を楽しめそうです。";
+  }
+
+  // ▼ 空が暗くなるころには月が昇っている
+  if (phaseName === "下弦の月") {
+    return "下弦の月は半月です。月の模様を観察するのもよさそうです。";
+  }
+
+  if (age >= 21 && age < 24) {
+    return "半月に近い形の月が見えそうです。月の模様を観察するのもよさそうです。";
+  }
+
+  if (age >= 24) {
+    return "細い月が見えるかもしれません。月の形や位置に注目するのもよさそうです。";
+  }
+
+  return "空が暗くなるころにはもう、月が昇っているでしょう。夜空が明るいので、星より月の観察にむくでしょう。";
+}
 
     function renderMoonObservation() {
     const content = document.getElementById(
@@ -549,20 +607,20 @@ function getAstronomicalTwilight(date) {
 
       // テストする場合は上の行をコメントアウトし、次の行を有効にする
       // 例）2026年10月11日 → 2026,9,11 ※月は-1とする
-      // const today = new Date(2026, 9, 5);
+      // const today = new Date(2027, 7, 22);
 
-const age = getMoonAge(today);
-const phaseIndex = getMoonPhaseIndex(today);
-const phaseName = getPhaseName(today);
+      const age = getMoonAge(today);
+      const phaseIndex = getMoonPhaseIndex(today);
+      const phaseName = getPhaseName(today);
 
-const observationWindow =
-  getObservationWindow(today);
+      const observationWindow =
+        getObservationWindow(today);
 
-const rating =
-  getSkyExpectation(observationWindow);
+      const rating =
+        getSkyExpectation(observationWindow);
 
-const observationWindowText =
-  formatObservationWindow(observationWindow);
+      const observationWindowText =
+        formatObservationWindow(observationWindow);
 
       // 月の出・月の入りの時刻表示（Astronomy Engineで直接計算）
       let moonTimeMessage;
@@ -573,27 +631,19 @@ const observationWindowText =
         const riseText = formatMoonEvent(getMoonRiseSet(today, 1));
         const setText = formatMoonEvent(getMoonRiseSet(today, -1));
 
-if (riseText && setText) {
-
-  moonTimeMessage =
-    `(月の出 ${riseText}　月の入り ${setText})`;
-
-} else if (riseText) {
-
-  moonTimeMessage =
-    `(月の出 ${riseText})`;
-
-} else if (setText) {
-
-  moonTimeMessage =
-    `(月の入り ${setText})`;
-
-} else {
-
-  moonTimeMessage =
-    "(月の出入り時刻データなし)";
-
-}
+        if (riseText && setText) {
+          moonTimeMessage =
+            `(月の出 ${riseText}　月の入り ${setText})`;
+        } else if (riseText) {
+          moonTimeMessage =
+            `(月の出 ${riseText})`;
+        } else if (setText) {
+          moonTimeMessage =
+            `(月の入り ${setText})`;
+        } else {
+          moonTimeMessage =
+            "(月の出入り時刻データなし)";
+        }
       }
 
       // 月相に応じた観察アドバイス
@@ -605,7 +655,7 @@ if (riseText && setText) {
       const imagePath =
         "image/common/" + MOON_IMAGES[phaseIndex];
 
-        // 年月日表示
+      // 年月日表示
       const dateText =
         `（調整中）${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
 
@@ -659,20 +709,22 @@ if (riseText && setText) {
                 padding: 0;
               "
             >
-<div style="
-  font-size: 0.75em;
-  text-align: center;
-  line-height: 1.2;
-  margin: 2px 0;
-">
-  ${
-    ["新月", "上弦の月", "満月", "下弦の月"]
-      .includes(phaseName)
-      ? phaseName + "<br>"
-      : ""
-  }
-  月齢${age.toFixed(1)}
-</div>
+
+            <div style="
+              font-size: 0.75em;
+              text-align: center;
+              line-height: 1.2;
+              margin: 2px 0;
+            ">
+              ${
+                ["新月", "上弦の月", "満月", "下弦の月"]
+                  .includes(phaseName)
+                  ? phaseName + "<br>"
+                  : ""
+              }
+              月齢${age.toFixed(1)}
+            </div>
+
             <!-- 下の▼：翌日へ -->
             <button
               type="button"
@@ -701,54 +753,56 @@ if (riseText && setText) {
             ">
               ${dateText}
             </div>
-<div style="
-  display: inline-block;
-  margin: 2px 0 8px 0;
-  padding: 3px 12px;
-  border: 1px solid currentColor;
-  box-sizing: border-box;
-  width: 100%;
-">
 
             <div style="
-              font-size: 1.1rem;
-              font-weight: 500;
-              margin: 8px 0 6px 0;
-              text-align: center;
+              display: inline-block;
+              margin: 2px 0 8px 0;
+              padding: 3px 12px;
+              border: 1px solid currentColor;
+              box-sizing: border-box;
+              width: 100%;
             ">
-              <span style="font-size:0.8rem;">今夜の星空期待値</span>
-              <span style="
-                font-size: 1.5rem;
-                color: rgb(255,215,0);
-                text-shadow: 0 0 2px rgba(0,0,0,0.5);
+              <div style="
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin: 8px 0 6px 0;
+                text-align: center;
               ">
-                ${rating.stars}
-              </span>
+                <span style="font-size:0.8rem;">今夜の星空期待値</span>
+                <span style="
+                  font-size: 1.5rem;
+                  color: rgb(255,215,0);
+                  text-shadow: 0 0 2px rgba(0,0,0,0.5);
+                ">
+                  ${rating.stars}
+                </span>
+              </div>
             </div>
-</div>
 
-<div style="
-  display: inline-block;
-  margin: 2px 0 8px 0;
-  padding: 3px 12px;
-  border: 1px solid currentColor;
-  box-sizing: border-box;
-  width: 100%;
-">
-<div style="
-  font-size: 0.8rem;
-  margin: 4px 0;
-  text-align: center;
-">
-  星空観察おすすめ時間帯
-</div>
+            <div style="
+              display: inline-block;
+              margin: 2px 0 8px 0;
+              padding: 3px 12px;
+              border: 1px solid currentColor;
+              box-sizing: border-box;
+              width: 100%;
+            ">
+              <div style="
+                font-size: 0.8rem;
+                margin: 4px 0;
+                text-align: center;
+              ">
+                星空観察おすすめ時間帯
+              </div>
 
-<div style="font-size:1.2em; font-weight: 600;
-  text-align: center;">
-  ${observationWindowText}
-</div>
-
-</div>
+              <div style="
+                font-size: 1.2em;
+                font-weight: 600;
+                text-align: center;
+              ">
+                ${observationWindowText}
+              </div>
+            </div>
 
             <div style="
               margin: 2px 0 5px 0;
@@ -778,7 +832,7 @@ if (riseText && setText) {
         });
       }
 
-      // ▼ 翌日へ移動
+      // ▼ 翌日へ
       const nextButton = content.querySelector(
         "#moon-date-next"
       );
