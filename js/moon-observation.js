@@ -758,7 +758,7 @@ if (riseText && setText) {
             </div>
 
             <div style="margin: 0; text-align: left;">
-              ${observationMessage}<span style="font-size:0.75em;"> ※期待値は天候や街の光などを考慮していません</span>
+              ${observationMessage}<span style="font-size:0.75em;"> ※大阪市の出入時刻。期待値は天候等を考慮していません。</span>
             </div>
           </div>
         </div>
