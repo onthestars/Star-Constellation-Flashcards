@@ -65,13 +65,19 @@ const specialPhotos = {
   // ▼夏の星座
       "Lyra": {
     noline: [
-      "Lyra-noline-pic01.jpg"
+      "Lyra-noline-pic01.jpg",
+            "Lyra-noline-pic02.jpg",
+                  "Lyra-noline-pic03.jpg"
     ],
     lines: [
-      "Lyra-lines-pic01.jpg"
+      "Lyra-lines-pic01.jpg",
+            "Lyra-lines-pic02.jpg",
+                  "Lyra-lines-pic03.jpg"
     ],
     caption: [
-      "こと座（1等星のベガ＝織姫星）／2026年7月12日／兵庫県猪名川町山中"
+      "こと座（1等星のベガ＝織姫星）／2026年7月12日／兵庫県猪名川町山中",
+            "こと座／2026年10月11日／大阪府高槻市山中"
+            
     ]
   },
   
