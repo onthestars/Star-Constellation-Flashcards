@@ -353,6 +353,19 @@ function getSkyExpectation(window) {
   };
 }
 
+// ▼ 時刻を10分単位で切り捨て
+function floorTo10Minutes(date) {
+  const rounded = new Date(date);
+
+  rounded.setMinutes(
+    Math.floor(rounded.getMinutes() / 10) * 10,
+    0,
+    0
+  );
+
+  return rounded;
+}
+
 // ▼ おすすめ時間帯を表示用に整形
 function formatObservationWindow(window) {
 
@@ -360,29 +373,35 @@ function formatObservationWindow(window) {
     return "ありません";
   }
 
-  const startHour =
-    window.start.getHours();
+const startDate =
+  floorTo10Minutes(window.start);
 
-  const startMinute =
-    String(window.start.getMinutes()).padStart(2, "0");
+const endDate =
+  floorTo10Minutes(window.end);
 
-  const endHour =
-    window.end.getHours();
+const startHour =
+  startDate.getHours();
 
-  const endMinute =
-    String(window.end.getMinutes()).padStart(2, "0");
+const startMinute =
+  String(startDate.getMinutes()).padStart(2, "0");
 
-  const startText =
-    `${startHour}:${startMinute}`;
+const endHour =
+  endDate.getHours();
 
-  const endText =
-    `${endHour}:${endMinute}`;
+const endMinute =
+  String(endDate.getMinutes()).padStart(2, "0");
+
+const startText =
+  `${startHour}:${startMinute}頃`;
+
+const endText =
+  `${endHour}:${endMinute}頃`;
 
   // ▼ 終了時刻が翌日か判定
-  const isNextDay =
-    window.end.getFullYear() !== window.start.getFullYear() ||
-    window.end.getMonth() !== window.start.getMonth() ||
-    window.end.getDate() !== window.start.getDate();
+const isNextDay =
+  endDate.getFullYear() !== startDate.getFullYear() ||
+  endDate.getMonth() !== startDate.getMonth() ||
+  endDate.getDate() !== startDate.getDate();
 
   return isNextDay
     ? `${startText}～翌${endText}`
