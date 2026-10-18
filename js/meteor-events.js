@@ -39,14 +39,14 @@ function getMeteorMessage(date) {
 messages.push(
   `<div style="
     display:inline-block;
-    padding:2px 6px;
+    padding:3px 6px 2px 6px;
     background:rgb(255,215,0);
     color:rgb(6,7,64);
     font-weight:bold;
     border-radius:4px;
     margin:8px 0;
   ">
-    ☄ 本日、${meteor.name}が極大です。
+    ☄ 本日、${meteor.name}が極大です
   </div>`
 );
 
@@ -58,9 +58,10 @@ messages.push(
       const [peakMonth, peakDay] =
         meteor.peak.split("-");
 
-      messages.push(
-        `☄ ${meteor.name}活動中（極大は${Number(peakMonth)}月${Number(peakDay)}日頃）`
-      );
+messages.push(
+  `☄ ${meteor.name}活動中<span style="font-size:0.85em; font-weight:normal;">（${Number(peakMonth)}/${Number(peakDay)}頃極大）</span>`
+);
+
 
       continue;
     }
