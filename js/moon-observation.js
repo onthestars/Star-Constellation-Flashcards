@@ -404,7 +404,7 @@ const isNextDay =
   endDate.getDate() !== startDate.getDate();
 
   return isNextDay
-    ? `${startText}～翌${endText}`
+    ? `${startText}～<span style="font-size:0.8em;">翌</span>${endText}`
     : `${startText}～${endText}`;
 }
 
