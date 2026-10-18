@@ -744,20 +744,27 @@ const dateText =
               "
             >
 
-            <div style="
-              font-size: 0.75em;
-              text-align: center;
-              line-height: 1.2;
-              margin: 2px 0;
-            ">
-              ${
-                ["新月", "上弦の月", "満月", "下弦の月"]
-                  .includes(phaseName)
-                  ? phaseName + "<br>"
-                  : ""
-              }
-              月齢${age.toFixed(1)}
-            </div>
+            <!-- 月画像下のテキスト -->
+<div style="
+  font-size: 0.75em;
+  text-align: center;
+  line-height: 1.2;
+  margin: 2px 0;
+">
+  月齢${age.toFixed(1)}
+  <br>
+  ${
+    phaseName === "新月"
+      ? "新　月"
+      : phaseName === "満月"
+        ? "満　月"
+        : phaseName === "満ちていく月"
+          ? "満ちる月"
+          : phaseName === "欠けていく月"
+            ? "欠ける月"
+            : phaseName
+  }
+</div>
 
             <!-- 下の▼：翌日へ -->
             <button
