@@ -59,7 +59,7 @@ messages.push(
         meteor.peak.split("-");
 
 messages.push(
-  `☄ ${meteor.name}活動中<span style="font-size:0.85em; font-weight:normal;">（${Number(peakMonth)}/${Number(peakDay)}頃極大）</span>`
+  `☄ ${meteor.name}活動中<span style="font-size:0.85em; font-weight:normal;">‥${Number(peakMonth)}/${Number(peakDay)}頃極大</span>`
 );
 
 
