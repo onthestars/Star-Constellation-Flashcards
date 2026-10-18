@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/effects.css">
   <link rel="stylesheet" href="css/ui.css">
   <link rel="stylesheet" href="css/meteor.css">
-    <link rel="stylesheet" href="css/moon-observation.css">
+  <link rel="stylesheet" href="css/moon-observation.css">
 
   <link rel="manifest" href="manifest.json">
 
@@ -34,12 +34,7 @@
 
   <!-- 音声 ON/OFF・月パネル再表示（画面右上固定） -->
   <div id="sound-global-buttons">
-    <img
-      src="image/common/btn-moon-obs.png"
-      id="moonObservationShowBtn"
-      alt="月の満ち欠けパネルを再表示"
-      title="月の満ち欠けパネルを再表示"
-    >
+    <img src="image/common/btn-moon-obs.png" id="moonObservationShowBtn" alt="月の満ち欠けパネルを再表示" title="月の満ち欠けパネルを再表示">
     <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
     <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
   </div>
@@ -54,16 +49,16 @@
   <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
 
   <!-- ▼ 今夜の月ガイド -->
-<div id="moon-observation-panel">
+  <div id="moon-observation-panel">
 
-  <button id="moon-panel-close" aria-label="閉じる">
-    ✕
-  </button>
+    <button id="moon-panel-close" aria-label="閉じる">
+      ✕
+    </button>
 
-  <div id="moon-observation-content">
-    読み込み中...
+    <div id="moon-observation-content">
+      読み込み中...
+    </div>
   </div>
-</div>
 
   <!-- ★★★★★ 月専用 Special Viewer ★★★★★ -->
   <div id="moon-special-viewer" style="display:none;">
@@ -96,27 +91,18 @@
         <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
       </div>
 
-<!-- ぴーとの星図ボタン（独立した上段） -->
-<div class="pete-chart-group">
-  <img
-    src="image/common/btn-star-chart.png"
-    id="peteChartBtn"
-    class="btn-special"
-    alt="ぴーとの星図"
-    role="button"
-    tabindex="0"
-  >
-</div>
+      <!-- ぴーとの星図ボタン（独立した上段） -->
+      <div class="pete-chart-group">
+        <img src="image/common/btn-star-chart.png" id="peteChartBtn" class="btn-special" alt="ぴーとの星図" role="button"
+          tabindex="0">
+      </div>
 
-<!-- 操作ボタン（下段） -->
-<div class="control-group">
-  <img src="image/common/btn-back.png"
-       class="btn-control" id="prevBtn" alt="前へ">
-  <img src="image/common/btn-flip.png"
-       class="btn-control" id="flipBtn" alt="裏返す">
-  <img src="image/common/btn-next.png"
-       class="btn-control" id="nextBtn" alt="次へ">
-</div>
+      <!-- 操作ボタン（下段） -->
+      <div class="control-group">
+        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
+        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
+        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
+      </div>
 
       <div class="special-group">
         <img src="image/common/btn-3stars.png" class="btn-special" id="specialBtn" alt="Special">
@@ -192,8 +178,10 @@
   <!-- 月齢計算ライブラリ読み込み -->
   <script src="js/vendor/astronomy.browser.min.js"></script>
 
-    <!-- ▼ 今夜の月 -->
-  <script src="js/moon-observation.js"></script>
+  <!-- ▼ 今夜の月 -->
+<script src="js/data-meteor.js"></script>
+<script src="js/meteor-events.js"></script>
+<script src="js/moon-observation.js"></script>
 
   <!-- ▼ 最後に main.js（全ての初期化を行う） -->
   <script src="js/main.js"></script>
