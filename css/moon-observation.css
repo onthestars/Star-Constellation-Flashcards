@@ -17,9 +17,9 @@
 /* 月の観察パネル */
 #moon-observation-panel {
   position: fixed;
-  top: 48px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 92%;
   max-width: 500px;
   padding: 12px 16px;
@@ -109,13 +109,4 @@
 /* フェードイン登場時間 */
 #moon-observation-panel.moon-panel-fade-in {
   animation: moonObservationFadeIn 0.8s ease-out both;
-}
-
-/* スマホでは画面の上下左右中央に配置 */
-@media screen and (max-width: 600px) {
-  #moon-observation-panel {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
 }
