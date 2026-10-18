@@ -392,10 +392,10 @@ const endMinute =
   String(endDate.getMinutes()).padStart(2, "0");
 
 const startText =
-  `${startHour}:${startMinute}頃`;
+  `${startHour}:${startMinute}<span style="font-size:0.8em; font-weight:normal;">頃</span>`;
 
 const endText =
-  `${endHour}:${endMinute}頃`;
+  `${endHour}:${endMinute}<span style="font-size:0.8em; font-weight:normal;">頃</span>`;
 
   // ▼ 終了時刻が翌日か判定
 const isNextDay =
@@ -680,6 +680,9 @@ function getObservationMessage(phaseName, date) {
         today
       );
 
+      // ▼ 流星群メッセージ取得
+const meteorMessage = getMeteorMessage(today);
+
       const imagePath =
         "image/common/" + MOON_IMAGES[phaseIndex];
 
@@ -843,11 +846,20 @@ const dateText =
               ${moonTimeMessage}
             </div>
 
-            <div style="margin: 0; text-align: left;">
-              ${observationMessage}<span style="font-size:0.75em;"> ※大阪市の出入時刻。期待値は天候等を考慮していません。</span>
-            </div>
-          </div>
-        </div>
+<div style="margin: 0; text-align: left;">
+  ${observationMessage} <span style="font-size:0.75em;">
+    ※出入時刻は大阪市。期待値は天候等を考慮していません。
+  </span>
+
+  ${
+    meteorMessage
+      ? `<br><br><span style="
+          color: #ffd700;
+          font-weight: 600;
+        ">${meteorMessage}</span>`
+      : ""
+  }
+</div>
       `;
 
       // ▲ 前日へ移動
