@@ -36,9 +36,19 @@ function getMeteorMessage(date) {
 
     if (meteor.peak === mmdd) {
 
-      messages.push(
-        `☄ 本日、${meteor.name}が極大です。`
-      );
+messages.push(
+  `<div style="
+    display:inline-block;
+    padding:2px 6px;
+    background:rgb(255,215,0);
+    color:rgb(6,7,64);
+    font-weight:bold;
+    border-radius:4px;
+    margin:8px 0;
+  ">
+    ☄ 本日、${meteor.name}が極大です。
+  </div>`
+);
 
       continue;
     }
