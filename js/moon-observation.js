@@ -465,6 +465,15 @@ function getAstronomicalTwilight(date) {
   }
 }
 
+// ▼ 曜日を取得
+function getWeekdayText(date) {
+  const weekdays = [
+    "日", "月", "火", "水", "木", "金", "土"
+  ];
+
+  return weekdays[date.getDay()];
+}
+
   // 今夜の観察対象日を取得（午前5時までは前日扱い）
   function getObservationDate() {
     const now = new Date();
@@ -674,9 +683,12 @@ function getObservationMessage(phaseName, date) {
       const imagePath =
         "image/common/" + MOON_IMAGES[phaseIndex];
 
-      // 年月日表示
-      const dateText =
-        `（調整中）${String(today.getFullYear())}年${today.getMonth() + 1}月${today.getDate()}日`;
+// ▼ 年月日＋曜日表示
+const weekday =
+  getWeekdayText(today);
+
+const dateText =
+  `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日(${weekday})`;
 
       content.innerHTML = `
         <div style="
