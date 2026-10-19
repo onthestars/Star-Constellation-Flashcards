@@ -2,8 +2,8 @@
 
 /* ▼ 月移動ボタン */
 .moon-date-button {
-  width: 44px;
-  height: 24px;
+  width: 56px; /* 当たり判定 */
+  height: 32px; /* ボタン同士のマージン調整にも */
 
   display: flex;
   align-items: center;
