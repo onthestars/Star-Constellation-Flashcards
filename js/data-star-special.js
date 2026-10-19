@@ -93,6 +93,18 @@ const specialPhotos = {
     ]
   },
 
+        "Cygnus": {
+    noline: [
+      "Cygnus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Cygnus-lines-pic01.jpg"
+    ],
+    caption: [
+      "はくちょう座（上、一部）と、こと座／2026年10月11日／大阪府高槻市山中"
+    ]
+  },
+
   "Ophiuchus": {
     noline: [
       "Ophiuchus-noline-pic01.jpg"
