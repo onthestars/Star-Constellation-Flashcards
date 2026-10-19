@@ -743,85 +743,101 @@ const dateText =
           line-height: 1.3;
           font-size: 14px;
         ">
-          <div style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 0 0 48px;
-            gap: 0;
-          ">
-            <!-- 上の▲：前の日へ -->
-            <button
-              type="button"
-              id="moon-date-previous"
-              aria-label="前の日の月"
-              title="前日"
-              style="
-                border: none;
-                background: transparent;
-                color: inherit;
-                font-size: 14px;
-                line-height: 18px;
-                cursor: pointer;
-              "
-            >▲</button>
-
-            <!-- 月の画像 -->
-            <img
-              src="${imagePath}"
-              alt="${phaseName}"
-              style="
-                display: block;
-                width: 40px;
-                height: 40px;
-                object-fit: contain;
-                margin: 4px 0;
-                padding: 0;
-              "
-            >
-
-            <!-- 月画像下のテキスト -->
 <div style="
-  font-size: 0.75em;
-  text-align: center;
-  line-height: 1.2;
-  margin: 2px 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 56px;
+  gap:4px;
 ">
-  月齢${age.toFixed(1)}
-  <br>
-  ${
-    phaseName === "新月"
-      ? "新　月"
-      : phaseName === "満月"
-        ? "満　月"
-        : phaseName === "満ちていく月"
-          ? "満ちる月"
-          : phaseName === "欠けていく月"
-            ? "欠ける月"
-            : phaseName
-  }
-</div>
 
-            <!-- 下の▼：翌日へ -->
-            <button
-              type="button"
-              id="moon-date-next"
-              aria-label="次の日の月"
-              title="翌日"
-              style="
-                width: 32px;
-                height: 18px;
-                padding: 0;
-                border: none;
-                background: transparent;
-                color: inherit;
-                font-size: 14px;
-                line-height: 18px;
-                cursor: pointer;
-              "
-            >▼</button>
-          </div>
+<button
+  type="button"
+  id="moon-date-back-7"
+  class="moon-date-button"
+  aria-label="7日前"
+  title="7日前"
+>
+  <img
+    src="image/common/btn-moon-back-7days.png"
+    alt=""
+  >
+</button>
+
+<button
+  type="button"
+  id="moon-date-back-1"
+  class="moon-date-button"
+  aria-label="1日前"
+  title="1日前"
+>
+  <img
+    src="image/common/btn-moon-back-1day.png"
+    alt=""
+  >
+</button>
+
+  <img
+    src="${imagePath}"
+    alt="${phaseName}"
+    style="
+      display:block;
+      width:40px;
+      height:40px;
+      object-fit:contain;
+      margin:4px 0;
+    "
+  >
+
+  <div style="
+    font-size:0.75em;
+    text-align:center;
+    line-height:1.2;
+    margin:2px 0;
+  ">
+    月齢${age.toFixed(1)}
+    <br>
+    ${
+      phaseName === "新月"
+        ? "新　月"
+        : phaseName === "満月"
+          ? "満　月"
+          : phaseName === "満ちていく月"
+            ? "満ちる月"
+            : phaseName === "欠けていく月"
+              ? "欠ける月"
+              : phaseName
+    }
+  </div>
+
+<button
+  type="button"
+  id="moon-date-next-1"
+  class="moon-date-button"
+  aria-label="1日後"
+  title="1日後"
+>
+  <img
+    src="image/common/btn-moon-next-1day.png"
+    alt=""
+  >
+</button>
+
+<button
+  type="button"
+  id="moon-date-next-7"
+  class="moon-date-button"
+  aria-label="7日後"
+  title="7日後"
+>
+  <img
+    src="image/common/btn-moon-next-7days.png"
+    alt=""
+  >
+</button>
+
+</div>
 
           <div style="min-width: 0; margin: 0; padding: 0;">
             <div style="
@@ -907,30 +923,31 @@ const dateText =
       `;
 
       // ▲ 前日へ移動
-      const previousButton = content.querySelector(
-        "#moon-date-previous"
-      );
+      [
+  ["#moon-date-back-1", -1],
+  ["#moon-date-back-7", -7],
+  ["#moon-date-next-1", 1],
+  ["#moon-date-next-7", 7]
+].forEach(function ([selector, days]) {
 
-      if (previousButton) {
-        previousButton.addEventListener("click", function () {
-          playMoonSelectSound();
-          selectedDate.setDate(selectedDate.getDate() - 1);
-          renderMoonObservation();
-        });
-      }
+  const button = content.querySelector(selector);
 
-      // ▼ 翌日へ
-      const nextButton = content.querySelector(
-        "#moon-date-next"
-      );
+  if (!button) {
+    return;
+  }
 
-      if (nextButton) {
-        nextButton.addEventListener("click", function () {
-          playMoonSelectSound();
-          selectedDate.setDate(selectedDate.getDate() + 1);
-          renderMoonObservation();
-        });
-      }
+  button.addEventListener("click", function () {
+
+    playMoonSelectSound();
+
+    selectedDate.setDate(
+      selectedDate.getDate() + days
+    );
+
+    renderMoonObservation();
+  });
+
+});
 
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
