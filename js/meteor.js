@@ -255,7 +255,7 @@ function getMeteorSpawnRate() {
       return 0.50; // 流星群極大
 
     case "active": // 流星群活動期
-      return 0.12;
+      return 0.20;
 
     default:
       return 0.04; // 通常時
