@@ -11,6 +11,12 @@ html, body {
   height: 100%;
 }
 
+/* ▼ iPhone横→縦復帰時の文字拡大防止 */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   overflow: hidden; /* 上下揺れ防止 */
 
