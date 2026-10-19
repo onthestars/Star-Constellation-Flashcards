@@ -408,6 +408,18 @@ const specialPhotos = {
     ]
   },
 
+      "Lepus": {
+    noline: [
+      "Lepus-noline-pic01.jpg"
+    ],
+    lines: [
+      "Lepus-lines-pic01.jpg"
+    ],
+    caption: [
+      "オリオンの足もとで跳ねる、うさぎ座／2025年1月26日／紀伊半島南部"
+    ]
+  },
+
   "Winter-Triangle": {
     noline: [
       "Winter-Triangle-noline-pic01.jpg",
