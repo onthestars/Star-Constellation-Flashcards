@@ -659,19 +659,56 @@ function getObservationMessage(phaseName, date) {
         const riseText = formatMoonEvent(getMoonRiseSet(today, 1));
         const setText = formatMoonEvent(getMoonRiseSet(today, -1));
 
-        if (riseText && setText) {
-          moonTimeMessage =
-            `(月の出 ${riseText}　月の入り ${setText})`;
-        } else if (riseText) {
-          moonTimeMessage =
-            `(月の出 ${riseText})`;
-        } else if (setText) {
-          moonTimeMessage =
-            `(月の入り ${setText})`;
-        } else {
-          moonTimeMessage =
-            "(月の出入り時刻データなし)";
-        }
+if (riseText && setText) {
+  moonTimeMessage =
+    `<img
+      src="image/common/ico-moonrise.png"
+      alt="月の出"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:3px;
+      "
+    >${riseText}
+    　<img
+      src="image/common/ico-moonset.png"
+      alt="月の入り"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:3px;
+      "
+    >${setText}`;
+} else if (riseText) {
+  moonTimeMessage =
+    `<img
+      src="image/common/ico-moonrise.png"
+      alt="月の出"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:3px;
+      "
+    >${riseText}`;
+} else if (setText) {
+  moonTimeMessage =
+    `<img
+      src="image/common/ico-moonset.png"
+      alt="月の入り"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:3px;
+      "
+    >${setText}`;
+} else {
+  moonTimeMessage =
+    "月の出入り時刻データなし";
+}
       }
 
       // 月相に応じた観察アドバイス
