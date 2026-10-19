@@ -52,11 +52,17 @@
   z-index: 5;
   position: fixed;
   bottom: 6px;
-  left: 0;
-  width: 100%;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: auto;
+  display: inline-block;
+
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
+
   font-size: clamp(9px, 3vw, 12px);
   color: rgba(0, 9, 95, 0.7);
   padding: 2px 0;
