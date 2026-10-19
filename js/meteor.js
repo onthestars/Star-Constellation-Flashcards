@@ -246,19 +246,36 @@ const coreSize =
 
 }
 
+// ▼ 流星出現率取得
+function getMeteorSpawnRate() {
+
+  switch (getMeteorActivityLevel()) {
+
+    case "peak":
+      return 0.50; // 流星群極大
+
+    case "active": // 流星群活動期
+      return 0.12;
+
+    default:
+      return 0.04; // 通常時
+  }
+}
+
 // ===============================
 // 流星群モード（極大期っぽい）
 // ===============================
 
 setInterval(() => {
 
-  // 毎秒判定（数値を増やせば一度に複数流れる 例：0.12→1秒ごとの判定で12%）
-  if (Math.random() < 0.12) {
+  const spawnRate =
+    getMeteorSpawnRate();
+
+  if (Math.random() < spawnRate) {
 
     spawnMeteorCore();
 
-    // 連続出現確率
-    if (Math.random() < 0.1) {
+    if (Math.random() < spawnRate) {
 
       setTimeout(() => {
 

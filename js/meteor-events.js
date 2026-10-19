@@ -18,6 +18,32 @@ function isMeteorActive(mmdd, meteor) {
   );
 }
 
+// ▼ 流星群レベル取得
+function getMeteorActivityLevel(date = new Date()) {
+
+  const mmdd =
+    String(date.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(date.getDate()).padStart(2, "0");
+
+  let active = false;
+
+  for (const meteor of meteorEvents) {
+
+    // ▼ 極大日
+    if (meteor.peak === mmdd) {
+      return "peak";
+    }
+
+    // ▼ 活動期間
+    if (isMeteorActive(mmdd, meteor)) {
+      active = true;
+    }
+  }
+
+  return active ? "active" : "normal";
+}
+
 // ▼ 流星群メッセージ取得
 function getMeteorMessage(date) {
 
