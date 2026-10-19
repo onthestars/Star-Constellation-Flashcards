@@ -40,7 +40,7 @@
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
-  font-size: clamp(9px, 3vw, 12px);
+font-size: 12px;
   color: rgba(0, 9, 95, 0.7);
   pointer-events: none;
 
@@ -63,7 +63,7 @@
   white-space: nowrap;
   overflow: hidden;
 
-  font-size: clamp(9px, 3vw, 12px);
+font-size: 12px;
   color: rgba(0, 9, 95, 0.7);
   padding: 2px 0;
 
