@@ -612,101 +612,6 @@ const dateText =
           line-height: 1.3;
           font-size: 14px;
         ">
-<div style="
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex:0 0 56px;
-  gap:4px;
-">
-
-<button
-  type="button"
-  id="moon-date-back-7"
-  class="moon-date-button"
-  aria-label="7日前"
-  title="7日前"
->
-  <img
-    src="image/common/btn-moon-back-7days.png"
-    alt=""
-  >
-</button>
-
-<button
-  type="button"
-  id="moon-date-back-1"
-  class="moon-date-button"
-  aria-label="1日前"
-  title="1日前"
->
-  <img
-    src="image/common/btn-moon-back-1day.png"
-    alt=""
-  >
-</button>
-
-  <img
-    src="${imagePath}"
-    alt="${phaseName}"
-    style="
-      display:block;
-      width:40px;
-      height:40px;
-      object-fit:contain;
-      margin:4px 0;
-    "
-  >
-
-  <div style="
-    font-size:0.75em;
-    text-align:center;
-    line-height:1.2;
-    margin:2px 0;
-  ">
-    月齢${age.toFixed(1)}
-    <br>
-    ${
-      phaseName === "新月"
-        ? "新　月"
-        : phaseName === "満月"
-          ? "満　月"
-          : phaseName === "満ちていく月"
-            ? "満ちる月"
-            : phaseName === "欠けていく月"
-              ? "欠ける月"
-              : phaseName
-    }
-  </div>
-
-<button
-  type="button"
-  id="moon-date-next-1"
-  class="moon-date-button"
-  aria-label="1日後"
-  title="1日後"
->
-  <img
-    src="image/common/btn-moon-next-1day.png"
-    alt=""
-  >
-</button>
-
-<button
-  type="button"
-  id="moon-date-next-7"
-  class="moon-date-button"
-  aria-label="7日後"
-  title="7日後"
->
-  <img
-    src="image/common/btn-moon-next-7days.png"
-    alt=""
-  >
-</button>
-
-</div>
 
           <div style="min-width: 0; margin: 0; padding: 0;">
             <div style="
@@ -805,6 +710,106 @@ const dateText =
     `
     : ""
 }
+
+</div>
+
+<div style="
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 56px;
+  gap:4px;
+">
+
+<button
+  type="button"
+  id="moon-date-back-7"
+  class="moon-date-button"
+  aria-label="7日前"
+  title="7日前"
+>
+  <img
+    src="image/common/btn-moon-back-7days.png"
+    alt=""
+  >
+</button>
+
+<button
+  type="button"
+  id="moon-date-back-1"
+  class="moon-date-button"
+  aria-label="1日前"
+  title="1日前"
+>
+  <img
+    src="image/common/btn-moon-back-1day.png"
+    alt=""
+  >
+</button>
+
+  <img
+    src="${imagePath}"
+    alt="${phaseName}"
+    style="
+      display:block;
+      width:40px;
+      height:40px;
+      object-fit:contain;
+      margin:4px 0;
+    "
+  >
+
+  <div style="
+    font-size:0.75em;
+    text-align:center;
+    line-height:1.2;
+    margin:2px 0;
+  ">
+    月齢${age.toFixed(1)}
+    <br>
+    ${
+      phaseName === "新月"
+        ? "新　月"
+        : phaseName === "満月"
+          ? "満　月"
+          : phaseName === "満ちていく月"
+            ? "満ちる月"
+            : phaseName === "欠けていく月"
+              ? "欠ける月"
+              : phaseName
+    }
+  </div>
+
+<button
+  type="button"
+  id="moon-date-next-1"
+  class="moon-date-button"
+  aria-label="1日後"
+  title="1日後"
+>
+  <img
+    src="image/common/btn-moon-next-1day.png"
+    alt=""
+  >
+</button>
+
+<button
+  type="button"
+  id="moon-date-next-7"
+  class="moon-date-button"
+  aria-label="7日後"
+  title="7日後"
+>
+  <img
+    src="image/common/btn-moon-next-7days.png"
+    alt=""
+  >
+</button>
+
+</div>
+
+</div>
 
       `;
 
