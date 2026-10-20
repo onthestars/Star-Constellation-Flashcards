@@ -485,132 +485,7 @@ function getWeekdayText(date) {
     return now;
   }
 
-
-  // ▼ 月相・月齢・月の出入り・空が暗くなる時刻を考慮した観察コメント
-function getObservationMessage(phaseName, date) {
-  const age = getMoonAge(date);
-  const time = Astronomy.MakeTime(getReferenceDate(date));
-  const phaseAngle = Astronomy.MoonPhase(time);
-
-  // ▼ 空が十分暗くなる時刻（天文薄明の終わり）
-  const twilight = getAstronomicalTwilight(date);
-  const dusk = twilight ? twilight.dusk : null;
-
-  // ▼ 本当の新月
-  if (phaseName === "新月") {
-    return "今日は新月です。月明かりの影響が少ないため、星々が最も輝く夜です。星座や淡い星、天の川を見つけやすいでしょう。";
-  }
-
-  // ▼ 本当の満月
-  if (phaseName === "満月") {
-    return "今日は満月です。夜空が大変明るいので、星空よりも月の観察にむくと言えます。";
-  }
-
-  // ▼ 新月に近い時期
-  if (age <= 1.5 || age >= SYNODIC_MONTH - 1.5) {
-    if (dusk && dusk.getHours() >= 21) {
-      return "月明かりが少ない時期です。空が十分暗くなってから星空を眺めるのもよさそうです。";
-    }
-
-    return "月明かりが少なく、一晩中星空を楽しみやすいでしょう。";
-  }
-
-  // ▼ 満月に近い時期
-  if (age >= 13.5 && age <= 16) {
-    return "月明かりが強く、星空の観察には余り向きません。月の模様やクレーターを観察するのが良さそうです。";
-  }
-
-  // ▼ 天文薄明の時刻を取得できない場合
-  if (!dusk) {
-    return "空の明るさや月の位置を確かめながら、月や星の様子を観察するのもよさそうです。";
-  }
-
-  // ▼ 月が満ちていく時期：月の入りを基準にする
-  if (phaseAngle < 180) {
-    const moonset = getMoonRiseSet(date, -1);
-
-    if (!moonset) {
-      return "月の入り時刻を確認できません。月の形や空の様子を観察するのもよさそうです。";
-    }
-
-    // ▼ 月が空の暗くなる時刻より前に沈む
-    if (moonset.date.getTime() <= dusk.getTime()) {
-      if (dusk.getHours() >= 21) {
-        return "月は先に沈みそうですが、空が十分暗くなるのは遅めです。暗くなってから星空を眺めるのもよさそうです。";
-      }
-
-      if (age < 6) {
-        return "細い月が沈んだ後に、星空が広がるでしょう。";
-      }
-
-      if (phaseName === "上弦の月") {
-        return "上弦の月は半月です。月が沈んだ後の星空も楽しめそうです。";
-      }
-
-      if (age < 9) {
-        return "半月に近い形の月が沈んだ後は、星空を観察するのもよさそうです。";
-      }
-
-      return "月が沈んだ後は、星空を楽しみやすくなりそうです。";
-    }
-
-    // ▼ 月が空の暗くなる時刻より後に沈む
-    if (age < 6) {
-      return "夕方の細い月を楽しめそうです。月が沈んだ後に星空が広がるでしょう。";
-    }
-
-    if (phaseName === "上弦の月") {
-      return "上弦の月は、満月に近づく半月を言います。月の模様やクレーターを観察するのに適しています。星空は夜遅くから広がるでしょう。";
-    }
-
-    if (age < 9) {
-      return "月の形は半月に近づいてゆきます。月のクレーターを観察するのに適しています。";
-    }
-
-    return "空が暗くなってからもしばらく月明かりがありそうです。星空の観察は、月が沈んだ後がより良いでしょう。";
-  }
-
-  // ▼ 月が欠けていく時期：月の出を基準にする
-  const moonrise = getMoonRiseSet(date, 1);
-
-  if (!moonrise) {
-    return "月の出時刻を確認できません。月の形や空の様子を観察するのもよさそうです。";
-  }
-
-  // ▼ 月が空の暗くなる時刻より後に昇る
-  if (moonrise.date.getTime() > dusk.getTime()) {
-    if (phaseName === "下弦の月") {
-      return "上弦の月は、新月に近づく半月を言います。月の模様やクレーターを観察するのに適しています。月が昇るまでの時間は、星空を楽しめそうです。";
-    }
-
-    if (age >= 21 && age < 24) {
-      return "月が昇るまでの時間は星空を楽しめそうです。半月に近く、クレーターの観察にもむきます。";
-    }
-
-    if (age >= 24) {
-      return "月が昇るまで星空を楽しめそうです。昇ってからの細い月にも注目するとよさそうです。";
-    }
-
-    return "空が暗くなってから月が昇るまでは星空を楽しめそうです。";
-  }
-
-  // ▼ 空が暗くなるころには月が昇っている
-  if (phaseName === "下弦の月") {
-    return "下弦の月は半月です。月の模様を観察するのもよさそうです。";
-  }
-
-  if (age >= 21 && age < 24) {
-    return "半月に近い形の月が見えそうです。月の模様を観察するのもよさそうです。";
-  }
-
-  if (age >= 24) {
-    return "細い月が見えるかもしれません。月の形や位置に注目するのもよさそうです。";
-  }
-
-  return "空が暗くなるころにはもう、月が昇っているでしょう。夜空が明るいので、星より月の観察にむくでしょう。";
-}
-
-    function renderMoonObservation() {
+  function renderMoonObservation() {
     const content = document.getElementById(
       "moon-observation-content"
     );
@@ -710,12 +585,6 @@ if (riseText && setText) {
     "月の出入り時刻データなし";
 }
       }
-
-      // 月相に応じた観察アドバイス
-      const observationMessage = getObservationMessage(
-        phaseName,
-        today
-      );
 
       // ▼ 流星群メッセージ取得
 const meteorMessage = getMeteorMessage(today);
@@ -919,18 +788,24 @@ const dateText =
               ${moonTimeMessage}
             </div>
 
-<div style="margin: 0; text-align: left;">
-  ${observationMessage}
+            ${
+  meteorMessage
+    ? `
+      <div style="
+        margin:0;
+        text-align:left;
+      ">
+        <span style="
+          color:#ffd700;
+          font-weight:600;
+        ">
+          ${meteorMessage}
+        </span>
+      </div>
+    `
+    : ""
+}
 
-  ${
-    meteorMessage
-      ? `<br><br><span style="
-          color: #ffd700;
-          font-weight: 600;
-        ">${meteorMessage}</span>`
-      : ""
-  }
-</div>
       `;
 
       // ▲ 前日へ移動
