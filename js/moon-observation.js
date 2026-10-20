@@ -947,19 +947,20 @@ if (!button) {
   return;
 }
 
-// ▼ 2026/10/1より前へは移動不可
-if (
-  (selector === "#moon-date-back-1" &&
-    getDateKey(today) <= MOON_DATA_START) ||
+// ▼ ボタン押下後の日付を計算　データ期間外は月送りボタンを押せなくする
+const targetDate = new Date(today);
 
-  (selector === "#moon-date-back-7" &&
-    getDateKey(
-      new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate() - 6
-      )
-    ) < MOON_DATA_START)
+targetDate.setDate(
+  targetDate.getDate() + days
+);
+
+const targetKey =
+  getDateKey(targetDate);
+
+// ▼ データ期間外なら無効化
+if (
+  targetKey < MOON_DATA_START ||
+  targetKey > MOON_DATA_END
 ) {
   button.disabled = true;
   button.style.opacity = "0.3";
