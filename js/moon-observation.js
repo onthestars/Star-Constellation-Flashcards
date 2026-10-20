@@ -881,7 +881,7 @@ const dateText =
     margin-top:4px;
     line-height:1.2;
   ">
-    ※天候等を考慮していません
+    ※天候等は考慮していません
   </div>
 </div>
             </div>
