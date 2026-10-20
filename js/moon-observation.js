@@ -241,7 +241,7 @@
 const timeText =
   `${hour}:${String(minute).padStart(2, "0")}頃`;
 
-    return (event.isNextDay ? "翌日" : "") + timeText;
+    return (event.isNextDay ? "翌" : "") + timeText;
   }
 
 // ▼ おすすめ時間帯を取得
@@ -680,7 +680,7 @@ if (riseText && setText) {
         vertical-align:-3px;
         margin-right:3px;
       "
-    >${setText}`;
+    >${setText} ※大阪市`;
 } else if (riseText) {
   moonTimeMessage =
     `<img
@@ -692,7 +692,7 @@ if (riseText && setText) {
         vertical-align:-3px;
         margin-right:3px;
       "
-    >${riseText}`;
+    >${riseText} ※大阪市`;
 } else if (setText) {
   moonTimeMessage =
     `<img
@@ -704,7 +704,7 @@ if (riseText && setText) {
         vertical-align:-3px;
         margin-right:3px;
       "
-    >${setText}`;
+    >${setText} ※大阪市`;
 } else {
   moonTimeMessage =
     "月の出入り時刻データなし";
@@ -856,21 +856,34 @@ const dateText =
               box-sizing: border-box;
               width: 100%;
             ">
-              <div style="
-                font-size: 1.1rem;
-                font-weight: 500;
-                margin: 8px 0 6px 0;
-                text-align: center;
-              ">
-                <span style="font-size:0.8rem;">今夜の星空期待値</span>
-                <span style="
-                  font-size: 1.5rem;
-                  color: rgb(255,215,0);
-                  text-shadow: 0 0 2px rgba(0,0,0,0.5);
-                ">
-                  ${rating.stars}
-                </span>
-              </div>
+<div style="
+  text-align:center;
+  margin:8px 0 6px 0;
+">
+  <div style="
+    font-size:0.8rem;
+    margin-bottom:2px;
+  ">
+    今夜の星空期待値
+  </div>
+
+  <div style="
+    font-size:1.5rem;
+    color:rgb(255,215,0);
+    text-shadow:0 0 2px rgba(0,0,0,0.5);
+    line-height:1;
+  ">
+    ${rating.stars}
+  </div>
+
+  <div style="
+    font-size:0.7em;
+    margin-top:4px;
+    line-height:1.2;
+  ">
+    ※天候、人工光等を考慮しない参考値。
+  </div>
+</div>
             </div>
 
             <div style="
@@ -886,7 +899,7 @@ const dateText =
                 margin: 4px 0;
                 text-align: center;
               ">
-                星空観察おすすめ時間帯
+                星空おすすめ時間帯
               </div>
 
               <div style="
@@ -907,9 +920,7 @@ const dateText =
             </div>
 
 <div style="margin: 0; text-align: left;">
-  ${observationMessage} <span style="font-size:0.75em;">
-    ※出入時刻は大阪市。期待値は天候等を考慮していません。
-  </span>
+  ${observationMessage}
 
   ${
     meteorMessage
