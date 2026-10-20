@@ -941,22 +941,45 @@ const dateText =
   ["#moon-date-next-7", 7]
 ].forEach(function ([selector, days]) {
 
-  const button = content.querySelector(selector);
+const button = content.querySelector(selector);
 
-  if (!button) {
+if (!button) {
+  return;
+}
+
+// ▼ 2026/10/1より前へは移動不可
+if (
+  (selector === "#moon-date-back-1" &&
+    getDateKey(today) <= MOON_DATA_START) ||
+
+  (selector === "#moon-date-back-7" &&
+    getDateKey(
+      new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 6
+      )
+    ) < MOON_DATA_START)
+) {
+  button.disabled = true;
+  button.style.opacity = "0.3";
+  button.style.cursor = "default";
+}
+
+button.addEventListener("click", function () {
+
+  if (button.disabled) {
     return;
   }
 
-  button.addEventListener("click", function () {
+  playMoonSelectSound();
 
-    playMoonSelectSound();
+  selectedDate.setDate(
+    selectedDate.getDate() + days
+  );
 
-    selectedDate.setDate(
-      selectedDate.getDate() + days
-    );
-
-    renderMoonObservation();
-  });
+  renderMoonObservation();
+});
 
 });
 
