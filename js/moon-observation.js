@@ -877,11 +877,11 @@ const dateText =
   </div>
 
   <div style="
-    font-size:0.7em;
+    font-size:0.65em;
     margin-top:4px;
     line-height:1.2;
   ">
-    ※天候等を考慮しない参考値
+    ※天候等を考慮していません
   </div>
 </div>
             </div>
