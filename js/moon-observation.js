@@ -881,7 +881,7 @@ const dateText =
     margin-top:4px;
     line-height:1.2;
   ">
-    ※天候、人工光等を考慮しない参考値。
+    ※天候、人工光等を考慮しない参考値
   </div>
 </div>
             </div>
