@@ -3,6 +3,7 @@
 const meteorEvents = [
   {
     name: "しぶんぎ座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Quadrantids.html",
     start: "12-28",
     end: "01-12",
     peak: "01-04"
@@ -10,6 +11,7 @@ const meteorEvents = [
 
   {
     name: "こと座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Lyrids.html",
     start: "04-14",
     end: "04-30",
     peak: "04-22"
@@ -17,6 +19,7 @@ const meteorEvents = [
 
   {
     name: "みずがめ座η流星群",
+    url: "https://www.study-style.com/seiza/meteors/Aquariids-eta.html",
     start: "04-19",
     end: "05-28",
     peak: "05-06"
@@ -24,6 +27,7 @@ const meteorEvents = [
 
   {
     name: "みずがめ座δ南流星群",
+    url: "https://www.study-style.com/seiza/meteors/Aquariids-sda.html",
     start: "07-12",
     end: "08-23",
     peak: "07-31"
@@ -31,6 +35,7 @@ const meteorEvents = [
 
   {
     name: "ペルセウス座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Perseids.html",
     start: "07-17",
     end: "08-24",
     peak: "08-13"
@@ -38,6 +43,7 @@ const meteorEvents = [
 
   {
     name: "10月りゅう座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Draconids.html",
     start: "10-06",
     end: "10-10",
     peak: "10-09"
@@ -45,6 +51,7 @@ const meteorEvents = [
 
   {
     name: "オリオン座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Orionids.html",
     start: "10-02",
     end: "11-07",
     peak: "10-21"
@@ -52,6 +59,7 @@ const meteorEvents = [
 
   {
     name: "おうし座南流星群",
+    url: "https://www.study-style.com/seiza/meteors/Taurids-sta.html",
     start: "09-20",
     end: "11-20",
     peak: "11-05"
@@ -59,6 +67,7 @@ const meteorEvents = [
 
   {
     name: "おうし座北流星群",
+    url: "https://www.study-style.com/seiza/meteors/Taurids-nta.html",
     start: "10-20",
     end: "12-10",
     peak: "11-12"
@@ -66,6 +75,7 @@ const meteorEvents = [
 
   {
     name: "しし座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Leonids.html",
     start: "11-06",
     end: "11-30",
     peak: "11-18"
@@ -73,6 +83,7 @@ const meteorEvents = [
 
   {
     name: "ふたご座流星群",
+    url: "https://www.study-style.com/seiza/meteors/Geminids.html",
     start: "12-04",
     end: "12-20",
     peak: "12-14"

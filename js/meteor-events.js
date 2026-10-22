@@ -72,7 +72,19 @@ messages.push(
     border-radius:4px;
     margin:8px 0;
   ">
-    ☄ 本日、${meteor.name}が極大です
+☄ 本日、
+<a
+  href="${meteor.url}"
+  target="_blank"
+  rel="noopener noreferrer"
+  style="
+    color:rgb(6,7,64);
+    font-weight:bold;
+  "
+>
+  ${meteor.name}
+</a>
+が極大です
   </div>`
 );
 
@@ -85,11 +97,28 @@ messages.push(
         meteor.peak.split("-");
 
 messages.push(
-  `☄ ${meteor.name}活動中<span style="font-size:0.85em; font-weight:normal;">‥${Number(peakMonth)}/${Number(peakDay)}頃極大</span>`
+  `☄
+  <a
+    href="${meteor.url}"
+    target="_blank"
+    rel="noopener noreferrer"
+    style="
+      color:#ffd700;
+      text-decoration:underline;
+    "
+  >
+    ${meteor.name}
+  </a>
+  活動中
+  <span style="
+    font-size:0.85em;
+    font-weight:normal;
+  ">
+    ‥${Number(peakMonth)}/${Number(peakDay)}頃極大
+  </span>`
 );
 
-
-      continue;
+continue;
     }
 
     messages.push(
