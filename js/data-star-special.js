@@ -38,6 +38,18 @@ const specialPhotos = {
     ]
   },
 
+    "Cancer": {
+    noline: [
+      "Cancer-noline-pic01.jpg"
+    ],
+    lines: [
+      "Cancer-lines-pic01.jpg"
+    ],
+    caption: [
+      "かに座（上、一部）とプレセペ星団、しし座（下、一部）。中央の、まるで信号機のように３つ並んだ星は、上から火星（赤）、木星（黄）、レグルス（青）／2026年10月22日未明／大阪府茨木市山中"
+    ]
+  },
+
   "Leo": {
     noline: [
       "Leo-noline-pic01.jpg"
