@@ -805,6 +805,38 @@ const dateText =
               </div>
             </div>
 
+${
+  meteorMessage
+    ? `
+      <div style="
+        display:inline-block;
+        margin:2px 0 8px 0;
+        padding:3px 12px;
+        border:1px solid currentColor;
+        box-sizing:border-box;
+        width:100%;
+      ">
+        <div style="
+          font-size:0.8rem;
+          margin:4px 0;
+          text-align:center;
+        ">
+          活動中の流星群
+        </div>
+
+        <div style="
+          font-size:1em;
+          font-weight:600;
+          text-align:center;
+          color:#ffd700;
+        ">
+          ${meteorMessage}
+        </div>
+      </div>
+    `
+    : ""
+}
+
 <div style="
   margin: 2px 0 2px 0;
   text-align: left;
@@ -820,6 +852,7 @@ const dateText =
 ">
   ${moonTimeMessage}
 </div>
+
 <div style="
   margin: 0 0 0.75em 0;
   text-align: left;
@@ -827,24 +860,6 @@ const dateText =
 ">
   ※大阪市を基準に算出
 </div>
-
-            ${
-  meteorMessage
-    ? `
-      <div style="
-        margin:0;
-        text-align:left;
-      ">
-        <span style="
-          color:#ffd700;
-          font-weight:600;
-        ">
-          ${meteorMessage}
-        </span>
-      </div>
-    `
-    : ""
-}
 
 </div>
 

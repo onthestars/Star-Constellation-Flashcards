@@ -123,12 +123,11 @@ messages.push(
   // ▼ 活動中流星群一覧
 if (activeMessages.length > 0) {
 
-  messages.push(
-    `<div style="font-weight:normal;line-height:1.25em;">
-    ☄<span style="font-size:0.95em;">活動中の流星群</span><br>
+messages.push(
+  `<div style="font-weight:normal;line-height:1.25em;">
       ${activeMessages.join("<br>")}
     </div>`
-  );
+);
 }
 
   return messages.join("<br>");
