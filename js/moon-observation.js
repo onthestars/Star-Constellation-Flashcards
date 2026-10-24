@@ -239,7 +239,7 @@
     const minute = d.getMinutes();
 
 const timeText =
-  `${hour}:${String(minute).padStart(2, "0")}頃`;
+  `${hour}:${String(minute).padStart(2, "0")}`;
 
     return (event.isNextDay ? "翌" : "") + timeText;
   }
@@ -284,7 +284,7 @@ function formatSunEvent(event) {
 
   return `${d.getHours()}:${String(
     d.getMinutes()
-  ).padStart(2, "0")}頃`;
+  ).padStart(2, "0")}`;
 }
 
 // ▼ おすすめ時間帯を取得
@@ -435,10 +435,10 @@ const endMinute =
   String(endDate.getMinutes()).padStart(2, "0");
 
 const startText =
-  `${startHour}:${startMinute}<span style="font-size:0.8em; font-weight:normal;">頃</span>`;
+  `${startHour}:${startMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
 
 const endText =
-  `${endHour}:${endMinute}<span style="font-size:0.8em; font-weight:normal;">頃</span>`;
+  `${endHour}:${endMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
 
   // ▼ 終了時刻が翌日か判定
 const isNextDay =
@@ -597,7 +597,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:2px;
+        margin:3px 1px 0 0;
       "
     >
     <img
@@ -607,7 +607,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:2px;
+                margin:3px 2px 0 0;
       "
     >${riseText}<img
       src="image/common/ico-moonset.png"
@@ -616,8 +616,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-          margin-left:6px;
-        margin-right:2px;
+                margin:3px 2px 0 6px;
       "
     >${setText}`;
 
@@ -630,7 +629,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:2px;
+        margin:3px 1px 0 0;
       "
     >
     <img
@@ -640,7 +639,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:2px;
+                margin:3px 0 0 0;
       "
     >${riseText}`;
 
@@ -653,7 +652,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:2px;
+        margin:3px 1px 0 0;
       "
     >
     <img
@@ -663,7 +662,7 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:3px;
+                margin:3px 0 0 0;
       "
     >${setText}`;
 } else {
@@ -681,7 +680,7 @@ if (sunriseText && sunsetText) {
       width:16px;
       height:16px;
       vertical-align:-3px;
-      margin-right:2px;
+        margin:3px 1px 0 0;
     "
   >
   <img
@@ -691,7 +690,7 @@ if (sunriseText && sunsetText) {
       width:16px;
       height:16px;
       vertical-align:-3px;
-      margin-right:2px;
+                margin:3px 2px 0 0;
     "
   >${sunriseText}<img
     src="image/common/ico-sunset.png"
@@ -701,7 +700,7 @@ if (sunriseText && sunsetText) {
       height:16px;
       vertical-align:-3px;      
           margin-left:6px;
-      margin-right:2px;
+                margin:3px 2px 0 6px;
     "
   >${sunsetText}`;
 }
@@ -815,13 +814,18 @@ const dateText =
 </div>
 
 <div style="
-  margin: 0 0 0.5em 0;
+  margin: 0 0 0.25em 0;
   text-align: left;
   font-size: 0.85em;
 ">
   ${moonTimeMessage}
-  <br>
-  ※大阪市のデータです。
+</div>
+<div style="
+  margin: 0 0 0.75em 0;
+  text-align: left;
+  font-size: 0.85em;
+">
+  ※大阪市を基準に算出
 </div>
 
             ${
