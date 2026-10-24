@@ -52,7 +52,8 @@ function getMeteorMessage(date) {
     "-" +
     String(date.getDate()).padStart(2, "0");
 
-  const messages = [];
+const messages = [];
+const activeMessages = [];
 
   for (const meteor of meteorEvents) {
 
@@ -93,38 +94,42 @@ messages.push(
 
     if (meteor.peak) {
 
-      const [peakMonth, peakDay] =
-        meteor.peak.split("-");
+  const [peakMonth, peakDay] =
+    meteor.peak.split("-");
 
-messages.push(
-  `☄
-  <a
-    href="${meteor.url}"
-    target="_blank"
-    rel="noopener noreferrer"
-    style="
-      color:#ffd700;
-      text-decoration:underline;
-    "
-  >
-    ${meteor.name}
-  </a>
-  活動中
-  <span style="
-    font-size:0.85em;
-    font-weight:normal;
-  ">
-…${Number(peakMonth)}/${Number(peakDay)}頃極大
-  </span>`
-);
+  activeMessages.push(
+    `<a
+      href="${meteor.url}"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        color:#ffd700;
+        text-decoration:underline;
+      "
+    >
+      ${meteor.name}
+    </a>
+    …${Number(peakMonth)}/${Number(peakDay)}頃極大`
+  );
 
-continue;
-    }
+  continue;
+}
 
     messages.push(
       `☄ ${meteor.name}活動中`
     );
   }
+
+  // ▼ 活動中流星群一覧
+if (activeMessages.length > 0) {
+
+  messages.push(
+    `<div style="line-height:1.5em;">
+      🌠活動中の流星群<br>
+      ${activeMessages.join("<br>")}
+    </div>`
+  );
+}
 
   return messages.join("<br>");
 }
