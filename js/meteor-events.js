@@ -114,7 +114,7 @@ messages.push(
     font-size:0.85em;
     font-weight:normal;
   ">
-    ‥${Number(peakMonth)}/${Number(peakDay)}頃極大
+…${Number(peakMonth)}/${Number(peakDay)}頃極大
   </span>`
 );
 
