@@ -109,7 +109,7 @@ messages.push(
     >
       ${meteor.name}
     </a>
-    …${Number(peakMonth)}/${Number(peakDay)}頃極大`
+    <span style="font-size:0.85em;">…${Number(peakMonth)}/${Number(peakDay)}頃極大</span>`
   );
 
   continue;
@@ -124,8 +124,8 @@ messages.push(
 if (activeMessages.length > 0) {
 
   messages.push(
-    `<div style="line-height:1.5em;">
-      🌠活動中の流星群<br>
+    `<div style="font-weight:normal;line-height:1.75em;">
+    ☄<span style="font-size:0.95em;font-weight:bold;">活動中の流星群</span><br>
       ${activeMessages.join("<br>")}
     </div>`
   );
