@@ -599,7 +599,7 @@ if (riseText && setText) {
         vertical-align:-3px;
         margin-right:2px;
       "
-    >…
+    >
     <img
       src="image/common/ico-moonrise.png"
       alt="月の出"
@@ -610,7 +610,7 @@ if (riseText && setText) {
         margin-right:2px;
       "
     >${riseText}
-    　<img
+    <img
       src="image/common/ico-moonset.png"
       alt="月の入り"
       style="
@@ -673,7 +673,7 @@ if (sunriseText && sunsetText) {
       vertical-align:-3px;
       margin-right:2px;
     "
-  >…
+  >
   <img
     src="image/common/ico-sunrise.png"
     alt="日の出"
@@ -684,7 +684,7 @@ if (sunriseText && sunsetText) {
       margin-right:2px;
     "
   >${sunriseText}
-  　<img
+  <img
     src="image/common/ico-sunset.png"
     alt="日の入り"
     style="
