@@ -124,7 +124,7 @@ messages.push(
 if (activeMessages.length > 0) {
 
   messages.push(
-    `<div style="font-weight:normal;line-height:1.75em;">
+    `<div style="font-weight:normal;line-height:1.25em;">
     ☄<span style="font-size:0.95em;font-weight:bold;">活動中の流星群</span><br>
       ${activeMessages.join("<br>")}
     </div>`
