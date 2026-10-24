@@ -837,28 +837,18 @@ ${
     : ""
 }
 
-<div style="
-  margin: 2px 0 2px 0;
-  text-align: left;
-  font-size: 0.85em;
-">
-  ${sunTimeMessage}
-</div>
+<div class="sun-moon-times">
+  <div class="sun-time">
+    ${sunTimeMessage}
+  </div>
 
-<div style="
-  margin: 0 0 0.25em 0;
-  text-align: left;
-  font-size: 0.85em;
-">
-  ${moonTimeMessage}
-</div>
+  <div class="moon-time">
+    ${moonTimeMessage}
+  </div>
 
-<div style="
-  margin: 0 0 0.75em 0;
-  text-align: left;
-  font-size: 0.85em;
-">
-  ※大阪市を基準に算出
+  <div class="moon-base-location">
+    ※基準地:大阪市
+  </div>
 </div>
 
 </div>
