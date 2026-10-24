@@ -120,3 +120,35 @@
 #moon-observation-panel.moon-panel-fade-in {
   animation: moonObservationFadeIn 0.8s ease-out both;
 }
+
+/* ▼ 日の出入り・月の出入り */
+.sun-moon-times {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  text-align: left;
+  font-size: 0.85em;
+
+  margin: 2px 0 0.25em 0;
+}
+
+/* ▼ 基準地 */
+.moon-base-location {
+  font-size: 0.95em;
+  opacity: 0.85;
+}
+
+@media (min-width: 768px) {
+
+  .sun-moon-times {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .moon-base-location {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+}
