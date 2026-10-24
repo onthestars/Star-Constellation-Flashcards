@@ -609,14 +609,14 @@ if (riseText && setText) {
         vertical-align:-3px;
         margin-right:2px;
       "
-    >${riseText}
-    <img
+    >${riseText}<img
       src="image/common/ico-moonset.png"
       alt="月の入り"
       style="
         width:16px;
         height:16px;
         vertical-align:-3px;
+          margin-left:6px;
         margin-right:2px;
       "
     >${setText}`;
@@ -683,14 +683,14 @@ if (sunriseText && sunsetText) {
       vertical-align:-3px;
       margin-right:2px;
     "
-  >${sunriseText}
-  <img
+  >${sunriseText}<img
     src="image/common/ico-sunset.png"
     alt="日の入り"
     style="
       width:16px;
       height:16px;
-      vertical-align:-3px;
+      vertical-align:-3px;      
+          margin-left:6px;
       margin-right:2px;
     "
   >${sunsetText}`;
