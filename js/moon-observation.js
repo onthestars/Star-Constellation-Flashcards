@@ -647,6 +647,16 @@ if (riseText && setText) {
 } else if (setText) {
   moonTimeMessage =
     `<img
+      src="image/common/ico-moon.png"
+      alt="月"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:2px;
+      "
+    >
+    <img
       src="image/common/ico-moonset.png"
       alt="月の入り"
       style="
@@ -801,7 +811,7 @@ const dateText =
   text-align: left;
   font-size: 0.85em;
 ">
-  ${moonTimeMessage}
+  ${sunTimeMessage}
 </div>
 
 <div style="
@@ -809,7 +819,7 @@ const dateText =
   text-align: left;
   font-size: 0.85em;
 ">
-  ${sunTimeMessage}
+  ${moonTimeMessage}
   <br>
   ※大阪市のデータです。
 </div>
