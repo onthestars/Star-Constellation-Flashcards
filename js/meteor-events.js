@@ -73,7 +73,7 @@ messages.push(
     border-radius:4px;
     margin:8px 0;
   ">
-☄ 本日、
+☄ 本日
 <a
   href="${meteor.url}"
   target="_blank"
@@ -85,7 +85,7 @@ messages.push(
 >
   ${meteor.name}
 </a>
-が極大です
+が極大
   </div>`
 );
 
