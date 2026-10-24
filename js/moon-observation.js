@@ -244,6 +244,49 @@ const timeText =
     return (event.isNextDay ? "翌" : "") + timeText;
   }
 
+  // ▼ 日の出・日の入り取得
+function getSunRiseSet(date, direction) {
+
+  const startOfDay = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    0, 0, 0, 0
+  );
+
+  const event = Astronomy.SearchRiseSet(
+    Astronomy.Body.Sun,
+    MOON_OBSERVER,
+    direction,
+    Astronomy.MakeTime(startOfDay),
+    1
+  );
+
+  if (!event || !event.date) {
+    return null;
+  }
+
+  return {
+    date: new Date(
+      Math.round(event.date.getTime() / 60000) * 60000
+    )
+  };
+}
+
+// ▼ 日の出・日の入り表示整形
+function formatSunEvent(event) {
+
+  if (!event) {
+    return null;
+  }
+
+  const d = event.date;
+
+  return `${d.getHours()}:${String(
+    d.getMinutes()
+  ).padStart(2, "0")}頃`;
+}
+
 // ▼ おすすめ時間帯を取得
 function getObservationWindow(date) {
 
@@ -525,8 +568,19 @@ function getWeekdayText(date) {
       const observationWindowText =
         formatObservationWindow(observationWindow);
 
-      // 月の出・月の入りの時刻表示（Astronomy Engineで直接計算）
-      let moonTimeMessage;
+// 月の出・月の入りの時刻表示（Astronomy Engineで直接計算）
+let moonTimeMessage;
+let sunTimeMessage = "";
+
+const sunriseText =
+  formatSunEvent(
+    getSunRiseSet(today, 1)
+  );
+
+const sunsetText =
+  formatSunEvent(
+    getSunRiseSet(today, -1)
+  );
 
       if (isMoonDataOutOfRange(today)) {
         moonTimeMessage = getMoonDataRangeMessage(today);
@@ -536,14 +590,24 @@ function getWeekdayText(date) {
 
 if (riseText && setText) {
   moonTimeMessage =
-    `<img
+  `<img
+      src="image/common/ico-moon.png"
+      alt="月"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:2px;
+      "
+    >…
+    <img
       src="image/common/ico-moonrise.png"
       alt="月の出"
       style="
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:3px;
+        margin-right:2px;
       "
     >${riseText}
     　<img
@@ -553,21 +617,33 @@ if (riseText && setText) {
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:3px;
+        margin-right:2px;
       "
-    >${setText} ※大阪市`;
+    >${setText}`;
+
 } else if (riseText) {
   moonTimeMessage =
-    `<img
+  `<img
+      src="image/common/ico-moon.png"
+      alt="月"
+      style="
+        width:16px;
+        height:16px;
+        vertical-align:-3px;
+        margin-right:2px;
+      "
+    >
+    <img
       src="image/common/ico-moonrise.png"
       alt="月の出"
       style="
         width:16px;
         height:16px;
         vertical-align:-3px;
-        margin-right:3px;
+        margin-right:2px;
       "
-    >${riseText} ※大阪市`;
+    >${riseText}`;
+
 } else if (setText) {
   moonTimeMessage =
     `<img
@@ -579,10 +655,45 @@ if (riseText && setText) {
         vertical-align:-3px;
         margin-right:3px;
       "
-    >${setText} ※大阪市`;
+    >${setText}`;
 } else {
   moonTimeMessage =
     "月の出入り時刻データなし";
+}
+
+if (sunriseText && sunsetText) {
+
+  sunTimeMessage =
+  `<img
+    src="image/common/ico-sun.png"
+    alt="太陽"
+    style="
+      width:16px;
+      height:16px;
+      vertical-align:-3px;
+      margin-right:2px;
+    "
+  >…
+  <img
+    src="image/common/ico-sunrise.png"
+    alt="日の出"
+    style="
+      width:16px;
+      height:16px;
+      vertical-align:-3px;
+      margin-right:2px;
+    "
+  >${sunriseText}
+  　<img
+    src="image/common/ico-sunset.png"
+    alt="日の入り"
+    style="
+      width:16px;
+      height:16px;
+      vertical-align:-3px;
+      margin-right:2px;
+    "
+  >${sunsetText}`;
 }
       }
 
@@ -685,13 +796,23 @@ const dateText =
               </div>
             </div>
 
-            <div style="
-              margin: 2px 0 5px 0;
-              text-align: left;
-              font-size: 0.85em;
-            ">
-              ${moonTimeMessage}
-            </div>
+<div style="
+  margin: 2px 0 2px 0;
+  text-align: left;
+  font-size: 0.85em;
+">
+  ${moonTimeMessage}
+</div>
+
+<div style="
+  margin: 0 0 0.5em 0;
+  text-align: left;
+  font-size: 0.85em;
+">
+  ${sunTimeMessage}
+  <br>
+  ※大阪市のデータです。
+</div>
 
             ${
   meteorMessage
