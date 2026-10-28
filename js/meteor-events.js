@@ -2,7 +2,6 @@
 
 // ▼ 流星群活動中判定
 function isMeteorActive(mmdd, meteor) {
-
   // ▼ 通常期間
   if (meteor.start <= meteor.end) {
     return (
@@ -18,9 +17,15 @@ function isMeteorActive(mmdd, meteor) {
   );
 }
 
+// ▼ Soleil表示用の流星群リンク
+function createMeteorShowerLink(meteor) {
+  return `<a href="#" class="meteor-shower-link"
+    data-meteor-name="${meteor.name}"
+    style="color:#ffd700; text-decoration:underline;">${meteor.name}</a>`;
+}
+
 // ▼ 流星群レベル取得
 function getMeteorActivityLevel(date = new Date()) {
-
   const mmdd =
     String(date.getMonth() + 1).padStart(2, "0") +
     "-" +
@@ -29,7 +34,6 @@ function getMeteorActivityLevel(date = new Date()) {
   let active = false;
 
   for (const meteor of meteorEvents) {
-
     // ▼ 極大日
     if (meteor.peak === mmdd) {
       return "peak";
@@ -73,23 +77,18 @@ messages.push(
     border-radius:4px;
     margin:8px 0;
   ">
-☄ 本日
-<a
-  href="${meteor.url}"
-  target="_blank"
-  rel="noopener noreferrer"
-  style="
-    color:rgb(6,7,64);
-    font-weight:bold;
-  "
->
-  ${meteor.name}
-</a>
-が極大
+    ☄ 本日
+    <a
+      href="#"
+      class="meteor-shower-link"
+      data-meteor-name="${meteor.name}"
+      style="color:rgb(6,7,64);font-weight:bold;"
+    >${meteor.name}</a>
+    が極大
   </div>`
 );
 
-      continue;
+continue;
     }
 
     if (meteor.peak) {
@@ -97,34 +96,24 @@ messages.push(
   const [peakMonth, peakDay] =
     meteor.peak.split("-");
 
-  activeMessages.push(
-    `<a
-      href="${meteor.url}"
-      target="_blank"
-      rel="noopener noreferrer"
-      style="
-        color:#ffd700;
-        text-decoration:underline;
-      "
-    >
-      ${meteor.name}
-    </a>
-    <span style="font-size:0.85em;">(${Number(peakMonth)}/${Number(peakDay)}頃極大)</span>`
-  );
+activeMessages.push(
+  `${createMeteorShowerLink(meteor)}
+  <span style="font-size:0.85em;">(${Number(peakMonth)}/${Number(peakDay)}頃極大)</span>`
+);
 
   continue;
 }
 
-    messages.push(
-      `☄ ${meteor.name}活動中`
-    );
+messages.push(
+  `☄ ${createMeteorShowerLink(meteor)}活動中`
+);
   }
 
   // ▼ 活動中流星群一覧
 if (activeMessages.length > 0) {
 
 messages.push(
-  `<div style="font-weight:normal;line-height:1.25em;">
+  `<div style="font-weight:normal;line-height:1.5em;">
       ${activeMessages.join("<br>")}
     </div>`
 );
@@ -132,3 +121,41 @@ messages.push(
 
   return messages.join("<br>");
 }
+
+// 流星群名からデータを検索し、Soleilを開く
+window.openSoleilForMeteorName = function (meteorName) {
+  const meteor = meteorEvents.find(function (item) {
+    return item.name === meteorName;
+  });
+
+  if (!meteor) {
+    console.error("流星群データが見つかりません。", meteorName);
+    return;
+  }
+
+  if (typeof window.openSoleilOverlay !== "function") {
+    console.error("Soleilオーバーレイが初期化されていません。");
+    return;
+  }
+
+  window.openSoleilOverlay(meteor);
+};
+
+// 流星群名からデータを検索し、独立星図を開く
+window.openIndependentChartForMeteorName = function (meteorName) {
+  const meteor = meteorEvents.find(function (item) {
+    return item.name === meteorName;
+  });
+
+  if (!meteor) {
+    console.error("流星群データが見つかりません。", meteorName);
+    return;
+  }
+
+  if (typeof window.openIndependentChart !== "function") {
+    console.error("独立星図オーバーレイが初期化されていません。");
+    return;
+  }
+
+  window.openIndependentChart(meteor);
+};
