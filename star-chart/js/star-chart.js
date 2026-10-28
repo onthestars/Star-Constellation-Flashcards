@@ -220,38 +220,25 @@
     };
   }
 
-  // 星図全体を再描画
-  function drawChart() {
-    if (canvasWidth <= 0 || canvasHeight <= 0) return;
+// 星図全体を再描画
+function drawChart() {
+  if (canvasWidth <= 0 || canvasHeight <= 0) return;
 
-    ctx.fillStyle = "#080D1A";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+  ctx.fillStyle = "#080D1A";
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    const centerX = canvasWidth / 2;
-    const centerY = canvasHeight / 2;
+  const centerX = canvasWidth / 2;
+  const centerY = canvasHeight / 2;
 
-    // 円形の視野の半径
-    const circleRadius = Math.min(canvasWidth, canvasHeight) / 2;
+  const scaleX = (canvasWidth / 2) / Math.tan(fieldOfViewDeg * RAD / 2);
+  const scaleY = (canvasHeight / 2) / Math.tan(fieldOfViewDeg * RAD / 2);
 
-    // 視野角に応じて星の描画倍率を変更する
-    const scale =
-      circleRadius / Math.tan(fieldOfViewDeg * RAD / 2);
+  const lstDeg = getLocalSiderealTimeDeg();
+  const basis = getProjectionBasis();
 
-    const lstDeg = getLocalSiderealTimeDeg();
-    const basis = getProjectionBasis();
+if (dataLoaded) {
 
-    if (dataLoaded) {
-      // 星を円形の視野の内側だけに描画する
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(
-        centerX,
-        centerY,
-        circleRadius,
-        0,
-        Math.PI * 2
-      );
-      ctx.clip();
+  // こぐま座などの星座線を描画
 
       // こぐま座などの星座線を描画
       const starById = new Map(
@@ -274,15 +261,15 @@
 
           if (!pointA || !pointB) continue;
 
-          ctx.moveTo(
-            centerX + pointA.x * scale,
-            centerY + pointA.y * scale
-          );
+ctx.moveTo(
+  centerX + pointA.x * scaleX,
+  centerY + pointA.y * scaleY
+);
 
-          ctx.lineTo(
-            centerX + pointB.x * scale,
-            centerY + pointB.y * scale
-          );
+ctx.lineTo(
+  centerX + pointB.x * scaleX,
+  centerY + pointB.y * scaleY
+);
         }
 
         ctx.stroke();
@@ -294,8 +281,8 @@
 
         if (!projected) continue;
 
-        const x = centerX + projected.x * scale;
-        const y = centerY + projected.y * scale;
+const x = centerX + projected.x * scaleX;
+const y = centerY + projected.y * scaleY;
 
         // キャンバスの外にある星は描かない
         if (
@@ -429,18 +416,16 @@ ctx.fill();
         continue;
       }
 
-      const x = centerX + point.x * scale;
-      const y = centerY + point.y * scale;
+const x = centerX + point.x * scaleX;
+const y = centerY + point.y * scaleY;
 
-      if (
-        !Number.isFinite(x) ||
-        !Number.isFinite(y) ||
-        Math.abs(x - centerX) > circleRadius * 1.5 ||
-        Math.abs(y - centerY) > circleRadius * 1.5
-      ) {
-        horizonDrawing = false;
-        continue;
-      }
+if (
+  !Number.isFinite(x) ||
+  !Number.isFinite(y)
+) {
+  horizonDrawing = false;
+  continue;
+}
 
       if (!horizonDrawing) {
         ctx.moveTo(x, y);
@@ -456,11 +441,6 @@ ctx.fill();
     
     // 地平座標の目盛り線
     ctx.save();
-
-    // 円形の視野の内側だけに描画する
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, circleRadius, 0, Math.PI * 2);
-    ctx.clip();
 
     ctx.strokeStyle = "rgba(160, 180, 200, 0.25)";
     ctx.lineWidth = 0.7;
@@ -479,8 +459,8 @@ ctx.fill();
           continue;
         }
 
-        const x = centerX + point.x * scale;
-        const y = centerY + point.y * scale;
+const x = centerX + point.x * scaleX;
+const y = centerY + point.y * scaleY;
 
         if (!Number.isFinite(x) || !Number.isFinite(y)) {
           drawing = false;
@@ -513,8 +493,8 @@ ctx.fill();
           continue;
         }
 
-        const x = centerX + point.x * scale;
-        const y = centerY + point.y * scale;
+const x = centerX + point.x * scaleX;
+const y = centerY + point.y * scaleY;
 
         if (!Number.isFinite(x) || !Number.isFinite(y)) {
           drawing = false;
@@ -537,11 +517,6 @@ ctx.fill();
     // 黄道を描画
     // 黄道傾斜角：約23.4393°
     ctx.save();
-
-    // 円形の視野の内側に限定する
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, circleRadius, 0, Math.PI * 2);
-    ctx.clip();
 
     ctx.strokeStyle = "rgba(210, 185, 100, 0.55)";
 ctx.lineWidth = 0.8;
@@ -591,8 +566,8 @@ ctx.setLineDash([4, 5]);
         continue;
       }
 
-      const x = centerX + point.x * scale;
-      const y = centerY + point.y * scale;
+const x = centerX + point.x * scaleX;
+const y = centerY + point.y * scaleY;
 
       if (!Number.isFinite(x) || !Number.isFinite(y)) {
         eclipticDrawing = false;
@@ -626,15 +601,14 @@ ctx.setLineDash([4, 5]);
       );
 
       if (radiantPoint) {
-        const x = centerX + radiantPoint.x * scale;
-        const y = centerY + radiantPoint.y * scale;
+const x = centerX + radiantPoint.x * scaleX;
+const y = centerY + radiantPoint.y * scaleY;
 
-        // 円形の視野内にある場合だけ表示
-        if (
-          Number.isFinite(x) &&
-          Number.isFinite(y) &&
-          Math.hypot(x - centerX, y - centerY) <= circleRadius
-        ) {
+// 放射点の座標が有効な場合だけ表示
+if (
+  Number.isFinite(x) &&
+  Number.isFinite(y)
+) {
           ctx.save();
 
           // 赤い円
@@ -659,18 +633,15 @@ ctx.setLineDash([4, 5]);
       }
     }
 
-    // 円形の視野の境界
-    ctx.beginPath();
-    ctx.arc(
-      centerX,
-      centerY,
-      circleRadius,
-      0,
-      Math.PI * 2
-    );
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
+// 星図の四角形の境界
+ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+ctx.lineWidth = 1;
+ctx.strokeRect(
+  0.5,
+  0.5,
+  canvasWidth - 1,
+  canvasHeight - 1
+);
 
     // 地平線上の東西南北を表示
     const directions = [
@@ -694,8 +665,8 @@ ctx.setLineDash([4, 5]);
 
       if (!point) continue;
 
-      const x = centerX + point.x * scale;
-      const y = centerY + point.y * scale;
+const x = centerX + point.x * scaleX;
+const y = centerY + point.y * scaleY;
 
 // 方位表示の位置
 const labelX = x;
@@ -725,8 +696,8 @@ const labelY = y;
     const zenithPoint = projectDirection(0, 90, basis);
 
     if (zenithPoint) {
-      const zenithX = centerX + zenithPoint.x * scale;
-      const zenithY = centerY + zenithPoint.y * scale;
+const zenithX = centerX + zenithPoint.x * scaleX;
+const zenithY = centerY + zenithPoint.y * scaleY;
 
       ctx.save();
 
