@@ -1,0 +1,71 @@
+/* css/independent-chart-overlay.css */
+
+/* 独立星図のオーバーレイ */
+#independent-chart-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 20, 0.94);
+}
+
+/* 星図パネル */
+#independent-chart-panel {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #000014;
+  border: 1px solid rgba(255, 215, 0, 0.65);
+  border-radius: 8px;
+}
+
+/* 上部タイトルバー */
+#independent-chart-header {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 6px 58px;
+  color: #ffffff;
+  background: #080824;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.45);
+  box-sizing: border-box;
+}
+
+/* タイトル */
+#independent-chart-title {
+  font-size: 16px;
+  text-align: center;
+}
+
+/* 黄色い閉じるボタン */
+#independent-chart-close {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 2px solid #FFD700;
+  border-radius: 50%;
+  color: #FFD700;
+  background: #15152D;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* 独立星図本体 */
+#independent-chart-frame {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #000014;
+}
