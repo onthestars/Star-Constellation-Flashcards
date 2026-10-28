@@ -1,0 +1,22 @@
+[
+  {"id":"betelgeuse","label":"ベテルギウス","ra":88.7929,"dec":7.4071,"mag":0.42,"con":"Ori"},
+  {"id":"rigel","label":"リゲル","ra":78.6345,"dec":-8.2016,"mag":0.13,"con":"Ori"},
+  {"id":"bellatrix","label":"ベラトリクス","ra":81.2828,"dec":6.3497,"mag":1.64,"con":"Ori"},
+  {"id":"mintaka","label":"ミンタカ","ra":83.0017,"dec":-0.2991,"mag":2.23,"con":"Ori"},
+  {"id":"alnilam","label":"アルニラム","ra":84.0534,"dec":-1.2019,"mag":1.69,"con":"Ori"},
+  {"id":"alnitak","label":"アルニタク","ra":85.1897,"dec":-1.9426,"mag":1.74,"con":"Ori"},
+  {"id":"saiph","label":"サイフ","ra":86.9391,"dec":-9.6696,"mag":2.07,"con":"Ori"},
+  {"id":"meissa","label":"メイッサ","ra":83.7845,"dec":9.9342,"mag":3.39,"con":"Ori"},
+  {"id":"aldebaran","label":"アルデバラン","ra":68.9802,"dec":16.5093,"mag":0.87,"con":"Tau"},
+  {"id":"elnath","label":"エルナト","ra":81.5729,"dec":28.6075,"mag":1.65,"con":"Tau"},
+  {"id":"capella","label":"カペラ","ra":79.1723,"dec":45.9979,"mag":0.08,"con":"Aur"},
+  {"id":"pollux","label":"ポルックス","ra":116.3289,"dec":28.0262,"mag":1.14,"con":"Gem"},
+  {"id":"castor","label":"カストル","ra":113.6494,"dec":31.8883,"mag":1.58,"con":"Gem"},
+  {"id":"procyon","label":"プロキオン","ra":114.8255,"dec":5.2249,"mag":0.34,"con":"CMi"},
+  {"id":"sirius","label":"シリウス","ra":101.2872,"dec":-16.7161,"mag":-1.46,"con":"CMa"},
+  {"id":"wasat","label":"ワサト","ra":110.0308,"dec":21.9823,"mag":3.53,"con":"Gem"},
+  {"id":"propus","label":"プロプス","ra":98.7641,"dec":22.5068,"mag":3.36,"con":"Gem"},
+  {"id":"mu-gem","label":"μ Gem","ra":100.9830,"dec":22.8140,"mag":2.87,"con":"Gem"},
+  {"id":"zeta-tau","label":"ζ Tau","ra":81.5729,"dec":21.1425,"mag":3.03,"con":"Tau"},
+  {"id":"lambda-ori","label":"λ Ori","ra":83.8583,"dec":9.9342,"mag":3.54,"con":"Ori"}
+]
