@@ -1,239 +1,33 @@
-<!-- index.html -->
 
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>トレミーの48星座カード</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080D1A">
+  <title>星図カード(開発中)</title>
 
-  <link rel="icon" href="image/icon/favicon.png" type="image/png">
-  <link rel="apple-touch-icon" href="image/icon/icon-512.png">
-
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/buttons.css">
-  <link rel="stylesheet" href="css/viewer.css">
-  <link rel="stylesheet" href="css/animation.css">
-  <link rel="stylesheet" href="css/effects.css">
-  <link rel="stylesheet" href="css/ui.css">
-  <link rel="stylesheet" href="css/meteor.css">
-  <link rel="stylesheet" href="css/soleil-meteor.css">
-  <link rel="stylesheet" href="css/moon-observation.css">
-  <link rel="stylesheet" href="css/soleil-meteor-overlay.css">
-  <link rel="stylesheet" href="css/independent-chart-overlay.css">
-
-  <link rel="manifest" href="manifest.json">
-
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="theme-color" content="#000000">
-
+  <link rel="stylesheet" href="css/star-chart.css">
+  <script src="js/star-chart.js" defer></script>
 </head>
-
 <body>
+  <main id="star-chart-app">
 
-  <!-- 音声 ON/OFF・月パネル再表示（画面右上固定） -->
-  <div id="sound-global-buttons">
-    <img src="image/common/btn-moon-obs.png" id="moonObservationShowBtn" alt="月の満ち欠けパネルを再表示" title="月の満ち欠けパネルを再表示">
-    <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
-    <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
-  </div>
+    <header id="chart-header">
+      <h1>星図カード(開発中)</h1>
+    </header>
 
-  <div id="rotate-warning">このアプリはスマホ横画面に対応していません</div>
+    <section id="chart-container" aria-label="星図">
+      <canvas id="star-chart-canvas">
+        お使いのブラウザはCanvasに対応していません。
+      </canvas>
+    </section>
 
-  <!-- 星の瞬きオーバーレイ -->
-  <div id="stars-overlay"></div>
+    <footer id="chart-footer">
+      <p id="chart-status">星図を準備しています。</p>
+    </footer>
 
-  <!-- 月の背景アニメーション -->
-  <img id="moon" src="image/common/moon5-crescent.png" alt="月">
-  <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
-
-  <!-- ▼ 今夜の月ガイド -->
-  <div id="moon-observation-panel">
-
-    <button id="moon-panel-close" aria-label="閉じる">
-      ✕
-    </button>
-
-    <div id="moon-observation-content">
-      読み込み中...
-    </div>
-  </div>
-
-  <!-- ★★★★★ 月専用 Special Viewer ★★★★★ -->
-  <div id="moon-special-viewer" style="display:none;">
-    <img id="moon-special-img" src="">
-    <div id="moon-special-caption"></div>
-
-    <div class="special-controls-row">
-      <img src="image/common/btn-back.png" id="moon-special-prev" class="special-btn">
-      <img src="image/common/btn-close.png" id="moon-special-close" class="special-btn">
-      <img src="image/common/btn-next.png" id="moon-special-next" class="special-btn">
-    </div>
-  </div>
-
-  <!-- 星座カード本体 -->
-  <div id="card-frame" class="card-frame">
-
-    <div class="card-image-area">
-      <div id="card-anim-wrapper">
-        <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
-      </div>
-    </div>
-
-    <div class="button-block">
-
-      <div class="season-group">
-        <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
-        <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
-        <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
-        <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
-        <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
-      </div>
-
-      <!-- ぴーとの星図ボタン（独立した上段） -->
-      <div class="pete-chart-group">
-        <img src="image/common/btn-star-chart.png" id="peteChartBtn" class="btn-special" alt="ぴーとの星図" role="button"
-          tabindex="0">
-      </div>
-
-      <!-- 操作ボタン（下段） -->
-      <div class="control-group">
-        <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
-        <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
-        <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
-      </div>
-
-      <div class="special-group">
-        <img src="image/common/btn-3stars.png" class="btn-special" id="specialBtn" alt="Special">
-      </div>
-
-    </div>
-  </div>
-
-  <div id="copyright">
-    ©2026 K-A-Z／トレミーの48星座カード All rights reserved.
-  </div>
-
-  <div id="specialThanksBtn" class="special-thanks-btn">
-    Special Thanks『ぴーとの星図』
-  </div>
-
-  <div id="special-viewer" style="display:none;">
-    <img id="special-img" src="" alt="Special画像">
-    <div id="special-caption"></div>
-
-    <div class="special-controls-row">
-      <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
-      <img src="image/common/btn-3stars.png" id="special-clear" class="special-btn" alt="星座線あり">
-      <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
-      <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線なし">
-      <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
-    </div>
-
-    <audio id="soundFlip" src="sound/sound-flipping-paper.mp3" preload="auto"></audio>
-    <audio id="soundPage" src="sound/sound-flipping-paper2.mp3" preload="auto"></audio>
-    <audio id="soundSeason" src="sound/sound-season.mp3" preload="auto"></audio>
-    <audio id="soundKirakira" src="sound/sound-kirakira.mp3" preload="auto"></audio>
-  </div>
-
-  <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
-  <script src="js/images.js"></script>
-
-  <!-- ▼ サウンド・アニメーションなどのUI補助 -->
-  <script src="js/sound-controls.js"></script>
-  <script src="js/animation-controls.js"></script>
-
-  <!-- ▼ データ系（リンク・季節データ） -->
-  <script src="js/data-links.js"></script>
-  <script src="js/data-season.js"></script>
-
-  <script src="js/update-season-buttons.js"></script>
-
-  <!-- ▼ viewer / navigation（カード表示と移動の中核） -->
-  <script src="js/viewer.js"></script>
-  <script src="js/navigation.js"></script>
-
-  <!-- ▼ 背景・月アニメーションなどの視覚効果 -->
-  <script src="js/background-image.js"></script>
-
-  <!-- ▼ 星座カード専用スペシャルビューア（特別カード表示） -->
-  <script src="js/data-star-special.js"></script>
-  <script src="js/star-special-viewer.js"></script>
-
-  <!-- ▼月専用スペシャルビューア -->
-  <script src="js/moon-animation.js"></script>
-  <script src="js/data-moon-special.js"></script>
-  <script src="js/moon-special-viewer.js"></script>
-
-  <!-- ▼流星イベント -->
-  <script src="js/meteor.js"></script>
-
-  <!-- ▼ 外部リンク（依存なし） -->
-  <script src="js/external-links.js"></script>
-
-  <!-- ▼ 画面向き警告 -->
-  <script src="js/orientation-warning.js"></script>
-
-  <!-- 月齢計算ライブラリ読み込み -->
-  <script src="js/vendor/astronomy.browser.min.js"></script>
-
-  <!-- ▼ 今夜の月 -->
-  <script src="js/data-meteor.js"></script>
-  <script src="js/meteor-events.js"></script>
-  <script src="js/moon-observation.js"></script>
-
-  <!-- ▼ 最後に main.js（全ての初期化を行う） -->
-  <script src="js/main.js"></script>
-
-  <!-- index.html：Soleil流星群オーバーレイ -->
-  <div id="chart-overlay" style="display:none;">
-    <div id="chart-panel">
-      <div id="chart-header">
-        <span id="chart-title">Soleil 流星群観察</span>
-        <button id="chart-close">✕</button>
-      </div>
-
-      <div id="chart-stage">
-        <iframe id="chart-frame" title="Soleil星図" src="about:blank" allowfullscreen></iframe>
-
-        <div id="meteor-layer">
-          <div id="meteor-radiant" aria-label="流星群の放射点"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-<!-- index.html：Soleilオーバーレイの処理 -->
-<script src="js/soleil-meteor-overlay.js"></script>
-
-<!-- 独立星図オーバーレイ -->
-<div id="independent-chart-overlay" style="display:none;">
-  <div id="independent-chart-panel">
-    <div id="independent-chart-header">
-      <span id="independent-chart-title">流星群の放射点</span>
-      <button
-        id="independent-chart-close"
-        type="button"
-        aria-label="独立星図を閉じる"
-      >×</button>
-    </div>
-
-    <iframe
-      id="independent-chart-frame"
-      title="独立星図"
-      src="about:blank"
-      allowfullscreen
-    ></iframe>
-  </div>
-</div>
-
-<!-- 独立星図の処理：HTML要素より後に読み込む -->
-<script src="js/independent-chart-overlay.js"></script>
-
+  </main>
 </body>
 </html>
