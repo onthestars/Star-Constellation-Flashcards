@@ -1,8 +1,19 @@
 // meteor.js
 
-// 放射点座標
-const radiantX = 100;
-const radiantY = 150;
+// ▼ 放射点座標
+let radiantX = 100;
+let radiantY = 150;
+
+// ▼ 外部から放射点を更新
+window.setMeteorRadiant = function (x, y) {
+
+  if (!Number.isFinite(x) || !Number.isFinite(y)) {
+    return;
+  }
+
+  radiantX = x;
+  radiantY = y;
+};
 
 function spawnMeteorCore() {
 
@@ -261,6 +272,20 @@ function getMeteorSpawnRate() {
       return 0.04; // 通常時
   }
 }
+
+// ▼ テスト用
+window.testMeteorCenter = function () {
+
+  window.setMeteorRadiant(
+    window.innerWidth / 2,
+    window.innerHeight / 2
+  );
+
+  console.log(
+    "Meteor radiant moved to center"
+  );
+
+};
 
 // ===============================
 // 流星群モード（極大期っぽい）
