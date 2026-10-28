@@ -1,13 +1,11 @@
-﻿<!-- index.html -->
+<!-- index.html -->
 
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
   <meta charset="UTF-8">
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>トレミーの48星座カード</title>
 
   <link rel="icon" href="image/icon/favicon.png" type="image/png">
@@ -21,7 +19,10 @@
   <link rel="stylesheet" href="css/effects.css">
   <link rel="stylesheet" href="css/ui.css">
   <link rel="stylesheet" href="css/meteor.css">
+  <link rel="stylesheet" href="css/soleil-meteor.css">
   <link rel="stylesheet" href="css/moon-observation.css">
+  <link rel="stylesheet" href="css/soleil-meteor-overlay.css">
+  <link rel="stylesheet" href="css/independent-chart-overlay.css">
 
   <link rel="manifest" href="manifest.json">
 
@@ -181,13 +182,58 @@
   <script src="js/vendor/astronomy.browser.min.js"></script>
 
   <!-- ▼ 今夜の月 -->
-<script src="js/data-meteor.js"></script>
-<script src="js/meteor-events.js"></script>
-<script src="js/moon-observation.js"></script>
+  <script src="js/data-meteor.js"></script>
+  <script src="js/meteor-events.js"></script>
+  <script src="js/moon-observation.js"></script>
 
   <!-- ▼ 最後に main.js（全ての初期化を行う） -->
   <script src="js/main.js"></script>
 
-</body>
+  <!-- index.html：Soleil流星群オーバーレイ -->
+  <div id="chart-overlay" style="display:none;">
+    <div id="chart-panel">
+      <div id="chart-header">
+        <span id="chart-title">Soleil 流星群観察</span>
+        <button id="chart-close">✕</button>
+      </div>
 
+      <div id="chart-stage">
+        <iframe id="chart-frame" title="Soleil星図" src="about:blank" allowfullscreen></iframe>
+
+        <div id="meteor-layer">
+          <div id="meteor-radiant" aria-label="流星群の放射点"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- index.html：Soleilオーバーレイの処理 -->
+<script src="js/soleil-meteor-overlay.js"></script>
+
+<!-- 独立星図オーバーレイ -->
+<div id="independent-chart-overlay" style="display:none;">
+  <div id="independent-chart-panel">
+    <div id="independent-chart-header">
+      <span id="independent-chart-title">流星群の放射点</span>
+      <button
+        id="independent-chart-close"
+        type="button"
+        aria-label="独立星図を閉じる"
+      >×</button>
+    </div>
+
+    <iframe
+      id="independent-chart-frame"
+      title="独立星図"
+      src="about:blank"
+      allowfullscreen
+    ></iframe>
+  </div>
+</div>
+
+<!-- 独立星図の処理：HTML要素より後に読み込む -->
+<script src="js/independent-chart-overlay.js"></script>
+
+</body>
 </html>
