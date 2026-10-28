@@ -40,6 +40,9 @@
   let canvasHeight = 0;
   let constellations = [];
 
+    // 放射点の赤経・赤緯（未受信時は非表示）
+  let meteorRadiant = null;
+
   // ドラッグ・ピンチ操作用
   let isDragging = false;
   let lastPointerX = 0;
@@ -608,6 +611,54 @@ ctx.setLineDash([4, 5]);
     ctx.setLineDash([]);
     ctx.restore();
 
+        // 流星群の放射点を赤い十字＋円で表示
+    if (meteorRadiant) {
+      const radiantPoint = projectStar(
+        {
+          ra: meteorRadiant.ra,
+          dec: meteorRadiant.dec,
+          mag: 0,
+          id: "meteor-radiant",
+          label: ""
+        },
+        lstDeg,
+        basis
+      );
+
+      if (radiantPoint) {
+        const x = centerX + radiantPoint.x * scale;
+        const y = centerY + radiantPoint.y * scale;
+
+        // 円形の視野内にある場合だけ表示
+        if (
+          Number.isFinite(x) &&
+          Number.isFinite(y) &&
+          Math.hypot(x - centerX, y - centerY) <= circleRadius
+        ) {
+          ctx.save();
+
+          // 赤い円
+          ctx.beginPath();
+          ctx.arc(x, y, 10, 0, Math.PI * 2);
+          ctx.strokeStyle = "#FF4545";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // 十字
+          ctx.beginPath();
+          ctx.moveTo(x - 15, y);
+          ctx.lineTo(x + 15, y);
+          ctx.moveTo(x, y - 15);
+          ctx.lineTo(x, y + 15);
+          ctx.strokeStyle = "#FF4545";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+    }
+
     // 円形の視野の境界
     ctx.beginPath();
     ctx.arc(
@@ -922,6 +973,12 @@ const labelY = y;
       console.error("流星群の放射点データが不正です。", data);
       return;
     }
+
+        // 受信した放射点の赤経・赤緯を保存
+    meteorRadiant = {
+      ra: data.ra,
+      dec: data.dec
+    };
 
     // 現在の地方恒星時を取得
     const lstDeg = getLocalSiderealTimeDeg();
