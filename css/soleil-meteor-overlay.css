@@ -1,0 +1,183 @@
+/* soleil-meteor-overlay.css */
+
+/* Soleil専用オーバーレイ */
+#chart-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 12px;
+  box-sizing: border-box;
+  background: rgba(6, 7, 64, 0.78);
+}
+
+#chart-panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgb(6, 7, 64);
+  border-radius: 8px;
+}
+
+#chart-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 12px;
+  color: #fff;
+
+  background: linear-gradient(
+    to bottom,
+    rgb(6, 7, 64) 0%,
+    rgb(13, 31, 104) 100%
+  );
+
+  z-index: 3;
+}
+
+#chart-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chart-subtitle {
+  font-size: 12px;
+  font-weight: normal;
+  color: #fff;
+}
+
+/* 星図を閉じるボタン */
+#chart-close {
+  background: none;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+
+  color: #fff;
+  font-size: 32px;
+  font-weight: normal;
+  line-height: 1;
+
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ヘッダー下部の帯 */
+#chart-stage {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+#chart-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  z-index: 1;
+  background: #000;
+}
+
+#meteor-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 放射点マーカー */
+#meteor-radiant {
+  display: none;
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  border: 2px solid #ff5252;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 4px rgba(255, 80, 80, 0.9));
+}
+
+#meteor-radiant::before,
+#meteor-radiant::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #ff5252;
+  transform: translate(-50%, -50%);
+}
+
+#meteor-radiant::before {
+  width: 30px;
+  height: 2px;
+}
+
+#meteor-radiant::after {
+  width: 2px;
+  height: 30px;
+}
+
+/* Soleil専用の流星。既存の .meteor-core / .meteor-tail は使わない */
+.soleil-meteor-core {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.8) 25%,
+    rgba(255, 255, 255, 0.35) 65%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translate(-50%, -50%);
+  filter: blur(0.5px);
+  box-shadow:
+    0 0 6px rgba(255, 255, 255, 0.65),
+    0 0 12px rgba(255, 255, 255, 0.5),
+    0 0 24px rgba(159, 216, 255, 0.4);
+}
+
+.soleil-meteor-tail {
+  position: absolute;
+  height: 8px;
+  transform-origin: right center;
+  clip-path: polygon(
+    0% 50%,
+    15% 48%,
+    30% 40%,
+    45% 28%,
+    60% 18%,
+    78% 20%,
+    92% 35%,
+    100% 50%,
+    92% 65%,
+    78% 80%,
+    60% 82%,
+    45% 72%,
+    30% 60%,
+    15% 52%
+  );
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.12) 55%,
+    rgba(255, 255, 255, 0.55) 100%
+  );
+  opacity: 0.7;
+  filter: blur(3px);
+}
