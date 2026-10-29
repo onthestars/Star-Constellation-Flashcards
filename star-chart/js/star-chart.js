@@ -143,6 +143,22 @@
     return a.x * b.x + a.y * b.y + a.z * b.z;
   }
 
+  // js/star-chart.js
+
+// 縦長・横長の画面に合わせ、四隅まで描画できる角度を求める
+function getMaxVisibleAngleDeg() {
+  const halfWidth = canvasWidth / 2;
+  const halfHeight = canvasHeight / 2;
+
+  const scale =
+    (Math.min(canvasWidth, canvasHeight) / 2) /
+    Math.tan(fieldOfViewDeg * RAD / 2);
+
+  const cornerRadius = Math.hypot(halfWidth, halfHeight);
+
+  return 2 * Math.atan(cornerRadius / scale) / RAD;
+}
+
   // 現在の表示方向に合わせて投影用の座標軸を作る
   function getProjectionBasis() {
     const az = centerAzDeg * RAD;
@@ -176,7 +192,7 @@
     );
 
     const centerDot = dot(v, basis.center);
-    const minDot = Math.cos(fieldOfViewDeg * RAD);
+const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
 
     // 表示範囲外の星は描画しない
     if (centerDot < minDot) {
@@ -202,7 +218,7 @@
   function projectDirection(azDeg, altDeg, basis) {
     const v = horizontalToVector(azDeg, altDeg);
     const centerDot = dot(v, basis.center);
-    const minDot = Math.cos(fieldOfViewDeg * RAD);
+const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
 
     if (centerDot < minDot - 1e-9) {
       return null;
@@ -230,8 +246,12 @@ function drawChart() {
   const centerX = canvasWidth / 2;
   const centerY = canvasHeight / 2;
 
-  const scaleX = (canvasWidth / 2) / Math.tan(fieldOfViewDeg * RAD / 2);
-  const scaleY = (canvasHeight / 2) / Math.tan(fieldOfViewDeg * RAD / 2);
+  // 円形の星図を維持する共通倍率
+  const scale = (Math.min(canvasWidth, canvasHeight) / 2) /
+    Math.tan(fieldOfViewDeg * RAD / 2);
+
+  const scaleX = scale;
+  const scaleY = scale;
 
   const lstDeg = getLocalSiderealTimeDeg();
   const basis = getProjectionBasis();
