@@ -51,17 +51,17 @@
   <img id="moon" src="image/common/moon5-crescent.png" alt="月">
   <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
 
-  <!-- ▼ 今夜の月ガイド -->
-  <div id="moon-observation-panel">
+<!-- ▼ 星空観測ガイド -->
+<div id="moon-observation-panel">
 
-    <button id="moon-panel-close" aria-label="閉じる">
-      ✕
-    </button>
+  <button id="moon-panel-close" aria-label="閉じる">
+    ✕
+  </button>
 
-    <div id="moon-observation-content">
-      読み込み中...
-    </div>
+  <div id="moon-observation-content">
+    読み込み中...
   </div>
+</div>
 
   <!-- ★★★★★ 月専用 Special Viewer ★★★★★ -->
   <div id="moon-special-viewer" style="display:none;">
@@ -220,7 +220,7 @@
         id="independent-chart-close"
         type="button"
         aria-label="星図カードを閉じる"
-      >×</button>
+      >✕</button>
     </div>
 
     <iframe
