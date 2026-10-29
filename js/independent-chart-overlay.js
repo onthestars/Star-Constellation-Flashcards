@@ -24,7 +24,7 @@
 
   if (!overlay || !title || !closeButton || !frame) {
     console.error(
-      "独立星図オーバーレイのHTML要素が見つかりません。"
+      "星図カードオーバーレイのHTML要素が見つかりません。"
     );
     return;
   }
@@ -49,7 +49,7 @@
     );
   }
 
-  // 独立星図を開く
+  // 星図カードを開く
   function openIndependentChart(meteor) {
     if (
       !meteor ||
@@ -66,7 +66,7 @@
     }
 
     selectedMeteor = meteor;
-    title.textContent = meteor.name + "｜独立星図";
+    title.textContent = meteor.name + "｜星図カード";
     overlay.style.display = "block";
     isOpen = true;
 
@@ -109,5 +109,5 @@
   // meteor-events.js から呼び出す関数
   window.openIndependentChart = openIndependentChart;
 
-  console.log("独立星図オーバーレイを初期化しました。");
+  console.log("星図カードオーバーレイを初期化しました。");
 })();

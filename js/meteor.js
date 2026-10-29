@@ -1,4 +1,4 @@
-// meteor.js
+// js/meteor.js
 
 // ▼ 放射点座標
 let radiantX = 100;

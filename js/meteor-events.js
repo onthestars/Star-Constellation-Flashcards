@@ -141,7 +141,7 @@ window.openSoleilForMeteorName = function (meteorName) {
   window.openSoleilOverlay(meteor);
 };
 
-// 流星群名からデータを検索し、独立星図を開く
+// 流星群名からデータを検索し、星図カードを開く
 window.openIndependentChartForMeteorName = function (meteorName) {
   const meteor = meteorEvents.find(function (item) {
     return item.name === meteorName;
@@ -153,7 +153,7 @@ window.openIndependentChartForMeteorName = function (meteorName) {
   }
 
   if (typeof window.openIndependentChart !== "function") {
-    console.error("独立星図オーバーレイが初期化されていません。");
+    console.error("星図カードオーバーレイが初期化されていません。");
     return;
   }
 

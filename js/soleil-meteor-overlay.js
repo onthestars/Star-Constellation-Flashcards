@@ -406,7 +406,7 @@ title.innerHTML = `
 
 /* js/soleil-meteor-overlay.js */
 
-// 活動中の流星群名をクリックしたら独立星図を開く
+// 活動中の流星群名をクリックしたら星図カードを開く
 document.addEventListener("click", function (event) {
   const target = event.target;
   if (!(target instanceof Element)) return;
@@ -417,7 +417,7 @@ document.addEventListener("click", function (event) {
   event.preventDefault();
 
   if (typeof window.openIndependentChartForMeteorName !== "function") {
-    console.error("独立星図の連携処理が初期化されていません。");
+    console.error("星図カードの連携処理が初期化されていません。");
     return;
   }
 
