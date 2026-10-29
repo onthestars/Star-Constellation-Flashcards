@@ -324,9 +324,6 @@ function drawMeteorTail(
 
   ctx.fillStyle = gradient;
 
-  
-/* star-chart/js/star-chart.js */
-
 // 滑らかな笹の葉型の尾
 ctx.beginPath();
 ctx.moveTo(0, 0);
