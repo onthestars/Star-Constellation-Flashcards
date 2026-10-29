@@ -906,8 +906,10 @@ if (meteorRadiant) {
       ctx.moveTo(x, y - 15);
       ctx.lineTo(x, y + 15);
 
+      // 放射点の色
       ctx.strokeStyle = "#FF4545";
-      ctx.lineWidth = 2;
+      // 放射点十字部分の太さ
+      ctx.lineWidth = 1;
       ctx.stroke();
 
       ctx.restore();
