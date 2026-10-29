@@ -1061,16 +1061,6 @@ if (meteorRadiant) {
   updateMeteorRadiantPosition(null, null);
 }
 
-// 星図の四角形の境界
-ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
-ctx.lineWidth = 1;
-ctx.strokeRect(
-  0.5,
-  0.5,
-  canvasWidth - 1,
-  canvasHeight - 1
-);
-
     // 地平線上の東西南北を表示
     const directions = [
       { az: 0, label: "北" },
