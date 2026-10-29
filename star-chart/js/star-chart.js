@@ -1,4 +1,4 @@
-/* js/star-chart.js */
+/* star-chart/js/star-chart.js */
 "use strict";
 
 (() => {
@@ -7,10 +7,294 @@
   const status = document.getElementById("chart-status");
   const ctx = canvas.getContext("2d");
 
-  if (!ctx) {
-    status.textContent = "キャンバスを初期化できません。";
+// 独立星図専用の流星レイヤー
+const meteorLayer = document.getElementById("star-chart-meteor-layer");
+
+// 現在の放射点の画面座標
+let meteorRadiantScreen = null;
+
+// 流星アニメーションの管理
+let activeChartMeteors = [];
+let meteorAnimationFrame = null;
+
+// 流星発生タイマー
+let meteorSpawnInterval = null;
+
+// 放射点の画面座標を更新する
+function updateMeteorRadiantPosition(x, y) {
+  if (
+    !Number.isFinite(x) ||
+    !Number.isFinite(y)
+  ) {
+    meteorRadiantScreen = null;
     return;
   }
+
+  meteorRadiantScreen = { x, y };
+}
+
+// 流星を1個発生させる
+function spawnChartMeteor() {
+  if (!meteorLayer || !meteorRadiantScreen) return;
+
+  const startX = meteorRadiantScreen.x;
+  const startY = meteorRadiantScreen.y;
+
+  // 放射点から外側へ向かう方向
+  const angle = Math.random() * Math.PI * 2;
+
+  // 流星の移動距離
+  const distance = 100 + Math.random() * 160;
+
+  // 流星の移動時間
+  const duration = 900 + Math.random() * 700;
+
+  const meteor = {
+    startX,
+    startY,
+    angle,
+    distance,
+    duration,
+    startTime: performance.now(),
+
+    core: document.createElement("div"),
+    tail: document.createElement("div")
+  };
+
+  meteor.core.className = "star-chart-meteor-core";
+  meteor.tail.className = "star-chart-meteor-tail";
+
+  meteorLayer.appendChild(meteor.tail);
+  meteorLayer.appendChild(meteor.core);
+
+  activeChartMeteors.push(meteor);
+}
+
+// 流星の位置と尾を更新する
+function animateChartMeteors(now) {
+  if (!meteorLayer) return;
+
+  const remainingMeteors = [];
+
+  for (const meteor of activeChartMeteors) {
+    const elapsed = now - meteor.startTime;
+
+    const progress = Math.min(
+      1,
+      elapsed / meteor.duration
+    );
+
+    // 放射点から外側へ進む
+    const distance = meteor.distance * progress;
+
+    const x =
+      meteor.startX +
+      Math.cos(meteor.angle) * distance;
+
+    const y =
+      meteor.startY +
+      Math.sin(meteor.angle) * distance;
+
+    // 流星の核
+    meteor.core.style.left = `${x}px`;
+    meteor.core.style.top = `${y}px`;
+
+    // 流星の尾
+    const tailLength = 25 + progress * 35;
+
+    meteor.tail.style.left =
+      `${x - Math.cos(meteor.angle) * tailLength}px`;
+
+    meteor.tail.style.top =
+      `${y - Math.sin(meteor.angle) * tailLength}px`;
+
+    meteor.tail.style.width = `${tailLength}px`;
+
+    meteor.tail.style.transform =
+      `rotate(${meteor.angle}rad)`;
+
+    // 終盤に向かって徐々に消える
+    const opacity = Math.max(
+      0,
+      1 - Math.max(0, progress - 0.75) / 0.25
+    );
+
+    meteor.core.style.opacity = opacity;
+    meteor.tail.style.opacity = opacity * 0.8;
+
+    if (progress < 1) {
+      remainingMeteors.push(meteor);
+    } else {
+      meteor.core.remove();
+      meteor.tail.remove();
+    }
+  }
+
+  activeChartMeteors = remainingMeteors;
+
+  meteorAnimationFrame =
+    requestAnimationFrame(animateChartMeteors);
+}
+
+// 流星アニメーションを開始する
+function startChartMeteorAnimation() {
+  if (!meteorLayer) return;
+
+  // アニメーションの二重起動を防止
+  if (meteorAnimationFrame !== null) return;
+
+  // 流星アニメーション開始
+  meteorAnimationFrame =
+    requestAnimationFrame(animateChartMeteors);
+
+  // 流星発生タイマーの二重起動を防止
+  if (meteorSpawnInterval !== null) return;
+
+  // 一定間隔で流星を発生させる
+  meteorSpawnInterval = window.setInterval(() => {
+    if (!meteorRadiantScreen) return;
+
+    spawnChartMeteor();
+  }, 1200);
+}
+
+// 放射点の画面座標を更新する
+function updateMeteorRadiantPosition(x, y) {
+  if (
+    !Number.isFinite(x) ||
+    !Number.isFinite(y)
+  ) {
+    meteorRadiantScreen = null;
+    return;
+  }
+
+  const newPosition = { x, y };
+
+  // 初回は位置を記録する
+  if (!meteorRadiantScreen) {
+    meteorRadiantScreen = newPosition;
+    return;
+  }
+
+  // 放射点の移動量
+  const deltaX = newPosition.x - meteorRadiantScreen.x;
+  const deltaY = newPosition.y - meteorRadiantScreen.y;
+
+  // 飛行中の流星も放射点の移動に追従させる
+  activeChartMeteors.forEach((meteor) => {
+    meteor.startX += deltaX;
+    meteor.startY += deltaY;
+  });
+
+  // 新しい放射点の位置を保存
+  meteorRadiantScreen = newPosition;
+}
+
+// 流星を生成
+function spawnChartMeteor() {
+  if (!meteorLayer || !meteorRadiantScreen) {
+    return;
+  }
+
+  const startX = meteorRadiantScreen.x;
+  const startY = meteorRadiantScreen.y;
+
+  // 流星の飛行方向
+  const angle = Math.random() * Math.PI * 2;
+
+  // 飛行距離
+  const distance = 100 + Math.random() * 160;
+
+  // 飛行時間
+  const duration = 900 + Math.random() * 700;
+
+  const meteor = {
+    startX,
+    startY,
+    angle,
+    distance,
+    duration,
+    startTime: performance.now(),
+
+    core: document.createElement("div"),
+    tail: document.createElement("div")
+  };
+
+  meteor.core.className = "star-chart-meteor-core";
+  meteor.tail.className = "star-chart-meteor-tail";
+
+  meteorLayer.appendChild(meteor.tail);
+  meteorLayer.appendChild(meteor.core);
+
+  activeChartMeteors.push(meteor);
+}
+
+// 流星を動かす
+function animateChartMeteors(now) {
+  if (!meteorLayer) {
+    meteorAnimationFrame = null;
+    return;
+  }
+
+  activeChartMeteors = activeChartMeteors.filter((meteor) => {
+    const elapsed = now - meteor.startTime;
+    const progress = elapsed / meteor.duration;
+
+    // 飛行終了
+    if (progress >= 1) {
+      meteor.core.remove();
+      meteor.tail.remove();
+      return false;
+    }
+
+    // 現在の移動距離
+    const currentDistance = meteor.distance * progress;
+
+    const x =
+      meteor.startX +
+      Math.cos(meteor.angle) * currentDistance;
+
+    const y =
+      meteor.startY +
+      Math.sin(meteor.angle) * currentDistance;
+
+    // 流星の中心
+    meteor.core.style.left = `${x}px`;
+    meteor.core.style.top = `${y}px`;
+
+    // 尾の長さ
+    const tailLength = 35;
+
+    // 尾の始点
+    const tailX =
+      x - Math.cos(meteor.angle) * tailLength;
+
+    const tailY =
+      y - Math.sin(meteor.angle) * tailLength;
+
+    meteor.tail.style.left = `${tailX}px`;
+    meteor.tail.style.top = `${tailY}px`;
+
+    meteor.tail.style.width = `${tailLength}px`;
+
+    // 尾の向き
+    meteor.tail.style.transform =
+      `rotate(${meteor.angle}rad)`;
+
+    // 徐々に消える
+    const opacity = Math.sin(Math.PI * progress);
+
+    meteor.core.style.opacity = opacity;
+    meteor.tail.style.opacity = opacity * 0.8;
+
+    return true;
+  });
+
+  // 次の描画
+  meteorAnimationFrame = requestAnimationFrame(
+    animateChartMeteors
+  );
+}
 
   const DATA_PATH = "data/stars-hyg.json";
 
@@ -606,52 +890,66 @@ const y = centerY + point.y * scaleY;
     ctx.setLineDash([]);
     ctx.restore();
 
-        // 流星群の放射点を赤い十字＋円で表示
-    if (meteorRadiant) {
-      const radiantPoint = projectStar(
-        {
-          ra: meteorRadiant.ra,
-          dec: meteorRadiant.dec,
-          mag: 0,
-          id: "meteor-radiant",
-          label: ""
-        },
-        lstDeg,
-        basis
-      );
+// 流星群の放射点を赤い十字＋円で表示
+if (meteorRadiant) {
+  const radiantPoint = projectStar(
+    {
+      ra: meteorRadiant.ra,
+      dec: meteorRadiant.dec,
+      mag: 0,
+      id: "meteor-radiant",
+      label: ""
+    },
+    lstDeg,
+    basis
+  );
 
-      if (radiantPoint) {
-const x = centerX + radiantPoint.x * scaleX;
-const y = centerY + radiantPoint.y * scaleY;
+  if (radiantPoint) {
+    const x = centerX + radiantPoint.x * scaleX;
+    const y = centerY + radiantPoint.y * scaleY;
 
-// 放射点の座標が有効な場合だけ表示
-if (
-  Number.isFinite(x) &&
-  Number.isFinite(y)
-) {
-          ctx.save();
+    // 放射点の座標が有効な場合だけ表示
+    if (
+      Number.isFinite(x) &&
+      Number.isFinite(y)
+    ) {
+      // 流星アニメーションへ放射点の画面座標を渡す
+      updateMeteorRadiantPosition(x, y);
 
-          // 赤い円
-          ctx.beginPath();
-          ctx.arc(x, y, 10, 0, Math.PI * 2);
-          ctx.strokeStyle = "#FF4545";
-          ctx.lineWidth = 2;
-          ctx.stroke();
+      ctx.save();
 
-          // 十字
-          ctx.beginPath();
-          ctx.moveTo(x - 15, y);
-          ctx.lineTo(x + 15, y);
-          ctx.moveTo(x, y - 15);
-          ctx.lineTo(x, y + 15);
-          ctx.strokeStyle = "#FF4545";
-          ctx.lineWidth = 2;
-          ctx.stroke();
+      // 赤い円
+      ctx.beginPath();
+      ctx.arc(x, y, 10, 0, Math.PI * 2);
+      ctx.strokeStyle = "#FF4545";
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
-          ctx.restore();
-        }
-      }
+      // 十字
+      ctx.beginPath();
+      ctx.moveTo(x - 15, y);
+      ctx.lineTo(x + 15, y);
+
+      ctx.moveTo(x, y - 15);
+      ctx.lineTo(x, y + 15);
+
+      ctx.strokeStyle = "#FF4545";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.restore();
+
+    } else {
+      updateMeteorRadiantPosition(null, null);
     }
+
+  } else {
+    updateMeteorRadiantPosition(null, null);
+  }
+
+} else {
+  updateMeteorRadiantPosition(null, null);
+}
 
 // 星図の四角形の境界
 ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
@@ -1036,4 +1334,7 @@ const zenithY = centerY + zenithPoint.y * scaleY;
 
   loadStarData();
   loadConstellationLines();
+
+    // 独立星図の流星アニメーションを開始
+startChartMeteorAnimation();
 })();
