@@ -1,4 +1,4 @@
-/* moon-observation.css */
+/* css/moon-observation.css */
 
 /* ▼ 月移動ボタン */
 .moon-date-button {
@@ -104,6 +104,8 @@
 /* 月の観察パネル：月のクリック判定領域より上 */
 #moon-observation-panel {
   z-index: 500;
+  /* パネルに控えめな影を付ける */
+box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
 }
 
 /* 月の観察パネル：最初のフェードイン */
