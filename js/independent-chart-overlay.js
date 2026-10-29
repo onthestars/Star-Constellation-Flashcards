@@ -66,7 +66,7 @@
     }
 
     selectedMeteor = meteor;
-title.textContent = meteor.name + "｜流星ガイド開発中";
+title.textContent = meteor.name + "(開発中)";
     overlay.style.display = "block";
     isOpen = true;
 
