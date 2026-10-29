@@ -188,16 +188,38 @@ function animateChartMeteors(now) {
     const progress = Math.min(1, elapsed / meteor.duration);
 
     // 飛行終了：核を消し、尾は残光として残す
-    if (progress >= 1) {
-      meteor.core.remove();
+    if (progress >= 1) {// star-chart/js/star-chart.js
+// 飛行終了：核と尾を同時にフェードアウト
+if (progress >= 1) {
+  meteor.core.animate(
+    [
+      { opacity: Number(meteor.core.style.opacity || 1) },
+      { opacity: 0 }
+    ],
+    {
+      duration: 500,
+      fill: "forwards"
+    }
+  );
 
-      meteor.tail.animate(
-        [{ opacity: 0.7 }, { opacity: 0 }],
-        { duration: 2000, fill: "forwards" }
-      );
+  meteor.tail.animate(
+    [
+      { opacity: Number(meteor.tail.style.opacity || 0.7) },
+      { opacity: 0 }
+    ],
+    {
+      duration: 500,
+      fill: "forwards"
+    }
+  );
 
-      window.setTimeout(() => meteor.tail.remove(), 2200);
-      continue;
+  window.setTimeout(() => {
+    meteor.core.remove();
+    meteor.tail.remove();
+  }, 550);
+
+  continue;
+}
     }
 
     // 現在の移動距離と核の位置
@@ -227,8 +249,8 @@ function animateChartMeteors(now) {
       progress > 0.9 ? 1 - (progress - 0.9) / 0.1 : 1;
     meteor.core.style.opacity = coreOpacity;
 
-    // 尾は出発位置から核まで伸ばす
-    const tailLength = Math.max(0, currentDistance);
+// 核の中心を少し越える位置まで尾を伸ばす
+const tailLength = Math.max(0, currentDistance + 3);
 
 const tailHeight = Math.max(
   1.5,
