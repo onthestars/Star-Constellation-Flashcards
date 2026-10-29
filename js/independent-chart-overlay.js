@@ -66,7 +66,7 @@
     }
 
     selectedMeteor = meteor;
-    title.textContent = meteor.name + "｜星図カード";
+title.textContent = meteor.name + "｜流星ガイド開発中";
     overlay.style.display = "block";
     isOpen = true;
 
