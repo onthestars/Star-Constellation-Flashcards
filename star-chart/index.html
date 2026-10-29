@@ -1,5 +1,4 @@
-
-<!-- index.html -->
+<!-- star-chart/index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -18,11 +17,14 @@
       <h1>星図カード(開発中)</h1>
     </header>
 
-    <section id="chart-container" aria-label="星図">
-      <canvas id="star-chart-canvas">
-        お使いのブラウザはCanvasに対応していません。
-      </canvas>
-    </section>
+<section id="chart-container" aria-label="星図">
+  <canvas id="star-chart-canvas">
+    お使いのブラウザはCanvasに対応していません。
+  </canvas>
+
+  <!-- 独立星図専用の流星アニメーションレイヤー -->
+  <div id="star-chart-meteor-layer" aria-hidden="true"></div>
+</section>
 
     <footer id="chart-footer">
       <p id="chart-status">星図を準備しています。</p>
