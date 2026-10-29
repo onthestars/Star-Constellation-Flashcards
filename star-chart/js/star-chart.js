@@ -35,11 +35,26 @@ function startChartMeteorAnimation() {
   if (meteorSpawnInterval !== null) return;
 
   // 一定間隔で流星を発生させる
-  meteorSpawnInterval = window.setInterval(() => {
-    if (!meteorRadiantScreen) return;
+meteorSpawnInterval = window.setInterval(() => {
+  if (!meteorRadiantScreen) return;
 
-    spawnChartMeteor();
-  }, 1200);
+  // 1回の発生で1〜3個の流星をランダムに発生させる
+  const count = Math.random() < 0.25
+    ? 3
+    : Math.random() < 0.5
+      ? 2
+      : 1;
+
+  for (let i = 0; i < count; i++) {
+    // 複数の場合も、少しずつ時間差をつける
+    window.setTimeout(() => {
+      if (meteorRadiantScreen) {
+        spawnChartMeteor();
+      }
+    }, i * (100 + Math.random() * 250));
+  }
+}, 1200 + Math.random() * 800);
+
 }
 
 // 放射点の画面座標を更新する
@@ -80,11 +95,11 @@ function spawnChartMeteor() {
     return;
   }
 
-  // 放射点の近くを中心に、出現位置をランダムに決める
+  // 放射点の近くを中心に、出現位置をランダムに決める。数値が少ない方が放射点の近くに集まりやすい
   const spread = Math.min(
     meteorLayer.clientWidth,
     meteorLayer.clientHeight
-  ) * 0.35;
+  ) * 0.18;
 
   const startX = Math.max(
     0,
@@ -111,16 +126,19 @@ function spawnChartMeteor() {
   const distanceFromRadiant = Math.hypot(dx, dy);
   const angle = Math.atan2(dy, dx);
 
-  // 移動距離と飛行時間
-  const distance = Math.min(
-    500,
-    60 + distanceFromRadiant * 0.7
-  );
+// 移動距離と飛行時間
+// 放射点に近い流星は短め、遠い流星は長めに動く
+const distance = Math.min(
+  500,
+  40 + distanceFromRadiant * 0.9
+);
 
-  const duration = Math.max(
-    600,
-    1200 - distanceFromRadiant * 0.4
-  );
+// 全体的に速度を上げ、流星ごとにランダムな差をつける
+const speedVariation = 0.8 + Math.random() * 0.4;
+const duration = Math.max(
+  300,
+  (850 - distanceFromRadiant * 0.25) * speedVariation
+);
 
   // 5色からランダムに選ぶ
   const meteorColors = [
