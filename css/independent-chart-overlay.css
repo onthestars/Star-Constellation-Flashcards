@@ -27,7 +27,6 @@
 
   background: rgba(6, 7, 64, 0.85);
 
-  border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 12px;
 
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
@@ -50,8 +49,6 @@
 
   color: #ffffff;
   background: rgba(8, 8, 36, 0.85);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 
   box-sizing: border-box;
 }
