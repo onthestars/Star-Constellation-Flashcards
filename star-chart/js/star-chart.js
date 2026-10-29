@@ -229,13 +229,13 @@ function animateChartMeteors(now) {
 
     // 尾は出発位置から核まで伸ばす
     const tailLength = Math.max(0, currentDistance);
-// 尾の高さ：スマホでも笹の葉型が見えやすい太さにする
+
 const tailHeight = Math.max(
-  4,
-  8 - Math.hypot(
+  1.5,
+  5 - Math.hypot(
     meteor.startX - meteorRadiantScreen.x,
     meteor.startY - meteorRadiantScreen.y
-  ) / 100
+  ) / 180
 );
 
     meteor.tail.style.left = `${meteor.startX}px`;
