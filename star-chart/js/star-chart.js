@@ -10,6 +10,29 @@
 // 独立星図専用の流星レイヤー
 const meteorLayer = document.getElementById("star-chart-meteor-layer");
 
+// 流星専用Canvasの描画コンテキスト
+const meteorCtx = meteorLayer
+  ? meteorLayer.getContext("2d")
+  : null;
+
+// 流星Canvasの内部解像度を表示サイズに合わせる
+function resizeChartMeteorCanvas() {
+  if (!meteorLayer || !meteorCtx) return;
+
+  const rect = meteorLayer.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  meteorLayer.width = Math.round(rect.width * dpr);
+  meteorLayer.height = Math.round(rect.height * dpr);
+
+  meteorCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// 画面サイズの変更に対応
+window.addEventListener("resize", resizeChartMeteorCanvas);
+
+resizeChartMeteorCanvas();
+
 // 現在の放射点の画面座標
 let meteorRadiantScreen = null;
 
@@ -22,7 +45,7 @@ let meteorSpawnInterval = null;
 
 // 流星アニメーションを開始する
 function startChartMeteorAnimation() {
-  if (!meteorLayer) return;
+  if (!meteorLayer || !meteorCtx) return;
 
   // アニメーションの二重起動を防止
   if (meteorAnimationFrame !== null) return;
@@ -89,22 +112,26 @@ function updateMeteorRadiantPosition(x, y) {
   meteorRadiantScreen = newPosition;
 }
 
-// 流星を生成
+// 流星を生成する
 function spawnChartMeteor() {
-  if (!meteorLayer || !meteorRadiantScreen) {
+  if (!meteorLayer || !meteorCtx || !meteorRadiantScreen) {
     return;
   }
 
-  // 放射点の近くを中心に、出現位置をランダムに決める。数値が少ない方が放射点の近くに集まりやすい
-  const spread = Math.min(
-    meteorLayer.clientWidth,
-    meteorLayer.clientHeight
-  ) * 0.18;
+  const width = meteorLayer.clientWidth;
+  const height = meteorLayer.clientHeight;
+
+  if (width <= 0 || height <= 0) {
+    return;
+  }
+
+  // 放射点の近くを中心に、出現位置をランダムに決める
+  const spread = Math.min(width, height) * 0.18;
 
   const startX = Math.max(
     0,
     Math.min(
-      meteorLayer.clientWidth,
+      width,
       meteorRadiantScreen.x +
         (Math.random() + Math.random() - 1) * spread
     )
@@ -113,35 +140,34 @@ function spawnChartMeteor() {
   const startY = Math.max(
     0,
     Math.min(
-      meteorLayer.clientHeight,
+      height,
       meteorRadiantScreen.y +
         (Math.random() + Math.random() - 1) * spread
     )
   );
 
   // 放射点から出現位置へ向かう方向
-  const dx = startX - meteorRadiantScreen.x;
-  const dy = startY - meteorRadiantScreen.y;
+const dx = startX - meteorRadiantScreen.x;
+const dy = startY - meteorRadiantScreen.y;
 
   const distanceFromRadiant = Math.hypot(dx, dy);
   const angle = Math.atan2(dy, dx);
 
-// 移動距離と飛行時間
-// 放射点に近い流星は短め、遠い流星は長めに動く
-const distance = Math.min(
-  500,
-  40 + distanceFromRadiant * 0.9
-);
+  // 移動距離と飛行時間
+  const distance = Math.min(
+    500,
+    40 + distanceFromRadiant * 0.9
+  );
 
-// 全体的に速度を上げ、流星ごとにランダムな差をつける
-const speedVariation = 0.8 + Math.random() * 0.4;
-const duration = Math.max(
-  300,
-  (850 - distanceFromRadiant * 0.25) * speedVariation
-);
+  const speedVariation = 0.8 + Math.random() * 0.4;
+
+  const duration = Math.max(
+    300,
+    (850 - distanceFromRadiant * 0.25) * speedVariation
+  );
 
   // 5色からランダムに選ぶ
-  const meteorColors = [
+  const colors = [
     { core: "#ffffff", tail: "255,255,255" },
     { core: "#fff4b0", tail: "255,244,176" },
     { core: "#ffe070", tail: "255,224,112" },
@@ -149,11 +175,12 @@ const duration = Math.max(
     { core: "#b5dfff", tail: "181,223,255" }
   ];
 
-  const color = meteorColors[
-    Math.floor(Math.random() * meteorColors.length)
+  const color = colors[
+    Math.floor(Math.random() * colors.length)
   ];
 
-  const meteor = {
+  // Canvas方式ではDOM要素を作らず、描画用の情報だけ保存する
+  activeChartMeteors.push({
     startX,
     startY,
     angle,
@@ -161,135 +188,223 @@ const duration = Math.max(
     duration,
     color,
     startTime: performance.now(),
-    core: document.createElement("div"),
-    tail: document.createElement("div")
-  };
-
-  meteor.core.className = "star-chart-meteor-core";
-  meteor.tail.className = "star-chart-meteor-tail";
-
-  meteorLayer.appendChild(meteor.tail);
-  meteorLayer.appendChild(meteor.core);
-
-  activeChartMeteors.push(meteor);
+    fadeStartTime: null
+  });
 }
 
-// 流星を動かす
+// Canvasで流星を描画する
 function animateChartMeteors(now) {
-  if (!meteorLayer) {
+  if (!meteorLayer || !meteorCtx) {
     meteorAnimationFrame = null;
     return;
   }
+
+  const width = meteorLayer.clientWidth;
+  const height = meteorLayer.clientHeight;
+
+  // 毎フレーム、流星Canvasだけを消去する
+  meteorCtx.clearRect(0, 0, width, height);
 
   const remainingMeteors = [];
 
   for (const meteor of activeChartMeteors) {
     const elapsed = now - meteor.startTime;
-    const progress = Math.min(1, elapsed / meteor.duration);
+    const progress = Math.min(elapsed / meteor.duration, 1);
 
-    // 飛行終了：核を消し、尾は残光として残す
-    if (progress >= 1) {// star-chart/js/star-chart.js
-// 飛行終了：核と尾を同時にフェードアウト
-if (progress >= 1) {
-  meteor.core.animate(
-    [
-      { opacity: Number(meteor.core.style.opacity || 1) },
-      { opacity: 0 }
-    ],
-    {
-      duration: 500,
-      fill: "forwards"
-    }
-  );
-
-  meteor.tail.animate(
-    [
-      { opacity: Number(meteor.tail.style.opacity || 0.7) },
-      { opacity: 0 }
-    ],
-    {
-      duration: 500,
-      fill: "forwards"
-    }
-  );
-
-  window.setTimeout(() => {
-    meteor.core.remove();
-    meteor.tail.remove();
-  }, 550);
-
-  continue;
-}
-    }
-
-    // 現在の移動距離と核の位置
     const currentDistance = meteor.distance * progress;
-    const x =
-      meteor.startX + Math.cos(meteor.angle) * currentDistance;
-    const y =
-      meteor.startY + Math.sin(meteor.angle) * currentDistance;
 
-    // 核の大きさと輝き
-    const coreSize = 2 + Math.sin(progress * Math.PI) * 4;
-    const glow = 6 + progress * 16;
+    const currentX =
+      meteor.startX +
+      Math.cos(meteor.angle) * currentDistance;
 
-    meteor.core.style.left = `${x}px`;
-    meteor.core.style.top = `${y}px`;
-    meteor.core.style.width = `${coreSize}px`;
-    meteor.core.style.height = `${coreSize}px`;
-    meteor.core.style.background = meteor.color.core;
-    meteor.core.style.boxShadow = `
-      0 0 ${glow}px ${meteor.color.core},
-      0 0 ${glow * 1.5}px ${meteor.color.core},
-      0 0 ${glow * 2.5}px ${meteor.color.core}
-    `;
+    const currentY =
+      meteor.startY +
+      Math.sin(meteor.angle) * currentDistance;
 
-    // 核は飛行の終盤で消える
+    // 飛行終了後は尾の残光だけを描く
+    if (progress >= 1) {
+      if (meteor.fadeStartTime === null) {
+        meteor.fadeStartTime = now;
+      }
+
+      const fadeProgress =
+        (now - meteor.fadeStartTime) / 2000;
+
+      if (fadeProgress >= 1) continue;
+
+      drawMeteorTail(
+        meteor,
+        meteor.distance,
+        0.7 * (1 - fadeProgress),
+        width,
+        height
+      );
+
+      remainingMeteors.push(meteor);
+      continue;
+    }
+
     const coreOpacity =
-      progress > 0.9 ? 1 - (progress - 0.9) / 0.1 : 1;
-    meteor.core.style.opacity = coreOpacity;
+      progress > 0.9
+        ? 1 - (progress - 0.9) / 0.1
+        : 1;
 
-// 核の中心を少し越える位置まで尾を伸ばす
-const tailLength = Math.max(0, currentDistance + 3);
+    // 尾を描画してから核を重ねる
+    drawMeteorTail(
+      meteor,
+      currentDistance,
+      0.7,
+      width,
+      height
+    );
 
-const tailHeight = Math.max(
-  1.5,
-  5 - Math.hypot(
-    meteor.startX - meteorRadiantScreen.x,
-    meteor.startY - meteorRadiantScreen.y
-  ) / 180
-);
-
-    meteor.tail.style.left = `${meteor.startX}px`;
-    meteor.tail.style.top = `${meteor.startY}px`;
-    meteor.tail.style.width = `${tailLength}px`;
-    meteor.tail.style.height = `${tailHeight}px`;
-    meteor.tail.style.transform =
-      `translateY(-50%) rotate(${meteor.angle}rad)`;
-
-    // 選ばれた流星色で、核に向かって明るくなる尾を描く
-    meteor.tail.style.background = `linear-gradient(
-      to right,
-      rgba(${meteor.color.tail}, 0.00) 0%,
-      rgba(${meteor.color.tail}, 0.02) 15%,
-      rgba(${meteor.color.tail}, 0.08) 35%,
-      rgba(${meteor.color.tail}, 0.18) 55%,
-      rgba(${meteor.color.tail}, 0.28) 75%,
-      rgba(${meteor.color.tail}, 0.42) 90%,
-      rgba(${meteor.color.tail}, 0.55) 100%
-    )`;
-
-    meteor.tail.style.opacity = 0.7;
+    drawMeteorCore(
+      currentX,
+      currentY,
+      progress,
+      meteor.color.core,
+      coreOpacity
+    );
 
     remainingMeteors.push(meteor);
   }
 
   activeChartMeteors = remainingMeteors;
 
-  // 次の描画
-  meteorAnimationFrame = requestAnimationFrame(
-    animateChartMeteors
+  meteorAnimationFrame =
+    requestAnimationFrame(animateChartMeteors);
+}
+
+// 流星の尾を描画する
+function drawMeteorTail(
+  meteor,
+  tailLength,
+  opacity,
+  width,
+  height
+) {
+  if (tailLength <= 0 || opacity <= 0) return;
+
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  const tailHeight = Math.max(
+    1.5,
+    5 -
+      Math.hypot(
+        meteor.startX - centerX,
+        meteor.startY - centerY
+      ) / 180
   );
+
+  const halfHeight = tailHeight / 2;
+  const length = tailLength;
+
+  const ctx = meteorCtx;
+
+  ctx.save();
+
+  ctx.globalAlpha = opacity;
+  ctx.translate(meteor.startX, meteor.startY);
+  ctx.rotate(meteor.angle);
+
+  // 尾の根元は透明、核側ほど明るくする
+  const gradient = ctx.createLinearGradient(
+    0, 0, length, 0
+  );
+
+  const rgb = meteor.color.tail;
+
+  gradient.addColorStop(0.00, `rgba(${rgb}, 0)`);
+  gradient.addColorStop(0.20, `rgba(${rgb}, 0.01)`);
+  gradient.addColorStop(0.40, `rgba(${rgb}, 0.06)`);
+  gradient.addColorStop(0.60, `rgba(${rgb}, 0.16)`);
+  gradient.addColorStop(0.80, `rgba(${rgb}, 0.32)`);
+  gradient.addColorStop(1.00, `rgba(${rgb}, 0.55)`);
+
+  ctx.fillStyle = gradient;
+
+  
+/* star-chart/js/star-chart.js */
+
+// 滑らかな笹の葉型の尾
+ctx.beginPath();
+ctx.moveTo(0, 0);
+
+ctx.bezierCurveTo(
+  length * 0.15, -halfHeight * 0.35,
+  length * 0.30, -halfHeight * 1.00,
+  length * 0.48, -halfHeight * 0.90
+);
+
+ctx.bezierCurveTo(
+  length * 0.70, -halfHeight * 0.75,
+  length * 0.90, -halfHeight * 0.25,
+  length, 0
+);
+
+ctx.bezierCurveTo(
+  length * 0.90, halfHeight * 0.25,
+  length * 0.70, halfHeight * 0.75,
+  length * 0.48, halfHeight * 0.90
+);
+
+ctx.bezierCurveTo(
+  length * 0.30, halfHeight * 1.00,
+  length * 0.15, halfHeight * 0.35,
+  0, 0
+);
+
+ctx.closePath();
+
+
+  ctx.filter = "blur(2px)";
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// 流星の核を描画する
+function drawMeteorCore(
+  x,
+  y,
+  progress,
+  coreColor,
+  opacity
+) {
+  const ctx = meteorCtx;
+
+// 核の大きさ調整
+const radius = (2 + Math.sin(progress * Math.PI) * 2) / 3;
+const glowRadius = (6 + progress * 10) / 3;
+
+  ctx.save();
+
+  ctx.globalAlpha = opacity;
+
+  // 外側の光から中心の明るい核へ
+  const glow = ctx.createRadialGradient(
+    x, y, 0,
+    x, y, glowRadius
+  );
+
+  glow.addColorStop(0.00, "rgba(255,255,255,0.95)");
+  glow.addColorStop(0.25, coreColor);
+  glow.addColorStop(0.65, `${coreColor}59`);
+  glow.addColorStop(1.00, `${coreColor}00`);
+
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(x, y, glowRadius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 核の中心に白い輝きを加える
+  ctx.fillStyle = "rgba(255,255,255,0.95)";
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
 }
 
   const DATA_PATH = "data/stars-hyg.json";
