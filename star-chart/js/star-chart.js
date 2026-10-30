@@ -125,26 +125,9 @@ function spawnChartMeteor() {
     return;
   }
 
-  // 放射点の近くを中心に、出現位置をランダムに決める
-  const spread = Math.min(width, height) * 0.18;
-
-  const startX = Math.max(
-    0,
-    Math.min(
-      width,
-      meteorRadiantScreen.x +
-        (Math.random() + Math.random() - 1) * spread
-    )
-  );
-
-  const startY = Math.max(
-    0,
-    Math.min(
-      height,
-      meteorRadiantScreen.y +
-        (Math.random() + Math.random() - 1) * spread
-    )
-  );
+  // 星図画面全体からランダムに出現
+  const startX = Math.random() * width;
+  const startY = Math.random() * height;
 
   // 放射点から出現位置へ向かう方向
 const dx = startX - meteorRadiantScreen.x;
@@ -156,14 +139,12 @@ const dy = startY - meteorRadiantScreen.y;
   // 移動距離と飛行時間
   const distance = Math.min(
     500,
-    40 + distanceFromRadiant * 0.9
+    60 + distanceFromRadiant * 0.7
   );
 
-  const speedVariation = 0.8 + Math.random() * 0.4;
-
   const duration = Math.max(
-    300,
-    (850 - distanceFromRadiant * 0.25) * speedVariation
+    600,
+    1200 - distanceFromRadiant * 0.4
   );
 
   // 5色からランダムに選ぶ
@@ -186,6 +167,7 @@ const dy = startY - meteorRadiantScreen.y;
     angle,
     distance,
     duration,
+    distanceFromRadiant,
     color,
     startTime: performance.now(),
     fadeStartTime: null
@@ -285,16 +267,10 @@ function drawMeteorTail(
 ) {
   if (tailLength <= 0 || opacity <= 0) return;
 
-  const centerX = width / 2;
-  const centerY = height / 2;
-
+  // 放射点からの距離に応じて尾の太さを調整
   const tailHeight = Math.max(
     1.5,
-    5 -
-      Math.hypot(
-        meteor.startX - centerX,
-        meteor.startY - centerY
-      ) / 180
+    5 - meteor.distanceFromRadiant / 180
   );
 
   const halfHeight = tailHeight / 2;
@@ -316,10 +292,11 @@ function drawMeteorTail(
   const rgb = meteor.color.tail;
 
   gradient.addColorStop(0.00, `rgba(${rgb}, 0)`);
-  gradient.addColorStop(0.20, `rgba(${rgb}, 0.01)`);
-  gradient.addColorStop(0.40, `rgba(${rgb}, 0.06)`);
-  gradient.addColorStop(0.60, `rgba(${rgb}, 0.16)`);
-  gradient.addColorStop(0.80, `rgba(${rgb}, 0.32)`);
+  gradient.addColorStop(0.15, `rgba(${rgb}, 0.02)`);
+  gradient.addColorStop(0.35, `rgba(${rgb}, 0.08)`);
+  gradient.addColorStop(0.55, `rgba(${rgb}, 0.18)`);
+  gradient.addColorStop(0.75, `rgba(${rgb}, 0.28)`);
+  gradient.addColorStop(0.90, `rgba(${rgb}, 0.42)`);
   gradient.addColorStop(1.00, `rgba(${rgb}, 0.55)`);
 
   ctx.fillStyle = gradient;
@@ -354,8 +331,8 @@ ctx.bezierCurveTo(
 
 ctx.closePath();
 
-
-  ctx.filter = "blur(2px)";
+// 流星の尾のボケ
+  ctx.filter = "blur(1px)";
   ctx.fill();
 
   ctx.restore();
