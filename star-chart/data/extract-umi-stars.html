@@ -1,0 +1,182 @@
+
+<!-- extract-umi-stars.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>こぐま座7星データ抽出</title>
+
+<style>
+body {
+  font-family: "Meiryo", sans-serif;
+  background: #10172a;
+  color: #eee;
+  padding: 24px;
+  line-height: 1.7;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+}
+
+button, input {
+  margin: 12px 0;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  cursor: pointer;
+}
+
+#result {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #202b42;
+  padding: 16px;
+  border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+<main>
+<h2>こぐま座7星データ抽出</h2>
+
+<p>
+stars-hyg.json を選択してください。
+元ファイルは変更されません。
+</p>
+
+<input type="file" id="fileInput" accept=".json,application/json">
+
+<div>
+<button id="extractButton">7星を抽出する</button>
+</div>
+
+<div id="result">まだファイルが選択されていません。</div>
+
+<script>
+"use strict";
+
+// 対象となるこぐま座7星
+const targets = [
+  { hip: 11767, label: "ポラリス", chartMag: 2 },
+  { hip: 72607, label: "コカブ", chartMag: 2 },
+  { hip: 75097, label: "フェルカド", chartMag: 3 },
+  { hip: 85822, label: "δ星", chartMag: 4 },
+  { hip: 79822, label: "ε星", chartMag: 4 },
+  { hip: 77055, label: "ζ星", chartMag: 4 },
+  { hip: 82080, label: "η星", chartMag: 4 }
+];
+
+const fileInput = document.getElementById("fileInput");
+const extractButton = document.getElementById("extractButton");
+const result = document.getElementById("result");
+
+function getHip(star) {
+  if (star.hip !== undefined) {
+    return Number(star.hip);
+  }
+
+  const match = String(star.id || "").match(/hip-(\d+)/i);
+
+  return match ? Number(match[1]) : null;
+}
+
+function getSpect(star) {
+  return (
+    star.spect ??
+    star.spectrum ??
+    star.spectralType ??
+    star.spectral_type ??
+    null
+  );
+}
+
+extractButton.addEventListener("click", async () => {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    result.textContent = "先に stars-hyg.json を選択してください。";
+    return;
+  }
+
+  try {
+    const text = await file.text();
+    const source = JSON.parse(text);
+
+    const stars = Array.isArray(source)
+      ? source
+      : Array.isArray(source.stars)
+        ? source.stars
+        : null;
+
+    if (!stars) {
+      throw new Error("JSONの配列形式を確認できませんでした。");
+    }
+
+    const output = [];
+    const missing = [];
+
+    for (const target of targets) {
+      const star = stars.find(item =>
+        getHip(item) === target.hip
+      );
+
+      if (!star) {
+        missing.push(target.hip);
+        continue;
+      }
+
+      const entry = {
+        id: `hip-${target.hip}`,
+        label: target.label,
+        ra: star.ra,
+        dec: star.dec,
+        mag: star.mag,
+        con: "UMi",
+        chartMag: target.chartMag
+      };
+
+      const spect = getSpect(star);
+
+      if (spect !== null && spect !== "") {
+        entry.spect = spect;
+      }
+
+      output.push(entry);
+    }
+
+    result.textContent =
+      `抽出結果：${output.length} / 7 星\n` +
+      `スペクトル型あり：${output.filter(s => s.spect).length} 星\n` +
+      `見つからなかったHIP番号：${missing.length ? missing.join(", ") : "なし"}\n\n` +
+      JSON.stringify(output, null, 2);
+
+    if (output.length > 0) {
+      const blob = new Blob(
+        [JSON.stringify(output, null, 2)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "stars-umi.json";
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+  } catch (error) {
+    result.textContent = "エラー： " + error.message;
+  }
+});
+</script>
+</main>
+</body>
+</html>
