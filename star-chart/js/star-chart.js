@@ -745,41 +745,74 @@ const y = centerY + projected.y * scaleY;
         const glow = style.glow || {};
         const glowEnabled = glow.enabled !== false;
 
+        // 等級に応じて光の強さを調整
         let glowFactor;
 
-if (mag < 1) {
-  glowFactor = 1.0;
-} else if (mag < 2) {
-  glowFactor = 1.0;
-} else if (mag < 3) {
-  glowFactor = 0.9;
-} else if (mag < 4) {
-  glowFactor = 0.75;
-} else {
-  glowFactor = 0.6;
-}
-
-        // 柔らかな光を描く
-        if (glowEnabled) {
-          ctx.save();
-
-          ctx.globalAlpha = glow.strength ?? 0.35;
-          ctx.shadowColor = color;
-          ctx.shadowBlur = (glow.radius ?? 4) * glowFactor;
-          ctx.fillStyle = color;
-
-          ctx.beginPath();
-          ctx.arc(x, y, radius, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.restore();
+        if (mag < 1) {
+          glowFactor = 1.5;
+        } else if (mag < 2) {
+          glowFactor = 1.3;
+        } else if (mag < 3) {
+          glowFactor = 0.9;
+        } else if (mag < 4) {
+          glowFactor = 0.75;
+        } else {
+          glowFactor = 0.6;
         }
 
-        // 星の中心をくっきり描く
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
+// 星の周囲に控えめな光を描く
+if (glowEnabled) {
+  ctx.save();
+
+// 光の広がりを少し大きくする
+const glowRadius =
+  (glow.radius ?? 12) * 0.5 * glowFactor;
+
+// 光の強さ
+const glowStrength = 0.8;
+
+  // 星の中心から外側へ自然に透明になるグラデーション
+  const glowGradient = ctx.createRadialGradient(
+    x, y, 0,
+    x, y, glowRadius
+  );
+
+glowGradient.addColorStop(0.00, `${color}CC`);
+glowGradient.addColorStop(0.30, `${color}80`);
+glowGradient.addColorStop(0.65, `${color}35`);
+glowGradient.addColorStop(1.00, `${color}00`);
+
+  ctx.globalAlpha = glowStrength;
+  ctx.fillStyle = glowGradient;
+
+  ctx.beginPath();
+  ctx.arc(
+    x,
+    y,
+    glowRadius,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// 星の中心はシャープに描く
+ctx.fillStyle = color;
+
+ctx.beginPath();
+ctx.arc(
+  x,
+  y,
+  radius,
+  0,
+  Math.PI * 2
+);
+
+ctx.fill();
+
         // 1等星・2等星の名前を表示
         if ((mag < 2 || isPolaris) && projected.label) {
           ctx.font = '12px "Meiryo", sans-serif';
