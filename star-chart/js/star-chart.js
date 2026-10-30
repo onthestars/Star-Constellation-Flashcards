@@ -381,7 +381,7 @@ const glowRadius = (6 + progress * 10) / 3;
   ctx.restore();
 }
 
-  const DATA_PATH = "data/stars-hyg.json";
+  const DATA_PATH = "data/stars-hyg-v42.json";
 
   // 星座線データ
   const LINE_DATA_PATH = "data/constellation-lines.json";
@@ -714,95 +714,72 @@ const y = centerY + projected.y * scaleY;
           continue;
         }
 
-        // 星の等級に応じて形・色・大きさを決める
+                // 星の等級・スペクトル型に応じて色と大きさを決める
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
-        const color = mag < 2 || isPolaris
-          ? "#FFD700"
-          : "#FFFFFF";
 
-        ctx.fillStyle = color;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1.5;
+        // スペクトル型から恒星の色を取得
+        const spect = String(star.spect || "").trim().toUpperCase();
+        const spectralClass = spect.match(/^[OBAFGKM]/)?.[0] || "";
+
+        const style = window.STAR_STYLE_CONFIG || {};
+        const color =
+          style.spectralColors?.[spectralClass] || "#FFFFFF";
+
+        // 実視等級に応じて星の半径を決める
+        let radius;
 
         if (mag < 1) {
-          // 1等星：大きな8方向の星印
-          const outerRadius = 10.5;
-          const innerRadius = 4.5;
-          const points = 8;
-
-          ctx.beginPath();
-
-          for (let i = 0; i < points * 2; i++) {
-            const angle = -Math.PI / 2 + i * Math.PI / points;
-            const radius = i % 2 === 0
-              ? outerRadius
-              : innerRadius;
-
-            const px = x + Math.cos(angle) * radius;
-            const py = y + Math.sin(angle) * radius;
-
-            if (i === 0) {
-              ctx.moveTo(px, py);
-            } else {
-              ctx.lineTo(px, py);
-            }
-          }
-
-          ctx.closePath();
-          ctx.fill();
-
+          radius = 4.5;
         } else if (mag < 2) {
-          // 2等星：★
-          const outerRadius = 6.75;
-          const innerRadius = outerRadius * 0.45;
-
-          ctx.beginPath();
-
-          for (let i = 0; i < 10; i++) {
-            const angle = -Math.PI / 2 + i * Math.PI / 5;
-            const radius = i % 2 === 0
-              ? outerRadius
-              : innerRadius;
-
-            const px = x + Math.cos(angle) * radius;
-            const py = y + Math.sin(angle) * radius;
-
-            if (i === 0) {
-              ctx.moveTo(px, py);
-            } else {
-              ctx.lineTo(px, py);
-            }
-          }
-
-          ctx.closePath();
-          ctx.fill();
-
+          radius = 3.3;
         } else if (mag < 3) {
-          
-// 3等星：⦿
-ctx.beginPath();
-ctx.arc(x, y, 3.84, 0, Math.PI * 2);
-ctx.lineWidth = 0.7;
-ctx.stroke();
-
-ctx.beginPath();
-ctx.arc(x, y, 1.248, 0, Math.PI * 2);
-ctx.fill();
-
+          radius = 2.5;
         } else if (mag < 4) {
-          // 4等星：●
-          ctx.beginPath();
-          ctx.arc(x, y, 2.16, 0, Math.PI * 2);
-          ctx.fill();
-
+          radius = 1.8;
         } else {
-          // 5等星以下：小さな●
-          ctx.beginPath();
-          ctx.arc(x, y, 1, 0, Math.PI * 2);
-          ctx.fill();
+          radius = 1.0;
         }
 
+        // グローの設定
+        const glow = style.glow || {};
+        const glowEnabled = glow.enabled !== false;
+
+        let glowFactor;
+
+if (mag < 1) {
+  glowFactor = 1.0;
+} else if (mag < 2) {
+  glowFactor = 1.0;
+} else if (mag < 3) {
+  glowFactor = 0.9;
+} else if (mag < 4) {
+  glowFactor = 0.75;
+} else {
+  glowFactor = 0.6;
+}
+
+        // 柔らかな光を描く
+        if (glowEnabled) {
+          ctx.save();
+
+          ctx.globalAlpha = glow.strength ?? 0.35;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = (glow.radius ?? 4) * glowFactor;
+          ctx.fillStyle = color;
+
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        // 星の中心をくっきり描く
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
         // 1等星・2等星の名前を表示
         if ((mag < 2 || isPolaris) && projected.label) {
           ctx.font = '12px "Meiryo", sans-serif';
@@ -1039,7 +1016,7 @@ if (meteorRadiant) {
       // 赤い円
       ctx.beginPath();
       ctx.arc(x, y, 10, 0, Math.PI * 2);
-      ctx.strokeStyle = "#FF4545";
+      ctx.strokeStyle = "#ffd700";
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -1052,7 +1029,7 @@ if (meteorRadiant) {
       ctx.lineTo(x, y + 15);
 
       // 放射点の色
-      ctx.strokeStyle = "#FF4545";
+      ctx.strokeStyle = "#ffd700";
       // 放射点十字部分の太さ
       ctx.lineWidth = 1;
       ctx.stroke();
