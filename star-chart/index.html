@@ -1,13 +1,20 @@
 <!-- star-chart/index.html -->
 <!DOCTYPE html>
 <html lang="ja">
+<!-- star-chart/index.html -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080D1A">
   <title>流星群観測ガイド</title>
 
+  <!-- 星図のデザイン -->
   <link rel="stylesheet" href="css/star-chart.css">
+
+  <!-- 星の色・発光設定 -->
+  <script src="js/star-style.js" defer></script>
+
+  <!-- 星図の描画処理 -->
   <script src="js/star-chart.js" defer></script>
 </head>
 <body>
@@ -20,7 +27,8 @@
 
 <!-- 独立星図専用の流星描画Canvas -->
 <canvas id="star-chart-meteor-layer" aria-hidden="true"></canvas>
-
+<!-- 星図の読み込み状態 -->
+<div id="chart-status" aria-live="polite"></div>
 </section>
 
   </main>
