@@ -57,6 +57,10 @@
 #independent-chart-title {
   font-size: 16px;
   text-align: center;
+
+    font-family:
+    "Meiryo",
+    sans-serif;
 }
 
 /* 星図パネルの閉じる×ボタン：月の観察パネルと統一 */
