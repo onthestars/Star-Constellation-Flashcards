@@ -512,8 +512,6 @@ const glowRadius = (6 + progress * 10) / 3;
     return a.x * b.x + a.y * b.y + a.z * b.z;
   }
 
-  // js/star-chart.js
-
 // 縦長・横長の画面に合わせ、四隅まで描画できる角度を求める
 function getMaxVisibleAngleDeg() {
   const halfWidth = canvasWidth / 2;
@@ -609,12 +607,6 @@ const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
 function drawChart() {
   if (canvasWidth <= 0 || canvasHeight <= 0) return;
 
-  ctx.fillStyle = "#080D1A";
-  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-  const centerX = canvasWidth / 2;
-  const centerY = canvasHeight / 2;
-
   // 円形の星図を維持する共通倍率
   const scale = (Math.min(canvasWidth, canvasHeight) / 2) /
     Math.tan(fieldOfViewDeg * RAD / 2);
@@ -624,8 +616,49 @@ function drawChart() {
 
   const lstDeg = getLocalSiderealTimeDeg();
   const basis = getProjectionBasis();
+  const centerX = canvasWidth / 2;
+  const centerY = canvasHeight / 2;
 
-if (dataLoaded) {
+  // 天頂の投影座標を計算
+  const zenithVector = horizontalToVector(0, 90);
+  const zenithDot = dot(zenithVector, basis.center);
+  const zenithDenominator = 1 + zenithDot;
+
+  let gradientCenterX = centerX;
+  let gradientCenterY = centerY;
+
+if (zenithDenominator > 1e-12) {
+  gradientCenterX =
+    centerX + (dot(zenithVector, basis.right) / zenithDenominator) * scaleX;
+
+  gradientCenterY =
+    centerY - (dot(zenithVector, basis.up) / zenithDenominator) * scaleY;
+}
+
+  // 星図背景（天頂を中心とした同心円状の夜空）
+const gradientRadius = scale;
+
+const backgroundGradient = ctx.createRadialGradient(
+  gradientCenterX,
+  gradientCenterY,
+  0,
+  gradientCenterX,
+  gradientCenterY,
+  gradientRadius
+);
+
+// 星図背景の色（天頂から外側へ緩やかに変化）
+backgroundGradient.addColorStop(0.00, "#000008");
+backgroundGradient.addColorStop(0.25, "#00000F");
+backgroundGradient.addColorStop(0.42, "#010116");
+backgroundGradient.addColorStop(0.62, "#02021D");
+backgroundGradient.addColorStop(0.85, "#040626");
+backgroundGradient.addColorStop(1.00, "#080D32");
+
+ctx.fillStyle = backgroundGradient;
+ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  if (dataLoaded) {
 
   // こぐま座などの星座線を描画
 
