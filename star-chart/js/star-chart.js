@@ -1077,7 +1077,7 @@ const labelY = y;
         ctx.fill();
 
         // 方位の文字（従来の16pxから24pxへ約1.5倍）
-        ctx.font = "bold 24px sans-serif";
+        ctx.font = 'bold 24px "Meiryo", sans-serif';
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "rgb(6, 7, 64)";
