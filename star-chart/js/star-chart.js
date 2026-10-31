@@ -745,32 +745,40 @@ const y = centerY + projected.y * scaleY;
         const glow = style.glow || {};
         const glowEnabled = glow.enabled !== false;
 
-        // 等級に応じて光の強さを調整
+        // 等星の区分に応じてグローの強さを決める
         let glowFactor;
 
-        if (mag < 1) {
+        if (mag < 1.5) {
+          // 1等星：0等星・マイナス等級も含む
           glowFactor = 1.5;
-        } else if (mag < 2) {
+        } else if (mag < 2.5) {
+          // 2等星
           glowFactor = 1.3;
-        } else if (mag < 3) {
+        } else if (mag < 3.5) {
+          // 3等星
           glowFactor = 0.9;
-        } else if (mag < 4) {
+        } else if (mag < 4.5) {
+          // 4等星
           glowFactor = 0.75;
+        } else if (mag < 5.5) {
+          // 5等星
+          glowFactor = 0.6;
         } else {
+          // 6等星
           glowFactor = 0.6;
         }
 
-// 星の周囲に控えめな光を描く
-// 1～3等星だけグローを表示
-if (glowEnabled && mag < 3.5) {
-  ctx.save();
+        // 星の周囲に控えめな光を描く
+        // 1～3等星だけグローを表示
+        if (glowEnabled && mag < 3.5) {
+          ctx.save();
 
-// 光の広がりを少し大きくする
-const glowRadius =
-  (glow.radius ?? 12) * 0.5 * glowFactor;
+          // 光の広がり
+          const glowRadius =
+            (glow.radius ?? 12) * 0.5 * glowFactor;
 
-// 光の強さ
-const glowStrength = 0.8;
+          // 光の強さ
+          const glowStrength = 0.8;
 
   // 星の中心から外側へ自然に透明になるグラデーション
   const glowGradient = ctx.createRadialGradient(
