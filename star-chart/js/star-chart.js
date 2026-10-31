@@ -818,7 +818,7 @@ glowGradient.addColorStop(1.00, `${color}00`);
         const rayLength = 28;
         const rayWidth = 1.2;
 
-        ctx.globalAlpha = 0.75;
+        ctx.globalAlpha = 0.9;
 
 // 短い光芒8本（45度間隔・淡いグラデーション）
 const shortRayLength = 22;
