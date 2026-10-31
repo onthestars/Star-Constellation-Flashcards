@@ -774,8 +774,11 @@ const y = centerY + projected.y * scaleY;
           ctx.save();
 
           // 光の広がり
-          const glowRadius =
-            (glow.radius ?? 12) * 0.5 * glowFactor;
+// 1等星はグロー範囲を拡大
+const glowScale = mag < 1.5 ? 0.7 : 0.5;
+
+const glowRadius =
+  (glow.radius ?? 12) * glowScale * glowFactor;
 
           // 光の強さ
           const glowStrength = 0.8;
@@ -807,6 +810,91 @@ glowGradient.addColorStop(1.00, `${color}00`);
 
   ctx.restore();
 }
+
+      // 1等星の十字形の光芒
+      if (mag < 1.5) {
+        ctx.save();
+
+        const rayLength = 28;
+        const rayWidth = 1.2;
+
+        ctx.globalAlpha = 0.75;
+
+// 短い光芒8本（45度間隔・淡いグラデーション）
+const shortRayLength = 22;
+const shortRayWidth = 0.5;
+
+ctx.globalAlpha = 0.12;
+ctx.lineWidth = shortRayWidth;
+ctx.lineCap = "round";
+
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * 45 + 22.5) * Math.PI / 180;
+
+          const dx = Math.cos(angle);
+          const dy = Math.sin(angle);
+
+          const startX = x + dx * 1.5;
+          const startY = y + dy * 1.5;
+
+          const endX = x + dx * shortRayLength;
+          const endY = y + dy * shortRayLength;
+
+          const rayGradient = ctx.createLinearGradient(
+            startX, startY,
+            endX, endY
+          );
+
+          rayGradient.addColorStop(0.00, `${color}CC`);
+          rayGradient.addColorStop(0.35, `${color}80`);
+          rayGradient.addColorStop(1.00, `${color}00`);
+
+          ctx.strokeStyle = rayGradient;
+
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+        }
+
+        // 縦方向の光芒
+        const verticalGradient = ctx.createLinearGradient(
+          x, y - rayLength,
+          x, y + rayLength
+        );
+
+        verticalGradient.addColorStop(0.00, `${color}00`);
+        verticalGradient.addColorStop(0.50, `${color}CC`);
+        verticalGradient.addColorStop(1.00, `${color}00`);
+
+        ctx.fillStyle = verticalGradient;
+        ctx.fillRect(
+          x - rayWidth / 2,
+          y - rayLength,
+          rayWidth,
+          rayLength * 2
+        );
+
+        // 横方向の光芒
+        const horizontalGradient = ctx.createLinearGradient(
+          x - rayLength, y,
+          x + rayLength, y
+        );
+
+        horizontalGradient.addColorStop(0.00, `${color}00`);
+        horizontalGradient.addColorStop(0.50, `${color}CC`);
+        horizontalGradient.addColorStop(1.00, `${color}00`);
+
+        ctx.fillStyle = horizontalGradient;
+        ctx.fillRect(
+          x - rayLength,
+          y - rayWidth / 2,
+          rayLength * 2,
+          rayWidth
+        );
+
+        ctx.restore();
+      }
 
 // 星の中心はシャープに描く
 ctx.fillStyle = color;
