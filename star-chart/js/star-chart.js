@@ -267,11 +267,11 @@ function drawMeteorTail(
 ) {
   if (tailLength <= 0 || opacity <= 0) return;
 
-  // 放射点からの距離に応じて尾の太さを調整
-  const tailHeight = Math.max(
-    1.5,
-    5 - meteor.distanceFromRadiant / 180
-  );
+// 放射点からの距離に応じて尾の太さを調整
+const tailHeight = Math.max(
+  1.2,
+  (5 - meteor.distanceFromRadiant / 180) * 0.8
+);
 
   const halfHeight = tailHeight / 2;
   const length = tailLength;
@@ -602,6 +602,112 @@ const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
       y: -dot(v, basis.up) / denominator
     };
   }
+  
+  // star-chart/js/star-chart.js
+
+// star-chart/js/star-chart.js
+
+// 1等星の光芒を描画
+function drawStarDiffraction(x, y, radius, color) {
+  const spikeLength = 12;
+
+  // 星に近い部分は太く、先端に向かって細くする
+  const nearWidth = 1.4;
+  const farWidth = 0.15;
+
+  ctx.save();
+
+// 光芒全体の基本透明度
+  ctx.globalAlpha = 0.45;
+
+  // 光芒1本を描画
+  function drawRay(x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    const length = Math.hypot(dx, dy);
+
+    if (length === 0) return;
+
+    // 光芒に対して垂直な方向
+    const px = -dy / length;
+    const py = dx / length;
+
+    const nearHalf = nearWidth / 2;
+    const farHalf = farWidth / 2;
+
+    ctx.beginPath();
+
+    // 星側の太い部分
+    ctx.moveTo(
+      x1 + px * nearHalf,
+      y1 + py * nearHalf
+    );
+
+    // 光芒の先端側
+    ctx.lineTo(
+      x2 + px * farHalf,
+      y2 + py * farHalf
+    );
+
+    ctx.lineTo(
+      x2 - px * farHalf,
+      y2 - py * farHalf
+    );
+
+    // 星側に戻る
+    ctx.lineTo(
+      x1 - px * nearHalf,
+      y1 - py * nearHalf
+    );
+
+    ctx.closePath();
+
+// 星の近くは明るく、先端に向かって透明にする
+const gradient = ctx.createLinearGradient(
+  x1, y1,
+  x2, y2
+);
+
+gradient.addColorStop(0, color);
+gradient.addColorStop(1, "rgba(255,255,255,0)");
+
+ctx.fillStyle = gradient;
+ctx.fill();
+  }
+
+  // 左右の光芒
+  drawRay(
+    x - radius,
+    y,
+    x - radius - spikeLength,
+    y
+  );
+
+  drawRay(
+    x + radius,
+    y,
+    x + radius + spikeLength,
+    y
+  );
+
+  // 上下の光芒
+  drawRay(
+    x,
+    y - radius,
+    x,
+    y - radius - spikeLength
+  );
+
+  drawRay(
+    x,
+    y + radius,
+    x,
+    y + radius + spikeLength
+  );
+
+  ctx.restore();
+}
 
 // 星図全体を再描画
 function drawChart() {
@@ -669,8 +775,9 @@ ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
       for (const constellation of constellations) {
         ctx.beginPath();
+        // 星座線の色と太さ
         ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
-        ctx.lineWidth = 1.25;
+        ctx.lineWidth = 0.75;
 
         for (const segment of constellation.segments) {
           const starA = starById.get(segment[0]);
@@ -717,6 +824,10 @@ const y = centerY + projected.y * scaleY;
                 // 星の等級・スペクトル型に応じて色と大きさを決める
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
+
+        // 四捨五入で1等星を判定
+// 1.5等未満を1等星として判定
+const isFirstMagnitude = mag < 1.5;
 
         // スペクトル型から恒星の色を取得
         const spect = String(star.spect || "").trim().toUpperCase();
@@ -799,6 +910,11 @@ glowGradient.addColorStop(1.00, `${color}00`);
   ctx.restore();
 }
 
+// 1等星に光芒を追加
+if (isFirstMagnitude) {
+  drawStarDiffraction(x, y, radius, color);
+}
+
 // 星の中心はシャープに描く
 ctx.fillStyle = color;
 
@@ -813,8 +929,9 @@ ctx.arc(
 
 ctx.fill();
 
-        // 1等星・2等星の名前を表示
-        if ((mag < 2 || isPolaris) && projected.label) {
+        // 1等星・2等星の名前を表示（星名の表示）
+        if (false) {
+          // if ((mag < 2 || isPolaris) && projected.label) {
           ctx.font = '12px "Meiryo", sans-serif';
           ctx.fillStyle = color;
           ctx.textAlign = "left";
