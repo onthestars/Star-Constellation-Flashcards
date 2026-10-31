@@ -1,4 +1,5 @@
-/* js/independent-chart-overlay.js */
+
+// js/independent-chart-overlay.js
 "use strict";
 
 (function () {
@@ -31,6 +32,30 @@
 
   let selectedMeteor = null;
   let isOpen = false;
+
+  // 月日を「10月2日」の形式に変換
+  function formatMeteorDate(mmdd) {
+    const [month, day] = mmdd.split("-");
+
+    return `${Number(month)}月${Number(day)}日`;
+  }
+
+  // ヘッダーに流星群名・出現期間・極大日を表示
+  function updateChartTitle(meteor) {
+    const nameElement = document.createElement("span");
+    nameElement.className = "independent-chart-title-name";
+    nameElement.textContent = meteor.name;
+
+    const periodElement = document.createElement("span");
+    periodElement.className = "independent-chart-title-period";
+
+    periodElement.textContent =
+      `${formatMeteorDate(meteor.start)} - ` +
+      `${formatMeteorDate(meteor.end)}` +
+      `（${formatMeteorDate(meteor.peak)}頃極大）`;
+
+    title.replaceChildren(nameElement, periodElement);
+  }
 
   // 選択した流星群の放射点を星図へ送信
   function sendRadiantCoordinates() {
@@ -66,7 +91,9 @@
     }
 
     selectedMeteor = meteor;
-title.textContent = meteor.name + "(開発中)";
+
+    updateChartTitle(meteor);
+
     overlay.style.display = "block";
     isOpen = true;
 
