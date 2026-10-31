@@ -667,276 +667,7 @@ backgroundGradient.addColorStop(1.00, "#080D32");
 ctx.fillStyle = backgroundGradient;
 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-  if (dataLoaded) {
-
-  // こぐま座などの星座線を描画
-
-      // こぐま座などの星座線を描画
-      const starById = new Map(
-        stars.map(star => [star.id, star])
-      );
-
-      for (const constellation of constellations) {
-        ctx.beginPath();
-        ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
-        ctx.lineWidth = 1.25;
-
-        for (const segment of constellation.segments) {
-          const starA = starById.get(segment[0]);
-          const starB = starById.get(segment[1]);
-
-          if (!starA || !starB) continue;
-
-          const pointA = projectStar(starA, lstDeg, basis, minDot);
-const pointB = projectStar(starB, lstDeg, basis, minDot);
-
-          if (!pointA || !pointB) continue;
-
-ctx.moveTo(
-  centerX + pointA.x * scaleX,
-  centerY + pointA.y * scaleY
-);
-
-ctx.lineTo(
-  centerX + pointB.x * scaleX,
-  centerY + pointB.y * scaleY
-);
-        }
-
-        ctx.stroke();
-      }
-
-      // 恒星を描画
-      for (const star of stars) {
-        const projected = projectStar(star, lstDeg, basis, minDot);
-
-        if (!projected) continue;
-
-const x = centerX + projected.x * scaleX;
-const y = centerY + projected.y * scaleY;
-
-        // キャンバスの外にある星は描かない
-        if (
-          x < 0 || x > canvasWidth ||
-          y < 0 || y > canvasHeight
-        ) {
-          continue;
-        }
-
-                // 星の等級・スペクトル型に応じて色と大きさを決める
-        const isPolaris = projected.id === "hip-11767";
-        const mag = projected.mag;
-
-        // スペクトル型から恒星の色を取得
-        const spect = String(star.spect || "").trim().toUpperCase();
-        const spectralClass = spect.match(/^[OBAFGKM]/)?.[0] || "";
-
-        const style = window.STAR_STYLE_CONFIG || {};
-        const color =
-          style.spectralColors?.[spectralClass] || "#FFFFFF";
-
-        // 実視等級に応じて星の半径を決める
-        let radius;
-
-        if (mag < 1) {
-          radius = 4.5;
-        } else if (mag < 2) {
-          radius = 3.3;
-        } else if (mag < 3) {
-          radius = 2.5;
-        } else if (mag < 4) {
-          radius = 1.8;
-        } else {
-          radius = 1.0;
-        }
-
-        // グローの設定
-        const glow = style.glow || {};
-        const glowEnabled = glow.enabled !== false;
-
-        // 等星の区分に応じてグローの強さを決める
-        let glowFactor;
-
-        if (mag < 1.5) {
-          // 1等星：0等星・マイナス等級も含む
-          glowFactor = 1.5;
-        } else if (mag < 2.5) {
-          // 2等星
-          glowFactor = 1.3;
-        } else if (mag < 3.5) {
-          // 3等星
-          glowFactor = 0.9;
-        } else if (mag < 4.5) {
-          // 4等星
-          glowFactor = 0.75;
-        } else if (mag < 5.5) {
-          // 5等星
-          glowFactor = 0.6;
-        } else {
-          // 6等星
-          glowFactor = 0.6;
-        }
-
-        // 星の周囲に控えめな光を描く
-        // 1～3等星だけグローを表示
-        if (glowEnabled && mag < 3.5) {
-          ctx.save();
-
-          // 光の広がり
-// 1等星はグロー範囲を拡大
-const glowScale = mag < 1.5 ? 0.7 : 0.5;
-
-const glowRadius =
-  (glow.radius ?? 12) * glowScale * glowFactor;
-
-          // 光の強さ
-          const glowStrength = 0.8;
-
-  // 星の中心から外側へ自然に透明になるグラデーション
-  const glowGradient = ctx.createRadialGradient(
-    x, y, 0,
-    x, y, glowRadius
-  );
-
-glowGradient.addColorStop(0.00, `${color}CC`);
-glowGradient.addColorStop(0.30, `${color}80`);
-glowGradient.addColorStop(0.65, `${color}35`);
-glowGradient.addColorStop(1.00, `${color}00`);
-
-  ctx.globalAlpha = glowStrength;
-  ctx.fillStyle = glowGradient;
-
-  ctx.beginPath();
-  ctx.arc(
-    x,
-    y,
-    glowRadius,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.fill();
-
-  ctx.restore();
-}
-
-      // 1等星の十字形の光芒
-      if (mag < 1.5) {
-        ctx.save();
-
-        const rayLength = 28;
-        const rayWidth = 1.2;
-
-        ctx.globalAlpha = 0.9;
-
-// 短い光芒8本（45度間隔・淡いグラデーション）
-const shortRayLength = 22;
-const shortRayWidth = 0.5;
-
-ctx.globalAlpha = 0.12;
-ctx.lineWidth = shortRayWidth;
-ctx.lineCap = "round";
-
-        for (let i = 0; i < 8; i++) {
-          const angle = (i * 45 + 22.5) * Math.PI / 180;
-
-          const dx = Math.cos(angle);
-          const dy = Math.sin(angle);
-
-          const startX = x + dx * 1.5;
-          const startY = y + dy * 1.5;
-
-          const endX = x + dx * shortRayLength;
-          const endY = y + dy * shortRayLength;
-
-          const rayGradient = ctx.createLinearGradient(
-            startX, startY,
-            endX, endY
-          );
-
-          rayGradient.addColorStop(0.00, `${color}CC`);
-          rayGradient.addColorStop(0.35, `${color}80`);
-          rayGradient.addColorStop(1.00, `${color}00`);
-
-          ctx.strokeStyle = rayGradient;
-
-          ctx.beginPath();
-          ctx.moveTo(startX, startY);
-          ctx.lineTo(endX, endY);
-          ctx.stroke();
-        }
-
-        // 縦方向の光芒
-        const verticalGradient = ctx.createLinearGradient(
-          x, y - rayLength,
-          x, y + rayLength
-        );
-
-        verticalGradient.addColorStop(0.00, `${color}00`);
-        verticalGradient.addColorStop(0.50, `${color}CC`);
-        verticalGradient.addColorStop(1.00, `${color}00`);
-
-        ctx.fillStyle = verticalGradient;
-        ctx.fillRect(
-          x - rayWidth / 2,
-          y - rayLength,
-          rayWidth,
-          rayLength * 2
-        );
-
-        // 横方向の光芒
-        const horizontalGradient = ctx.createLinearGradient(
-          x - rayLength, y,
-          x + rayLength, y
-        );
-
-        horizontalGradient.addColorStop(0.00, `${color}00`);
-        horizontalGradient.addColorStop(0.50, `${color}CC`);
-        horizontalGradient.addColorStop(1.00, `${color}00`);
-
-        ctx.fillStyle = horizontalGradient;
-        ctx.fillRect(
-          x - rayLength,
-          y - rayWidth / 2,
-          rayLength * 2,
-          rayWidth
-        );
-
-        ctx.restore();
-      }
-
-// 星の中心はシャープに描く
-ctx.fillStyle = color;
-
-ctx.beginPath();
-ctx.arc(
-  x,
-  y,
-  radius,
-  0,
-  Math.PI * 2
-);
-
-ctx.fill();
-
-        // 1等星・2等星の名前を表示
-        if ((mag < 2 || isPolaris) && projected.label) {
-          ctx.font = '12px "Meiryo", sans-serif';
-          ctx.fillStyle = color;
-          ctx.textAlign = "left";
-          ctx.textBaseline = "middle";
-
-          ctx.fillText(
-            isPolaris ? "北極星" : projected.label,
-            x + 9,
-            y - 8
-          );
-        }
-      }
-
-      // 星の描画範囲の制限を解除する
-      ctx.restore();
-    }
+  
 
         // 地平線（高度0°）を描画
     ctx.save();
@@ -1124,64 +855,6 @@ const y = centerY + point.y * scaleY;
     ctx.setLineDash([]);
     ctx.restore();
 
-// 流星群の放射点を赤い十字＋円で表示
-if (meteorRadiant) {
-  const radiantPoint = projectStar(
-  { ra: meteorRadiant.ra, dec: meteorRadiant.dec, mag: 0, id: "meteor-radiant", label: "" },
-  lstDeg,
-  basis,
-  minDot
-);
-
-  if (radiantPoint) {
-    const x = centerX + radiantPoint.x * scaleX;
-    const y = centerY + radiantPoint.y * scaleY;
-
-    // 放射点の座標が有効な場合だけ表示
-    if (
-      Number.isFinite(x) &&
-      Number.isFinite(y)
-    ) {
-      // 流星アニメーションへ放射点の画面座標を渡す
-      updateMeteorRadiantPosition(x, y);
-
-      ctx.save();
-
-      // 赤い円
-      ctx.beginPath();
-      ctx.arc(x, y, 10, 0, Math.PI * 2);
-      ctx.strokeStyle = "#ffd700";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // 十字
-      ctx.beginPath();
-      ctx.moveTo(x - 15, y);
-      ctx.lineTo(x + 15, y);
-
-      ctx.moveTo(x, y - 15);
-      ctx.lineTo(x, y + 15);
-
-      // 放射点の色
-      ctx.strokeStyle = "#ffd700";
-      // 放射点十字部分の太さ
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      ctx.restore();
-
-    } else {
-      updateMeteorRadiantPosition(null, null);
-    }
-
-  } else {
-    updateMeteorRadiantPosition(null, null);
-  }
-
-} else {
-  updateMeteorRadiantPosition(null, null);
-}
-
     // 地平線上の東西南北を表示
     const directions = [
       { az: 0, label: "北" },
@@ -1256,6 +929,349 @@ const zenithY = centerY + zenithPoint.y * scaleY;
 
       ctx.restore();
     }
+
+    if (dataLoaded) {
+
+  // こぐま座などの星座線を描画
+
+      // こぐま座などの星座線を描画
+      const starById = new Map(
+        stars.map(star => [star.id, star])
+      );
+
+      for (const constellation of constellations) {
+        ctx.beginPath();
+        ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
+        ctx.lineWidth = 1.25;
+
+        for (const segment of constellation.segments) {
+          const starA = starById.get(segment[0]);
+          const starB = starById.get(segment[1]);
+
+          if (!starA || !starB) continue;
+
+          const pointA = projectStar(starA, lstDeg, basis, minDot);
+const pointB = projectStar(starB, lstDeg, basis, minDot);
+
+          if (!pointA || !pointB) continue;
+
+ctx.moveTo(
+  centerX + pointA.x * scaleX,
+  centerY + pointA.y * scaleY
+);
+
+ctx.lineTo(
+  centerX + pointB.x * scaleX,
+  centerY + pointB.y * scaleY
+);
+        }
+
+        ctx.stroke();
+      }
+
+      // 恒星を描画
+      for (const star of stars) {
+        const projected = projectStar(star, lstDeg, basis, minDot);
+
+        if (!projected) continue;
+
+const x = centerX + projected.x * scaleX;
+const y = centerY + projected.y * scaleY;
+
+        // キャンバスの外にある星は描かない
+        if (
+          x < 0 || x > canvasWidth ||
+          y < 0 || y > canvasHeight
+        ) {
+          continue;
+        }
+
+                // 星の等級・スペクトル型に応じて色と大きさを決める
+        const isPolaris = projected.id === "hip-11767";
+        const mag = projected.mag;
+
+        // スペクトル型から恒星の色を取得
+        const spect = String(star.spect || "").trim().toUpperCase();
+        const spectralClass = spect.match(/^[OBAFGKM]/)?.[0] || "";
+
+        const style = window.STAR_STYLE_CONFIG || {};
+        const color =
+          style.spectralColors?.[spectralClass] || "#FFFFFF";
+
+// 等星の区分に応じて星の半径を決める
+let radius;
+
+if (mag < 1.5) {
+  // 1等星：0等星・マイナス等級も含む
+  radius = 4.5;
+} else if (mag < 2.5) {
+  // 2等星
+  radius = 3.3;
+} else if (mag < 3.5) {
+  // 3等星
+  radius = 2.5;
+} else if (mag < 4.5) {
+  // 4等星
+  radius = 1.8;
+} else {
+  // 5～6等星
+  radius = 1.0;
+}
+
+        // グローの設定
+        const glow = style.glow || {};
+        const glowEnabled = glow.enabled !== false;
+
+        // 等星の区分に応じてグローの強さを決める
+        let glowFactor;
+
+        if (mag < 1.5) {
+          // 1等星：0等星・マイナス等級も含む
+          glowFactor = 1.5;
+        } else if (mag < 2.5) {
+          // 2等星
+          glowFactor = 1.3;
+        } else if (mag < 3.5) {
+          // 3等星
+          glowFactor = 0.9;
+        } else if (mag < 4.5) {
+          // 4等星
+          glowFactor = 0.75;
+        } else if (mag < 5.5) {
+          // 5等星
+          glowFactor = 0.6;
+        } else {
+          // 6等星
+          glowFactor = 0.6;
+        }
+
+        // 星の周囲に控えめな光を描く
+        // 1～3等星だけグローを表示
+        if (glowEnabled && mag < 3.5) {
+          ctx.save();
+
+          // 光の広がり
+// 1等星はグロー範囲を拡大
+const glowScale = mag < 1.5 ? 0.7 : 0.5;
+
+const glowRadius =
+  (glow.radius ?? 12) * glowScale * glowFactor;
+
+          // 光の強さ
+          const glowStrength = 0.8;
+
+  // 星の中心から外側へ自然に透明になるグラデーション
+  const glowGradient = ctx.createRadialGradient(
+    x, y, 0,
+    x, y, glowRadius
+  );
+
+glowGradient.addColorStop(0.00, `${color}CC`);
+glowGradient.addColorStop(0.30, `${color}80`);
+glowGradient.addColorStop(0.65, `${color}35`);
+glowGradient.addColorStop(1.00, `${color}00`);
+
+  ctx.globalAlpha = glowStrength;
+  ctx.fillStyle = glowGradient;
+
+  ctx.beginPath();
+  ctx.arc(
+    x,
+    y,
+    glowRadius,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.restore();
+}
+
+      // 1等星の十字形の光芒
+      if (mag < 1.5) {
+        ctx.save();
+
+        const rayLength = 28;
+        const rayWidth = 1.2;
+
+        ctx.globalAlpha = 0.9;
+
+// 短い光芒8本（45度間隔・淡いグラデーション）
+const shortRayLength = 22;
+const shortRayWidth = 0.5;
+
+ctx.globalAlpha = 0.12;
+ctx.lineWidth = shortRayWidth;
+ctx.lineCap = "round";
+
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * 45 + 22.5) * Math.PI / 180;
+
+          const dx = Math.cos(angle);
+          const dy = Math.sin(angle);
+
+          const startX = x + dx * 1.5;
+          const startY = y + dy * 1.5;
+
+          const endX = x + dx * shortRayLength;
+          const endY = y + dy * shortRayLength;
+
+          const rayGradient = ctx.createLinearGradient(
+            startX, startY,
+            endX, endY
+          );
+
+          rayGradient.addColorStop(0.00, `${color}CC`);
+          rayGradient.addColorStop(0.35, `${color}80`);
+          rayGradient.addColorStop(1.00, `${color}00`);
+
+          ctx.strokeStyle = rayGradient;
+
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+        }
+
+        // 縦方向の光芒
+        const verticalGradient = ctx.createLinearGradient(
+          x, y - rayLength,
+          x, y + rayLength
+        );
+
+        verticalGradient.addColorStop(0.00, `${color}00`);
+        verticalGradient.addColorStop(0.50, `${color}CC`);
+        verticalGradient.addColorStop(1.00, `${color}00`);
+
+        ctx.fillStyle = verticalGradient;
+        ctx.fillRect(
+          x - rayWidth / 2,
+          y - rayLength,
+          rayWidth,
+          rayLength * 2
+        );
+
+        // 横方向の光芒
+        const horizontalGradient = ctx.createLinearGradient(
+          x - rayLength, y,
+          x + rayLength, y
+        );
+
+        horizontalGradient.addColorStop(0.00, `${color}00`);
+        horizontalGradient.addColorStop(0.50, `${color}CC`);
+        horizontalGradient.addColorStop(1.00, `${color}00`);
+
+        ctx.fillStyle = horizontalGradient;
+        ctx.fillRect(
+          x - rayLength,
+          y - rayWidth / 2,
+          rayLength * 2,
+          rayWidth
+        );
+
+        ctx.restore();
+      }
+
+// 星の中心はシャープに描く
+ctx.fillStyle = color;
+
+ctx.beginPath();
+ctx.arc(
+  x,
+  y,
+  radius,
+  0,
+  Math.PI * 2
+);
+
+ctx.fill();
+
+// 拡大率に応じて恒星名の表示対象を切り替える
+const shouldShowStarLabel =
+  isPolaris ||
+  mag < 1.5 ||
+  (fieldOfViewDeg <= 60 && mag < 2.5) ||
+  (fieldOfViewDeg <= 25 && mag < 3.5);
+
+// 恒星名を表示
+if (shouldShowStarLabel && (isPolaris || projected.label)) {
+  ctx.font = '12px "Meiryo", sans-serif';
+  ctx.fillStyle = color;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+
+  ctx.fillText(
+    isPolaris ? "北極星" : projected.label,
+    x + 9,
+    y - 8
+  );
+}
+}
+
+      // 星の描画範囲の制限を解除する
+      ctx.restore();
+    }
+
+// 流星群の放射点を赤い十字＋円で表示
+if (meteorRadiant) {
+  const radiantPoint = projectStar(
+  { ra: meteorRadiant.ra, dec: meteorRadiant.dec, mag: 0, id: "meteor-radiant", label: "" },
+  lstDeg,
+  basis,
+  minDot
+);
+
+  if (radiantPoint) {
+    const x = centerX + radiantPoint.x * scaleX;
+    const y = centerY + radiantPoint.y * scaleY;
+
+    // 放射点の座標が有効な場合だけ表示
+    if (
+      Number.isFinite(x) &&
+      Number.isFinite(y)
+    ) {
+      // 流星アニメーションへ放射点の画面座標を渡す
+      updateMeteorRadiantPosition(x, y);
+
+      ctx.save();
+
+      // 赤い円
+      ctx.beginPath();
+      ctx.arc(x, y, 10, 0, Math.PI * 2);
+      ctx.strokeStyle = "#ffd700";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // 十字
+      ctx.beginPath();
+      ctx.moveTo(x - 15, y);
+      ctx.lineTo(x + 15, y);
+
+      ctx.moveTo(x, y - 15);
+      ctx.lineTo(x, y + 15);
+
+      // 放射点の色
+      ctx.strokeStyle = "#ffd700";
+      // 放射点十字部分の太さ
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.restore();
+
+    } else {
+      updateMeteorRadiantPosition(null, null);
+    }
+
+  } else {
+    updateMeteorRadiantPosition(null, null);
+  }
+
+} else {
+  updateMeteorRadiantPosition(null, null);
+}
+
+    
 
   }
 
@@ -1574,6 +1590,30 @@ canvas.addEventListener("lostpointercapture", stopDragging);
 
       console.log("全星データ件数:", data.length);
       console.log("有効な恒星データ件数:", stars.length);
+
+      // 1等星・2等星のうち、星名が未登録の恒星を調査
+const missingLabels = stars.filter(star =>
+  star.mag < 2.5 &&
+  (!star.label || star.label.trim() === "")
+);
+
+console.log("星名未登録の1等星・2等星:", missingLabels.length);
+
+console.log(
+  "星名未登録一覧:",
+  JSON.stringify(
+    missingLabels.map(star => ({
+      id: star.id,
+      mag: star.mag,
+      con: star.con,
+      ra: star.ra,
+      dec: star.dec
+    })),
+    null,
+    2
+  )
+);
+
       console.log("現在の地方恒星時:", getLocalSiderealTimeDeg());
 
     } catch (error) {
