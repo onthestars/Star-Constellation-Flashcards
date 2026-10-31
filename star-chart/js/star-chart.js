@@ -761,7 +761,8 @@ const y = centerY + projected.y * scaleY;
         }
 
 // 星の周囲に控えめな光を描く
-if (glowEnabled) {
+// 1～3等星だけグローを表示
+if (glowEnabled && mag < 3.5) {
   ctx.save();
 
 // 光の広がりを少し大きくする
