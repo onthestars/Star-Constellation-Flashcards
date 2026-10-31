@@ -619,6 +619,7 @@ function drawStarDiffraction(x, y, radius, color) {
 
 // 光芒全体の基本透明度
   ctx.globalAlpha = 0.45;
+  ctx.filter = "blur(1px)";
 
   // 光芒1本を描画
   function drawRay(x1, y1, x2, y2) {
@@ -874,13 +875,20 @@ const isFirstMagnitude = mag < 1.5;
 // 星の周囲に控えめな光を描く
 if (glowEnabled) {
   ctx.save();
+  // 1等星のグローだけを柔らかくぼかす
+if (isFirstMagnitude) {
+  ctx.filter = "blur(8px)";
+}
 
-// 光の広がりを少し大きくする
+// 1等星だけグローの広がりを1.5倍にする
 const glowRadius =
-  (glow.radius ?? 12) * 0.5 * glowFactor;
+  (glow.radius ?? 12) *
+  0.5 *
+  glowFactor *
+  (isFirstMagnitude ? 1.5 : 1);
 
 // 光の強さ
-const glowStrength = 0.8;
+const glowStrength = 0.5;
 
   // 星の中心から外側へ自然に透明になるグラデーション
   const glowGradient = ctx.createRadialGradient(
