@@ -390,7 +390,7 @@ const glowRadius = (6 + progress * 10) / 3;
   let fieldOfViewDeg = 90;
 
   // 拡大・縮小できる視野角の範囲
-  const MIN_FIELD_OF_VIEW_DEG = 20;
+  const MIN_FIELD_OF_VIEW_DEG = 10;
   const MAX_FIELD_OF_VIEW_DEG = 120;
 
   // 観測地点：大阪付近
@@ -416,6 +416,12 @@ const glowRadius = (6 + progress * 10) / 3;
   let isDragging = false;
   let lastPointerX = 0;
   let lastPointerY = 0;
+
+  // 慣性移動用
+let dragVelocityAz = 0;
+let dragVelocityAlt = 0;
+let lastDragMoveTime = 0;
+let inertiaFrameId = null;
 
   // 2本指によるピンチ操作用
   const activePointers = new Map();
@@ -1272,117 +1278,267 @@ const zenithY = centerY + zenithPoint.y * scaleY;
     drawChart();
   }
 
-  // 指の操作開始
-  canvas.addEventListener("pointerdown", event => {
-    if (event.pointerType === "mouse" && event.button !== 0) {
-      return;
+// 慣性移動
+function startInertia() {
+  console.log(
+    "慣性開始チェック:",
+    "Az速度 =", dragVelocityAz,
+    "Alt速度 =", dragVelocityAlt,
+    "合成速度 =", Math.hypot(dragVelocityAz, dragVelocityAlt)
+  );
+
+  if (inertiaFrameId !== null) {
+    cancelAnimationFrame(inertiaFrameId);
+    inertiaFrameId = null;
+  }
+
+  // 慣性の強さを半分にする
+dragVelocityAz *= 0.5;
+dragVelocityAlt *= 0.5;
+
+  // 速度が小さければ慣性を開始しない
+  if (
+    Math.hypot(dragVelocityAz, dragVelocityAlt) < 1.5
+  ) {
+    return;
+  }
+
+  let previousTime = 0;
+
+  function animateInertia(time) {
+    if (previousTime === 0) {
+      previousTime = time;
     }
 
-    activePointers.set(event.pointerId, {
-      x: event.clientX,
-      y: event.clientY
-    });
-
-    canvas.setPointerCapture(event.pointerId);
-
-    if (activePointers.size === 1) {
-      // 1本指：ドラッグ開始
-      isDragging = true;
-      lastPointerX = event.clientX;
-      lastPointerY = event.clientY;
-    } else if (activePointers.size === 2) {
-      // 2本指：ピンチ開始
-      isDragging = false;
-      lastPinchDistance = getPinchDistance();
-    }
-  });
-
-  // 指の移動
-  canvas.addEventListener("pointermove", event => {
-    if (!activePointers.has(event.pointerId)) return;
-
-    activePointers.set(event.pointerId, {
-      x: event.clientX,
-      y: event.clientY
-    });
-
-    if (activePointers.size >= 2) {
-      // 2本指：間隔の変化で拡大・縮小
-      const currentDistance = getPinchDistance();
-
-      if (lastPinchDistance > 0 && currentDistance > 0) {
-        const zoomFactor = lastPinchDistance / currentDistance;
-
-        fieldOfViewDeg = Math.max(
-          MIN_FIELD_OF_VIEW_DEG,
-          Math.min(
-            MAX_FIELD_OF_VIEW_DEG,
-            fieldOfViewDeg * zoomFactor
-          )
-        );
-
-        drawChart();
-      }
-
-      lastPinchDistance = currentDistance;
-      return;
-    }
-
-    if (!isDragging) return;
-
-    // 1本指：従来どおり表示方向を変更
-    const deltaX = event.clientX - lastPointerX;
-    const deltaY = event.clientY - lastPointerY;
-
-    lastPointerX = event.clientX;
-    lastPointerY = event.clientY;
-
-    const minSize = Math.min(canvasWidth, canvasHeight);
-    if (minSize <= 0) return;
-
-    const degreesPerPixel = 180 / minSize;
-
-    const cosAlt = Math.max(
-      0.05,
-      Math.abs(Math.cos(centerAltDeg * RAD))
+    const deltaTime = Math.min(
+      (time - previousTime) / 1000,
+      0.05
     );
 
+    previousTime = time;
+
+    // 慣性による移動
     centerAzDeg = normalizeDeg(
-      centerAzDeg - deltaX * degreesPerPixel / cosAlt
+      centerAzDeg + dragVelocityAz * deltaTime
     );
 
     centerAltDeg = Math.max(
       -89.5,
       Math.min(
         89.5,
-        centerAltDeg + deltaY * degreesPerPixel
+        centerAltDeg + dragVelocityAlt * deltaTime
       )
     );
 
+    // 徐々に減速
+    const friction = Math.exp(-5 * deltaTime);
+
+    dragVelocityAz *= friction;
+    dragVelocityAlt *= friction;
+
     drawChart();
-  });
 
-  // 指の操作終了
-  function stopDragging(event) {
-    activePointers.delete(event.pointerId);
-
-    isDragging = false;
-    lastPinchDistance = 0;
-
-    // 2本指の片方を離した後、残った指でドラッグを再開
-    if (activePointers.size === 1) {
-      const remainingPointer =
-        Array.from(activePointers.values())[0];
-
-      lastPointerX = remainingPointer.x;
-      lastPointerY = remainingPointer.y;
-      isDragging = true;
+    // 十分に遅くなったら停止
+    if (
+      Math.hypot(dragVelocityAz, dragVelocityAlt) < 0.8
+    ) {
+      inertiaFrameId = null;
+      dragVelocityAz = 0;
+      dragVelocityAlt = 0;
+      return;
     }
+
+    inertiaFrameId = requestAnimationFrame(animateInertia);
   }
 
-  canvas.addEventListener("pointerup", stopDragging);
-  canvas.addEventListener("pointercancel", stopDragging);
-  canvas.addEventListener("lostpointercapture", stopDragging);
+  inertiaFrameId = requestAnimationFrame(animateInertia);
+}
+
+  // 指の操作開始
+// star-chart.js
+
+// 指の操作開始
+canvas.addEventListener("pointerdown", event => {
+  if (event.pointerType === "mouse" && event.button !== 0) {
+    return;
+  }
+
+  // 進行中の慣性を停止
+  if (inertiaFrameId !== null) {
+    cancelAnimationFrame(inertiaFrameId);
+    inertiaFrameId = null;
+  }
+
+  // 慣性速度をリセット
+  dragVelocityAz = 0;
+  dragVelocityAlt = 0;
+
+  activePointers.set(event.pointerId, {
+    x: event.clientX,
+    y: event.clientY
+  });
+
+  canvas.setPointerCapture(event.pointerId);
+
+  if (activePointers.size === 1) {
+    // 1本指：ドラッグ開始
+    isDragging = true;
+    lastPointerX = event.clientX;
+    lastPointerY = event.clientY;
+    lastDragMoveTime = event.timeStamp;
+
+  } else if (activePointers.size === 2) {
+    // 2本指：ピンチ開始
+    isDragging = false;
+    lastPinchDistance = getPinchDistance();
+  }
+});
+
+// 指の移動
+canvas.addEventListener("pointermove", event => {
+  if (!activePointers.has(event.pointerId)) return;
+
+  activePointers.set(event.pointerId, {
+    x: event.clientX,
+    y: event.clientY
+  });
+
+  if (activePointers.size >= 2) {
+    // 2本指：間隔の変化で拡大・縮小
+    const currentDistance = getPinchDistance();
+
+    if (lastPinchDistance > 0 && currentDistance > 0) {
+      const zoomFactor = lastPinchDistance / currentDistance;
+
+      fieldOfViewDeg = Math.max(
+        MIN_FIELD_OF_VIEW_DEG,
+        Math.min(
+          MAX_FIELD_OF_VIEW_DEG,
+          fieldOfViewDeg * zoomFactor
+        )
+      );
+
+      drawChart();
+    }
+
+    lastPinchDistance = currentDistance;
+    return;
+  }
+
+  if (!isDragging) return;
+
+  // 1本指：移動量を計算
+  const deltaX = event.clientX - lastPointerX;
+  const deltaY = event.clientY - lastPointerY;
+
+  lastPointerX = event.clientX;
+  lastPointerY = event.clientY;
+
+  const minSize = Math.min(canvasWidth, canvasHeight);
+  if (minSize <= 0) return;
+
+  const degreesPerPixel = 180 / minSize;
+
+  const cosAlt = Math.max(
+    0.05,
+    Math.abs(Math.cos(centerAltDeg * RAD))
+  );
+
+  // 方位角・高度の移動量
+  const deltaAz =
+    -deltaX * degreesPerPixel / cosAlt;
+
+  const deltaAlt =
+    deltaY * degreesPerPixel;
+
+  // 移動速度を計測
+  const elapsed =
+    (event.timeStamp - lastDragMoveTime) / 1000;
+
+  if (elapsed > 0 && elapsed < 0.1) {
+    const instantAz = deltaAz / elapsed;
+    const instantAlt = deltaAlt / elapsed;
+
+    // 速度を滑らかに更新
+    dragVelocityAz =
+      dragVelocityAz * 0.65 + instantAz * 0.35;
+
+    dragVelocityAlt =
+      dragVelocityAlt * 0.65 + instantAlt * 0.35;
+
+  } else {
+    // 移動間隔が長い場合は速度をリセット
+    dragVelocityAz = 0;
+    dragVelocityAlt = 0;
+  }
+
+  lastDragMoveTime = event.timeStamp;
+
+  // 星図の表示方向を変更
+  centerAzDeg = normalizeDeg(
+    centerAzDeg + deltaAz
+  );
+
+  centerAltDeg = Math.max(
+    -89.5,
+    Math.min(
+      89.5,
+      centerAltDeg + deltaAlt
+    )
+  );
+
+  drawChart();
+});
+
+// star-chart/js/star-chart.js
+
+// 指の操作終了
+function stopDragging(event) {
+
+  // すでに処理済みのイベントは無視する
+  if (!activePointers.has(event.pointerId)) return;
+
+  const wasDragging = isDragging;
+
+  activePointers.delete(event.pointerId);
+
+  isDragging = false;
+  lastPinchDistance = 0;
+
+  // 2本指の片方を離した後、残った指でドラッグを再開
+  if (activePointers.size === 1) {
+    const remainingPointer =
+      Array.from(activePointers.values())[0];
+
+    lastPointerX = remainingPointer.x;
+    lastPointerY = remainingPointer.y;
+
+    // ピンチからドラッグに切り替える際は速度をリセット
+    dragVelocityAz = 0;
+    dragVelocityAlt = 0;
+
+    isDragging = true;
+    lastDragMoveTime = event.timeStamp;
+    return;
+  }
+
+  // 最後の指を通常に離したときだけ慣性を開始
+  if (
+    activePointers.size === 0 &&
+    wasDragging &&
+    event.type === "pointerup"
+  ) {
+    startInertia();
+
+  } else if (activePointers.size === 0) {
+    dragVelocityAz = 0;
+    dragVelocityAlt = 0;
+  }
+}
+
+canvas.addEventListener("pointerup", stopDragging);
+canvas.addEventListener("pointercancel", stopDragging);
+canvas.addEventListener("lostpointercapture", stopDragging);
 
   // 星データを読み込む
   async function loadStarData() {
