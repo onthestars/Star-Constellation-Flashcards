@@ -551,7 +551,7 @@ function getMaxVisibleAngleDeg() {
   }
 
   // 星の方向をステレオ投影座標に変換する
-  function projectStar(star, lstDeg, basis) {
+  function projectStar(star, lstDeg, basis, minDot) {
     const v = equatorialToHorizontalVector(
       star.ra,
       star.dec,
@@ -559,7 +559,6 @@ function getMaxVisibleAngleDeg() {
     );
 
     const centerDot = dot(v, basis.center);
-const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
 
     // 表示範囲外の星は描画しない
     if (centerDot < minDot) {
@@ -582,14 +581,13 @@ const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
   }
 
   // 方角の位置を星図上の座標に変換する
-  function projectDirection(azDeg, altDeg, basis) {
-    const v = horizontalToVector(azDeg, altDeg);
-    const centerDot = dot(v, basis.center);
-const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
+function projectDirection(azDeg, altDeg, basis, minDot) {
+  const v = horizontalToVector(azDeg, altDeg);
+  const centerDot = dot(v, basis.center);
 
-    if (centerDot < minDot - 1e-9) {
-      return null;
-    }
+  if (centerDot < minDot - 1e-9) {
+    return null;
+  }
 
     const denominator = 1 + centerDot;
 
@@ -614,10 +612,15 @@ function drawChart() {
   const scaleX = scale;
   const scaleY = scale;
 
-  const lstDeg = getLocalSiderealTimeDeg();
-  const basis = getProjectionBasis();
-  const centerX = canvasWidth / 2;
-  const centerY = canvasHeight / 2;
+const lstDeg = getLocalSiderealTimeDeg();
+const basis = getProjectionBasis();
+const centerX = canvasWidth / 2;
+const centerY = canvasHeight / 2;
+
+// 星図の表示範囲を計算（描画中は共通）
+const minDot = Math.cos(
+  getMaxVisibleAngleDeg() * RAD
+);  
 
   // 天頂の投影座標を計算
   const zenithVector = horizontalToVector(0, 90);
@@ -678,8 +681,8 @@ ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
           if (!starA || !starB) continue;
 
-          const pointA = projectStar(starA, lstDeg, basis);
-          const pointB = projectStar(starB, lstDeg, basis);
+          const pointA = projectStar(starA, lstDeg, basis, minDot);
+const pointB = projectStar(starB, lstDeg, basis, minDot);
 
           if (!pointA || !pointB) continue;
 
@@ -699,7 +702,7 @@ ctx.lineTo(
 
       // 恒星を描画
       for (const star of stars) {
-        const projected = projectStar(star, lstDeg, basis);
+        const projected = projectStar(star, lstDeg, basis, minDot);
 
         if (!projected) continue;
 
@@ -938,7 +941,7 @@ ctx.fill();
     let horizonDrawing = false;
 
     for (let az = 0; az <= 360; az += 1) {
-      const point = projectDirection(az, 0, basis);
+      const point = projectDirection(az, 0, basis, minDot);
 
       if (!point) {
         horizonDrawing = false;
@@ -981,7 +984,7 @@ if (
       ctx.beginPath();
 
       for (let az = 0; az <= 360; az += 1) {
-        const point = projectDirection(az, alt, basis);
+        const point = projectDirection(az, alt, basis, minDot);
 
         if (!point) {
           drawing = false;
@@ -1015,7 +1018,7 @@ const y = centerY + point.y * scaleY;
       ctx.beginPath();
 
       for (let alt = 0; alt <= 90; alt += 1) {
-        const point = projectDirection(az, alt, basis);
+        const point = projectDirection(az, alt, basis, minDot);
 
         if (!point) {
           drawing = false;
@@ -1088,7 +1091,7 @@ ctx.setLineDash([4, 5]);
       ) * 180 / Math.PI;
 
       // 現在の星図と同じ投影方式で描画位置を求める
-      const point = projectDirection(azDeg, altDeg, basis);
+      const point = projectDirection(azDeg, altDeg, basis, minDot);
 
       if (!point) {
         eclipticDrawing = false;
@@ -1118,16 +1121,11 @@ const y = centerY + point.y * scaleY;
 // 流星群の放射点を赤い十字＋円で表示
 if (meteorRadiant) {
   const radiantPoint = projectStar(
-    {
-      ra: meteorRadiant.ra,
-      dec: meteorRadiant.dec,
-      mag: 0,
-      id: "meteor-radiant",
-      label: ""
-    },
-    lstDeg,
-    basis
-  );
+  { ra: meteorRadiant.ra, dec: meteorRadiant.dec, mag: 0, id: "meteor-radiant", label: "" },
+  lstDeg,
+  basis,
+  minDot
+);
 
   if (radiantPoint) {
     const x = centerX + radiantPoint.x * scaleX;
@@ -1192,11 +1190,12 @@ if (meteorRadiant) {
     ctx.textBaseline = "middle";
 
     for (const direction of directions) {
-      const point = projectDirection(
-        direction.az,
-        0,
-        basis
-      );
+const point = projectDirection(
+  direction.az,
+  0,
+  basis,
+  minDot
+);
 
       if (!point) continue;
 
@@ -1228,7 +1227,7 @@ const labelY = y;
     }
 
     // 天頂の表示
-    const zenithPoint = projectDirection(0, 90, basis);
+    const zenithPoint = projectDirection(0, 90, basis, minDot);
 
     if (zenithPoint) {
 const zenithX = centerX + zenithPoint.x * scaleX;
