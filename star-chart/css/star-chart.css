@@ -87,3 +87,47 @@ body {
   pointer-events: none;
   z-index: 10;
 }
+
+/* ワープ演出専用Canvas */
+#star-chart-warp-layer {
+  position: absolute;
+  inset: 0;
+
+  display: none;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+/* 星図のクロスフェード */
+#star-chart-canvas,
+#star-chart-meteor-layer {
+  opacity: 1;
+  transition: opacity 1200ms ease;
+}
+
+/* ワープ中は星図と流星を隠す */
+#chart-container.is-warping #star-chart-canvas,
+#chart-container.is-warping #star-chart-meteor-layer {
+  opacity: 0;
+  transition: none;
+}
+
+/* ワープCanvasのクロスフェード */
+#star-chart-warp-layer {
+  opacity: 1;
+  transition: opacity 1200ms ease;
+}
+
+/* ワープ専用Canvasの背景 */
+#star-chart-warp-layer {
+  background-color: #080D1A;
+}
