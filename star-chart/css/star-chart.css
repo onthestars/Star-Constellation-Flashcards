@@ -198,3 +198,27 @@ body {
 #sensor-test-panel button:disabled {
   opacity: 0.45;
 }
+
+/* 選択中のモード */
+#sensor-test-panel button.active::before {
+  content: "● ";
+  color: #FF3030;
+}
+
+/* 選択していないモード */
+#sensor-test-panel button:not(.active)::before {
+  content: "○ ";
+  color: #888888;
+}
+
+/* 選択していないボタンをグレーアウト */
+#sensor-test-panel button:not(.active) {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+/* 選択中のボタン */
+#sensor-test-panel button.active {
+  opacity: 1;
+  filter: none;
+}
