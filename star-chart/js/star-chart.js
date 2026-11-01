@@ -1826,6 +1826,106 @@ tryStartStarWarp();
   // 1分ごとに星図を再描画
   window.setInterval(drawChart, 60_000);
 
+    // =====================================
+  // スマホ方位センサー試験
+  // =====================================
+
+  const sensorStartButton = document.getElementById("sensor-start");
+  const sensorStopButton = document.getElementById("sensor-stop");
+  const sensorStatus = document.getElementById("sensor-status");
+
+  let sensorActive = false;
+
+  // センサー値を受信
+  function handleDeviceOrientation(event) {
+
+    const alpha = event.alpha;
+    const beta = event.beta;
+    const gamma = event.gamma;
+    const compass = event.webkitCompassHeading;
+
+    sensorStatus.textContent =
+      `alpha: ${alpha === null ? "取得不可" : alpha?.toFixed(1) + "°"} / ` +
+      `beta: ${beta === null ? "取得不可" : beta?.toFixed(1) + "°"} / ` +
+      `gamma: ${gamma === null ? "取得不可" : gamma?.toFixed(1) + "°"} / ` +
+      `方位: ${Number.isFinite(compass) ? compass.toFixed(1) + "°" : "未取得"} / ` +
+      `absolute: ${event.absolute}`;
+
+  }
+
+  // センサー開始
+  sensorStartButton.addEventListener("click", async () => {
+
+    if (!window.isSecureContext) {
+      sensorStatus.textContent =
+        "HTTPS接続が必要です。";
+      return;
+    }
+
+    if (!("DeviceOrientationEvent" in window)) {
+      sensorStatus.textContent =
+        "この端末は方位センサーに対応していません。";
+      return;
+    }
+
+    try {
+
+      // iPhoneなど許可が必要な端末への対応
+      if (
+        typeof DeviceOrientationEvent.requestPermission === "function"
+      ) {
+        const permission =
+          await DeviceOrientationEvent.requestPermission();
+
+        if (permission !== "granted") {
+          sensorStatus.textContent =
+            "センサーの使用が許可されませんでした。";
+          return;
+        }
+      }
+
+      window.addEventListener(
+        "deviceorientation",
+        handleDeviceOrientation
+      );
+
+      sensorActive = true;
+      sensorStartButton.disabled = true;
+      sensorStopButton.disabled = false;
+
+      sensorStatus.textContent =
+        "センサー値を取得しています。スマホを動かしてください。";
+
+    } catch (error) {
+
+      sensorStatus.textContent =
+        "センサー開始エラー: " + error.message;
+
+      console.error("センサー開始エラー:", error);
+    }
+
+  });
+
+  // センサー停止
+  sensorStopButton.addEventListener("click", () => {
+
+    window.removeEventListener(
+      "deviceorientation",
+      handleDeviceOrientation
+    );
+
+    sensorActive = false;
+    sensorStartButton.disabled = false;
+    sensorStopButton.disabled = true;
+
+    sensorStatus.textContent = "センサー停止中";
+
+  });
+
+  // =====================================
+  // スマホ方位センサー試験ここまで
+  // =====================================
+
   loadStarData();
   loadConstellationLines();
 
