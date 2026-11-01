@@ -390,7 +390,7 @@ const glowRadius = (6 + progress * 10) / 3;
   let fieldOfViewDeg = 90;
 
   // 拡大・縮小できる視野角の範囲
-  const MIN_FIELD_OF_VIEW_DEG = 10;
+  const MIN_FIELD_OF_VIEW_DEG = 5;
   const MAX_FIELD_OF_VIEW_DEG = 120;
 
   // 観測地点：大阪付近
@@ -1007,8 +1007,8 @@ ctx.lineTo(
 
         if (!projected) continue;
 
-const x = centerX + projected.x * scaleX;
-const y = centerY + projected.y * scaleY;
+       const x = centerX + projected.x * scaleX;
+       const y = centerY + projected.y * scaleY;
 
         // キャンバスの外にある星は描かない
         if (
@@ -1021,6 +1021,36 @@ const y = centerY + projected.y * scaleY;
                 // 星の等級・スペクトル型に応じて色と大きさを決める
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
+
+// 視野角に応じて表示する等級を6段階に制御
+
+// ① 視野角90°超：1～2等星
+if (fieldOfViewDeg > 90 && mag >= 2.5) {
+  continue;
+}
+
+// ② 視野角50°超～90°以下：1～3等星
+if (fieldOfViewDeg > 50 && mag >= 3.5) {
+  continue;
+}
+
+// ③ 視野角30°超～50°以下：1～4等星
+if (fieldOfViewDeg > 30 && mag >= 4.5) {
+  continue;
+}
+
+// ④ 視野角20°超～30°以下：1～5等星
+if (fieldOfViewDeg > 20 && mag >= 5.5) {
+  continue;
+}
+
+// ⑤ 視野角10°超～20°以下：1～6等星
+if (fieldOfViewDeg > 10 && mag >= 6.5) {
+  continue;
+}
+
+// ⑥ 視野角10°以下：読み込み対象の全星を表示
+
 
         // スペクトル型から恒星の色を取得
         const spect = String(star.spect || "").trim().toUpperCase();
@@ -1044,10 +1074,13 @@ if (mag < 1.5) {
   radius = 2.5;
 } else if (mag < 4.5) {
   // 4等星
-  radius = 1.8;
+  radius = 1.2;
+} else if (mag < 5.5) {
+  // 5等星：テスト用に大きくする
+  radius = 0.8;
 } else {
-  // 5～6等星
-  radius = 1.0;
+  // 6等星：テスト用に大きくする
+  radius = 0.4;
 }
 
         // グローの設定
@@ -1340,7 +1373,17 @@ function startInertia() {
     inertiaFrameId = null;
   }
 
-  // 慣性の強さを半分にする
+// star-chart/js/star-chart.js
+
+// 視野角に応じて慣性を調整
+if (fieldOfViewDeg <= 20) {
+  // 視野角20°以下：慣性を無効にする
+  dragVelocityAz = 0;
+  dragVelocityAlt = 0;
+  return;
+}
+
+// 視野角20°超：現在の慣性を維持
 dragVelocityAz *= 0.5;
 dragVelocityAlt *= 0.5;
 
