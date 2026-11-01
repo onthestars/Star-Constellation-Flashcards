@@ -1,7 +1,6 @@
 <!-- star-chart/index.html -->
 <!DOCTYPE html>
 <html lang="ja">
-<!-- star-chart/index.html -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,39 +16,35 @@
   <!-- 星図の描画処理 -->
   <script src="js/star-chart.js" defer></script>
 
-    <!-- ワープ演出専用処理 -->
+  <!-- ワープ演出専用処理 -->
   <script src="js/star-warp.js" defer></script>
 
 </head>
 <body>
   <main id="star-chart-app">
 
-<section id="chart-container" class="is-warping" aria-label="星図">
-  
-  <canvas id="star-chart-canvas">
-    お使いのブラウザはCanvasに対応していません。
-  </canvas>
+    <section id="chart-container" class="is-warping" aria-label="星図">
 
-<!-- 独立星図専用の流星描画Canvas -->
-<canvas id="star-chart-meteor-layer" aria-hidden="true"></canvas>
+      <canvas id="star-chart-canvas">
+        お使いのブラウザはCanvasに対応していません。
+      </canvas>
 
-<!-- ワープ演出専用Canvas -->
-<canvas id="star-chart-warp-layer" aria-hidden="true"></canvas>
+      <!-- 独立星図専用の流星描画Canvas -->
+      <canvas id="star-chart-meteor-layer" aria-hidden="true"></canvas>
 
-<!-- 星図の読み込み状態 -->
-<div id="chart-status" aria-live="polite"></div>
-</section>
+      <!-- ワープ演出専用Canvas -->
+      <canvas id="star-chart-warp-layer" aria-hidden="true"></canvas>
 
-</section>
+      <!-- 星図の読み込み状態 -->
+      <div id="chart-status" aria-live="polite"></div>
 
-<!-- スマホ方位センサー -->
-<div id="sensor-test-panel">
-  <button id="sensor-start" type="button">センサー開始</button>
-  <button id="sensor-stop" type="button" disabled>センサー停止</button>
-  <div id="sensor-status">センサー未開始</div>
-</div>
+      <!-- モード切り替えボタン -->
+      <div id="sensor-test-panel">
+        <button id="sensor-start" type="button">自動方角</button>
+        <button id="sensor-stop" type="button" disabled>手動方角</button>
+      </div>
 
-</main>
+    </section>
 
   </main>
 </body>
