@@ -409,8 +409,40 @@ const glowRadius = (6 + progress * 10) / 3;
   let canvasHeight = 0;
   let constellations = [];
 
-    // 放射点の赤経・赤緯（未受信時は非表示）
+  // ワープ演出の準備状態
+  let constellationsLoaded = false;
+  let warpStarted = false;
+
+  // 放射点の赤経・赤緯（未受信時は非表示）
   let meteorRadiant = null;
+
+  // 星図の準備が整ったらワープ演出を開始
+  function tryStartStarWarp() {
+
+    // 3つの条件が揃っていなければ開始しない
+    if (
+      warpStarted ||
+      !dataLoaded ||
+      !constellationsLoaded ||
+      !meteorRadiant
+    ) {
+      return;
+    }
+
+    // ワープ演出の関数が存在するか確認
+    if (typeof window.startStarWarp !== "function") {
+      console.error("ワープ演出の関数が見つかりません。");
+      return;
+    }
+
+    // 二重起動を防止
+    warpStarted = true;
+
+    // ワープ演出を開始
+    window.startStarWarp();
+
+    console.log("星図のワープ演出を開始しました。");
+  }
 
   // ドラッグ・ピンチ操作用
   let isDragging = false;
@@ -418,10 +450,10 @@ const glowRadius = (6 + progress * 10) / 3;
   let lastPointerY = 0;
 
   // 慣性移動用
-let dragVelocityAz = 0;
-let dragVelocityAlt = 0;
-let lastDragMoveTime = 0;
-let inertiaFrameId = null;
+  let dragVelocityAz = 0;
+  let dragVelocityAlt = 0;
+  let lastDragMoveTime = 0;
+  let inertiaFrameId = null;
 
   // 2本指によるピンチ操作用
   const activePointers = new Map();
@@ -1616,6 +1648,8 @@ console.log(
 
       console.log("現在の地方恒星時:", getLocalSiderealTimeDeg());
 
+      tryStartStarWarp();
+
     } catch (error) {
       console.error("星データの読み込みに失敗しました:", error);
       status.textContent = "星データを読み込めませんでした。";
@@ -1639,6 +1673,9 @@ console.log(
 
       constellations = data.constellations;
       drawChart();
+
+      constellationsLoaded = true;
+tryStartStarWarp();
 
       console.log("星座線データを読み込みました:", constellations);
 
