@@ -390,7 +390,7 @@ const LINE_DATA_PATH = "data/constellation-lines.json";
   let fieldOfViewDeg = 110;
 
   // 拡大・縮小できる視野角の範囲
-  const MIN_FIELD_OF_VIEW_DEG = 5;
+  const MIN_FIELD_OF_VIEW_DEG = 10;
   const MAX_FIELD_OF_VIEW_DEG = 120;
 
   // 観測地点：大阪付近
@@ -2232,11 +2232,9 @@ function startInertia() {
     inertiaFrameId = null;
   }
 
-// star-chart/js/star-chart.js
-
 // 視野角に応じて慣性を調整
-if (fieldOfViewDeg <= 20) {
-  // 視野角20°以下：慣性を無効にする
+if (fieldOfViewDeg <= 25) {
+  // 視野角25°以下：慣性を無効にする
   dragVelocityAz = 0;
   dragVelocityAlt = 0;
   return;
