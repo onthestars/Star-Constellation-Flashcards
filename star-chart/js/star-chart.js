@@ -1839,12 +1839,13 @@ tryStartStarWarp();
   // 絶対方位センサーの確認
 function handleAbsoluteOrientation(event) {
 
-  console.log("絶対方位センサー:", {
-    alpha: event.alpha,
-    beta: event.beta,
-    gamma: event.gamma,
-    absolute: event.absolute
-  });
+console.log(
+  "絶対方位センサー:",
+  "alpha:", event.alpha,
+  "beta:", event.beta,
+  "gamma:", event.gamma,
+  "absolute:", event.absolute
+);
 
 }
 
