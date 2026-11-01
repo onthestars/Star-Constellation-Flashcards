@@ -131,3 +131,31 @@ body {
 #star-chart-warp-layer {
   background-color: #080D1A;
 }
+
+/* スマホ方位センサー操作パネル */
+#sensor-test-panel {
+  flex: 0 0 auto;
+  padding: 8px;
+  text-align: center;
+  background: #080D1A;
+  z-index: 30;
+}
+
+#sensor-test-panel button {
+  margin: 4px;
+  padding: 8px 14px;
+  color: #E8EDF7;
+  background: #0D1F68;
+  border: 1px solid #526AAB;
+  border-radius: 6px;
+}
+
+#sensor-test-panel button:disabled {
+  opacity: 0.45;
+}
+
+#sensor-status {
+  margin-top: 4px;
+  color: #AAB6CC;
+  font-size: 12px;
+}
