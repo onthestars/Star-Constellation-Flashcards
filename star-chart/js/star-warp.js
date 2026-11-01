@@ -202,6 +202,10 @@
       stars = [];
       startTime = 0;
       fadeStarted = false;
+
+            // 星座線のフェードインを開始
+      window.startConstellationFadeIn?.();
+      
     }
   }
 
