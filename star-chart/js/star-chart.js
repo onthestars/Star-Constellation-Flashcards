@@ -1539,15 +1539,18 @@ const zenithY = centerY + zenithPoint.y * scaleY;
 
     if (dataLoaded) {
 
-// 星座線の表示基準
+// 星座線の表示基準（拡大率によって変える）
 let constellationMagLimit;
 
-if (fieldOfViewDeg > 90) {
+if (fieldOfViewDeg > 75) {
   constellationMagLimit = null; // 星座線なし
+
 } else if (fieldOfViewDeg > 60) {
   constellationMagLimit = 1.5;  // 1等星をもつ星座
-} else if (fieldOfViewDeg > 40) {
+
+} else if (fieldOfViewDeg > 30) {
   constellationMagLimit = 2.5;  // 2等星をもつ星座まで追加
+
 } else {
   constellationMagLimit = 6.5;  // すべての星座
 }
@@ -1813,7 +1816,7 @@ const labelY = (minY + maxY) / 2;
 
 ctx.save();
 
-ctx.font = '12px "Meiryo", sans-serif';
+ctx.font = '11px "Meiryo", sans-serif';
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
@@ -1822,7 +1825,7 @@ const textWidth =
   ctx.measureText(constellation.name).width;
 
 // 角丸背景のサイズ
-const paddingX = 6;
+const paddingX = 5;
 const paddingY = 4;
 const boxWidth = textWidth + paddingX * 2;
 const boxHeight = 20;
@@ -1881,32 +1884,37 @@ ctx.restore();
 
 // 視野角に応じて表示する等級を6段階に制御
 
-// ① 視野角90°超：1～2等星
-if (fieldOfViewDeg > 90 && mag >= 2.5) {
+// 視野角90°超：1等星
+if (fieldOfViewDeg > 90 && mag >= 1.5) {
   continue;
 }
 
-// ② 視野角50°超～90°以下：1～3等星
+// 視野角50°超～90°以下：1～2等星
+if (fieldOfViewDeg > 80 && mag >= 2.5) {
+  continue;
+}
+
+// 視野角50°超～90°以下：1～3等星
 if (fieldOfViewDeg > 50 && mag >= 3.5) {
   continue;
 }
 
-// ③ 視野角30°超～50°以下：1～4等星
+// 視野角30°超～50°以下：1～4等星
 if (fieldOfViewDeg > 30 && mag >= 4.5) {
   continue;
 }
 
-// ④ 視野角20°超～30°以下：1～5等星
+// 視野角20°超～30°以下：1～5等星
 if (fieldOfViewDeg > 20 && mag >= 5.5) {
   continue;
 }
 
-// ⑤ 視野角10°超～20°以下：1～6等星
+// 視野角10°超～20°以下：1～6等星
 if (fieldOfViewDeg > 10 && mag >= 6.5) {
   continue;
 }
 
-// ⑥ 視野角10°以下：読み込み対象の全星を表示
+// 視野角10°以下：読み込み対象の全星を表示
 
 
         // スペクトル型から恒星の色を取得
