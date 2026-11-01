@@ -1239,7 +1239,7 @@ if (mag < 1.5) {
   radius = 4.5;
 } else if (mag < 2.5) {
   // 2等星
-  radius = 2.0;
+  radius = 2.5;
 } else if (mag < 3.5) {
   // 3等星
   radius = 1.5;
@@ -1266,7 +1266,7 @@ if (mag < 1.5) {
           glowFactor = 1.5;
         } else if (mag < 2.5) {
           // 2等星
-          glowFactor = 0.8;
+          glowFactor = 1.0;
         } else if (mag < 3.5) {
           // 3等星
           glowFactor = 0.5;
