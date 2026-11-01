@@ -512,9 +512,6 @@ const glowRadius = (6 + progress * 10) / 3;
   const sensorStopButton =
     document.getElementById("sensor-stop");
 
-  const sensorStatus =
-    document.getElementById("sensor-status");
-
   let sensorActive = false;
 
   // スマホ画面正面の向きを計算
@@ -577,82 +574,68 @@ const altitude = -Math.asin(
   }
 
   // センサー開始
-  if (sensorStartButton && sensorStopButton && sensorStatus) {
+if (sensorStartButton && sensorStopButton) {
 
-    sensorStartButton.addEventListener("click", async () => {
+  sensorStartButton.addEventListener("click", async () => {
 
-      if (!window.isSecureContext) {
-        sensorStatus.textContent =
-          "HTTPS接続が必要です。";
-        return;
-      }
+    if (!window.isSecureContext) {
+      return;
+    }
 
-      if (!("DeviceOrientationEvent" in window)) {
-        sensorStatus.textContent =
-          "この端末は姿勢センサーに対応していません。";
-        return;
-      }
+    if (!("DeviceOrientationEvent" in window)) {
+      return;
+    }
 
-      try {
+    try {
 
-        // iPhoneなど、許可要求が必要な端末に対応
-        if (
-          typeof DeviceOrientationEvent.requestPermission ===
-          "function"
-        ) {
-          const permission =
-            await DeviceOrientationEvent.requestPermission();
+      // iPhoneなど、許可要求が必要な端末に対応
+      if (
+        typeof DeviceOrientationEvent.requestPermission ===
+        "function"
+      ) {
+        const permission =
+          await DeviceOrientationEvent.requestPermission();
 
-          if (permission !== "granted") {
-            sensorStatus.textContent =
-              "センサーの使用が許可されませんでした。";
-            return;
-          }
+        if (permission !== "granted") {
+          return;
         }
-
-        // 絶対姿勢センサーを開始
-        window.addEventListener(
-          "deviceorientationabsolute",
-          handleAbsoluteOrientation
-        );
-
-        sensorActive = true;
-
-        sensorStartButton.disabled = true;
-        sensorStopButton.disabled = false;
-
-        sensorStatus.textContent =
-          "センサー取得中。スマホを動かしてください。";
-
-        console.log("姿勢センサーを開始しました。");
-
-      } catch (error) {
-
-        sensorStatus.textContent =
-          "センサー開始エラー: " + error.message;
-
-        console.error("センサー開始エラー:", error);
       }
-    });
 
-    // センサー停止
-    sensorStopButton.addEventListener("click", () => {
-
-      window.removeEventListener(
+      // 絶対姿勢センサーを開始
+      window.addEventListener(
         "deviceorientationabsolute",
         handleAbsoluteOrientation
       );
 
-      sensorActive = false;
+      sensorActive = true;
 
-      sensorStartButton.disabled = false;
-      sensorStopButton.disabled = true;
+      sensorStartButton.disabled = true;
+      sensorStopButton.disabled = false;
 
-      sensorStatus.textContent = "センサー停止中";
+      console.log("姿勢センサーを開始しました。");
 
-      console.log("姿勢センサーを停止しました。");
-    });
-  }
+    } catch (error) {
+
+      console.error("センサー開始エラー:", error);
+    }
+  });
+
+  // センサー停止
+  sensorStopButton.addEventListener("click", () => {
+
+    window.removeEventListener(
+      "deviceorientationabsolute",
+      handleAbsoluteOrientation
+    );
+
+    sensorActive = false;
+
+    sensorStartButton.disabled = false;
+    sensorStopButton.disabled = true;
+
+    console.log("姿勢センサーを停止しました。");
+  });
+}
 
   // 現在の地方恒星時を計算する
   function getLocalSiderealTimeDeg(date = new Date()) {
