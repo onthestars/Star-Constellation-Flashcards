@@ -502,6 +502,158 @@ const glowRadius = (6 + progress * 10) / 3;
     return ((deg % 360) + 360) % 360;
   }
 
+    // ==========================================
+  // スマホ姿勢センサーによる星図自動追従
+  // ==========================================
+
+  const sensorStartButton =
+    document.getElementById("sensor-start");
+
+  const sensorStopButton =
+    document.getElementById("sensor-stop");
+
+  const sensorStatus =
+    document.getElementById("sensor-status");
+
+  let sensorActive = false;
+
+  // スマホ画面正面の向きを計算
+  function handleAbsoluteOrientation(event) {
+
+    const alpha = event.alpha;
+    const beta = event.beta;
+    const gamma = event.gamma;
+
+    if (
+      !Number.isFinite(alpha) ||
+      !Number.isFinite(beta) ||
+      !Number.isFinite(gamma)
+    ) {
+      return;
+    }
+
+    // 角度をラジアンに変換
+    const a = alpha * RAD;
+    const b = beta * RAD;
+    const g = gamma * RAD;
+
+    // スマホ画面正面の方向ベクトル
+    const x =
+      Math.cos(a) * Math.sin(g) +
+      Math.sin(a) * Math.sin(b) * Math.cos(g);
+
+    const y =
+      Math.sin(a) * Math.sin(g) -
+      Math.cos(a) * Math.sin(b) * Math.cos(g);
+
+    const z =
+      Math.cos(b) * Math.cos(g);
+
+    // 方位角：北0°、東90°
+    const azimuth = normalizeDeg(
+      Math.atan2(x, y) / RAD
+    );
+
+    // 高度：水平0°、天頂90°
+    const altitude = Math.asin(
+      Math.max(-1, Math.min(1, z))
+    ) / RAD;
+
+    // センサーの向きを星図の中心に反映
+    centerAzDeg = azimuth;
+
+    centerAltDeg = Math.max(
+      -89.5,
+      Math.min(89.5, altitude)
+    );
+
+    // 星図を再描画
+    drawChart();
+
+    // センサー情報を表示
+    sensorStatus.textContent =
+      `方位 ${azimuth.toFixed(1)}° / ` +
+      `高度 ${altitude.toFixed(1)}°`;
+  }
+
+  // センサー開始
+  if (sensorStartButton && sensorStopButton && sensorStatus) {
+
+    sensorStartButton.addEventListener("click", async () => {
+
+      if (!window.isSecureContext) {
+        sensorStatus.textContent =
+          "HTTPS接続が必要です。";
+        return;
+      }
+
+      if (!("DeviceOrientationEvent" in window)) {
+        sensorStatus.textContent =
+          "この端末は姿勢センサーに対応していません。";
+        return;
+      }
+
+      try {
+
+        // iPhoneなど、許可要求が必要な端末に対応
+        if (
+          typeof DeviceOrientationEvent.requestPermission ===
+          "function"
+        ) {
+          const permission =
+            await DeviceOrientationEvent.requestPermission();
+
+          if (permission !== "granted") {
+            sensorStatus.textContent =
+              "センサーの使用が許可されませんでした。";
+            return;
+          }
+        }
+
+        // 絶対姿勢センサーを開始
+        window.addEventListener(
+          "deviceorientationabsolute",
+          handleAbsoluteOrientation
+        );
+
+        sensorActive = true;
+
+        sensorStartButton.disabled = true;
+        sensorStopButton.disabled = false;
+
+        sensorStatus.textContent =
+          "センサー取得中。スマホを動かしてください。";
+
+        console.log("姿勢センサーを開始しました。");
+
+      } catch (error) {
+
+        sensorStatus.textContent =
+          "センサー開始エラー: " + error.message;
+
+        console.error("センサー開始エラー:", error);
+      }
+    });
+
+    // センサー停止
+    sensorStopButton.addEventListener("click", () => {
+
+      window.removeEventListener(
+        "deviceorientationabsolute",
+        handleAbsoluteOrientation
+      );
+
+      sensorActive = false;
+
+      sensorStartButton.disabled = false;
+      sensorStopButton.disabled = true;
+
+      sensorStatus.textContent = "センサー停止中";
+
+      console.log("姿勢センサーを停止しました。");
+    });
+  }
+
   // 現在の地方恒星時を計算する
   function getLocalSiderealTimeDeg(date = new Date()) {
     const jd = date.getTime() / 86400000 + 2440587.5;
@@ -1022,37 +1174,35 @@ ctx.lineTo(
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
 
-// 視野角（拡大率）に応じて表示する等級を6段階に制御
+// 視野角に応じて表示する等級を6段階に制御
 
-// 視野角100°超：1等星のみ
-if (fieldOfViewDeg > 100 && mag >= 1.5) {
+// ① 視野角90°超：1～2等星
+if (fieldOfViewDeg > 90 && mag >= 2.5) {
   continue;
 }
 
-// 視野角90°超：1～2等星
-if (fieldOfViewDeg > 80 && mag >= 2.5) {
+// ② 視野角50°超～90°以下：1～3等星
+if (fieldOfViewDeg > 50 && mag >= 3.5) {
   continue;
 }
 
-// 1～3等星
-if (fieldOfViewDeg > 60 && mag >= 3.5) {
+// ③ 視野角30°超～50°以下：1～4等星
+if (fieldOfViewDeg > 30 && mag >= 4.5) {
   continue;
 }
 
-// 1～4等星
-if (fieldOfViewDeg > 40 && mag >= 4.5) {
+// ④ 視野角20°超～30°以下：1～5等星
+if (fieldOfViewDeg > 20 && mag >= 5.5) {
   continue;
 }
 
-// 1～5等星
-if (fieldOfViewDeg > 30 && mag >= 5.5) {
+// ⑤ 視野角10°超～20°以下：1～6等星
+if (fieldOfViewDeg > 10 && mag >= 6.5) {
   continue;
 }
 
-// 1～6等星
-if (fieldOfViewDeg > 30 && mag >= 6.5) {
-  continue;
-}
+// ⑥ 視野角10°以下：読み込み対象の全星を表示
+
 
         // スペクトル型から恒星の色を取得
         const spect = String(star.spect || "").trim().toUpperCase();
@@ -1825,155 +1975,6 @@ tryStartStarWarp();
 
   // 1分ごとに星図を再描画
   window.setInterval(drawChart, 60_000);
-
-    // =====================================
-  // スマホ方位センサー試験
-  // =====================================
-
-  const sensorStartButton = document.getElementById("sensor-start");
-  const sensorStopButton = document.getElementById("sensor-stop");
-  const sensorStatus = document.getElementById("sensor-status");
-
-  let sensorActive = false;
-
-// スマホ画面正面の方位・高度を計算
-function handleAbsoluteOrientation(event) {
-
-  const alpha = event.alpha;
-  const beta = event.beta;
-  const gamma = event.gamma;
-
-  if (
-    !Number.isFinite(alpha) ||
-    !Number.isFinite(beta) ||
-    !Number.isFinite(gamma)
-  ) {
-    sensorStatus.textContent = "姿勢データ取得中...";
-    return;
-  }
-
-  // 角度をラジアンに変換
-  const a = alpha * RAD;
-  const b = beta * RAD;
-  const g = gamma * RAD;
-
-  // 画面正面（端末のZ軸）の方向ベクトル
-  const x =
-    Math.cos(a) * Math.sin(g) +
-    Math.sin(a) * Math.sin(b) * Math.cos(g);
-
-  const y =
-    Math.sin(a) * Math.sin(g) -
-    Math.cos(a) * Math.sin(b) * Math.cos(g);
-
-  const z =
-    Math.cos(b) * Math.cos(g);
-
-  // 方位角（北0°、東90°）
-  const azimuth = normalizeDeg(
-    Math.atan2(x, y) / RAD
-  );
-
-  // 高度（水平0°、天頂90°）
-  const altitude = Math.asin(
-    Math.max(-1, Math.min(1, z))
-  ) / RAD;
-
-  sensorStatus.textContent =
-    `画面の向き：方位 ${azimuth.toFixed(1)}° / ` +
-    `高度 ${altitude.toFixed(1)}°\n` +
-    `absolute: ${event.absolute}`;
-
-}
-
-  // センサー値を受信
-// 通常の姿勢イベント（今回は画面表示に使わない）
-function handleDeviceOrientation(event) {
-  // 絶対方位イベント側で表示するため、ここでは何もしない
-}
-
-  // センサー開始
-  sensorStartButton.addEventListener("click", async () => {
-
-    if (!window.isSecureContext) {
-      sensorStatus.textContent =
-        "HTTPS接続が必要です。";
-      return;
-    }
-
-    if (!("DeviceOrientationEvent" in window)) {
-      sensorStatus.textContent =
-        "この端末は方位センサーに対応していません。";
-      return;
-    }
-
-    try {
-
-      // iPhoneなど許可が必要な端末への対応
-      if (
-        typeof DeviceOrientationEvent.requestPermission === "function"
-      ) {
-        const permission =
-          await DeviceOrientationEvent.requestPermission();
-
-        if (permission !== "granted") {
-          sensorStatus.textContent =
-            "センサーの使用が許可されませんでした。";
-          return;
-        }
-      }
-
-      window.addEventListener(
-        "deviceorientation",
-        handleDeviceOrientation
-      );
-
-      window.addEventListener(
-  "deviceorientationabsolute",
-  handleAbsoluteOrientation
-);
-
-      sensorActive = true;
-      sensorStartButton.disabled = true;
-      sensorStopButton.disabled = false;
-
-      sensorStatus.textContent =
-        "センサー値を取得しています。スマホを動かしてください。";
-
-    } catch (error) {
-
-      sensorStatus.textContent =
-        "センサー開始エラー: " + error.message;
-
-      console.error("センサー開始エラー:", error);
-    }
-
-  });
-
-  // センサー停止
-  sensorStopButton.addEventListener("click", () => {
-
-    window.removeEventListener(
-      "deviceorientation",
-      handleDeviceOrientation
-    );
-
-      window.removeEventListener(
-    "deviceorientationabsolute",
-    handleAbsoluteOrientation
-  );
-
-    sensorActive = false;
-    sensorStartButton.disabled = false;
-    sensorStopButton.disabled = true;
-
-    sensorStatus.textContent = "センサー停止中";
-
-  });
-
-  // =====================================
-  // スマホ方位センサー試験ここまで
-  // =====================================
 
   loadStarData();
   loadConstellationLines();
