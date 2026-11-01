@@ -30,9 +30,6 @@
     お使いのブラウザはCanvasに対応していません。
   </canvas>
 
-<!-- 流星群ガイドパネル専用の流星描画Canvas -->
-<canvas id="star-chart-meteor-layer" aria-hidden="true"></canvas>
-
 <!-- 独立星図専用の流星描画Canvas -->
 <canvas id="star-chart-meteor-layer" aria-hidden="true"></canvas>
 
@@ -41,10 +38,18 @@
 
 <!-- 星図の読み込み状態 -->
 <div id="chart-status" aria-live="polite"></div>
-
-<!-- 星図の読み込み状態 -->
-<div id="chart-status" aria-live="polite"></div>
 </section>
+
+</section>
+
+<!-- スマホ方位センサー試験 -->
+<div id="sensor-test-panel">
+  <button id="sensor-start" type="button">センサー開始</button>
+  <button id="sensor-stop" type="button" disabled>センサー停止</button>
+  <div id="sensor-status">センサー未開始</div>
+</div>
+
+</main>
 
   </main>
 </body>
