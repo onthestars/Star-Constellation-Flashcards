@@ -1836,6 +1836,18 @@ tryStartStarWarp();
 
   let sensorActive = false;
 
+  // 絶対方位センサーの確認
+function handleAbsoluteOrientation(event) {
+
+  console.log("絶対方位センサー:", {
+    alpha: event.alpha,
+    beta: event.beta,
+    gamma: event.gamma,
+    absolute: event.absolute
+  });
+
+}
+
   // センサー値を受信
   function handleDeviceOrientation(event) {
 
@@ -1889,6 +1901,11 @@ tryStartStarWarp();
         handleDeviceOrientation
       );
 
+      window.addEventListener(
+  "deviceorientationabsolute",
+  handleAbsoluteOrientation
+);
+
       sensorActive = true;
       sensorStartButton.disabled = true;
       sensorStopButton.disabled = false;
@@ -1913,6 +1930,11 @@ tryStartStarWarp();
       "deviceorientation",
       handleDeviceOrientation
     );
+
+      window.removeEventListener(
+    "deviceorientationabsolute",
+    handleAbsoluteOrientation
+  );
 
     sensorActive = false;
     sensorStartButton.disabled = false;
