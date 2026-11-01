@@ -39,10 +39,14 @@
       <div id="chart-status" aria-live="polite"></div>
 
       <!-- モード切り替えボタン -->
-      <div id="sensor-test-panel">
-        <button id="sensor-start" type="button">自動方角</button>
-        <button id="sensor-stop" type="button" disabled>手動方角</button>
-      </div>
+<div id="sensor-test-panel">
+  <button id="sensor-start" type="button" aria-pressed="true">
+    自動方角
+  </button>
+  <button id="sensor-stop" type="button" aria-pressed="false">
+    手動方角
+  </button>
+</div>
 
     </section>
 
