@@ -534,7 +534,7 @@ function setSensorMode(mode) {
 }
 
 // 初期状態は自動方角モード
-setSensorMode("auto");
+setSensorMode("manual");
 
   // スマホ画面正面の向きを計算
   function handleAbsoluteOrientation(event) {
