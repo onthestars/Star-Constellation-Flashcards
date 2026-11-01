@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 SOURCE = Path("../data/source/constellationship.fab")
-OUTPUT = Path("../data/constellation-lines.json")
+OUTPUT = Path("../data/constellation-lines-test.json")
 
 NAME_MAP = {
     "And": "アンドロメダ座",
