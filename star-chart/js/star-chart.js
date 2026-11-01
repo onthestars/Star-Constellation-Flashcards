@@ -349,7 +349,7 @@ function drawMeteorCore(
   const ctx = meteorCtx;
 
 // 核の大きさ調整
-const radius = (2 + Math.sin(progress * Math.PI) * 2) / 3;
+const radius = (2 + Math.sin(progress * Math.PI) * 2) / 3 * 0.2;
 const glowRadius = (6 + progress * 10) / 3;
 
   ctx.save();
