@@ -836,21 +836,36 @@ function getDistanceToSegment(px, py, ax, ay, bx, by) {
 }
 
 // タップ位置から星座線を判定
+// タップした星座線を判定
 function findConstellationAt(x, y) {
 
-  const targetConstellation = constellations.find(
-    constellation => constellation.id === "Ori"
-  );
+  // 星座線が表示されない視野角では選択しない
+  if (fieldOfViewDeg > 90) return null;
 
-  if (!targetConstellation) return null;
+  // 現在の視野角に応じた星座線の表示基準
+  let constellationMagLimit;
+
+  if (fieldOfViewDeg > 60) {
+    constellationMagLimit = 1.5;
+  } else if (fieldOfViewDeg > 40) {
+    constellationMagLimit = 2.5;
+  } else if (fieldOfViewDeg > 30) {
+    constellationMagLimit = 3.5;
+  } else if (fieldOfViewDeg > 20) {
+    constellationMagLimit = 4.5;
+  } else if (fieldOfViewDeg > 10) {
+    constellationMagLimit = 5.5;
+  } else {
+    constellationMagLimit = 6.5;
+  }
 
   const rect = canvas.getBoundingClientRect();
 
-  // Canvas内の座標に変換
   const px = x - rect.left;
   const py = y - rect.top;
 
-  const scale = (Math.min(canvasWidth, canvasHeight) / 2) /
+  const scale =
+    (Math.min(canvasWidth, canvasHeight) / 2) /
     Math.tan(fieldOfViewDeg * RAD / 2);
 
   const scaleX = scale;
@@ -858,45 +873,87 @@ function findConstellationAt(x, y) {
 
   const lstDeg = getLocalSiderealTimeDeg();
   const basis = getProjectionBasis();
-  const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
+
+  const minDot = Math.cos(
+    getMaxVisibleAngleDeg() * RAD
+  );
 
   const starById = new Map(
     stars.map(star => [star.id, star])
   );
 
-  // タップ許容距離（ピクセル）
   const hitDistance = 12;
 
-  for (const segment of targetConstellation.segments) {
+  let selectedConstellation = null;
+  let nearestDistance = hitDistance;
 
-    const starA = starById.get(segment[0]);
-    const starB = starById.get(segment[1]);
+  // すべての星座を調べる
+  for (const constellation of constellations) {
 
-    if (!starA || !starB) continue;
-
-    if (starA.id === starB.id) continue;
-
-    const pointA = projectStar(starA, lstDeg, basis, minDot);
-    const pointB = projectStar(starB, lstDeg, basis, minDot);
-
-    if (!pointA || !pointB) continue;
-
-    const ax = canvasWidth / 2 + pointA.x * scaleX;
-    const ay = canvasHeight / 2 + pointA.y * scaleY;
-
-    const bx = canvasWidth / 2 + pointB.x * scaleX;
-    const by = canvasHeight / 2 + pointB.y * scaleY;
-
-    const distance = getDistanceToSegment(
-      px, py, ax, ay, bx, by
+    // 星座を構成する恒星の明るさを調べる
+    const memberIds = new Set(
+      constellation.segments.flat()
     );
 
-    if (distance <= hitDistance) {
-      return targetConstellation;
+    const magnitudes = [];
+
+    for (const id of memberIds) {
+      const star = starById.get(id);
+
+      if (
+        star &&
+        star.mag != null &&
+        Number.isFinite(Number(star.mag))
+      ) {
+        magnitudes.push(Number(star.mag));
+      }
+    }
+
+    if (magnitudes.length === 0) continue;
+
+    const brightestMag = Math.min(...magnitudes);
+
+    // 現在の表示基準に合わない星座は対象外
+    if (brightestMag >= constellationMagLimit) continue;
+
+    // 星座線の各線分を調べる
+    for (const segment of constellation.segments) {
+
+      const starA = starById.get(segment[0]);
+      const starB = starById.get(segment[1]);
+
+      if (!starA || !starB) continue;
+      if (starA.id === starB.id) continue;
+
+      const pointA = projectStar(
+        starA, lstDeg, basis, minDot
+      );
+
+      const pointB = projectStar(
+        starB, lstDeg, basis, minDot
+      );
+
+      if (!pointA || !pointB) continue;
+
+      const ax = canvasWidth / 2 + pointA.x * scaleX;
+      const ay = canvasHeight / 2 + pointA.y * scaleY;
+
+      const bx = canvasWidth / 2 + pointB.x * scaleX;
+      const by = canvasHeight / 2 + pointB.y * scaleY;
+
+      const distance = getDistanceToSegment(
+        px, py, ax, ay, bx, by
+      );
+
+      // 最も近い星座線を選択
+      if (distance <= nearestDistance) {
+        nearestDistance = distance;
+        selectedConstellation = constellation;
+      }
     }
   }
 
-  return null;
+  return selectedConstellation;
 }
 
 // 選択した星座線のアニメーションを開始
