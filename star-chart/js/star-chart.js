@@ -381,10 +381,10 @@ const glowRadius = (6 + progress * 10) / 3;
   ctx.restore();
 }
 
-  const DATA_PATH = "data/stars-hyg-v42.json";
+const DATA_PATH = "data/stars-hyg-v42.json";
 
-  // 星座線データ
-  const LINE_DATA_PATH = "data/constellation-lines.json";
+// 星座線データ
+const LINE_DATA_PATH = "data/constellation-lines.json";
 
   // 初期の視野角（度）
   let fieldOfViewDeg = 110;
