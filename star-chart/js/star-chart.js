@@ -1022,35 +1022,37 @@ ctx.lineTo(
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
 
-// 視野角に応じて表示する等級を6段階に制御
+// 視野角（拡大率）に応じて表示する等級を6段階に制御
 
-// ① 視野角90°超：1～2等星
-if (fieldOfViewDeg > 90 && mag >= 2.5) {
+// 視野角100°超：1等星のみ
+if (fieldOfViewDeg > 100 && mag >= 1.5) {
   continue;
 }
 
-// ② 視野角50°超～90°以下：1～3等星
-if (fieldOfViewDeg > 50 && mag >= 3.5) {
+// 視野角90°超：1～2等星
+if (fieldOfViewDeg > 80 && mag >= 2.5) {
   continue;
 }
 
-// ③ 視野角30°超～50°以下：1～4等星
-if (fieldOfViewDeg > 30 && mag >= 4.5) {
+// 1～3等星
+if (fieldOfViewDeg > 60 && mag >= 3.5) {
   continue;
 }
 
-// ④ 視野角20°超～30°以下：1～5等星
-if (fieldOfViewDeg > 20 && mag >= 5.5) {
+// 1～4等星
+if (fieldOfViewDeg > 40 && mag >= 4.5) {
   continue;
 }
 
-// ⑤ 視野角10°超～20°以下：1～6等星
-if (fieldOfViewDeg > 10 && mag >= 6.5) {
+// 1～5等星
+if (fieldOfViewDeg > 30 && mag >= 5.5) {
   continue;
 }
 
-// ⑥ 視野角10°以下：読み込み対象の全星を表示
-
+// 1～6等星
+if (fieldOfViewDeg > 30 && mag >= 6.5) {
+  continue;
+}
 
         // スペクトル型から恒星の色を取得
         const spect = String(star.spect || "").trim().toUpperCase();
