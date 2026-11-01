@@ -514,6 +514,28 @@ const glowRadius = (6 + progress * 10) / 3;
 
   let sensorActive = false;
 
+  // モード表示の切り替え
+function setSensorMode(mode) {
+
+  const isAuto = mode === "auto";
+
+  sensorStartButton.classList.toggle("active", isAuto);
+  sensorStopButton.classList.toggle("active", !isAuto);
+
+  sensorStartButton.setAttribute(
+    "aria-pressed",
+    String(isAuto)
+  );
+
+  sensorStopButton.setAttribute(
+    "aria-pressed",
+    String(!isAuto)
+  );
+}
+
+// 初期状態は自動方角モード
+setSensorMode("auto");
+
   // スマホ画面正面の向きを計算
   function handleAbsoluteOrientation(event) {
 
@@ -611,8 +633,7 @@ if (sensorStartButton && sensorStopButton) {
 
       sensorActive = true;
 
-      sensorStartButton.disabled = true;
-      sensorStopButton.disabled = false;
+      setSensorMode("auto");
 
       console.log("姿勢センサーを開始しました。");
 
@@ -637,8 +658,7 @@ if (sensorStartButton && sensorStopButton) {
 
     sensorActive = false;
 
-    sensorStartButton.disabled = false;
-    sensorStopButton.disabled = true;
+    setSensorMode("manual");
 
     console.log("姿勢センサーを停止しました。");
   });
