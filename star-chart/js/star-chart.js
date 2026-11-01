@@ -573,18 +573,15 @@ const altitude = -Math.asin(
       `高度 ${altitude.toFixed(1)}°`;
   }
 
-  // センサー開始
+// センサー開始・停止
 if (sensorStartButton && sensorStopButton) {
 
-  sensorStartButton.addEventListener("click", async () => {
+  // センサーを開始する関数
+  async function startSensor(userAction = false) {
 
-    if (!window.isSecureContext) {
-      return;
-    }
+    if (!window.isSecureContext) return;
 
-    if (!("DeviceOrientationEvent" in window)) {
-      return;
-    }
+    if (!("DeviceOrientationEvent" in window)) return;
 
     try {
 
@@ -593,15 +590,20 @@ if (sensorStartButton && sensorStopButton) {
         typeof DeviceOrientationEvent.requestPermission ===
         "function"
       ) {
+        // ユーザー操作がない場合は自動開始しない
+        if (!userAction) return;
+
         const permission =
           await DeviceOrientationEvent.requestPermission();
 
-        if (permission !== "granted") {
-          return;
-        }
+        if (permission !== "granted") return;
       }
 
-      // 絶対姿勢センサーを開始
+      window.removeEventListener(
+        "deviceorientationabsolute",
+        handleAbsoluteOrientation
+      );
+
       window.addEventListener(
         "deviceorientationabsolute",
         handleAbsoluteOrientation
@@ -618,9 +620,14 @@ if (sensorStartButton && sensorStopButton) {
 
       console.error("センサー開始エラー:", error);
     }
+  }
+
+  // 自動方角モード
+  sensorStartButton.addEventListener("click", () => {
+    startSensor(true);
   });
 
-  // センサー停止
+  // 手動方角モード
   sensorStopButton.addEventListener("click", () => {
 
     window.removeEventListener(
@@ -635,6 +642,15 @@ if (sensorStartButton && sensorStopButton) {
 
     console.log("姿勢センサーを停止しました。");
   });
+
+  // ページ読み込み時に自動開始
+  if (
+    window.isSecureContext &&
+    "DeviceOrientationEvent" in window &&
+    typeof DeviceOrientationEvent.requestPermission !== "function"
+  ) {
+    startSensor();
+  }
 }
 
   // 現在の地方恒星時を計算する
