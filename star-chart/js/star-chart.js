@@ -1836,22 +1836,53 @@ tryStartStarWarp();
 
   let sensorActive = false;
 
-// 絶対方位センサーの確認
+// スマホ画面正面の方位・高度を計算
 function handleAbsoluteOrientation(event) {
 
-  sensorStatus.textContent =
-    "【絶対方位センサー】\n" +
-    `alpha: ${event.alpha?.toFixed(1) ?? "取得不可"}° / ` +
-    `beta: ${event.beta?.toFixed(1) ?? "取得不可"}° / ` +
-    `gamma: ${event.gamma?.toFixed(1) ?? "取得不可"}° / ` +
-    `absolute: ${event.absolute}`;
+  const alpha = event.alpha;
+  const beta = event.beta;
+  const gamma = event.gamma;
 
-  console.log("絶対方位センサー:", {
-    alpha: event.alpha,
-    beta: event.beta,
-    gamma: event.gamma,
-    absolute: event.absolute
-  });
+  if (
+    !Number.isFinite(alpha) ||
+    !Number.isFinite(beta) ||
+    !Number.isFinite(gamma)
+  ) {
+    sensorStatus.textContent = "姿勢データ取得中...";
+    return;
+  }
+
+  // 角度をラジアンに変換
+  const a = alpha * RAD;
+  const b = beta * RAD;
+  const g = gamma * RAD;
+
+  // 画面正面（端末のZ軸）の方向ベクトル
+  const x =
+    Math.cos(a) * Math.sin(g) +
+    Math.sin(a) * Math.sin(b) * Math.cos(g);
+
+  const y =
+    Math.sin(a) * Math.sin(g) -
+    Math.cos(a) * Math.sin(b) * Math.cos(g);
+
+  const z =
+    Math.cos(b) * Math.cos(g);
+
+  // 方位角（北0°、東90°）
+  const azimuth = normalizeDeg(
+    Math.atan2(x, y) / RAD
+  );
+
+  // 高度（水平0°、天頂90°）
+  const altitude = Math.asin(
+    Math.max(-1, Math.min(1, z))
+  ) / RAD;
+
+  sensorStatus.textContent =
+    `画面の向き：方位 ${azimuth.toFixed(1)}° / ` +
+    `高度 ${altitude.toFixed(1)}°\n` +
+    `absolute: ${event.absolute}`;
 
 }
 
