@@ -1767,7 +1767,98 @@ if (
   }
 }
 
-      // 恒星を描画
+// 恒星を描画
+// 全星座の名前を描画
+for (const constellation of constellations) {
+
+  const state =
+    constellationFadeStates.get(constellation.id);
+
+  if (!state || state.opacity <= 0) continue;
+
+  // 星座を構成する恒星の位置を取得
+  const memberIds = new Set(
+    constellation.segments.flat()
+  );
+
+  const points = [];
+
+  for (const id of memberIds) {
+
+    const star = starById.get(id);
+    if (!star) continue;
+
+    const projected =
+      projectStar(star, lstDeg, basis, minDot);
+
+    if (!projected) continue;
+
+    points.push({
+      x: centerX + projected.x * scaleX,
+      y: centerY + projected.y * scaleY
+    });
+  }
+
+  if (points.length > 0) {
+
+// 星座の表示範囲を計算
+const minX = Math.min(...points.map(p => p.x));
+const maxX = Math.max(...points.map(p => p.x));
+const minY = Math.min(...points.map(p => p.y));
+const maxY = Math.max(...points.map(p => p.y));
+
+// 星座の中央部に配置
+const labelX = (minX + maxX) / 2;
+const labelY = (minY + maxY) / 2;
+
+ctx.save();
+
+ctx.font = '12px "Meiryo", sans-serif';
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+// 星座名の幅を取得
+const textWidth =
+  ctx.measureText(constellation.name).width;
+
+// 角丸背景のサイズ
+const paddingX = 6;
+const paddingY = 4;
+const boxWidth = textWidth + paddingX * 2;
+const boxHeight = 20;
+
+// 背景の位置
+const boxX = labelX - boxWidth / 2;
+const boxY = labelY - boxHeight / 2;
+
+// 星座線の透明度に連動
+ctx.globalAlpha = state.opacity * 0.65;
+
+// 半透明の白い角丸背景
+ctx.fillStyle = "#FFFFFF";
+ctx.beginPath();
+ctx.roundRect(
+  boxX,
+  boxY,
+  boxWidth,
+  boxHeight,
+  5
+);
+ctx.fill();
+
+// 星座名
+ctx.fillStyle = "rgb(6, 7, 64)";
+
+ctx.fillText(
+  constellation.name,
+  labelX,
+  labelY
+);
+
+ctx.restore();
+  }
+}
+
       for (const star of stars) {
         const projected = projectStar(star, lstDeg, basis, minDot);
 
