@@ -42,7 +42,7 @@ function updatePeteChartButton(index, peteChartBtn) {
 function playWarpSound() {
   if (!soundEnabled) return;
 
-  const warpSound = new Audio("sound/warp.m4a");
+  const warpSound = new Audio("sound/the-spaceship-flew-by.m4a");
 
   warpSound.play().catch(error => {
     console.warn("星図の効果音を再生できませんでした:", error);
