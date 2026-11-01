@@ -1836,16 +1836,22 @@ tryStartStarWarp();
 
   let sensorActive = false;
 
-  // 絶対方位センサーの確認
+// 絶対方位センサーの確認
 function handleAbsoluteOrientation(event) {
 
-console.log(
-  "絶対方位センサー:",
-  "alpha:", event.alpha,
-  "beta:", event.beta,
-  "gamma:", event.gamma,
-  "absolute:", event.absolute
-);
+  sensorStatus.textContent =
+    "【絶対方位センサー】\n" +
+    `alpha: ${event.alpha?.toFixed(1) ?? "取得不可"}° / ` +
+    `beta: ${event.beta?.toFixed(1) ?? "取得不可"}° / ` +
+    `gamma: ${event.gamma?.toFixed(1) ?? "取得不可"}° / ` +
+    `absolute: ${event.absolute}`;
+
+  console.log("絶対方位センサー:", {
+    alpha: event.alpha,
+    beta: event.beta,
+    gamma: event.gamma,
+    absolute: event.absolute
+  });
 
 }
 
