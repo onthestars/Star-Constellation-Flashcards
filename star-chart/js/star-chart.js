@@ -974,7 +974,7 @@ const zenithY = centerY + zenithPoint.y * scaleY;
       for (const constellation of constellations) {
         ctx.beginPath();
         ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
-        ctx.lineWidth = 1.25;
+        ctx.lineWidth = 0.75;
 
         for (const segment of constellation.segments) {
           const starA = starById.get(segment[0]);
@@ -1068,19 +1068,19 @@ if (mag < 1.5) {
   radius = 4.5;
 } else if (mag < 2.5) {
   // 2等星
-  radius = 3.3;
+  radius = 2.0;
 } else if (mag < 3.5) {
   // 3等星
-  radius = 2.5;
+  radius = 1.5;
 } else if (mag < 4.5) {
   // 4等星
-  radius = 1.2;
+  radius = 1.0;
 } else if (mag < 5.5) {
-  // 5等星：テスト用に大きくする
+  // 5等星
   radius = 0.8;
 } else {
-  // 6等星：テスト用に大きくする
-  radius = 0.4;
+  // 6等星
+  radius = 0.5;
 }
 
         // グローの設定
@@ -1095,19 +1095,19 @@ if (mag < 1.5) {
           glowFactor = 1.5;
         } else if (mag < 2.5) {
           // 2等星
-          glowFactor = 1.3;
+          glowFactor = 0.8;
         } else if (mag < 3.5) {
           // 3等星
-          glowFactor = 0.9;
+          glowFactor = 0.5;
         } else if (mag < 4.5) {
           // 4等星
-          glowFactor = 0.75;
+          glowFactor = 0.3;
         } else if (mag < 5.5) {
           // 5等星
-          glowFactor = 0.6;
+          glowFactor = 0.2;
         } else {
           // 6等星
-          glowFactor = 0.6;
+          glowFactor = 0.1;
         }
 
         // 星の周囲に控えめな光を描く
@@ -1259,19 +1259,19 @@ const shouldShowStarLabel =
   (fieldOfViewDeg <= 60 && mag < 2.5) ||
   (fieldOfViewDeg <= 25 && mag < 3.5);
 
-// 恒星名を表示
-if (shouldShowStarLabel && (isPolaris || projected.label)) {
-  ctx.font = '12px "Meiryo", sans-serif';
-  ctx.fillStyle = color;
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
+// // 恒星名を表示
+// if (shouldShowStarLabel && (isPolaris || projected.label)) {
+//   ctx.font = '12px "Meiryo", sans-serif';
+//   ctx.fillStyle = color;
+//   ctx.textAlign = "left";
+//   ctx.textBaseline = "middle";
 
-  ctx.fillText(
-    isPolaris ? "北極星" : projected.label,
-    x + 9,
-    y - 8
-  );
-}
+//   ctx.fillText(
+//     isPolaris ? "北極星" : projected.label,
+//     x + 9,
+//     y - 8
+//   );
+// }
 }
 
       // 星の描画範囲の制限を解除する
