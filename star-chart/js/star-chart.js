@@ -2166,14 +2166,7 @@ if (meteorRadiant) {
 
       ctx.save();
 
-      // 赤い円
-      ctx.beginPath();
-      ctx.arc(x, y, 10, 0, Math.PI * 2);
-      ctx.strokeStyle = "#ffd700";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // 十字
+      // 放射点の十字
       ctx.beginPath();
       ctx.moveTo(x - 15, y);
       ctx.lineTo(x + 15, y);
@@ -2184,8 +2177,39 @@ if (meteorRadiant) {
       // 放射点の色
       ctx.strokeStyle = "#ffd700";
       // 放射点十字部分の太さ
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.5;
       ctx.stroke();
+
+      // 放射点名・極大日を表示
+if (meteorRadiant.name) {
+
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+
+  // 流星群名（11px）
+  ctx.font = '11px "Meiryo", sans-serif';
+  ctx.fillStyle = "#ffd700";
+  ctx.fillText(
+    meteorRadiant.name,
+    x + 19,
+    y + 5
+  );
+
+  // 極大日（9px）
+  if (meteorRadiant.peak) {
+    const [month, day] = meteorRadiant.peak.split("-");
+
+    const peakText =
+      `${Number(month)}/${Number(day)}頃極大`;
+
+    ctx.font = '9px "Meiryo", sans-serif';
+    ctx.fillText(
+      peakText,
+      x + 19,
+      y + 19
+    );
+  }
+}
 
       ctx.restore();
 
@@ -2653,10 +2677,12 @@ tryStartStarWarp();
     }
 
         // 受信した放射点の赤経・赤緯を保存
-    meteorRadiant = {
-      ra: data.ra,
-      dec: data.dec
-    };
+meteorRadiant = {
+  name: data.name,
+  peak: data.peak,
+  ra: data.ra,
+  dec: data.dec
+};
 
     // 現在の地方恒星時を取得
     const lstDeg = getLocalSiderealTimeDeg();
