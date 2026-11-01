@@ -13,6 +13,9 @@
 
   const ctx = warpCanvas.getContext("2d");
 
+  // ワープ演出専用サウンド
+  let warpSound = null;
+
   let animationId = null;
   let stars = [];
   let startTime = 0;
@@ -20,15 +23,15 @@
     let fadeStarted = false;
 
     // 演出時間（ミリ秒）
-  const MOVEMENT_TIME = 2100;
-  const FADE_TIME = 1200;
+  const MOVEMENT_TIME = 2800;
+  const FADE_TIME = 1800;
 
   // 移動の最後の時間でクロスフェード
   const FADE_START_TIME = MOVEMENT_TIME - FADE_TIME;
   const TOTAL_TIME = MOVEMENT_TIME;
 
   // 星の数
-  const STAR_COUNT = 450;
+  const STAR_COUNT = 1200;
 
   // 画面サイズに合わせてCanvasを調整
   function resizeWarpCanvas() {
@@ -218,6 +221,17 @@
 
     // 星図と既存流星を先に隠す
     container.classList.add("is-warping");
+
+    // ワープ開始時にサウンドを生成・再生
+    if (window.parent.soundEnabled !== false) {
+    warpSound = new Audio(
+    "../sound/the-spaceship-flew-by.m4a"
+  );
+
+    warpSound.play().catch(error => {
+    console.warn("ワープ音を再生できませんでした。", error);
+  });
+}
 
     // Canvasを透明な状態で表示
     warpCanvas.style.transition = "opacity 1500ms ease";
