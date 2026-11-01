@@ -1887,21 +1887,10 @@ function handleAbsoluteOrientation(event) {
 }
 
   // センサー値を受信
-  function handleDeviceOrientation(event) {
-
-    const alpha = event.alpha;
-    const beta = event.beta;
-    const gamma = event.gamma;
-    const compass = event.webkitCompassHeading;
-
-    sensorStatus.textContent =
-      `alpha: ${alpha === null ? "取得不可" : alpha?.toFixed(1) + "°"} / ` +
-      `beta: ${beta === null ? "取得不可" : beta?.toFixed(1) + "°"} / ` +
-      `gamma: ${gamma === null ? "取得不可" : gamma?.toFixed(1) + "°"} / ` +
-      `方位: ${Number.isFinite(compass) ? compass.toFixed(1) + "°" : "未取得"} / ` +
-      `absolute: ${event.absolute}`;
-
-  }
+// 通常の姿勢イベント（今回は画面表示に使わない）
+function handleDeviceOrientation(event) {
+  // 絶対方位イベント側で表示するため、ここでは何もしない
+}
 
   // センサー開始
   sensorStartButton.addEventListener("click", async () => {
