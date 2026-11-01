@@ -409,11 +409,155 @@ const glowRadius = (6 + progress * 10) / 3;
   let canvasHeight = 0;
   let constellations = [];
   
-  // 星座線アニメーション管理
-  let constellationFadeIn = 0;
-  let selectedConstellationId = null;
-  let constellationAnimationProgress = 0;
-  let constellationAnimationFrame = null;
+// 星座線アニメーション管理
+let selectedConstellationId = null;
+let constellationAnimationProgress = 0;
+let constellationAnimationFrame = null;
+
+// 星座ごとのフェード専用アニメーションフレーム
+let constellationFadeAnimationFrame = null;
+
+// 星座ごとのフェード状態を管理
+const constellationFadeStates = new Map();
+
+// フェード時間
+const CONSTELLATION_FADE_DURATION = 1200;
+
+// 星座ごとのフェード状態を更新
+function updateConstellationFadeStates(visibleConstellationIds) {
+
+  const now = performance.now();
+
+  for (const id of visibleConstellationIds) {
+
+    let state = constellationFadeStates.get(id);
+
+    // 初めて表示される星座
+    if (!state) {
+      constellationFadeStates.set(id, {
+        opacity: 0,
+        phase: "fadeIn",
+        startTime: now,
+        startOpacity: 0
+      });
+      continue;
+    }
+
+    // フェードアウト中に再び表示対象になった場合
+    if (state.phase === "fadeOut") {
+      state.phase = "fadeIn";
+      state.startTime = now;
+      state.startOpacity = state.opacity;
+    }
+  }
+
+  // 表示対象から外れた星座
+  for (const [id, state] of constellationFadeStates) {
+
+    if (
+      !visibleConstellationIds.has(id) &&
+      state.phase !== "fadeOut"
+    ) {
+      state.phase = "fadeOut";
+      state.startTime = now;
+      state.startOpacity = state.opacity;
+    }
+  }
+
+    // 表示対象から外れた星座
+  for (const [id, state] of constellationFadeStates) {
+
+    if (
+      !visibleConstellationIds.has(id) &&
+      state.phase !== "fadeOut"
+    ) {
+      state.phase = "fadeOut";
+      state.startTime = now;
+      state.startOpacity = state.opacity;
+    }
+  }
+
+  // フェード中の星座があればアニメーションを開始
+  for (const state of constellationFadeStates.values()) {
+    if (
+      state.phase === "fadeIn" ||
+      state.phase === "fadeOut"
+    ) {
+      requestConstellationFadeFrame();
+      break;
+    }
+  }
+}
+
+// 星座ごとのフェード進行を更新
+function animateConstellationFadeStates() {
+
+  const now = performance.now();
+  let isAnimating = false;
+
+  for (const [id, state] of constellationFadeStates) {
+
+    const elapsed = now - state.startTime;
+
+    const progress = Math.min(
+      elapsed / CONSTELLATION_FADE_DURATION,
+      1
+    );
+
+    // ゆっくり始まり、自然に加速し、穏やかに停止
+    const eased =
+      progress * progress * (3 - 2 * progress);
+
+    if (state.phase === "fadeIn") {
+
+      state.opacity =
+        state.startOpacity +
+        (1 - state.startOpacity) * eased;
+
+      if (progress >= 1) {
+        state.opacity = 1;
+        state.phase = "visible";
+      } else {
+        isAnimating = true;
+      }
+
+    } else if (state.phase === "fadeOut") {
+
+      state.opacity =
+        state.startOpacity * (1 - eased);
+
+      if (progress >= 1) {
+        state.opacity = 0;
+        constellationFadeStates.delete(id);
+      } else {
+        isAnimating = true;
+      }
+    }
+  }
+
+  return isAnimating;
+}
+
+// 星座フェードの自動更新
+function requestConstellationFadeFrame() {
+
+  if (constellationFadeAnimationFrame !== null) return;
+
+  constellationFadeAnimationFrame =
+    requestAnimationFrame(() => {
+
+      constellationFadeAnimationFrame = null;
+
+      const isAnimating =
+        animateConstellationFadeStates();
+
+      drawChart();
+
+      if (isAnimating) {
+        requestConstellationFadeFrame();
+      }
+    });
+}
 
   // 選択した星座線の描画アニメーション管理
 let constellationLineAnimationPhase = "idle";
@@ -519,7 +663,7 @@ let isMultiPointerGesture = false;
     return ((deg % 360) + 360) % 360;
   }
 
-    // ==========================================
+  // ==========================================
   // スマホ姿勢センサーによる星図自動追従
   // ==========================================
 
@@ -530,6 +674,14 @@ let isMultiPointerGesture = false;
     document.getElementById("sensor-stop");
 
   let sensorActive = false;
+
+  // iPhoneではdeviceorientationを使用
+// Androidなどではdeviceorientationabsoluteを使用
+const sensorEventName =
+  typeof DeviceOrientationEvent !== "undefined" &&
+  typeof DeviceOrientationEvent.requestPermission === "function"
+    ? "deviceorientation"
+    : "deviceorientationabsolute";
 
   // モード表示の切り替え
 function setSensorMode(mode) {
@@ -585,10 +737,23 @@ setSensorMode("manual");
     const z =
       Math.cos(b) * Math.cos(g);
 
-// 方位角：北0°、東90°（背面方向）
-const azimuth = normalizeDeg(
-  Math.atan2(x, y) / RAD + 180
-);
+// 方位角：北0°、東90°
+let azimuth;
+
+if (Number.isFinite(event.webkitCompassHeading)) {
+
+  // iPhone Safari専用の方位情報
+  azimuth = normalizeDeg(
+    event.webkitCompassHeading + 180
+  );
+
+} else {
+
+  // Androidなど従来の計算
+  azimuth = normalizeDeg(
+    Math.atan2(x, y) / RAD + 180
+  );
+}
 
 // 高度：水平0°、天頂90°（背面方向）
 const altitude = -Math.asin(
@@ -638,15 +803,15 @@ if (sensorStartButton && sensorStopButton) {
         if (permission !== "granted") return;
       }
 
-      window.removeEventListener(
-        "deviceorientationabsolute",
-        handleAbsoluteOrientation
-      );
+window.removeEventListener(
+  sensorEventName,
+  handleAbsoluteOrientation
+);
 
-      window.addEventListener(
-        "deviceorientationabsolute",
-        handleAbsoluteOrientation
-      );
+window.addEventListener(
+  sensorEventName,
+  handleAbsoluteOrientation
+);
 
       sensorActive = true;
 
@@ -668,10 +833,10 @@ if (sensorStartButton && sensorStopButton) {
   // 手動方角モード
   sensorStopButton.addEventListener("click", () => {
 
-    window.removeEventListener(
-      "deviceorientationabsolute",
-      handleAbsoluteOrientation
-    );
+window.removeEventListener(
+  sensorEventName,
+  handleAbsoluteOrientation
+);
 
     sensorActive = false;
 
@@ -1404,60 +1569,77 @@ if (fieldOfViewDeg > 90) {
         stars.map(star => [star.id, star])
       );
 
-      // 星座線を表示する場合だけ描画する
+// 現在の視野角で表示対象となる星座を収集
+const visibleConstellationIds = new Set();
+
 if (constellationMagLimit !== null) {
 
+  for (const constellation of constellations) {
+
+    const memberIds = new Set(
+      constellation.segments.flat()
+    );
+
+    let brightestMag = Infinity;
+
+    for (const id of memberIds) {
+      const star = starById.get(id);
+
+      if (
+        star &&
+        star.mag != null &&
+        Number.isFinite(Number(star.mag))
+      ) {
+        brightestMag = Math.min(
+          brightestMag,
+          Number(star.mag)
+        );
+      }
+    }
+
+    if (brightestMag < constellationMagLimit) {
+      visibleConstellationIds.add(constellation.id);
+    }
+  }
+}
+
+// 星座ごとのフェード状態を更新
+updateConstellationFadeStates(visibleConstellationIds);
+
+// 星座ごとの透明度に応じて星座線を描画
 for (const constellation of constellations) {
 
-  // アニメーション中の星座は通常描画から除外
+  const state =
+    constellationFadeStates.get(constellation.id);
+
+  // フェード状態がない星座は描画しない
+  if (!state || state.opacity <= 0) continue;
+
+  // タップアニメーション中の星座は通常描画から除外
   if (
     constellation.id === selectedConstellationId &&
     constellationLineAnimationPhase !== "idle"
   ) continue;
 
-  // 星座を構成する恒星のうち、最も明るい星を調べる
-  const memberIds = new Set(
-    constellation.segments.flat()
-  );
-
-  const magnitudes = [];
-
-  for (const id of memberIds) {
-    const star = starById.get(id);
-
-    if (
-      star &&
-      star.mag != null &&
-      Number.isFinite(Number(star.mag))
-    ) {
-      magnitudes.push(Number(star.mag));
-    }
-  }
-
-  if (magnitudes.length === 0) continue;
-
-  const brightestMag = Math.min(...magnitudes);
-
-  // 表示基準より暗い星しかない星座は表示しない
-  if (brightestMag >= constellationMagLimit) continue;
-
-  // 星座線を描画
-
-  // 星座線のフェードイン透明度
-  ctx.globalAlpha = constellationFadeIn;
+  ctx.globalAlpha = state.opacity;
 
   ctx.beginPath();
-  ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
+  ctx.strokeStyle =
+    constellation.lineColor || "#FF3CC8";
   ctx.lineWidth = 0.75;
 
   for (const segment of constellation.segments) {
+
     const starA = starById.get(segment[0]);
     const starB = starById.get(segment[1]);
 
     if (!starA || !starB) continue;
 
-    const pointA = projectStar(starA, lstDeg, basis, minDot);
-    const pointB = projectStar(starB, lstDeg, basis, minDot);
+    const pointA =
+      projectStar(starA, lstDeg, basis, minDot);
+
+    const pointB =
+      projectStar(starB, lstDeg, basis, minDot);
 
     if (!pointA || !pointB) continue;
 
@@ -1474,7 +1656,6 @@ for (const constellation of constellations) {
 
   ctx.stroke();
   ctx.globalAlpha = 1;
-}
 }
 
 // 選択した星座線のアニメーション描画
@@ -1566,7 +1747,7 @@ if (
         ctx.strokeStyle =
           selectedConstellation.lineColor || "#FF3CC8";
         ctx.lineWidth = 0.75;
-        ctx.globalAlpha = constellationFadeIn * opacity;
+        ctx.globalAlpha = opacity;
 
         // 配列順に一本ずつ描画
         for (const segment of projectedSegments) {
@@ -1958,52 +2139,6 @@ if (meteorRadiant) {
 // ▲▲▲drawChart();ここまで
 
 
-
-// 星座線の初期フェードイン
-window.startConstellationFadeIn = function () {
-
-  if (constellationAnimationFrame !== null) {
-    cancelAnimationFrame(constellationAnimationFrame);
-  }
-
-  constellationFadeIn = 0;
-
-  const duration = 1200;
-  let startTime = null;
-  let lastFrameTime = 0;
-
-  function animateFade(timestamp) {
-
-    if (startTime === null) {
-      startTime = timestamp;
-    }
-
-    const elapsed = timestamp - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    // ゆっくり始まり、自然に加速し、穏やかに停止
-    constellationFadeIn =
-      progress * progress * (3 - 2 * progress);
-
-    // 約30fpsで描画し、端末への負荷を抑える
-    if (timestamp - lastFrameTime >= 1000 / 30 || progress >= 1) {
-      drawChart();
-      lastFrameTime = timestamp;
-    }
-
-    if (progress < 1) {
-      constellationAnimationFrame =
-        requestAnimationFrame(animateFade);
-    } else {
-      constellationFadeIn = 1;
-      drawChart();
-      constellationAnimationFrame = null;
-    }
-  }
-
-  constellationAnimationFrame =
-    requestAnimationFrame(animateFade);
-};
 
 // 慣性移動
 function startInertia() {
