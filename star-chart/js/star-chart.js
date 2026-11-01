@@ -549,15 +549,15 @@ const glowRadius = (6 + progress * 10) / 3;
     const z =
       Math.cos(b) * Math.cos(g);
 
-    // 方位角：北0°、東90°
-    const azimuth = normalizeDeg(
-      Math.atan2(x, y) / RAD
-    );
+// 方位角：北0°、東90°（背面方向）
+const azimuth = normalizeDeg(
+  Math.atan2(x, y) / RAD + 180
+);
 
-    // 高度：水平0°、天頂90°
-    const altitude = Math.asin(
-      Math.max(-1, Math.min(1, z))
-    ) / RAD;
+// 高度：水平0°、天頂90°（背面方向）
+const altitude = -Math.asin(
+  Math.max(-1, Math.min(1, z))
+) / RAD;
 
     // センサーの向きを星図の中心に反映
     centerAzDeg = azimuth;
