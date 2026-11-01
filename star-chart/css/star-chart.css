@@ -134,11 +134,11 @@ body {
 
 /* スマホ方位センサー操作パネル */
 #sensor-test-panel {
-  flex: 0 0 auto;
-  padding: 8px;
-  text-align: center;
-  background: #080D1A;
-  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
 #sensor-test-panel button {
@@ -154,8 +154,47 @@ body {
   opacity: 0.45;
 }
 
-#sensor-status {
-  margin-top: 4px;
-  color: #AAB6CC;
-  font-size: 12px;
+/* 星図内のモード切り替えボタン */
+#chart-container {
+  position: relative;
+}
+
+#sensor-test-panel {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+
+  padding: 0;
+  background: transparent;
+  z-index: 30;
+}
+
+/* モード切り替えボタン */
+#sensor-test-panel button {
+  margin: 0;
+  padding: 7px 12px;
+
+  color: #E8EDF7;
+  font-size: 11px;
+  white-space: nowrap;
+
+  background: linear-gradient(
+    to bottom,
+    rgb(6, 7, 64),
+    rgb(13, 31, 104)
+  );
+
+  border: 1px solid #526AAB;
+  border-radius: 6px;
+}
+
+#sensor-test-panel button:disabled {
+  opacity: 0.45;
 }
