@@ -1001,27 +1001,20 @@ function getDistanceToSegment(px, py, ax, ay, bx, by) {
 }
 
 // タップ位置から星座線を判定
-// タップした星座線を判定
 function findConstellationAt(x, y) {
 
   // 星座線が表示されない視野角では選択しない
   if (fieldOfViewDeg > 90) return null;
 
-  // 現在の視野角に応じた星座線の表示基準
+  // 星座線の選択基準
   let constellationMagLimit;
 
   if (fieldOfViewDeg > 60) {
-    constellationMagLimit = 1.5;
+    constellationMagLimit = 1.5; // 1等星をもつ星座
   } else if (fieldOfViewDeg > 40) {
-    constellationMagLimit = 2.5;
-  } else if (fieldOfViewDeg > 30) {
-    constellationMagLimit = 3.5;
-  } else if (fieldOfViewDeg > 20) {
-    constellationMagLimit = 4.5;
-  } else if (fieldOfViewDeg > 10) {
-    constellationMagLimit = 5.5;
+    constellationMagLimit = 2.5; // 2等星をもつ星座まで追加
   } else {
-    constellationMagLimit = 6.5;
+    constellationMagLimit = 6.5; // すべての星座
   }
 
   const rect = canvas.getBoundingClientRect();
@@ -1550,19 +1543,13 @@ const zenithY = centerY + zenithPoint.y * scaleY;
 let constellationMagLimit;
 
 if (fieldOfViewDeg > 90) {
-  constellationMagLimit = null; // 全体表示では星座線なし
+  constellationMagLimit = null; // 星座線なし
 } else if (fieldOfViewDeg > 60) {
-  constellationMagLimit = 1.5;  // 1等星を含む星座
-  } else if (fieldOfViewDeg > 40) {
-  constellationMagLimit = 2.5;  // 2等星を含む星座
-} else if (fieldOfViewDeg > 30) {
-  constellationMagLimit = 3.5;  // 3等星を含む星座を追加
-} else if (fieldOfViewDeg > 20) {
-  constellationMagLimit = 4.5;  // 4等星を含む星座を追加
-} else if (fieldOfViewDeg > 10) {
-  constellationMagLimit = 5.5;  // 5等星を含む星座を追加
+  constellationMagLimit = 1.5;  // 1等星をもつ星座
+} else if (fieldOfViewDeg > 40) {
+  constellationMagLimit = 2.5;  // 2等星をもつ星座まで追加
 } else {
-  constellationMagLimit = 6.5;  // 6等星を含む星座も追加
+  constellationMagLimit = 6.5;  // すべての星座
 }
 
       const starById = new Map(
