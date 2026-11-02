@@ -2328,6 +2328,75 @@
       ctx.restore();
     }
 
+        // 太陽を星図に表示
+    const sun = getSunEquatorialPosition();
+
+    const sunPoint = projectStar(
+      {
+        ra: sun.ra,
+        dec: sun.dec,
+        mag: 0,
+        id: "sun",
+        label: "太陽"
+      },
+      lstDeg,
+      basis,
+      minDot
+    );
+
+    if (sunPoint) {
+      const sunX = centerX + sunPoint.x * scaleX;
+      const sunY = centerY + sunPoint.y * scaleY;
+
+      // 太陽の大きさ（仮設定）
+      const sunRadius = 15;
+
+      ctx.save();
+
+      // 太陽の周囲に光彩を描く
+      ctx.shadowColor = "rgba(255, 190, 60, 1.0)";
+      ctx.shadowBlur = 56;
+
+      ctx.fillStyle = "#FFD76A";
+
+      ctx.beginPath();
+      ctx.arc(
+        sunX,
+        sunY,
+        sunRadius,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      ctx.restore();
+
+      // 太陽本体
+      ctx.save();
+
+      ctx.fillStyle = "#FFF0A0";
+
+      ctx.beginPath();
+      ctx.arc(
+        sunX,
+        sunY,
+        sunRadius,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      ctx.restore();
+
+      // 太陽の名前
+ctx.font = '11px "Meiryo", sans-serif';
+ctx.fillStyle = "#FFF0A0";
+ctx.textAlign = "left";
+ctx.textBaseline = "middle";
+ctx.fillText("太陽", sunX + sunRadius + 4, sunY);
+
+    }
+
     // 月を星図に表示
     const moon = getMoonEquatorialPosition();
 
@@ -2500,12 +2569,12 @@ const phaseWidth =
 
       ctx.restore();
 
-      // 月の名前
-      ctx.font = '12px "Meiryo", sans-serif';
-      ctx.fillStyle = "#FFF2B0";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText("", moonX + 11, moonY);
+// 月の名前
+ctx.font = '11px "Meiryo", sans-serif';
+ctx.fillStyle = "#FFF2B0";
+ctx.textAlign = "left";
+ctx.textBaseline = "middle";
+ctx.fillText("月", moonX + moonRadius + 4, moonY);
 
       ctx.restore();
     }
