@@ -873,6 +873,186 @@
     return normalizeDeg(gmst + longitudeDeg);
   }
 
+  // 月の赤経・赤緯を簡易計算する
+  function getMoonEquatorialPosition(date = new Date()) {
+
+    const RAD = Math.PI / 180;
+    const d = (date.getTime() - Date.UTC(1999, 11, 31, 0))
+      / 86400000;
+
+    // 月の軌道要素
+    const N = 125.1228 - 0.0529538083 * d;
+    const i = 5.1454;
+    const w = 318.0634 + 0.1643573223 * d;
+    const e = 0.054900;
+    const M = 115.3654 + 13.0649929509 * d;
+
+    // 離心近点角
+    let E = M + e * (180 / Math.PI) * Math.sin(M * RAD)
+      * (1 + e * Math.cos(M * RAD));
+
+    for (let j = 0; j < 3; j++) {
+      E -= (E - (180 / Math.PI) * e * Math.sin(E * RAD) - M)
+        / (1 - e * Math.cos(E * RAD));
+    }
+
+    const xv = Math.cos(E * RAD) - e;
+    const yv = Math.sqrt(1 - e * e) * Math.sin(E * RAD);
+
+    const v = Math.atan2(yv, xv) / RAD;
+    const r = Math.sqrt(xv * xv + yv * yv);
+
+    const xh = r * (
+      Math.cos(N * RAD) * Math.cos((v + w) * RAD)
+      - Math.sin(N * RAD) * Math.sin((v + w) * RAD) * Math.cos(i * RAD)
+    );
+
+    const yh = r * (
+      Math.sin(N * RAD) * Math.cos((v + w) * RAD)
+      + Math.cos(N * RAD) * Math.sin((v + w) * RAD) * Math.cos(i * RAD)
+    );
+
+    const zh = r * Math.sin((v + w) * RAD) * Math.sin(i * RAD);
+
+    let lon = Math.atan2(yh, xh) / RAD;
+    let lat = Math.atan2(zh, Math.sqrt(xh * xh + yh * yh)) / RAD;
+
+    // 月の位置を簡易補正
+    const L = N + w + M;
+    const Ms = 356.0470 + 0.9856002585 * d;
+    const Ls = 280.460 + 0.9856474 * d;
+    const D = L - Ls;
+    const F = L - N;
+
+    const sinD = angle => Math.sin(angle * RAD);
+
+    lon +=
+      -1.274 * sinD(M - 2 * D)
+      + 0.658 * sinD(2 * D)
+      - 0.186 * sinD(Ms)
+      - 0.059 * sinD(2 * M - 2 * D)
+      - 0.057 * sinD(M - 2 * D + Ms)
+      + 0.053 * sinD(M + 2 * D)
+      + 0.046 * sinD(2 * D - Ms)
+      + 0.041 * sinD(M - Ms);
+
+    lat +=
+      -0.173 * sinD(F - 2 * D)
+      - 0.055 * sinD(M - F - 2 * D)
+      - 0.046 * sinD(M + F - 2 * D)
+      + 0.033 * sinD(F + 2 * D)
+      + 0.017 * sinD(2 * M + F);
+
+    // 黄道座標から赤道座標へ変換
+    const epsilon = (23.4393 - 0.0000003563 * d) * RAD;
+
+    const x = Math.cos(lon * RAD) * Math.cos(lat * RAD);
+    const y = Math.sin(lon * RAD) * Math.cos(lat * RAD);
+    const z = Math.sin(lat * RAD);
+
+    const yEq = y * Math.cos(epsilon) - z * Math.sin(epsilon);
+    const zEq = y * Math.sin(epsilon) + z * Math.cos(epsilon);
+
+    const ra = normalizeDeg(Math.atan2(yEq, x) / RAD);
+    const dec = Math.asin(zEq) / RAD;
+
+    return { ra, dec };
+  }
+
+  // 太陽の赤経・赤緯を簡易計算する
+  function getSunEquatorialPosition(date = new Date()) {
+
+    const RAD = Math.PI / 180;
+
+    const d = (date.getTime() - Date.UTC(1999, 11, 31, 0))
+      / 86400000;
+
+    // 太陽の平均黄経
+    const L = normalizeDeg(280.460 + 0.9856474 * d);
+
+    // 太陽の平均近点角
+    const g = normalizeDeg(357.528 + 0.9856003 * d);
+
+    // 太陽の黄経
+    const lambda = normalizeDeg(
+      L
+      + 1.915 * Math.sin(g * RAD)
+      + 0.020 * Math.sin(2 * g * RAD)
+    );
+
+    // 黄道傾斜角
+    const epsilon = (23.4393 - 0.0000003563 * d) * RAD;
+
+    // 黄道座標から赤道座標へ変換
+    const x = Math.cos(lambda * RAD);
+    const y = Math.cos(epsilon) * Math.sin(lambda * RAD);
+    const z = Math.sin(epsilon) * Math.sin(lambda * RAD);
+
+    const ra = normalizeDeg(
+      Math.atan2(y, x) / RAD
+    );
+
+    const dec = Math.asin(z) / RAD;
+
+    return { ra, dec };
+  }
+
+  // 月の満ち欠けを計算する
+  function getMoonPhase(date = new Date()) {
+
+    const RAD = Math.PI / 180;
+
+    // 同じ日時で太陽と月の位置を取得
+    const moon = getMoonEquatorialPosition(date);
+    const sun = getSunEquatorialPosition(date);
+
+    // 赤経・赤緯を三次元ベクトルに変換
+    function toVector(position) {
+      const ra = position.ra * RAD;
+      const dec = position.dec * RAD;
+
+      return {
+        x: Math.cos(dec) * Math.cos(ra),
+        y: Math.cos(dec) * Math.sin(ra),
+        z: Math.sin(dec)
+      };
+    }
+
+    const moonVector = toVector(moon);
+    const sunVector = toVector(sun);
+
+    // 太陽と月の離角を計算
+    const dot =
+      moonVector.x * sunVector.x +
+      moonVector.y * sunVector.y +
+      moonVector.z * sunVector.z;
+
+    const elongation = Math.acos(
+      Math.max(-1, Math.min(1, dot))
+    );
+
+    // 月の明るい部分の割合
+    const illuminatedFraction =
+      (1 - Math.cos(elongation)) / 2;
+
+    // 月から見た太陽の方向（天球上の位置角）
+    const deltaRA = (sun.ra - moon.ra) * RAD;
+    const moonDec = moon.dec * RAD;
+    const sunDec = sun.dec * RAD;
+
+    const positionAngle = Math.atan2(
+      Math.cos(sunDec) * Math.sin(deltaRA),
+      Math.sin(sunDec) * Math.cos(moonDec) -
+      Math.cos(sunDec) * Math.sin(moonDec) *
+      Math.cos(deltaRA)
+    );
+
+    return {
+      illuminatedFraction,
+      positionAngle: positionAngle / RAD
+    };
+  }
+
   // 赤経・赤緯を水平座標系の方向ベクトルに変換する
   // x：東、y：北、z：天頂方向
   function equatorialToHorizontalVector(raDeg, decDeg, lstDeg) {
@@ -971,7 +1151,8 @@
       y: -dot(v, basis.up) / denominator,
       mag: star.mag,
       id: star.id,
-      label: star.label || ""
+      label: star.label || "",
+      centerDot: centerDot
     };
   }
 
@@ -2144,6 +2325,188 @@
       }
 
       // 星の描画範囲の制限を解除する
+      ctx.restore();
+    }
+
+    // 月を星図に表示
+    const moon = getMoonEquatorialPosition();
+
+    const moonPoint = projectStar(
+      {
+        ra: moon.ra,
+        dec: moon.dec,
+        mag: 0,
+        id: "moon",
+        label: "月"
+      },
+      lstDeg,
+      basis,
+      minDot
+    );
+
+    if (moonPoint) {
+      const moonX = centerX + moonPoint.x * scaleX;
+      const moonY = centerY + moonPoint.y * scaleY;
+
+      ctx.save();
+
+      // 月の満ち欠けを取得
+      const phase = getMoonPhase();
+
+            // 太陽の位置を星図の投影座標に変換
+      const sun = getSunEquatorialPosition();
+
+      const sunPoint = projectStar(
+        {
+          ra: sun.ra,
+          dec: sun.dec,
+          mag: 0,
+          id: "sun",
+          label: ""
+        },
+        lstDeg,
+        basis,
+        -1
+      );
+
+       // 月と太陽の方向を地平座標のベクトルに変換
+      const moonVector = equatorialToHorizontalVector(
+        moon.ra,
+        moon.dec,
+        lstDeg
+      );
+
+      const sunVector = equatorialToHorizontalVector(
+        sun.ra,
+        sun.dec,
+        lstDeg
+      );
+
+      // 月から太陽へ向かう方向を計算
+      const sunDotMoon = dot(sunVector, moonVector);
+
+      const lightVector = {
+        x: sunVector.x - sunDotMoon * moonVector.x,
+        y: sunVector.y - sunDotMoon * moonVector.y,
+        z: sunVector.z - sunDotMoon * moonVector.z
+      };
+
+      // 星図の投影座標における方向を計算
+      const denominator = 1 + dot(moonVector, basis.center);
+
+      const moonRight = dot(moonVector, basis.right);
+      const moonUp = dot(moonVector, basis.up);
+
+      const lightRight = dot(lightVector, basis.right);
+      const lightUp = dot(lightVector, basis.up);
+      const lightCenter = dot(lightVector, basis.center);
+
+      const lightX =
+        (lightRight * denominator -
+          moonRight * lightCenter) /
+        (denominator * denominator) * scaleX;
+
+      const lightY =
+        -(lightUp * denominator -
+          moonUp * lightCenter) /
+        (denominator * denominator) * scaleY;
+
+      // 月の明るい側を向ける画面上の角度
+      const lightAngle = Math.atan2(lightY, lightX);
+
+      // 月の視直径を基準に、見やすさのため2倍に補正
+      const moonRadius = Math.max(
+        8,
+        Math.min(
+          12,
+          8 * scale * (0.25 * RAD) /
+          (1 + moonPoint.centerDot)
+        )
+      );
+
+// 月の周囲に淡い光彩を描く
+ctx.save();
+
+ctx.shadowColor = "rgba(255, 235, 150, 1.0)";
+ctx.shadowBlur = 28;
+
+ctx.fillStyle = "rgba(255, 235, 150, 0.55)";
+ctx.beginPath();
+ctx.arc(
+  moonX,
+  moonY,
+  moonRadius,
+  0,
+  Math.PI * 2
+);
+ctx.fill();
+
+ctx.restore();
+
+      // 月の円形クリッピング
+      ctx.save();
+
+      ctx.beginPath();
+      ctx.arc(
+        moonX,
+        moonY,
+        moonRadius,
+        0,
+        Math.PI * 2
+      );
+      ctx.clip();
+
+      // 暗い部分
+      ctx.fillStyle = "#55566A";
+      ctx.fillRect(
+        moonX - moonRadius,
+        moonY - moonRadius,
+        moonRadius * 2,
+        moonRadius * 2
+      );
+      
+            ctx.translate(moonX, moonY);
+      ctx.rotate(lightAngle);
+      ctx.translate(-moonX, -moonY);
+
+      // 明るい部分の描画
+      ctx.fillStyle = "#FFF2B0";
+
+      ctx.beginPath();
+
+      ctx.arc(
+        moonX,
+        moonY,
+        moonRadius,
+        -Math.PI / 2,
+        Math.PI / 2
+      );
+
+const phaseWidth =
+  moonRadius * (2 * phase.illuminatedFraction - 1);
+
+      ctx.ellipse(
+        moonX,
+        moonY,
+        Math.abs(phaseWidth),
+        moonRadius,
+        0,
+        Math.PI / 2,
+        -Math.PI / 2,
+        phaseWidth < 0
+      );
+
+      ctx.fill();
+
+      ctx.restore();
+
+      // 月の名前
+      ctx.font = '12px "Meiryo", sans-serif';
+      ctx.fillStyle = "#FFF2B0";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText("", moonX + 11, moonY);
+
       ctx.restore();
     }
 
