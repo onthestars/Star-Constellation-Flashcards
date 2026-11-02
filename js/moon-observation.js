@@ -758,7 +758,7 @@ const dateText =
     font-size:0.8rem;
     margin-bottom:2px;
   ">
-    今夜の星空期待値
+    この夜の星空期待値
   </div>
 
   <div style="
@@ -775,7 +775,7 @@ const dateText =
     margin-top:4px;
     line-height:1.2;
   ">
-    ※天候等は考慮していません
+    ※晴れていることが条件です
   </div>
 </div>
             </div>
