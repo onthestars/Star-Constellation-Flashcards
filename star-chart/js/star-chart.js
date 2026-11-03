@@ -3270,15 +3270,12 @@
       inertiaFrameId = null;
     }
 
-    // 視野角に応じて慣性を調整
-    if (fieldOfViewDeg <= 25) {
-      // 視野角25°以下：慣性を無効にする
-      dragVelocityAz = 0;
-      dragVelocityAlt = 0;
-      return;
-    }
+    // 視野角に応じて慣性の初速を調整
+    const zoomSensitivity = Math.min(
+      1,
+      fieldOfViewDeg / 90
+    );
 
-    // 視野角20°超：現在の慣性を維持
     dragVelocityAz *= 0.5;
     dragVelocityAlt *= 0.5;
 
@@ -3430,7 +3427,14 @@
     const minSize = Math.min(canvasWidth, canvasHeight);
     if (minSize <= 0) return;
 
-    const degreesPerPixel = 180 / minSize;
+    // 拡大率に応じてスワイプ感度を調整
+    const zoomSensitivity = Math.min(
+      1,
+      fieldOfViewDeg / 90
+    );
+
+    const degreesPerPixel =
+      (180 / minSize) * zoomSensitivity;
 
     const cosAlt = Math.max(
       0.05,
