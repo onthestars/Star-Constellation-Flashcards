@@ -1,0 +1,442 @@
+[
+  {
+    "hip": "32349",
+    "proper": "Sirius",
+    "mag": -1.44
+  },
+  {
+    "hip": "30438",
+    "proper": "Canopus",
+    "mag": -0.62
+  },
+  {
+    "hip": "69673",
+    "proper": "Arcturus",
+    "mag": -0.05
+  },
+  {
+    "hip": "71683",
+    "proper": "Rigil Kentaurus",
+    "mag": -0.01
+  },
+  {
+    "hip": "91262",
+    "proper": "Vega",
+    "mag": 0.03
+  },
+  {
+    "hip": "24608",
+    "proper": "Capella",
+    "mag": 0.08
+  },
+  {
+    "hip": "24436",
+    "proper": "Rigel",
+    "mag": 0.18
+  },
+  {
+    "hip": "37279",
+    "proper": "Procyon",
+    "mag": 0.4
+  },
+  {
+    "hip": "7588",
+    "proper": "Achernar",
+    "mag": 0.45
+  },
+  {
+    "hip": "27989",
+    "proper": "Betelgeuse",
+    "mag": 0.45
+  },
+  {
+    "hip": "68702",
+    "proper": "Hadar",
+    "mag": 0.61
+  },
+  {
+    "hip": "97649",
+    "proper": "Altair",
+    "mag": 0.76
+  },
+  {
+    "hip": "60718",
+    "proper": "Acrux",
+    "mag": 0.77
+  },
+  {
+    "hip": "21421",
+    "proper": "Aldebaran",
+    "mag": 0.87
+  },
+  {
+    "hip": "65474",
+    "proper": "Spica",
+    "mag": 0.98
+  },
+  {
+    "hip": "80763",
+    "proper": "Antares",
+    "mag": 1.06
+  },
+  {
+    "hip": "37826",
+    "proper": "Pollux",
+    "mag": 1.16
+  },
+  {
+    "hip": "113368",
+    "proper": "Fomalhaut",
+    "mag": 1.17
+  },
+  {
+    "hip": "62434",
+    "proper": "Mimosa",
+    "mag": 1.25
+  },
+  {
+    "hip": "102098",
+    "proper": "Deneb",
+    "mag": 1.25
+  },
+  {
+    "hip": "71681",
+    "proper": "Toliman",
+    "mag": 1.35
+  },
+  {
+    "hip": "49669",
+    "proper": "Regulus",
+    "mag": 1.36
+  },
+  {
+    "hip": "33579",
+    "proper": "Adhara",
+    "mag": 1.5
+  },
+  {
+    "hip": "36850",
+    "proper": "Castor",
+    "mag": 1.58
+  },
+  {
+    "hip": "61084",
+    "proper": "Gacrux",
+    "mag": 1.59
+  },
+  {
+    "hip": "85927",
+    "proper": "Shaula",
+    "mag": 1.62
+  },
+  {
+    "hip": "25336",
+    "proper": "Bellatrix",
+    "mag": 1.64
+  },
+  {
+    "hip": "25428",
+    "proper": "Elnath",
+    "mag": 1.65
+  },
+  {
+    "hip": "45238",
+    "proper": "Miaplacidus",
+    "mag": 1.67
+  },
+  {
+    "hip": "26311",
+    "proper": "Alnilam",
+    "mag": 1.69
+  },
+  {
+    "hip": "109268",
+    "proper": "Alnair",
+    "mag": 1.73
+  },
+  {
+    "hip": "26727",
+    "proper": "Alnitak",
+    "mag": 1.74
+  },
+  {
+    "hip": "62956",
+    "proper": "Alioth",
+    "mag": 1.76
+  },
+  {
+    "hip": "15863",
+    "proper": "Mirfak",
+    "mag": 1.79
+  },
+  {
+    "hip": "90185",
+    "proper": "Kaus Australis",
+    "mag": 1.79
+  },
+  {
+    "hip": "54061",
+    "proper": "Dubhe",
+    "mag": 1.81
+  },
+  {
+    "hip": "34444",
+    "proper": "Wezen",
+    "mag": 1.83
+  },
+  {
+    "hip": "67301",
+    "proper": "Alkaid",
+    "mag": 1.85
+  },
+  {
+    "hip": "41037",
+    "proper": "Avior",
+    "mag": 1.86
+  },
+  {
+    "hip": "86228",
+    "proper": "Sargas",
+    "mag": 1.86
+  },
+  {
+    "hip": "28360",
+    "proper": "Menkalinan",
+    "mag": 1.9
+  },
+  {
+    "hip": "82273",
+    "proper": "Atria",
+    "mag": 1.91
+  },
+  {
+    "hip": "31681",
+    "proper": "Alhena",
+    "mag": 1.93
+  },
+  {
+    "hip": "42913",
+    "proper": "Alsephina",
+    "mag": 1.93
+  },
+  {
+    "hip": "100751",
+    "proper": "Peacock",
+    "mag": 1.94
+  },
+  {
+    "hip": "11767",
+    "proper": "Polaris",
+    "mag": 1.97
+  },
+  {
+    "hip": "30324",
+    "proper": "Mirzam",
+    "mag": 1.98
+  },
+  {
+    "hip": "46390",
+    "proper": "Alphard",
+    "mag": 1.99
+  },
+  {
+    "hip": "9884",
+    "proper": "Hamal",
+    "mag": 2.01
+  },
+  {
+    "hip": "50583",
+    "proper": "Algieba",
+    "mag": 2.01
+  },
+  {
+    "hip": "3419",
+    "proper": "Diphda",
+    "mag": 2.04
+  },
+  {
+    "hip": "92855",
+    "proper": "Nunki",
+    "mag": 2.05
+  },
+  {
+    "hip": "68933",
+    "proper": "Menkent",
+    "mag": 2.06
+  },
+  {
+    "hip": "677",
+    "proper": "Alpheratz",
+    "mag": 2.07
+  },
+  {
+    "hip": "5447",
+    "proper": "Mirach",
+    "mag": 2.07
+  },
+  {
+    "hip": "27366",
+    "proper": "Saiph",
+    "mag": 2.07
+  },
+  {
+    "hip": "72607",
+    "proper": "Kochab",
+    "mag": 2.07
+  },
+  {
+    "hip": "112122",
+    "proper": "Tiaki",
+    "mag": 2.07
+  },
+  {
+    "hip": "86032",
+    "proper": "Rasalhague",
+    "mag": 2.08
+  },
+  {
+    "hip": "14576",
+    "proper": "Algol",
+    "mag": 2.09
+  },
+  {
+    "hip": "9640",
+    "proper": "Almach",
+    "mag": 2.1
+  },
+  {
+    "hip": "57632",
+    "proper": "Denebola",
+    "mag": 2.14
+  },
+  {
+    "hip": "4427",
+    "proper": "Cih",
+    "mag": 2.15
+  },
+  {
+    "hip": "39429",
+    "proper": "Naos",
+    "mag": 2.21
+  },
+  {
+    "hip": "45556",
+    "proper": "Aspidiske",
+    "mag": 2.21
+  },
+  {
+    "hip": "76267",
+    "proper": "Alphecca",
+    "mag": 2.22
+  },
+  {
+    "hip": "44816",
+    "proper": "Suhail",
+    "mag": 2.23
+  },
+  {
+    "hip": "65378",
+    "proper": "Mizar",
+    "mag": 2.23
+  },
+  {
+    "hip": "100453",
+    "proper": "Sadr",
+    "mag": 2.23
+  },
+  {
+    "hip": "3179",
+    "proper": "Schedar",
+    "mag": 2.24
+  },
+  {
+    "hip": "87833",
+    "proper": "Eltanin",
+    "mag": 2.24
+  },
+  {
+    "hip": "25930",
+    "proper": "Mintaka",
+    "mag": 2.25
+  },
+  {
+    "hip": "746",
+    "proper": "Caph",
+    "mag": 2.28
+  },
+  {
+    "hip": "78401",
+    "proper": "Dschubba",
+    "mag": 2.29
+  },
+  {
+    "hip": "82396",
+    "proper": "Larawag",
+    "mag": 2.29
+  },
+  {
+    "hip": "71860",
+    "proper": "Uridim",
+    "mag": 2.3
+  },
+  {
+    "hip": "53910",
+    "proper": "Merak",
+    "mag": 2.34
+  },
+  {
+    "hip": "72105",
+    "proper": "Izar",
+    "mag": 2.35
+  },
+  {
+    "hip": "107315",
+    "proper": "Enif",
+    "mag": 2.38
+  },
+  {
+    "hip": "2081",
+    "proper": "Ankaa",
+    "mag": 2.4
+  },
+  {
+    "hip": "58001",
+    "proper": "Phecda",
+    "mag": 2.41
+  },
+  {
+    "hip": "84012",
+    "proper": "Sabik",
+    "mag": 2.43
+  },
+  {
+    "hip": "113881",
+    "proper": "Scheat",
+    "mag": 2.44
+  },
+  {
+    "hip": "35904",
+    "proper": "Aludra",
+    "mag": 2.45
+  },
+  {
+    "hip": "105199",
+    "proper": "Alderamin",
+    "mag": 2.45
+  },
+  {
+    "hip": "45941",
+    "proper": "Markeb",
+    "mag": 2.47
+  },
+  {
+    "hip": "102488",
+    "proper": "Aljanah",
+    "mag": 2.48
+  },
+  {
+    "hip": "113963",
+    "proper": "Markab",
+    "mag": 2.49
+  }
+]
