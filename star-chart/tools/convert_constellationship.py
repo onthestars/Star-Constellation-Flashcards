@@ -9,6 +9,7 @@ OUTPUT = Path("../data/constellation-lines-test.json")
 NAME_MAP = {
     "And": "アンドロメダ座",
     "Aql": "わし座",
+    "Aqr": "みずがめ座",
     "Ara": "さいだん座",
     "Ari": "おひつじ座",
     "Aur": "ぎょしゃ座",
@@ -58,6 +59,27 @@ NAME_MAP = {
     "Vir": "おとめ座",
     "Qua": "しぶんぎ座"
 }
+
+# 元データとNAME_MAPの照合
+source_codes = set()
+
+with SOURCE.open("r", encoding="utf-8") as f:
+    for line in f:
+        parts = line.split()
+
+        if len(parts) >= 2 and parts[1].isdigit():
+            source_codes.add(parts[0])
+
+print("\n--- 星座略号の照合結果 ---")
+
+print("元データにあるがNAME_MAPにない略号:")
+print(sorted(source_codes - NAME_MAP.keys()))
+
+print("NAME_MAPにあるが元データにない略号:")
+print(sorted(NAME_MAP.keys() - source_codes))
+
+print("NAME_MAP登録数:", len(NAME_MAP))
+print("元データとの一致数:", len(source_codes & NAME_MAP.keys()))
 
 TARGETS = set(NAME_MAP.keys())
 
