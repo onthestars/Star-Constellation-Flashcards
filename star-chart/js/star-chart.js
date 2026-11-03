@@ -2312,8 +2312,12 @@
       }
 
       // 恒星を描画
+
       // 全星座の名前を描画
       for (const constellation of constellations) {
+
+        // 視野角40°より広い場合は星座名を描画しない
+        if (fieldOfViewDeg > 40) continue;
 
         const state =
           constellationFadeStates.get(constellation.id);
@@ -2375,10 +2379,9 @@
           const boxX = labelX - boxWidth / 2;
           const boxY = labelY - boxHeight / 2;
 
-          // 星座線の透明度に連動
-          ctx.globalAlpha = state.opacity * 0.65;
+          // 白い背景だけ透明度を設定
+          ctx.globalAlpha = state.opacity * 0.30;
 
-          // 半透明の白い角丸背景
           ctx.fillStyle = "#FFFFFF";
           ctx.beginPath();
           ctx.roundRect(
@@ -2390,7 +2393,8 @@
           );
           ctx.fill();
 
-          // 星座名
+          // 星座名は完全不透明
+          ctx.globalAlpha = 1.0;
           ctx.fillStyle = "rgb(6, 7, 64)";
 
           ctx.fillText(
@@ -2658,26 +2662,25 @@
 
         ctx.fill();
 
-        // 拡大率に応じて恒星名の表示対象を切り替える
-        const shouldShowStarLabel =
-          isPolaris ||
-          mag < 1.5 ||
-          (fieldOfViewDeg <= 60 && mag < 2.5) ||
-          (fieldOfViewDeg <= 25 && mag < 3.5);
+// 拡大率に応じて恒星名の表示対象を切り替える
+const shouldShowStarLabel =
+  fieldOfViewDeg <= 60 &&
+  mag < 1.5;
 
-        // // 恒星名を表示
-        // if (shouldShowStarLabel && (isPolaris || projected.label)) {
-        //   ctx.font = '12px "Meiryo", sans-serif';
-        //   ctx.fillStyle = color;
-        //   ctx.textAlign = "left";
-        //   ctx.textBaseline = "middle";
+  // 恒星名を表示
+if (shouldShowStarLabel && (isPolaris || projected.label)) {
 
-        //   ctx.fillText(
-        //     isPolaris ? "北極星" : projected.label,
-        //     x + 9,
-        //     y - 8
-        //   );
-        // }
+  ctx.font = '9px "Meiryo", sans-serif';
+  ctx.fillStyle = "#F5DFA0";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+
+  ctx.fillText(
+    isPolaris ? "北極星" : projected.label,
+    x + 9,
+    y - 8
+  );
+}
       }
 
       // 星の描画範囲の制限を解除する
@@ -2855,23 +2858,23 @@
       ctx.save();
 
       // 惑星の光彩
-ctx.save();
+      ctx.save();
 
-ctx.shadowColor = planet.color;
-ctx.shadowBlur = planet.glow;
+      ctx.shadowColor = planet.color;
+      ctx.shadowBlur = planet.glow;
 
-ctx.fillStyle = planet.color;
-ctx.beginPath();
-ctx.arc(
-  x,
-  y,
-  planet.radius,
-  0,
-  Math.PI * 2
-);
-ctx.fill();
+      ctx.fillStyle = planet.color;
+      ctx.beginPath();
+      ctx.arc(
+        x,
+        y,
+        planet.radius,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
 
-ctx.restore();
+      ctx.restore();
 
       // 惑星本体
       if (planet.key === "Jupiter") {
