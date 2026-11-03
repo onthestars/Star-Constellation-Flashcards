@@ -2662,25 +2662,26 @@
 
         ctx.fill();
 
-// 拡大率に応じて恒星名の表示対象を切り替える
-const shouldShowStarLabel =
-  fieldOfViewDeg <= 60 &&
-  mag < 1.5;
+        // 拡大率に応じて恒星名の表示対象を切り替える
+        const shouldShowStarLabel =
+          fieldOfViewDeg <= 60 &&
+          projected.label &&
+          projected.label.trim() !== "";
 
-  // 恒星名を表示
-if (shouldShowStarLabel && (isPolaris || projected.label)) {
+        // 恒星名を表示
+        if (shouldShowStarLabel && (isPolaris || projected.label)) {
 
-  ctx.font = '9px "Meiryo", sans-serif';
-  ctx.fillStyle = "#F5DFA0";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
+          ctx.font = '9px "Meiryo", sans-serif';
+          ctx.fillStyle = "#F5DFA0";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
 
-  ctx.fillText(
-    isPolaris ? "北極星" : projected.label,
-    x + 9,
-    y - 8
-  );
-}
+          ctx.fillText(
+            isPolaris ? "北極星" : projected.label,
+            x + 9,
+            y - 8
+          );
+        }
       }
 
       // 星の描画範囲の制限を解除する
