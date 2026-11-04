@@ -185,11 +185,9 @@ body {
   font-size: 11px;
   white-space: nowrap;
 
-  background: linear-gradient(
-    to bottom,
-    rgb(6, 7, 64),
-    rgb(13, 31, 104)
-  );
+  background: linear-gradient(to bottom,
+      rgb(6, 7, 64),
+      rgb(13, 31, 104));
 
   border: 1px solid #526AAB;
   border-radius: 6px;
@@ -221,4 +219,11 @@ body {
 #sensor-test-panel button.active {
   opacity: 1;
   filter: none;
+}
+
+/* PCでは方角切り替えボタンを非表示 */
+@media (hover: hover) and (pointer: fine) {
+  #sensor-test-panel {
+    display: none;
+  }
 }
