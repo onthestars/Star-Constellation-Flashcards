@@ -1,7 +1,20 @@
-// external-links.js
+// js/external-links.js
 
-export function setupExternalLinks() {
-  document.getElementById("specialThanksBtn").addEventListener("click", () => {
-    window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
-  });
+function setupExternalLinks() {
+
+    const button = document.getElementById("specialThanksBtn");
+
+    if (!button) return;
+
+    button.addEventListener("click", () => {
+
+        window.open(
+            "https://peteworden.github.io/Soleil/chart.html",
+            "_blank"
+        );
+
+    });
+
 }
+
+setupExternalLinks();

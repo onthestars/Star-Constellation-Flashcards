@@ -1,4 +1,4 @@
-// background-image.js
+// js/background-image.js
 
 // 背景画像ランダム読み込み
 const portraitImages = [

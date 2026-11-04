@@ -4,7 +4,7 @@ window.animationClass = null;
 
 function animationControlsInit() {
 
-  window.applyViewerAnimation = function(viewer) {
+  window.applyViewerAnimation = function (viewer) {
     if (!window.animationClass) return;
 
     viewer.classList.remove("slide-out-left", "fade-in");

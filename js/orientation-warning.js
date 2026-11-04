@@ -1,4 +1,4 @@
-// orientation-warning.js
+// js/orientation-warning.js
 
 // スマホ横画面警告表示
 

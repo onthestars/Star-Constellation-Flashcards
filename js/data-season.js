@@ -1,4 +1,4 @@
-// data-season.js
+// js/data-season.js
 
 // 季節ボタン画像データ（normal / active）
 

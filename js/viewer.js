@@ -1,4 +1,4 @@
-// viewer.js
+// js/viewer.js
 // カード表示ロジック（画像切替・裏返し・specialボタン・星図リンク・prev/next状態制御）
 
 // ▼ Special画像の有無を判定
@@ -38,7 +38,7 @@ function updatePeteChartButton(index, peteChartBtn) {
 }
 
 
- // ▼ ぴーとの星図を開く効果音
+// ▼ ぴーとの星図を開く効果音
 function playWarpSound() {
   if (!soundEnabled) return;
 
@@ -49,7 +49,7 @@ function playWarpSound() {
   });
 }
 
- // ▼ ぴーとの星図ボタンのクリック処理
+// ▼ ぴーとの星図ボタンのクリック処理
 function setupPeteChartButton(peteChartBtn) {
   if (!peteChartBtn) return;
 
@@ -110,17 +110,17 @@ function updateViewer(
     prevBtn.disabled = false;
     prevBtn.style.opacity = 1;
 
-// ★ special viewer ボタンは消さない（Argo Q の状態を維持）
-updateSpecialButton(index, specialBtn);
+    // ★ special viewer ボタンは消さない（Argo Q の状態を維持）
+    updateSpecialButton(index, specialBtn);
 
-// ★ 最終ページでは星図ボタンを無効化
-if (peteChartBtn) {
-  peteChartBtn.disabled = true;
-  peteChartBtn.style.opacity = "0.2";
-  peteChartBtn.dataset.url = "";
-}
+    // ★ 最終ページでは星図ボタンを無効化
+    if (peteChartBtn) {
+      peteChartBtn.disabled = true;
+      peteChartBtn.style.opacity = "0.2";
+      peteChartBtn.dataset.url = "";
+    }
 
-return;
+    return;
 
   }
 
@@ -146,7 +146,7 @@ return;
 }
 
 
- // ▼ カードクリック → 星図リンクを開く
+// ▼ カードクリック → 星図リンクを開く
 function setupViewerClick(viewer, indexGetter) {
 
   viewer.addEventListener("click", () => {

@@ -1,4 +1,4 @@
-// moon-special-viewer.js
+// js/moon-special-viewer.js
 
 // ================================
 // 月スペシャルビューア：状態

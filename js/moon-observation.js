@@ -1,4 +1,4 @@
-// moon-observation.js
+// js/moon-observation.js
 (function () {
   "use strict";
 

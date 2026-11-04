@@ -1,4 +1,4 @@
-// meteor-events.js
+// js/meteor-events.js
 
 // ▼ 流星群活動中判定
 function isMeteorActive(mmdd, meteor) {
@@ -56,8 +56,8 @@ function getMeteorMessage(date) {
     "-" +
     String(date.getDate()).padStart(2, "0");
 
-const messages = [];
-const activeMessages = [];
+  const messages = [];
+  const activeMessages = [];
 
   for (const meteor of meteorEvents) {
 
@@ -67,8 +67,8 @@ const activeMessages = [];
 
     if (meteor.peak === mmdd) {
 
-messages.push(
-  `<div style="
+      messages.push(
+        `<div style="
     display:inline-block;
     padding:3px 6px 2px 6px;
     background:rgb(255,215,0);
@@ -86,38 +86,38 @@ messages.push(
     >${meteor.name}</a>
     が極大
   </div>`
-);
+      );
 
-continue;
+      continue;
     }
 
     if (meteor.peak) {
 
-  const [peakMonth, peakDay] =
-    meteor.peak.split("-");
+      const [peakMonth, peakDay] =
+        meteor.peak.split("-");
 
-activeMessages.push(
-  `${createMeteorShowerLink(meteor)}
+      activeMessages.push(
+        `${createMeteorShowerLink(meteor)}
   <span style="font-size:0.85em;">(${Number(peakMonth)}/${Number(peakDay)}頃極大)</span>`
-);
+      );
 
-  continue;
-}
+      continue;
+    }
 
-messages.push(
-  `☄ ${createMeteorShowerLink(meteor)}活動中`
-);
+    messages.push(
+      `☄ ${createMeteorShowerLink(meteor)}活動中`
+    );
   }
 
   // ▼ 活動中流星群一覧
-if (activeMessages.length > 0) {
+  if (activeMessages.length > 0) {
 
-messages.push(
-  `<div style="font-weight:normal;line-height:1.5em;">
+    messages.push(
+      `<div style="font-weight:normal;line-height:1.5em;">
       ${activeMessages.join("<br>")}
     </div>`
-);
-}
+    );
+  }
 
   return messages.join("<br>");
 }

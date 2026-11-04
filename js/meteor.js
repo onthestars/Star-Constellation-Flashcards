@@ -48,10 +48,10 @@ function spawnMeteorCore() {
 
   const meteorColor =
     meteorColors[
-      Math.floor(
-        Math.random() *
-        meteorColors.length
-      )
+    Math.floor(
+      Math.random() *
+      meteorColors.length
+    )
     ];
 
   const core = document.createElement("div");
@@ -78,19 +78,19 @@ function spawnMeteorCore() {
   const angle =
     Math.atan2(dy, dx);
 
-    // 尾の長さ
-const moveDistance =
-  Math.min(
-    500,
-    60 + distanceFromRadiant * 0.7
-  );
+  // 尾の長さ
+  const moveDistance =
+    Math.min(
+      500,
+      60 + distanceFromRadiant * 0.7
+    );
 
-// 流星速度
-const duration =
-  Math.max(
-    600,
-    1200 - distanceFromRadiant * 0.4
-  );
+  // 流星速度
+  const duration =
+    Math.max(
+      600,
+      1200 - distanceFromRadiant * 0.4
+    );
 
   const endX =
     startX + Math.cos(angle) * moveDistance;
@@ -120,9 +120,9 @@ const duration =
       (endY - startY) *
       progress;
 
-      // 核の大きさ
-const coreSize =
-  2 + Math.sin(progress * Math.PI) * 4;
+    // 核の大きさ
+    const coreSize =
+      2 + Math.sin(progress * Math.PI) * 4;
 
     core.style.left =
       currentX + "px";
@@ -139,7 +139,7 @@ const coreSize =
     core.style.background =
       meteorColor.core;
 
-      // 核の輝き
+    // 核の輝き
     const glow =
       6 + progress * 16;
 
@@ -177,7 +177,7 @@ const coreSize =
         distance
       );
 
-      // 尾の太さ
+    // 尾の太さ
     const trailHeight =
       Math.max(
         1.5,
@@ -219,7 +219,7 @@ const coreSize =
         animate
       );
 
-        } else {
+    } else {
 
       core.remove();
 
@@ -247,7 +247,7 @@ const coreSize =
 
     }
 
-    
+
 
   }
 

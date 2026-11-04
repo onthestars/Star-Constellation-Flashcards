@@ -1,4 +1,4 @@
-// star-special-viewer.js
+// js/star-special-viewer.js
 
 // 効果音
 const soundKirakira = document.getElementById("soundKirakira");
@@ -6,20 +6,20 @@ soundKirakira.volume = 0.2;   // ★ 音量調節（最大1.0-最小0.0）
 
 // Special Viewer（写真ビューアー）
 let specialIndex = 0;
-let specialMode  = "noline";
-let savedIndex   = null;
-let savedIsBack  = null;
+let specialMode = "noline";
+let savedIndex = null;
+let savedIsBack = null;
 
 let spAnimationClass = null;
 
 const specialViewer = document.getElementById("special-viewer");
-const specialImg    = document.getElementById("special-img");
+const specialImg = document.getElementById("special-img");
 const specialCaption = document.getElementById("special-caption");
-const specialClose  = document.getElementById("special-close");
-const specialLines  = document.getElementById("special-lines");
-const specialClear  = document.getElementById("special-clear");
-const specialNext   = document.getElementById("special-next");
-const specialPrev   = document.getElementById("special-prev");
+const specialClose = document.getElementById("special-close");
+const specialLines = document.getElementById("special-lines");
+const specialClear = document.getElementById("special-clear");
+const specialNext = document.getElementById("special-next");
+const specialPrev = document.getElementById("special-prev");
 
 // ▼ indexからSpecial対象名を取得
 function getStarNameFromIndex(i) {
@@ -75,12 +75,12 @@ specialBtn.onclick = () => {
   savedIndex = index;
   savedIsBack = isBack;
   specialIndex = 0;
-  specialMode  = "noline";
+  specialMode = "noline";
 
   const starName = getStarNameFromIndex(index);
   if (!starName || !specialPhotos[starName]) return;
 
-const folder = getSpecialFolder(savedIndex);
+  const folder = getSpecialFolder(savedIndex);
   specialImg.src = folder + specialPhotos[starName].noline[0];
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
   specialViewer.style.display = "flex";
@@ -174,7 +174,7 @@ specialClear.onclick = () => {
 specialNext.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
-const folder = getSpecialFolder(savedIndex);
+  const folder = getSpecialFolder(savedIndex);
 
   if (specialIndex < specialPhotos[starName].noline.length - 1) {
     specialIndex++;
@@ -193,7 +193,7 @@ const folder = getSpecialFolder(savedIndex);
 specialPrev.onclick = () => {
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
-const folder = getSpecialFolder(savedIndex);
+  const folder = getSpecialFolder(savedIndex);
 
   if (specialIndex > 0) {
     specialIndex--;
@@ -244,7 +244,7 @@ function playStarTwinkle() {
     const y = Math.random() * 100;
 
     star.style.left = x + "vw";
-    star.style.top  = y + "vh";
+    star.style.top = y + "vh";
 
     star.style.animationDelay = (Math.random() * 1.5) + "s";
 

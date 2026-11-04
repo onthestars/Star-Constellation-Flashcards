@@ -1,4 +1,4 @@
-// images.js
+// js/images.js
 
 // ▼ すべてのカード画像パス（遅延読み込み）
 window.images = [
@@ -140,7 +140,7 @@ window.backs = window.images.map((img, i) => {
 });
 
 // ▼ カード名から index を取得
-window.findCardIndex = function(cardName) {
+window.findCardIndex = function (cardName) {
   return images.findIndex(
     img => img && img.includes(cardName)
   );
@@ -148,7 +148,7 @@ window.findCardIndex = function(cardName) {
 
 // ▼ index からカード名を取得
 // Q/Aカードと補助カードの両方に対応
-window.getCardName = function(index) {
+window.getCardName = function (index) {
 
   const img = images[index];
 
@@ -183,7 +183,7 @@ window.seasonStart = {
 };
 
 // ▼ index から季節判定
-window.detectSeasonByIndex = function(i) {
+window.detectSeasonByIndex = function (i) {
   if (i >= window.seasonStart.spring && i < window.seasonStart.summer) return "spring";
   if (i >= window.seasonStart.summer && i < window.seasonStart.autumn) return "summer";
   if (i >= window.seasonStart.autumn && i < window.seasonStart.winter) return "autumn";

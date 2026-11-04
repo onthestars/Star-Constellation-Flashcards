@@ -1,4 +1,4 @@
-// data-star-special.js
+// js/data-star-special.js
 
 // ======== ======== ======== ======== ========
 //▼▼▼Special画像追加時に編集//
@@ -22,7 +22,7 @@ const specialPhotos = {
     caption: [
       "竹林に潜む、こぐま座と北極星（ポラリス）／2026年10月1日／大阪府茨木市山中",
       "竹林に潜む、こぐま座と北極星（ポラリス）／2026年10月1日／大阪府茨木市山中",
-      "反射望遠鏡で観た北極星（ポラリス）／2025年12月6日／大阪府吹田市千里ニュータウン"      
+      "反射望遠鏡で観た北極星（ポラリス）／2025年12月6日／大阪府吹田市千里ニュータウン"
     ]
   },
 
@@ -38,7 +38,7 @@ const specialPhotos = {
     ]
   },
 
-    "Cancer": {
+  "Cancer": {
     noline: [
       "Cancer-noline-pic01.jpg"
     ],
@@ -75,25 +75,25 @@ const specialPhotos = {
   },
 
   // ▼夏の星座
-      "Lyra": {
+  "Lyra": {
     noline: [
       "Lyra-noline-pic01.jpg",
-            "Lyra-noline-pic02.jpg",
-                  "Lyra-noline-pic03.jpg"
+      "Lyra-noline-pic02.jpg",
+      "Lyra-noline-pic03.jpg"
     ],
     lines: [
       "Lyra-lines-pic01.jpg",
-            "Lyra-lines-pic02.jpg",
-                  "Lyra-lines-pic03.jpg"
+      "Lyra-lines-pic02.jpg",
+      "Lyra-lines-pic03.jpg"
     ],
     caption: [
       "こと座（1等星のベガ＝織姫星）／2026年7月12日／兵庫県猪名川町山中",
-            "こと座／2026年10月11日／大阪府高槻市山中"
-            
+      "こと座／2026年10月11日／大阪府高槻市山中"
+
     ]
   },
-  
-      "Aquila": {
+
+  "Aquila": {
     noline: [
       "Aquila-noline-pic01.jpg"
     ],
@@ -105,7 +105,7 @@ const specialPhotos = {
     ]
   },
 
-        "Cygnus": {
+  "Cygnus": {
     noline: [
       "Cygnus-noline-pic01.jpg"
     ],
@@ -157,20 +157,20 @@ const specialPhotos = {
     noline: [
       "Summer-Triangle-noline-pic01.jpg",
       "Summer-Triangle-noline-pic02.jpg",
-            "Summer-Triangle-noline-pic03.jpg",
-                  "Summer-Triangle-noline-pic04.jpg"
+      "Summer-Triangle-noline-pic03.jpg",
+      "Summer-Triangle-noline-pic04.jpg"
     ],
     lines: [
       "Summer-Triangle-lines-pic01.jpg",
       "Summer-Triangle-lines-pic02.jpg",
-            "Summer-Triangle-lines-pic03.jpg",
+      "Summer-Triangle-lines-pic03.jpg",
       "Summer-Triangle-lines-pic04.jpg"
     ],
     caption: [
       "夏の大三角とペルセウス座流星群／2026年8月13～14日／紀伊半島南部",
       "夏の大三角とペルセウス座流星群／2026年8月13～14日／紀伊半島南部",
-            "夏の大三角／撮影日不明／大阪府吹田市千里ニュータウン",
-                        "夏の大三角／2026年10月11日／大阪府高槻市山中"
+      "夏の大三角／撮影日不明／大阪府吹田市千里ニュータウン",
+      "夏の大三角／2026年10月11日／大阪府高槻市山中"
     ]
   },
 
@@ -214,21 +214,21 @@ const specialPhotos = {
     ]
   },
 
-    "Andromeda": {
+  "Andromeda": {
     noline: [
       "Andromeda-noline-pic01.jpg",
       "Andromeda-noline-pic02.jpg",
-            "Andromeda-noline-pic03.jpg"
+      "Andromeda-noline-pic03.jpg"
     ],
     lines: [
       "Andromeda-lines-pic01.jpg",
       "Andromeda-lines-pic02.jpg",
-            "Andromeda-lines-pic03.jpg"
+      "Andromeda-lines-pic03.jpg"
     ],
     caption: [
       "地球から「肉眼で見える最も遠い天体」といわれるアンドロメダ銀河。なんと約250万年前の光／2025年11月16日／紀伊半島南部",
       "地球から「肉眼で見える最も遠い天体」といわれるアンドロメダ銀河。なんと約250万年前の光／2025年11月16日／紀伊半島南部",
-            "アンドロメダ座（上）、アンドロメダ銀河（中）、カシオペヤ座（下）／2026年10月12日未明／大阪府高槻市山中"
+      "アンドロメダ座（上）、アンドロメダ銀河（中）、カシオペヤ座（下）／2026年10月12日未明／大阪府高槻市山中"
     ]
   },
 
@@ -254,7 +254,7 @@ const specialPhotos = {
     ],
     lines: [
       "Equuleus-lines-pic01.jpg",
-            "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
+      "Aquarius-Capricornus-Equuleus-lines-pic01.jpg"
     ],
     caption: [
       "こうま座／025年11月16日／紀伊半島南部",
@@ -280,7 +280,7 @@ const specialPhotos = {
     ]
   },
 
-    "Cepheus": {
+  "Cepheus": {
     noline: [
       "Cepheus-Cassiopeia-noline-pic01.jpg",
       "Cepheus-noline-pic01.jpg"
@@ -303,14 +303,14 @@ const specialPhotos = {
       "Perseus-Taurus-noline-pic01.jpg",
       "Perseus-noline-pic01.jpg",
       "Perseus-noline-pic02.jpg",
-            "Perseus-Cassiopeia-Triangulum-Aries-noline-pic01.jpg"
+      "Perseus-Cassiopeia-Triangulum-Aries-noline-pic01.jpg"
 
     ],
     lines: [
       "Perseus-Taurus-lines-pic01.jpg",
       "Perseus-lines-pic01.jpg",
       "Perseus-lines-pic02.jpg",
-                  "Perseus-Cassiopeia-Triangulum-Aries-lines-pic01.jpg"
+      "Perseus-Cassiopeia-Triangulum-Aries-lines-pic01.jpg"
 
     ],
     caption: [
@@ -321,7 +321,7 @@ const specialPhotos = {
     ]
   },
 
-    "Triangulum": {
+  "Triangulum": {
     noline: [
       "Triangulum-Aries-Perseus-noline-pic01.jpg",
       "Triangulum-Aries-noline-pic01.jpg"
@@ -336,18 +336,18 @@ const specialPhotos = {
     ]
   },
 
-      "Aries": {
+  "Aries": {
     noline: [
-            "Triangulum-Aries-Perseus-noline-pic01.jpg",
-            "Triangulum-Aries-noline-pic01.jpg"
+      "Triangulum-Aries-Perseus-noline-pic01.jpg",
+      "Triangulum-Aries-noline-pic01.jpg"
     ],
     lines: [
-            "Triangulum-Aries-Perseus-lines-pic01.jpg",
-            "Triangulum-Aries-lines-pic01.jpg"
+      "Triangulum-Aries-Perseus-lines-pic01.jpg",
+      "Triangulum-Aries-lines-pic01.jpg"
     ],
     caption: [
-            "(左から）ペルセウス座、さんかく座、おひつじ座／2026年10月9日／高槻市山中",
-            "さんかく座（上）とおひつじ座／2026年10月9日／高槻市山中"
+      "(左から）ペルセウス座、さんかく座、おひつじ座／2026年10月9日／高槻市山中",
+      "さんかく座（上）とおひつじ座／2026年10月9日／高槻市山中"
     ]
   },
 
@@ -359,11 +359,11 @@ const specialPhotos = {
     ],
     lines: [
       "Gemini-lines-pic01.jpg",
-      "Gemini-lines-pic02.jpg"      
+      "Gemini-lines-pic02.jpg"
     ],
     caption: [
       "ふたご座と木星／2026年3月21日／京都府亀岡市山中",
-      "ふたご座と電力鉄塔／2024年1月31日未明／大阪府吹田市千里ニュータウン"      
+      "ふたご座と電力鉄塔／2024年1月31日未明／大阪府吹田市千里ニュータウン"
     ]
   },
 
@@ -381,12 +381,12 @@ const specialPhotos = {
 
   "Taurus": {
     noline: [
-            "Perseus-Taurus-noline-pic01.jpg",
+      "Perseus-Taurus-noline-pic01.jpg",
       "Taurus-noline-pic02.jpg"
 
     ],
     lines: [
-            "Perseus-Taurus-lines-pic01.jpg",
+      "Perseus-Taurus-lines-pic01.jpg",
       "Taurus-lines-pic02.jpg"
 
     ],
@@ -395,7 +395,7 @@ const specialPhotos = {
       "おうし座（ふたご座流星）／2025年12月14日／紀伊半島中部"
     ]
   },
-  
+
   "Orion": {
     noline: [
       "Orion-noline-pic01.jpg"
@@ -408,7 +408,7 @@ const specialPhotos = {
     ]
   },
 
-    "Canis-Major": {
+  "Canis-Major": {
     noline: [
       "Canis-Major-noline-pic01.jpg"
     ],
@@ -420,7 +420,7 @@ const specialPhotos = {
     ]
   },
 
-      "Lepus": {
+  "Lepus": {
     noline: [
       "Lepus-noline-pic01.jpg"
     ],

@@ -1,4 +1,4 @@
-// navigation.js
+// js/navigation.js
 // 前後移動・スワイプ・季節自動判定・nullカード処理
 
 function setupNavigation(
@@ -75,7 +75,7 @@ function setupNavigation(
       void viewer.offsetWidth;
       viewer.classList.add("fade-in");
 
-  updateViewer(getIndex(), getIsBack());
+      updateViewer(getIndex(), getIsBack());
 
       autoSeasonUpdate(getIndex());
 
@@ -119,7 +119,7 @@ function setupNavigation(
       void viewer.offsetWidth;
       viewer.classList.add("fade-in");
 
-updateViewer(getIndex(), getIsBack());
+      updateViewer(getIndex(), getIsBack());
 
       autoSeasonUpdate(getIndex());
 

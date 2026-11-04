@@ -1,4 +1,4 @@
-// data-meteor.js
+// js/data-meteor.js
 
 const meteorEvents = [
   {

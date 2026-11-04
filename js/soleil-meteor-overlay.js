@@ -1,4 +1,4 @@
-// soleil-meteor-overlay.js
+// js/soleil-meteor-overlay.js
 // Soleil星図オーバーレイ・放射点連携・流星アニメーション
 (function () {
   "use strict";
@@ -136,19 +136,19 @@
     const meteorColor =
       meteorColors[Math.floor(Math.random() * meteorColors.length)];
 
-// 放射点の近くから流星を発生させる。
-const maxSpawnDistance = Math.min(width, height) * 0.25;
+    // 放射点の近くから流星を発生させる。
+    const maxSpawnDistance = Math.min(width, height) * 0.25;
 
-const spawnAngle = Math.random() * Math.PI * 2;
-const spawnDistance = Math.random() * maxSpawnDistance;
+    const spawnAngle = Math.random() * Math.PI * 2;
+    const spawnDistance = Math.random() * maxSpawnDistance;
 
-const startX =
-  radiantPosition.x +
-  Math.cos(spawnAngle) * spawnDistance;
+    const startX =
+      radiantPosition.x +
+      Math.cos(spawnAngle) * spawnDistance;
 
-const startY =
-  radiantPosition.y +
-  Math.sin(spawnAngle) * spawnDistance;
+    const startY =
+      radiantPosition.y +
+      Math.sin(spawnAngle) * spawnDistance;
 
     const dx = startX - radiantPosition.x;
     const dy = startY - radiantPosition.y;
@@ -351,7 +351,7 @@ const startY =
     frameReady = false;
     radiantReady = false;
 
-title.innerHTML = `
+    title.innerHTML = `
   ${meteor.name}
   <span class="chart-subtitle">｜ぴーとの星図</span>
 `;

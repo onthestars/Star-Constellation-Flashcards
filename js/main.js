@@ -1,4 +1,4 @@
-// main.js
+// js/main.js
 
 // サウンドON/OFFボタンの初期化（sound-controls.js）
 soundControlsInit();
@@ -23,14 +23,14 @@ const springBtn = document.getElementById("springBtn");
 const summerBtn = document.getElementById("summerBtn");
 const autumnBtn = document.getElementById("autumnBtn");
 const winterBtn = document.getElementById("winterBtn");
-const southBtn  = document.getElementById("southBtn");
+const southBtn = document.getElementById("southBtn");
 
 const specialBtn = document.getElementById("specialBtn");
 const peteChartBtn = document.getElementById("peteChartBtn");
 
 // 効果音
-const soundFlip   = document.getElementById("soundFlip");
-const soundPage   = document.getElementById("soundPage");
+const soundFlip = document.getElementById("soundFlip");
+const soundPage = document.getElementById("soundPage");
 const soundSeason = document.getElementById("soundSeason");
 
 // 季節ジャンプ（フェードアウト → フェードイン）
@@ -54,15 +54,15 @@ function jumpToSeason(season) {
     void viewer.offsetWidth;
     viewer.classList.add("fade-in");
 
-updateViewer(
-  index,
-  isBack,
-  viewer,
-  specialBtn,
-  prevBtn,
-  nextBtn,
-  peteChartBtn
-);
+    updateViewer(
+      index,
+      isBack,
+      viewer,
+      specialBtn,
+      prevBtn,
+      nextBtn,
+      peteChartBtn
+    );
 
   }, 300);
 }
@@ -99,14 +99,14 @@ setupNavigation(
   () => animationClass,
   (v) => { animationClass = v; },
   (idx, back) => updateViewer(
-  idx,
-  back,
-  viewer,
-  specialBtn,
-  prevBtn,
-  nextBtn,
-  peteChartBtn
-),
+    idx,
+    back,
+    viewer,
+    specialBtn,
+    prevBtn,
+    nextBtn,
+    peteChartBtn
+  ),
   () => updateSeasonButtons(currentSeason, seasonImages)
 );
 
@@ -184,15 +184,15 @@ window.addEventListener("load", () => {
   isBack = false;
   isFinalNull = false;
 
-updateViewer(
-  index,
-  isBack,
-  viewer,
-  specialBtn,
-  prevBtn,
-  nextBtn,
-  peteChartBtn
-);
+  updateViewer(
+    index,
+    isBack,
+    viewer,
+    specialBtn,
+    prevBtn,
+    nextBtn,
+    peteChartBtn
+  );
 });
 
 // ▼ 今夜の月ガイド
@@ -225,15 +225,15 @@ function jumpToExplanatoryNote() {
 
     viewer.classList.add("fade-in");
 
-updateViewer(
-  index,
-  isBack,
-  viewer,
-  specialBtn,
-  prevBtn,
-  nextBtn,
-  peteChartBtn
-);
+    updateViewer(
+      index,
+      isBack,
+      viewer,
+      specialBtn,
+      prevBtn,
+      nextBtn,
+      peteChartBtn
+    );
 
   }, 300);
 }

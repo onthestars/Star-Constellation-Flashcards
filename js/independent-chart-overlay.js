@@ -57,23 +57,23 @@
     title.replaceChildren(nameElement, periodElement);
   }
 
-// 選択した流星群の放射点を星図へ送信
-function sendRadiantCoordinates() {
-  if (!isOpen || !selectedMeteor || !frame.contentWindow) {
-    return;
-  }
+  // 選択した流星群の放射点を星図へ送信
+  function sendRadiantCoordinates() {
+    if (!isOpen || !selectedMeteor || !frame.contentWindow) {
+      return;
+    }
 
-  frame.contentWindow.postMessage(
-    {
-      type: "set-meteor-radiant",
-      name: selectedMeteor.name,
-      peak: selectedMeteor.peak,
-      ra: selectedMeteor.radiantRa,
-      dec: selectedMeteor.radiantDec
-    },
-    CHART_ORIGIN
-  );
-}
+    frame.contentWindow.postMessage(
+      {
+        type: "set-meteor-radiant",
+        name: selectedMeteor.name,
+        peak: selectedMeteor.peak,
+        ra: selectedMeteor.radiantRa,
+        dec: selectedMeteor.radiantDec
+      },
+      CHART_ORIGIN
+    );
+  }
 
   // 星図カードを開く
   function openIndependentChart(meteor) {

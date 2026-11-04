@@ -1,4 +1,4 @@
-// update-season-buttons.js
+// js/update-season-buttons.js
 
 function updateSeasonButtons(currentSeason, seasonImages) {
   document.querySelectorAll('.btn-season').forEach(btn => {
