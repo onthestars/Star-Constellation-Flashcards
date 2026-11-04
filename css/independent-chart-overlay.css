@@ -1,4 +1,3 @@
-
 /* css/independent-chart-overlay.css */
 
 /* 独立星図オーバーレイ：画面全体 */
@@ -166,4 +165,12 @@
   border: 0;
 
   background: #080D1A;
+}
+
+/* PC専用：星図パネルを横長・画面いっぱいに表示 */
+@media screen and (min-width: 1024px) {
+  #independent-chart-panel {
+    width: 96%;
+    max-width: none;
+  }
 }
