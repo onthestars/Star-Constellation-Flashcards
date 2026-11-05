@@ -20,9 +20,9 @@
   let stars = [];
   let startTime = 0;
 
-    let fadeStarted = false;
+  let fadeStarted = false;
 
-    // 演出時間（ミリ秒）
+  // 演出時間（ミリ秒）
   const MOVEMENT_TIME = 2800;
   const FADE_TIME = 1800;
 
@@ -73,7 +73,7 @@
     return result;
   }
 
-    // ワープ演出を描画
+  // ワープ演出を描画
   function drawWarp(progress, width, height) {
 
     ctx.clearRect(0, 0, width, height);
@@ -203,9 +203,9 @@
       startTime = 0;
       fadeStarted = false;
 
-            // 星座線のフェードインを開始
+      // 星座線のフェードインを開始
       window.startConstellationFadeIn?.();
-      
+
     }
   }
 
@@ -228,14 +228,14 @@
 
     // ワープ開始時にサウンドを生成・再生
     if (window.parent.soundEnabled !== false) {
-    warpSound = new Audio(
-    "../sound/the-spaceship-flew-by.m4a"
-  );
+      warpSound = new Audio(
+        "../sound/the-spaceship-flew-by.m4a"
+      );
 
-    warpSound.play().catch(error => {
-    console.warn("ワープ音を再生できませんでした。", error);
-  });
-}
+      warpSound.play().catch(error => {
+        console.warn("ワープ音を再生できませんでした。", error);
+      });
+    }
 
     // Canvasを透明な状態で表示
     warpCanvas.style.transition = "opacity 1500ms ease";

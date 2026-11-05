@@ -16,8 +16,8 @@ window.STAR_STYLE_CONFIG = {
 
   // グロー（星の周囲の柔らかい光）
   glow: {
-  enabled: true,
-  radius: 12,
-  strength: 0.65
-}
+    enabled: true,
+    radius: 12,
+    strength: 0.65
+  }
 };

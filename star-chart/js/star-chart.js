@@ -403,6 +403,18 @@
 
   const RAD = Math.PI / 180;
 
+  // ==========================================
+  // 観測日時の管理
+  // ==========================================
+
+  // 初期観測日時：現在日時
+  let observationDate = new Date();
+
+  // 観測日時を取得する
+  function getObservationDate() {
+    return new Date(observationDate.getTime());
+  }
+
   let stars = [];
   let dataLoaded = false;
   let canvasWidth = 0;
@@ -859,8 +871,8 @@
     }
   }
 
-  // 現在の地方恒星時を計算する
-  function getLocalSiderealTimeDeg(date = new Date()) {
+  // 観測日時の地方恒星時を計算する
+  function getLocalSiderealTimeDeg(date = getObservationDate()) {
     const jd = date.getTime() / 86400000 + 2440587.5;
     const t = (jd - 2451545.0) / 36525;
 
@@ -874,7 +886,7 @@
   }
 
   // 月の赤経・赤緯を簡易計算する
-  function getMoonEquatorialPosition(date = new Date()) {
+  function getMoonEquatorialPosition(date = getObservationDate()) {
 
     const RAD = Math.PI / 180;
     const d = (date.getTime() - Date.UTC(1999, 11, 31, 0))
@@ -960,7 +972,7 @@
   }
 
   // 太陽の赤経・赤緯を簡易計算する
-  function getSunEquatorialPosition(date = new Date()) {
+  function getSunEquatorialPosition(date = getObservationDate()) {
 
     const RAD = Math.PI / 180;
 
@@ -1001,7 +1013,7 @@
   // 惑星の赤経・赤緯を簡易計算する
   // ==========================================
 
-  function getPlanetEquatorialPosition(planetName, date = new Date()) {
+  function getPlanetEquatorialPosition(planetName, date = getObservationDate()) {
 
     const RAD = Math.PI / 180;
 
@@ -1354,7 +1366,7 @@
 
 
   // 月の満ち欠けを計算する
-  function getMoonPhase(date = new Date()) {
+  function getMoonPhase(date = getObservationDate()) {
 
     const RAD = Math.PI / 180;
 
@@ -1766,7 +1778,12 @@
     const scaleX = scale;
     const scaleY = scale;
 
-    const lstDeg = getLocalSiderealTimeDeg();
+    // 今回の描画で使用する観測日時
+    const observation = getObservationDate();
+
+    // 観測日時に基づく地方恒星時
+    const lstDeg = getLocalSiderealTimeDeg(observation);
+
     const basis = getProjectionBasis();
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
@@ -2689,7 +2706,7 @@
     }
 
     // 太陽を星図に表示
-    const sun = getSunEquatorialPosition();
+    const sun = getSunEquatorialPosition(observation);
 
     const sunPoint = projectStar(
       {
@@ -2823,7 +2840,7 @@
     for (const planet of planetDisplayList) {
 
       const position =
-        getPlanetEquatorialPosition(planet.key);
+        getPlanetEquatorialPosition(planet.key, observation);
 
       if (!position) {
         continue;
@@ -2968,7 +2985,7 @@
     }
 
     // 月を星図に表示
-    const moon = getMoonEquatorialPosition();
+    const moon = getMoonEquatorialPosition(observation);
 
     const moonPoint = projectStar(
       {
@@ -2990,10 +3007,10 @@
       ctx.save();
 
       // 月の満ち欠けを取得
-      const phase = getMoonPhase();
+      const phase = getMoonPhase(observation);
 
       // 太陽の位置を星図の投影座標に変換
-      const sun = getSunEquatorialPosition();
+      const sun = getSunEquatorialPosition(observation);
 
       const sunPoint = projectStar(
         {
@@ -3762,4 +3779,226 @@
 
   // プラネタリウムの流星アニメーションを開始
   startChartMeteorAnimation();
+
+
+// =================================
+// 観測日時ボタンの選択
+// =================================
+
+const datetimeFields = document.querySelectorAll(
+  ".datetime-field"
+);
+
+// 最初は年を選択
+let selectedDatetimeUnit = "year";
+
+// 選択状態を更新
+function updateDatetimeSelection() {
+
+  datetimeFields.forEach(button => {
+
+    const isSelected =
+      button.dataset.unit === selectedDatetimeUnit;
+
+    button.classList.toggle("active", isSelected);
+
+  });
+
+}
+
+// 年月日時分ボタンをクリック
+datetimeFields.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    selectedDatetimeUnit = button.dataset.unit;
+
+    updateDatetimeSelection();
+
+  });
+
+});
+
+// 初期状態を反映
+updateDatetimeSelection();
+
+// =================================
+// 観測日時の表示更新
+// =================================
+
+function updateDatetimeDisplay() {
+
+  const date = getObservationDate();
+
+  document.getElementById("datetime-year").textContent =
+    date.getFullYear();
+
+  document.getElementById("datetime-month").textContent =
+    String(date.getMonth() + 1).padStart(2, "0");
+
+  document.getElementById("datetime-day").textContent =
+    String(date.getDate()).padStart(2, "0");
+
+  document.getElementById("datetime-hour").textContent =
+    String(date.getHours()).padStart(2, "0");
+
+  document.getElementById("datetime-minute").textContent =
+    String(date.getMinutes()).padStart(2, "0");
+
+}
+
+// 初期日時を画面に反映
+updateDatetimeDisplay();
+
+// =================================
+// 観測日時の変更
+// =================================
+
+function changeObservationDate(direction) {
+
+  const date = getObservationDate();
+
+  switch (selectedDatetimeUnit) {
+
+    case "year":
+      date.setFullYear(date.getFullYear() + direction);
+      break;
+
+    case "month":
+      date.setMonth(date.getMonth() + direction);
+      break;
+
+    case "day":
+      date.setDate(date.getDate() + direction);
+      break;
+
+    case "hour":
+      date.setHours(date.getHours() + direction);
+      break;
+
+    case "minute":
+      date.setMinutes(date.getMinutes() + direction);
+      break;
+
+  }
+
+  observationDate = date;
+
+  updateDatetimeDisplay();
+
+  drawChart();
+}
+
+
+// =================================
+// 左右矢印の長押し連続変更
+// =================================
+
+let datetimeRepeatTimer = null;
+let datetimeRepeatInterval = null;
+
+// 連続変更を停止
+function stopDatetimeRepeat() {
+
+  // 1秒後の開始予約を解除
+  if (datetimeRepeatTimer !== null) {
+
+    clearTimeout(datetimeRepeatTimer);
+
+    datetimeRepeatTimer = null;
+
+  }
+
+  // 連続変更を停止
+  if (datetimeRepeatInterval !== null) {
+
+    clearInterval(datetimeRepeatInterval);
+
+    datetimeRepeatInterval = null;
+
+  }
+
+}
+
+// 矢印を押したとき
+function startDatetimeRepeat(direction) {
+
+  // すでに動作中なら何もしない
+  if (
+    datetimeRepeatTimer !== null ||
+    datetimeRepeatInterval !== null
+  ) return;
+
+  // 最初の1回はすぐに変更
+  changeObservationDate(direction);
+
+  // 1秒後から連続変更を開始
+  datetimeRepeatTimer = setTimeout(() => {
+
+    datetimeRepeatTimer = null;
+
+    datetimeRepeatInterval = setInterval(() => {
+
+      changeObservationDate(direction);
+
+    }, 150);
+
+  }, 1000);
+
+}
+
+// 左矢印
+document.getElementById("datetime-prev")
+  .addEventListener("pointerdown", event => {
+
+    if (event.button !== 0) return;
+
+    event.preventDefault();
+
+    startDatetimeRepeat(-1);
+
+  });
+
+// 右矢印
+document.getElementById("datetime-next")
+  .addEventListener("pointerdown", event => {
+
+    if (event.button !== 0) return;
+
+    event.preventDefault();
+
+    startDatetimeRepeat(1);
+
+  });
+
+// マウス・指を離したら停止
+window.addEventListener("pointerup", stopDatetimeRepeat);
+
+// 操作がキャンセルされたら停止
+window.addEventListener("pointercancel", stopDatetimeRepeat);
+
+// ウィンドウからフォーカスが外れたら停止
+window.addEventListener("blur", stopDatetimeRepeat);
+
+// =================================
+// 現在の空に戻す
+// =================================
+
+document.getElementById("datetime-now")
+  .addEventListener("click", () => {
+
+    // 長押し処理が動いていれば停止
+    stopDatetimeRepeat();
+
+    // 現在日時を取得
+    observationDate = new Date();
+
+    // 日時表示を更新
+    updateDatetimeDisplay();
+
+    // 星図を再描画
+    drawChart();
+
+  });
+
 })();
