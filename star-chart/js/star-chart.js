@@ -3789,8 +3789,8 @@ const datetimeFields = document.querySelectorAll(
   ".datetime-field"
 );
 
-// 最初は年を選択
-let selectedDatetimeUnit = "year";
+// 最初のボタン選択（year,month,day,hour,minute）
+let selectedDatetimeUnit = "hour";
 
 // 選択状態を更新
 function updateDatetimeSelection() {
