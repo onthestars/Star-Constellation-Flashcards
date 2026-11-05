@@ -40,21 +40,9 @@
     return `${Number(month)}月${Number(day)}日`;
   }
 
-  // ヘッダーに流星群名・出現期間・極大日を表示
-  function updateChartTitle(meteor) {
-    const nameElement = document.createElement("span");
-    nameElement.className = "independent-chart-title-name";
-    nameElement.textContent = meteor.name;
-
-    const periodElement = document.createElement("span");
-    periodElement.className = "independent-chart-title-period";
-
-    periodElement.textContent =
-      `${formatMeteorDate(meteor.start)} - ` +
-      `${formatMeteorDate(meteor.end)}` +
-      `（${formatMeteorDate(meteor.peak)}頃極大）`;
-
-    title.replaceChildren(nameElement, periodElement);
+  // ヘッダーのタイトルを設定
+  function updateChartTitle() {
+    title.textContent = "トレミーのプラネタリウム";
   }
 
   // 選択した流星群の放射点を星図へ送信
