@@ -1,14 +1,21 @@
 /* css/independent-chart-overlay.css */
 
-/* 独立星図オーバーレイ：画面全体 */
+/* =================================
+   プラネタリウムオーバーレイ
+================================= */
+
 #independent-chart-overlay {
   position: fixed;
   inset: 0;
   z-index: 10000;
+
   background: rgba(0, 0, 20, 0.35);
 }
 
-/* 星図パネル：スマートフォン */
+/* =================================
+   星図パネル：スマートフォン
+================================= */
+
 #independent-chart-panel {
   position: absolute;
 
@@ -33,21 +40,21 @@
   box-sizing: border-box;
 }
 
+/* =================================
+   上部タイトルバー
+================================= */
 
-/* css/independent-chart-overlay.css */
-
-/* 上部タイトルバー */
 #independent-chart-header {
   position: relative;
 
   display: flex;
-  flex: 0 0 64px;
+  flex: 0 0 34px;
 
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
-  min-height: 64px;
-  padding: 6px 58px;
+  min-height: 34px;
+  padding: 6px 42px 6px 14px;
 
   color: #ffffff;
   background: rgba(8, 8, 36, 0.85);
@@ -55,78 +62,30 @@
   box-sizing: border-box;
 }
 
-/* 流星群名・出現期間 */
+/* =================================
+   プラネタリウム名
+================================= */
+
 #independent-chart-title {
-  position: absolute;
-
-  left: 50%;
-  transform: translateX(-50%);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: calc(100% - 116px);
-  min-width: 0;
-  gap: 3px;
+  display: block;
 
   margin: 0;
   padding: 0;
 
+  color: #ffffff;
   font-family: "Meiryo", sans-serif;
-  text-align: center;
-}
-
-/* 流星群名 */
-.independent-chart-title-name {
-  display: block;
-  width: 100%;
-
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 11px;
+  font-weight: 400;
   line-height: 1.2;
 
-  text-align: center;
-}
-
-/* 出現期間・極大日 */
-.independent-chart-title-period {
-  display: block;
-
-  width: 100%;
-  margin: 0;
-  padding: 0;
-
-  font-size: clamp(10px, 2.8vw, 13px);
-  font-weight: normal;
-  line-height: 1.2;
-
+  text-align: left;
   white-space: nowrap;
-  text-align: center;
 }
 
-/* 流星群名 */
-.independent-chart-title-name {
-  font-size: 15px;
-  font-weight: bold;
-  line-height: 1.2;
-}
+/* =================================
+   閉じるボタン
+================================= */
 
-/* 出現期間・極大日 */
-.independent-chart-title-period {
-  width: 100%;
-
-  font-size: clamp(10px, 2.8vw, 13px);
-  font-weight: normal;
-  line-height: 1.2;
-
-  white-space: nowrap;
-  text-align: center;
-}
-
-
-/* 星図パネルの閉じる×ボタン：月の観察パネルと統一 */
 #independent-chart-close {
   position: absolute;
 
@@ -151,7 +110,10 @@
   opacity: 0.7;
 }
 
-/* 星図 iframe */
+/* =================================
+   星図 iframe
+================================= */
+
 #independent-chart-frame {
   display: block;
 
@@ -167,10 +129,15 @@
   background: #080D1A;
 }
 
-/* PC専用：星図パネルを横長・画面いっぱいに表示 */
+/* =================================
+   PC専用：広い星図パネル
+================================= */
+
 @media screen and (min-width: 1024px) {
+
   #independent-chart-panel {
     width: 96%;
     max-width: none;
   }
+
 }

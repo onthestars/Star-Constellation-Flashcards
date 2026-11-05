@@ -1,0 +1,160 @@
+/* css/star-guide.css */
+
+/* ▼ 月移動ボタン */
+.moon-date-button {
+  width: 48px;
+  /* 当たり判定 */
+  height: 32px;
+  /* ボタン同士のマージン調整にも */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+/* ▼ ボタン画像 */
+.moon-date-button img {
+  width: 16px;
+  height: auto;
+  display: block;
+}
+
+/* 月の観察パネル */
+#star-guide-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 500px;
+  padding: 12px 16px;
+  background: rgba(6, 7, 64, 0.85);
+  color: #ffffff;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 1.7;
+  z-index: 500;
+  box-sizing: border-box;
+}
+
+#star-guide-content {
+  font-size: 14px;
+  font-family: "Meiryo", sans-serif;
+}
+
+#starGuideCloseBtn {
+  /* 星空ガイドパネルの閉じる×ボタン */
+  position: absolute;
+
+  top: 4px;
+  right: 6px;
+
+  margin: 0 0 4px 4px;
+
+  background: none;
+  border: none;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Meiryo", sans-serif;
+
+  cursor: pointer;
+}
+
+#starGuideCloseBtn:hover {
+  opacity: 0.7;
+}
+
+/* ▼ 月相アイコン */
+
+.moon-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  font-size: 15px;
+  font-family: "Meiryo", sans-serif;
+}
+
+.moon-phase-icon {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+}
+
+/* 月の背景画像 */
+#moon {
+  z-index: 1;
+}
+
+/* 月のクリック判定領域：月画像のすぐ上 */
+#moonAnime {
+  z-index: 2;
+}
+
+/* 月の観察パネル：月のクリック判定領域より上 */
+#star-guide-panel {
+  z-index: 500;
+  /* パネルに控えめな影を付ける */
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
+}
+
+/* 月の観察パネル：最初のフェードイン */
+@keyframes moonObservationFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* フェードイン登場時間 */
+#star-guide-panel.moon-panel-fade-in {
+  animation: moonObservationFadeIn 0.8s ease-out both;
+}
+
+/* ▼ 日の出入り・月の出入り */
+.sun-moon-times {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  text-align: left;
+  font-size: 0.85em;
+
+  margin: 2px 0 0.25em 0;
+}
+
+/* ▼ 基準地 */
+.moon-base-location {
+  font-size: 0.95em;
+  opacity: 0.85;
+}
+
+@media (min-width: 768px) {
+
+  .sun-moon-times {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .moon-base-location {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+}

@@ -1,5 +1,5 @@
 /* ============================
-   layout.css
+   css/layout.css
    縦置き・横置き・PCレイアウト
    ============================ */
 
@@ -26,16 +26,16 @@
   }
 
   /* ぴーとの星図ボタン：独立した上段 */
-.pete-chart-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .pete-chart-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-/* 星図ボタンと操作ボタンの間隔 */
-.pete-chart-group + .control-group {
-  margin-top: 0;
-}
+  /* 星図ボタンと操作ボタンの間隔 */
+  .pete-chart-group+.control-group {
+    margin-top: 0;
+  }
 
   /* 操作ボタン段（横並び） */
   .control-group {
@@ -63,7 +63,7 @@
 @media (orientation: landscape) and (max-width: 900px) {
 
   #card-frame,
-  #moon-observation-panel {
+  #star-guide-panel {
     display: none !important;
   }
 

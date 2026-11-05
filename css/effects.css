@@ -1,5 +1,5 @@
 /* ============================
-   effects.css（完成版）
+   css/effects.css（完成版）
    星オーバーレイ・CSS星・月オブジェクト
    ============================ */
 
@@ -60,15 +60,31 @@
 
 /* 星のアニメーション */
 @keyframes starTwinkle {
-  0%   { opacity: 0; transform: scale(0.4); }
-  30%  { opacity: 1; transform: scale(1); }
-  70%  { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.4); }
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
 }
 
 /* 月オブジェクト（アニメ設定は JS 側） */
 #moon {
-  position: fixed; /* Chromeのレイアウト揺れ防止 */
+  position: fixed;
+  /* Chromeのレイアウト揺れ防止 */
   top: 0;
   left: 0;
 

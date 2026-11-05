@@ -1,20 +1,21 @@
 /* ============================
-   ui.css（完成版）
+   css/ui.css（完成版）
    音声ボタン・コピーライト・Special Thanks
    ============================ */
 
 /* 音声 ON/OFF・月パネル再表示ボタン */
-#sound-global-buttons {
+#main-panel-buttons {
   z-index: 6;
   position: fixed;
   top: 10px;
   right: 10px;
   display: flex;
   align-items: center;
-  gap: 12px; /* ボタン同士の隙間 */
+  gap: 12px;
+  /* ボタン同士の隙間 */
 }
 
-#sound-global-buttons img {
+#main-panel-buttons img {
   display: block;
   width: 32px;
   height: 32px;
@@ -24,7 +25,7 @@
 
 /* スマホ向け（幅640px以下） */
 @media (max-width: 640px) {
-  #sound-global-buttons img {
+  #main-panel-buttons img {
     transform: scale(0.8);
     transform-origin: top right;
   }
