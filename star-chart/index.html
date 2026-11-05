@@ -1,6 +1,7 @@
 <!-- star-chart/index.html -->
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,16 +21,17 @@
   <script src="js/star-warp.js" defer></script>
 
 </head>
+
 <body>
   <main id="star-chart-app">
 
-    <section id="chart-container" class="is-warping" aria-label="星図">
+    <section id="chart-container" aria-label="星図">
 
       <canvas id="star-chart-canvas">
         お使いのブラウザはCanvasに対応していません。
       </canvas>
 
-      <!-- 独立星図専用の流星描画Canvas -->
+      <!-- プラネタリウム専用の流星描画Canvas -->
       <canvas id="star-chart-meteor-layer" aria-hidden="true"></canvas>
 
       <!-- ワープ演出専用Canvas -->
@@ -39,17 +41,67 @@
       <div id="chart-status" aria-live="polite"></div>
 
       <!-- モード切り替えボタン -->
-<div id="sensor-test-panel">
-  <button id="sensor-start" type="button" aria-pressed="true">
-    自動方角
-  </button>
-  <button id="sensor-stop" type="button" aria-pressed="false">
-    手動方角
-  </button>
-</div>
+      <div id="sensor-test-panel">
+        <button id="sensor-start" type="button" aria-pressed="true">
+          自動方角
+        </button>
+        <button id="sensor-stop" type="button" aria-pressed="false">
+          手動方角
+        </button>
+      </div>
 
     </section>
 
+    <!-- 観測日時選択フッター -->
+    <footer id="datetime-footer">
+
+      <!-- 現在選択されている観測日時 -->
+      <div id="datetime-display">
+        <span id="datetime-year">2026</span><small class="date-unit">年</small><span
+          id="datetime-month">11</span><small>月</small><span id="datetime-day">05</span><small
+          class="date-unit">日</small><span id="datetime-hour">20</span><small>時</small><span
+          id="datetime-minute">00</span><small>分</small>
+      </div>
+
+      <!-- 日時変更ボタン -->
+      <div id="datetime-controls">
+
+        <button type="button" id="datetime-prev" class="datetime-arrow" aria-label="戻す">
+          ◀
+        </button>
+
+        <button type="button" class="datetime-field" data-unit="year">
+          年
+        </button>
+
+        <button type="button" class="datetime-field" data-unit="month">
+          月
+        </button>
+
+        <button type="button" class="datetime-field" data-unit="day">
+          日
+        </button>
+
+        <button type="button" class="datetime-field" data-unit="hour">
+          時
+        </button>
+
+        <button type="button" class="datetime-field" data-unit="minute">
+          分
+        </button>
+
+        <button type="button" id="datetime-next" class="datetime-arrow" aria-label="進める">
+          ▶
+        </button><!-- 現在の空に戻すボタン -->
+      </div>
+
+        <button type="button" id="datetime-now" class="datetime-now">
+          今の空を見る
+        </button>
+
+    </footer>
+
   </main>
 </body>
+
 </html>
