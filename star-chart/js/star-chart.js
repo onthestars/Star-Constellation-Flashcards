@@ -703,9 +703,6 @@
     ? "deviceorientation"
     : "deviceorientationabsolute";
 
-    sensorStatus.textContent =
-  `端末判定:${isIOS} / イベント:${sensorEventName}`;
-
   // モード表示の切り替え
   function setSensorMode(mode) {
 
