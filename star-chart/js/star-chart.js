@@ -798,6 +798,7 @@
       `γ:${gamma.toFixed(1)} ` +
       `方位:${azimuth.toFixed(1)} ` +
       `絶対:${event.absolute}`;
+      `イベント:${event.type}`;
   }
 
   // センサー開始・停止
