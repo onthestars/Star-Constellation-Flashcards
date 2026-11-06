@@ -596,8 +596,7 @@
     if (
       warpStarted ||
       !dataLoaded ||
-      !constellationsLoaded ||
-      !meteorRadiant
+      !constellationsLoaded
     ) {
       return;
     }
@@ -3781,224 +3780,224 @@
   startChartMeteorAnimation();
 
 
-// =================================
-// 観測日時ボタンの選択
-// =================================
+  // =================================
+  // 観測日時ボタンの選択
+  // =================================
 
-const datetimeFields = document.querySelectorAll(
-  ".datetime-field"
-);
+  const datetimeFields = document.querySelectorAll(
+    ".datetime-field"
+  );
 
-// 最初のボタン選択（year,month,day,hour,minute）
-let selectedDatetimeUnit = "hour";
+  // 最初のボタン選択（year,month,day,hour,minute）
+  let selectedDatetimeUnit = "hour";
 
-// 選択状態を更新
-function updateDatetimeSelection() {
+  // 選択状態を更新
+  function updateDatetimeSelection() {
 
+    datetimeFields.forEach(button => {
+
+      const isSelected =
+        button.dataset.unit === selectedDatetimeUnit;
+
+      button.classList.toggle("active", isSelected);
+
+    });
+
+  }
+
+  // 年月日時分ボタンをクリック
   datetimeFields.forEach(button => {
 
-    const isSelected =
-      button.dataset.unit === selectedDatetimeUnit;
+    button.addEventListener("click", () => {
 
-    button.classList.toggle("active", isSelected);
+      selectedDatetimeUnit = button.dataset.unit;
 
-  });
+      updateDatetimeSelection();
 
-}
-
-// 年月日時分ボタンをクリック
-datetimeFields.forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    selectedDatetimeUnit = button.dataset.unit;
-
-    updateDatetimeSelection();
+    });
 
   });
 
-});
+  // 初期状態を反映
+  updateDatetimeSelection();
 
-// 初期状態を反映
-updateDatetimeSelection();
+  // =================================
+  // 観測日時の表示更新
+  // =================================
 
-// =================================
-// 観測日時の表示更新
-// =================================
+  function updateDatetimeDisplay() {
 
-function updateDatetimeDisplay() {
+    const date = getObservationDate();
 
-  const date = getObservationDate();
+    document.getElementById("datetime-year").textContent =
+      date.getFullYear();
 
-  document.getElementById("datetime-year").textContent =
-    date.getFullYear();
+    document.getElementById("datetime-month").textContent =
+      String(date.getMonth() + 1).padStart(2, "0");
 
-  document.getElementById("datetime-month").textContent =
-    String(date.getMonth() + 1).padStart(2, "0");
+    document.getElementById("datetime-day").textContent =
+      String(date.getDate()).padStart(2, "0");
 
-  document.getElementById("datetime-day").textContent =
-    String(date.getDate()).padStart(2, "0");
+    document.getElementById("datetime-hour").textContent =
+      String(date.getHours()).padStart(2, "0");
 
-  document.getElementById("datetime-hour").textContent =
-    String(date.getHours()).padStart(2, "0");
-
-  document.getElementById("datetime-minute").textContent =
-    String(date.getMinutes()).padStart(2, "0");
-
-}
-
-// 初期日時を画面に反映
-updateDatetimeDisplay();
-
-// =================================
-// 観測日時の変更
-// =================================
-
-function changeObservationDate(direction) {
-
-  const date = getObservationDate();
-
-  switch (selectedDatetimeUnit) {
-
-    case "year":
-      date.setFullYear(date.getFullYear() + direction);
-      break;
-
-    case "month":
-      date.setMonth(date.getMonth() + direction);
-      break;
-
-    case "day":
-      date.setDate(date.getDate() + direction);
-      break;
-
-    case "hour":
-      date.setHours(date.getHours() + direction);
-      break;
-
-    case "minute":
-      date.setMinutes(date.getMinutes() + direction);
-      break;
+    document.getElementById("datetime-minute").textContent =
+      String(date.getMinutes()).padStart(2, "0");
 
   }
 
-  observationDate = date;
-
+  // 初期日時を画面に反映
   updateDatetimeDisplay();
 
-  drawChart();
-}
+  // =================================
+  // 観測日時の変更
+  // =================================
 
+  function changeObservationDate(direction) {
 
-// =================================
-// 左右矢印の長押し連続変更
-// =================================
+    const date = getObservationDate();
 
-let datetimeRepeatTimer = null;
-let datetimeRepeatInterval = null;
+    switch (selectedDatetimeUnit) {
 
-// 連続変更を停止
-function stopDatetimeRepeat() {
+      case "year":
+        date.setFullYear(date.getFullYear() + direction);
+        break;
 
-  // 1秒後の開始予約を解除
-  if (datetimeRepeatTimer !== null) {
+      case "month":
+        date.setMonth(date.getMonth() + direction);
+        break;
 
-    clearTimeout(datetimeRepeatTimer);
+      case "day":
+        date.setDate(date.getDate() + direction);
+        break;
 
-    datetimeRepeatTimer = null;
+      case "hour":
+        date.setHours(date.getHours() + direction);
+        break;
 
-  }
+      case "minute":
+        date.setMinutes(date.getMinutes() + direction);
+        break;
 
-  // 連続変更を停止
-  if (datetimeRepeatInterval !== null) {
+    }
 
-    clearInterval(datetimeRepeatInterval);
+    observationDate = date;
 
-    datetimeRepeatInterval = null;
-
-  }
-
-}
-
-// 矢印を押したとき
-function startDatetimeRepeat(direction) {
-
-  // すでに動作中なら何もしない
-  if (
-    datetimeRepeatTimer !== null ||
-    datetimeRepeatInterval !== null
-  ) return;
-
-  // 最初の1回はすぐに変更
-  changeObservationDate(direction);
-
-  // 1秒後から連続変更を開始
-  datetimeRepeatTimer = setTimeout(() => {
-
-    datetimeRepeatTimer = null;
-
-    datetimeRepeatInterval = setInterval(() => {
-
-      changeObservationDate(direction);
-
-    }, 150);
-
-  }, 1000);
-
-}
-
-// 左矢印
-document.getElementById("datetime-prev")
-  .addEventListener("pointerdown", event => {
-
-    if (event.button !== 0) return;
-
-    event.preventDefault();
-
-    startDatetimeRepeat(-1);
-
-  });
-
-// 右矢印
-document.getElementById("datetime-next")
-  .addEventListener("pointerdown", event => {
-
-    if (event.button !== 0) return;
-
-    event.preventDefault();
-
-    startDatetimeRepeat(1);
-
-  });
-
-// マウス・指を離したら停止
-window.addEventListener("pointerup", stopDatetimeRepeat);
-
-// 操作がキャンセルされたら停止
-window.addEventListener("pointercancel", stopDatetimeRepeat);
-
-// ウィンドウからフォーカスが外れたら停止
-window.addEventListener("blur", stopDatetimeRepeat);
-
-// =================================
-// 現在の空に戻す
-// =================================
-
-document.getElementById("datetime-now")
-  .addEventListener("click", () => {
-
-    // 長押し処理が動いていれば停止
-    stopDatetimeRepeat();
-
-    // 現在日時を取得
-    observationDate = new Date();
-
-    // 日時表示を更新
     updateDatetimeDisplay();
 
-    // 星図を再描画
     drawChart();
+  }
 
-  });
+
+  // =================================
+  // 左右矢印の長押し連続変更
+  // =================================
+
+  let datetimeRepeatTimer = null;
+  let datetimeRepeatInterval = null;
+
+  // 連続変更を停止
+  function stopDatetimeRepeat() {
+
+    // 1秒後の開始予約を解除
+    if (datetimeRepeatTimer !== null) {
+
+      clearTimeout(datetimeRepeatTimer);
+
+      datetimeRepeatTimer = null;
+
+    }
+
+    // 連続変更を停止
+    if (datetimeRepeatInterval !== null) {
+
+      clearInterval(datetimeRepeatInterval);
+
+      datetimeRepeatInterval = null;
+
+    }
+
+  }
+
+  // 矢印を押したとき
+  function startDatetimeRepeat(direction) {
+
+    // すでに動作中なら何もしない
+    if (
+      datetimeRepeatTimer !== null ||
+      datetimeRepeatInterval !== null
+    ) return;
+
+    // 最初の1回はすぐに変更
+    changeObservationDate(direction);
+
+    // 1秒後から連続変更を開始
+    datetimeRepeatTimer = setTimeout(() => {
+
+      datetimeRepeatTimer = null;
+
+      datetimeRepeatInterval = setInterval(() => {
+
+        changeObservationDate(direction);
+
+      }, 150);
+
+    }, 1000);
+
+  }
+
+  // 左矢印
+  document.getElementById("datetime-prev")
+    .addEventListener("pointerdown", event => {
+
+      if (event.button !== 0) return;
+
+      event.preventDefault();
+
+      startDatetimeRepeat(-1);
+
+    });
+
+  // 右矢印
+  document.getElementById("datetime-next")
+    .addEventListener("pointerdown", event => {
+
+      if (event.button !== 0) return;
+
+      event.preventDefault();
+
+      startDatetimeRepeat(1);
+
+    });
+
+  // マウス・指を離したら停止
+  window.addEventListener("pointerup", stopDatetimeRepeat);
+
+  // 操作がキャンセルされたら停止
+  window.addEventListener("pointercancel", stopDatetimeRepeat);
+
+  // ウィンドウからフォーカスが外れたら停止
+  window.addEventListener("blur", stopDatetimeRepeat);
+
+  // =================================
+  // 現在の空に戻す
+  // =================================
+
+  document.getElementById("datetime-now")
+    .addEventListener("click", () => {
+
+      // 長押し処理が動いていれば停止
+      stopDatetimeRepeat();
+
+      // 現在日時を取得
+      observationDate = new Date();
+
+      // 日時表示を更新
+      updateDatetimeDisplay();
+
+      // 星図を再描画
+      drawChart();
+
+    });
 
 })();
