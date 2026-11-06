@@ -682,9 +682,10 @@
     document.getElementById("sensor-start");
 
   const sensorStopButton =
-  
+    document.getElementById("sensor-stop");
+
   const sensorStatus =
-  document.getElementById("sensor-status");
+    document.getElementById("sensor-status");
 
   let sensorActive = false;
 
