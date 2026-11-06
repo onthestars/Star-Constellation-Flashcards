@@ -168,6 +168,8 @@ function openMoonSpecialViewer() {
 
   moonSpecialViewer.style.display = "flex";
 
+  window.bringPanelToFront(moonSpecialViewer);
+
   moonSpecialIndex = 0;
 
   const currentData = displayMoonData[0];

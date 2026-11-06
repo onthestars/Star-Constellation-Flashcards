@@ -83,7 +83,10 @@ specialBtn.onclick = () => {
   const folder = getSpecialFolder(savedIndex);
   specialImg.src = folder + specialPhotos[starName].noline[0];
   specialCaption.innerHTML = specialPhotos[starName].caption[0].replace(/　/g, "<br>");
+
   specialViewer.style.display = "flex";
+
+  window.bringPanelToFront(specialViewer);
 
   // キラキラ音（音声ON時のみ）
   if (soundEnabled) {
