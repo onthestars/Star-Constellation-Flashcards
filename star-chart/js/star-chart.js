@@ -689,19 +689,19 @@
 
   let sensorActive = false;
 
-// iOS端末かどうかを判定
-const isIOS =
-  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-  (
-    navigator.platform === "MacIntel" &&
-    navigator.maxTouchPoints > 1
-  );
+  // iOS端末かどうかを判定
+  const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (
+      navigator.platform === "MacIntel" &&
+      navigator.maxTouchPoints > 1
+    );
 
-// iPhoneではdeviceorientation
-// Androidではdeviceorientationabsolute
-const sensorEventName = isIOS
-  ? "deviceorientation"
-  : "deviceorientationabsolute";
+  // iPhoneではdeviceorientation
+  // Androidではdeviceorientationabsolute
+  const sensorEventName = isIOS
+    ? "deviceorientation"
+    : "deviceorientationabsolute";
 
   // モード表示の切り替え
   function setSensorMode(mode) {
@@ -821,6 +821,7 @@ const sensorEventName = isIOS
 
         // iPhoneなど、許可要求が必要な端末に対応
         if (
+          isIOS &&
           typeof DeviceOrientationEvent.requestPermission ===
           "function"
         ) {
@@ -879,7 +880,7 @@ const sensorEventName = isIOS
     if (
       window.isSecureContext &&
       "DeviceOrientationEvent" in window &&
-      typeof DeviceOrientationEvent.requestPermission !== "function"
+      !isIOS
     ) {
       startSensor();
     }
