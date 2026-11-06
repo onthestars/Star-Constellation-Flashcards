@@ -31,103 +31,13 @@
   flex-direction: column;
   overflow: hidden;
 
-  background: rgba(6, 7, 64, 0.85);
+  background: rgba(6, 7, 64, 0.9);
 
   border-radius: 12px;
 
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
 
   box-sizing: border-box;
-}
-
-/* =================================
-   上部タイトルバー
-================================= */
-
-#independent-chart-header {
-  position: relative;
-
-  display: flex;
-  flex: 0 0 34px;
-
-  align-items: center;
-  justify-content: flex-start;
-
-  min-height: 34px;
-  padding: 6px 42px 6px 14px;
-
-  color: #ffffff;
-  background: rgba(8, 8, 36, 0.85);
-
-  box-sizing: border-box;
-}
-
-/* =================================
-   プラネタリウム名
-================================= */
-
-#independent-chart-title {
-  display: block;
-
-  margin: 0;
-  padding: 0;
-
-  color: #ffffff;
-  font-family: "Meiryo", sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 1.2;
-
-  text-align: left;
-  white-space: nowrap;
-}
-
-/* =================================
-   タイトルとアイコン
-================================= */
-
-#independent-chart-title-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#independent-chart-icon {
-  display: block;
-
-  width: 18px;
-  height: 18px;
-
-  object-fit: contain;
-  flex: 0 0 auto;
-}
-
-/* =================================
-   閉じるボタン
-================================= */
-
-#independent-chart-close {
-  position: absolute;
-
-  top: 4px;
-  right: 6px;
-
-  margin: 0 0 4px 4px;
-
-  background: none;
-  border: none;
-
-  color: #ffffff;
-
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Meiryo", sans-serif;
-
-  cursor: pointer;
-}
-
-#independent-chart-close:hover {
-  opacity: 0.7;
 }
 
 /* =================================

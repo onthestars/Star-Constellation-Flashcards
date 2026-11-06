@@ -26,52 +26,55 @@
   display: block;
 }
 
-/* 月の観察パネル */
+/* 星空ガイドパネル */
 #star-guide-panel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
   width: 92%;
   max-width: 500px;
-  padding: 12px 16px;
-  background: rgba(6, 7, 64, 0.85);
+  max-height: calc(100vh - 20px);
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 0;
+
+  background: rgba(6, 7, 64, 0.9);
   color: #ffffff;
+
   border-radius: 12px;
   text-align: center;
   line-height: 1.7;
+
   z-index: 500;
   box-sizing: border-box;
+
+  overflow: hidden;
+
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
 }
 
 #star-guide-content {
+  padding: 6px 16px;
+
   font-size: 14px;
   font-family: "Meiryo", sans-serif;
+
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+
+  /* スクロールバーを非表示 */
+  scrollbar-width: none;
+
 }
 
-#starGuideCloseBtn {
-  /* 星空ガイドパネルの閉じる×ボタン */
-  position: absolute;
-
-  top: 4px;
-  right: 6px;
-
-  margin: 0 0 4px 4px;
-
-  background: none;
-  border: none;
-
-  color: #ffffff;
-
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Meiryo", sans-serif;
-
-  cursor: pointer;
-}
-
-#starGuideCloseBtn:hover {
-  opacity: 0.7;
+#star-guide-content::-webkit-scrollbar {
+  display: none;
 }
 
 /* ▼ 月相アイコン */
@@ -111,20 +114,26 @@
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
 }
 
-/* 月の観察パネル：最初のフェードイン */
-@keyframes moonObservationFadeIn {
+/* =================================
+   星座カードパネル：上から下へ表示
+================================= */
+
+@keyframes cardPanelReveal {
+
   from {
+    clip-path: inset(0 0 100% 0);
     opacity: 0;
   }
 
   to {
+    clip-path: inset(0 0 0 0);
     opacity: 1;
   }
+
 }
 
-/* フェードイン登場時間 */
-#star-guide-panel.moon-panel-fade-in {
-  animation: moonObservationFadeIn 0.8s ease-out both;
+.constellation-card-panel.card-panel-fade-in {
+  animation: cardPanelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
 }
 
 /* ▼ 日の出入り・月の出入り */
@@ -157,4 +166,62 @@
     margin-left: auto;
     white-space: nowrap;
   }
+}
+
+/* 星空ガイド：上から下へ表示 */
+#star-guide-panel.moon-panel-fade-in {
+  animation: cardPanelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
+}
+
+/* =================================
+   今の空を見るボタン
+================================= */
+
+#star-guide-panel .datetime-now {
+  flex: 0 0 auto;
+  width: min(240px, 80%);
+  height: 28px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 8px auto 12px;
+  padding: 0 12px;
+
+  color: #080D32;
+  font-family: "Meiryo", sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+
+  background: linear-gradient(to bottom, #FFE080, #D9A928);
+
+  border: 1px solid #FFD700;
+  border-radius: 7px;
+
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#star-guide-panel .datetime-now:active {
+  background: #FFD700;
+  transform: scale(0.98);
+}
+
+/* =================================
+   星空ガイド下部フッター
+================================= */
+
+#star-guide-panel .star-guide-footer {
+  flex: 0 0 auto;
+  width: calc(100% + 32px);
+  box-sizing: border-box;
+  margin-left: -16px;
+  margin-top: 4px;
+  margin-bottom: -6px;
+  padding: 4.5px 6px 6px;
+
+  background: linear-gradient(to bottom, #101C38, #080D1A);
+  border-top: 1px solid #263A68;
 }

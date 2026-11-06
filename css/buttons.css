@@ -33,3 +33,21 @@
   min-width: 38px;
   margin: 6px 0;
 }
+
+/* =================================
+   星座カードパネル内のボタン：白い縁取り
+================================= */
+
+.constellation-card-panel .btn-season:not(.active-season),
+.constellation-card-panel .btn-control,
+.constellation-card-panel .btn-special {
+  outline: 1px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 1px;
+  border-radius: 10px;
+}
+
+/* めくるボタンの左右に余白 */
+#flipBtn {
+  margin-left: 8px;
+  margin-right: 8px;
+}

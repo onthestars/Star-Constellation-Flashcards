@@ -104,3 +104,39 @@
 #card-frame {
   transform: translateY(24px);
 }
+
+/* =================================
+   星座カード独立パネル
+================================= */
+
+.constellation-card-panel {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: fit-content;
+  max-width: calc(100vw - 16px);
+
+  padding: 0 0 24px 0;
+
+  background: rgba(6, 7, 64, 0.9);
+  border-radius: 12px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  z-index: 500;
+
+  box-shadow: none;
+}
+
+  /* カード枠の幅をpadding込みで計算 */
+  #card-frame {
+    box-sizing: border-box;
+  }

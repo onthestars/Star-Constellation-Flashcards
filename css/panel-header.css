@@ -1,0 +1,179 @@
+/* css/panel-header.css */
+
+
+/* =================================
+   共通パネルヘッダー
+================================= */
+
+/* ヘッダー本体 */
+#star-guide-header,
+#independent-chart-header {
+  position: relative;
+
+  display: flex;
+  flex: 0 0 34px;
+
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 34px;
+  padding: 6px 42px 6px 14px;
+
+  color: #ffffff;
+  background: rgba(8, 8, 36, 0.85);
+
+  box-sizing: border-box;
+}
+
+/* タイトルとアイコン */
+#star-guide-title-group,
+#independent-chart-title-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* アイコン */
+#star-guide-icon,
+#independent-chart-icon {
+  display: block;
+
+  width: 18px;
+  height: 18px;
+
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+/* タイトル */
+#star-guide-title,
+#independent-chart-title {
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  color: #ffffff;
+  font-family: "Meiryo", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* 閉じるボタン */
+#starGuideCloseBtn,
+#independent-chart-close {
+  position: absolute;
+
+  top: 4px;
+  right: 6px;
+
+  margin: 0 0 4px 4px;
+
+  background: none;
+  border: none;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Meiryo", sans-serif;
+
+  cursor: pointer;
+}
+
+/* 閉じるボタン：ホバー */
+#starGuideCloseBtn:hover,
+#independent-chart-close:hover {
+  opacity: 0.7;
+}
+
+/* =================================
+   星座カード専用ヘッダー
+================================= */
+
+#card-panel-header {
+  position: relative;
+
+  display: flex;
+  flex: 0 0 34px;
+
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 34px;
+  padding: 6px 42px 6px 14px;
+
+  color: #ffffff;
+  background: rgba(8, 8, 36, 0.85);
+
+  box-sizing: border-box;
+}
+
+#card-panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#card-panel-icon {
+  display: block;
+
+  width: 18px;
+  height: 18px;
+
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+#card-panel-title {
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  color: #ffffff;
+  font-family: "Meiryo", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+
+  text-align: left;
+  white-space: nowrap;
+}
+
+#cardPanelCloseBtn {
+  position: absolute;
+
+  top: 4px;
+  right: 6px;
+
+  margin: 0 0 4px 4px;
+
+  background: none;
+  border: none;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Meiryo", sans-serif;
+
+  cursor: pointer;
+}
+
+#cardPanelCloseBtn:hover {
+  opacity: 0.7;
+}
+
+/* 基準地 */
+#star-guide-location {
+  color: rgba(255, 255, 255, 0.75);
+  font-family: "Meiryo", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  white-space: nowrap;
+}
