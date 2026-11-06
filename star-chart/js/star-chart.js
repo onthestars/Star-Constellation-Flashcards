@@ -788,8 +788,10 @@
 
     // センサー情報を表示
     sensorStatus.textContent =
-      `方位 ${azimuth.toFixed(1)}° / ` +
-      `高度 ${altitude.toFixed(1)}°`;
+      `α:${alpha.toFixed(1)} ` +
+      `β:${beta.toFixed(1)} ` +
+      `γ:${gamma.toFixed(1)} ` +
+      `方位:${azimuth.toFixed(1)}`;
   }
 
   // センサー開始・停止
