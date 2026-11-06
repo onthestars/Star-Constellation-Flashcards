@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="css/star-guide.css">
   <link rel="stylesheet" href="css/soleil-meteor-overlay.css">
   <link rel="stylesheet" href="css/independent-chart-overlay.css">
+  <link rel="stylesheet" href="css/panel-header.css">
 
   <link rel="manifest" href="manifest.json">
 
@@ -44,15 +45,11 @@
       <!-- 各種ボタン（画面右上固定） -->
       <div id="main-panel-buttons">
         <img src="image/common/btn-star-guide.png" id="showStarGuideBtn" alt="星空ガイドパネルを表示" title="星空ガイドパネルを表示">
-        <!-- <button id="showPlanetariumBtn">
-          プラネタリウム
-        </button>
-        <button id="showCardBtn">
-          星座カード
-        </button>
-        <button id="showSettingsBtn">
-          設定
-        </button> -->
+
+        <img src="image/common/btn-star-chart.png" id="showPlanetariumBtn" alt="プラネタリウムを表示" title="プラネタリウムを表示">
+
+        <img src="image/common/btn-flashcard.png" id="showCardBtn" alt="星座カードパネルを表示" title="星座カードパネルを表示">
+
         <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
         <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
       </div>
@@ -68,7 +65,7 @@
       <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
 
       <div id="copyright">
-        ©2026 K-A-Z／トレミーの48星座カード All rights reserved.
+        ©2026 K-A-Z／トレミーの48星座 All rights reserved.
       </div>
 
       <div id="specialThanksBtn" class="special-thanks-btn">
@@ -81,18 +78,28 @@
     <div class="main-panels">
 
       <!-- ▼ 星空ガイド -->
-      <div class="star-guide-panel">
-        <!-- ▼ 星空観測ガイド -->
-        <div id="star-guide-panel">
+      <div id="star-guide-panel">
+
+        <!-- 星空ガイドのヘッダー -->
+        <div id="star-guide-header">
+
+          <div id="star-guide-title-group">
+            <img src="image/common/btn-star-guide.png" alt="" id="star-guide-icon">
+            <span id="star-guide-title">星空ガイド</span>
+            <span id="star-guide-location">（基準地：大阪府）</span>
+          </div>
 
           <button id="starGuideCloseBtn" aria-label="閉じる">
             ✕
           </button>
 
-          <div id="star-guide-content">
-            読み込み中...
-          </div>
         </div>
+
+        <!-- 星空ガイドの内容 -->
+        <div id="star-guide-content">
+          読み込み中...
+        </div>
+
       </div>
 
       <!-- ▼ プラネタリウム -->
@@ -137,6 +144,21 @@
 
       <!-- ▼ 星座カード -->
       <div class="constellation-card-panel">
+
+        <!-- 星座カードのヘッダー -->
+        <div id="card-panel-header">
+
+          <div id="card-panel-title-group">
+            <img src="image/common/btn-flashcard.png" alt="" id="card-panel-icon">
+            <span id="card-panel-title">トレミーの48星座カード</span>
+          </div>
+
+          <button id="cardPanelCloseBtn" type="button" aria-label="閉じる">
+            ✕
+          </button>
+
+        </div>
+
         <!-- 星座カード本体 -->
         <div id="card-frame" class="card-frame">
 
