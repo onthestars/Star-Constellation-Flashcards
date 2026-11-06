@@ -199,6 +199,120 @@ window.addEventListener("load", () => {
 updateMoonObservation();
 initMoonObservationPanel();
 
+// =================================
+// 星座カードパネルの開閉
+// =================================
+
+// =================================
+// パネルを最前面に表示
+// =================================
+
+let highestPanelZIndex = 10000;
+
+window.bringPanelToFront = function (panel) {
+
+  if (!panel) return;
+
+  highestPanelZIndex++;
+
+  panel.style.zIndex = highestPanelZIndex;
+
+};
+
+function initConstellationCardPanel() {
+
+  const panel = document.querySelector(
+    ".constellation-card-panel"
+  );
+
+  const closeButton = document.getElementById(
+    "cardPanelCloseBtn"
+  );
+
+  const showButton = document.getElementById(
+    "showCardBtn"
+  );
+
+  // 再表示ボタンの状態を更新
+  function updateShowButtonState() {
+
+    if (!panel || !showButton) {
+      return;
+    }
+
+    const isVisible =
+      getComputedStyle(panel).display !== "none";
+
+    showButton.style.opacity =
+      isVisible ? 0.4 : 1;
+  }
+
+  // 閉じるボタン
+  if (
+    closeButton &&
+    panel &&
+    !closeButton.dataset.initialized
+  ) {
+
+    closeButton.addEventListener("click", function () {
+
+      panel.style.display = "none";
+
+      updateShowButtonState();
+
+    });
+
+    closeButton.dataset.initialized = "true";
+  }
+
+  // 再表示ボタン
+  if (
+    showButton &&
+    panel &&
+    !showButton.dataset.initialized
+  ) {
+
+    showButton.addEventListener("click", function () {
+      panel.style.display = "flex";
+
+      window.bringPanelToFront(panel);
+
+      panel.classList.remove("card-panel-fade-in");
+      void panel.offsetWidth;
+      panel.classList.add("card-panel-fade-in");
+      updateShowButtonState();
+    });
+
+    showButton.dataset.initialized = "true";
+  }
+
+  // 初期状態を反映
+  updateShowButtonState();
+}
+
+// 星座カードパネルの初期化
+initConstellationCardPanel();
+
+// =================================
+// プラネタリウムパネルの表示
+// =================================
+
+const showPlanetariumBtn = document.getElementById(
+  "showPlanetariumBtn"
+);
+
+if (showPlanetariumBtn) {
+
+  showPlanetariumBtn.addEventListener("click", function () {
+
+    if (typeof window.openPlanetarium === "function") {
+      window.openPlanetarium();
+    }
+
+  });
+
+}
+
 // ▼ 凡例へ移動
 function jumpToExplanatoryNote() {
 

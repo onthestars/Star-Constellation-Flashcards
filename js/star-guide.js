@@ -178,7 +178,7 @@
   // 観測地点：大阪府大阪市（緯度34.6937、経度135.5023、標高0m）
   const MOON_OBSERVER = new Astronomy.Observer(34.6937, 135.5023, 0);
 
-    // direction: 1 = 月の出、-1 = 月の入り
+  // direction: 1 = 月の出、-1 = 月の入り
   // 観察対象日の正午から翌日の正午直前までを検索対象にする。
   function getMoonRiseSet(date, direction) {
     if (isMoonDataOutOfRange(date)) {
@@ -239,284 +239,284 @@
     const hour = d.getHours();
     const minute = d.getMinutes();
 
-const timeText =
-  `${hour}:${String(minute).padStart(2, "0")}`;
+    const timeText =
+      `${hour}:${String(minute).padStart(2, "0")}`;
 
     return (event.isNextDay ? "翌" : "") + timeText;
   }
 
   // ▼ 日の出・日の入り取得
-function getSunRiseSet(date, direction) {
+  function getSunRiseSet(date, direction) {
 
-  const startOfDay = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    0, 0, 0, 0
-  );
-
-  const event = Astronomy.SearchRiseSet(
-    Astronomy.Body.Sun,
-    MOON_OBSERVER,
-    direction,
-    Astronomy.MakeTime(startOfDay),
-    1
-  );
-
-  if (!event || !event.date) {
-    return null;
-  }
-
-  return {
-    date: new Date(
-      Math.round(event.date.getTime() / 60000) * 60000
-    )
-  };
-}
-
-// ▼ 日の出・日の入り表示整形
-function formatSunEvent(event) {
-
-  if (!event) {
-    return null;
-  }
-
-  const d = event.date;
-
-  return `${d.getHours()}:${String(
-    d.getMinutes()
-  ).padStart(2, "0")}`;
-}
-
-// ▼ おすすめ時間帯を取得
-function getObservationWindow(date) {
-
-  const phaseAngle = Astronomy.MoonPhase(
-    Astronomy.MakeTime(getReferenceDate(date))
-  );
-
-  const moonrise = getMoonRiseSet(date, 1);
-  const moonset = getMoonRiseSet(date, -1);
-
-  const twilight =
-    getAstronomicalTwilight(date);
-
-  // ▼ 新月～満月（満ちていく月）
-  if (
-    phaseAngle < 180 &&
-    moonset &&
-    twilight &&
-    twilight.dusk &&
-    twilight.dawn
-  ) {
-
-    const startTime =
-      moonset.date.getTime() > twilight.dusk.getTime()
-        ? moonset.date
-        : twilight.dusk;
-
-    const endTime = twilight.dawn;
-
-    if (
-      startTime.getTime() >=
-      endTime.getTime()
-    ) {
-      return null;
-    }
-
-    return {
-      start: startTime,
-      end: endTime
-    };
-  }
-
-  // ▼ 満月～新月（欠けていく月）
-  if (
-    phaseAngle >= 180 &&
-    moonrise &&
-    twilight &&
-    twilight.dusk &&
-    twilight.dawn
-  ) {
-
-    const startTime = twilight.dusk;
-
-    const endTime =
-      moonrise.date.getTime() < twilight.dawn.getTime()
-        ? moonrise.date
-        : twilight.dawn;
-
-    if (
-      endTime.getTime() <=
-      startTime.getTime()
-    ) {
-      return null;
-    }
-
-    return {
-      start: startTime,
-      end: endTime
-    };
-  }
-
-  return null;
-}
-
-// ▼ 星空期待値を算出
-function getSkyExpectation(window) {
-
-  if (!window) {
-    return {
-      stars: "☆☆☆☆☆"
-    };
-  }
-
-  const hours =
-    (window.end.getTime() - window.start.getTime())
-    / (1000 * 60 * 60);
-
-  let stars;
-
-  if (hours >= 8) {
-    stars = 5;
-  } else if (hours >= 6) {
-    stars = 4;
-  } else if (hours >= 4) {
-    stars = 3;
-  } else if (hours >= 2) {
-    stars = 2;
-  } else if (hours >= 1) {
-    stars = 1;
-  } else {
-    stars = 0;
-  }
-
-  return {
-    stars: "★".repeat(stars) +
-           "☆".repeat(5 - stars)
-  };
-}
-
-// ▼ 時刻を10分単位で切り捨て
-function floorTo10Minutes(date) {
-  const rounded = new Date(date);
-
-  rounded.setMinutes(
-    Math.floor(rounded.getMinutes() / 10) * 10,
-    0,
-    0
-  );
-
-  return rounded;
-}
-
-// ▼ おすすめ時間帯を表示用に整形
-function formatObservationWindow(window) {
-
-  if (!window) {
-    return "ありません";
-  }
-
-const startDate =
-  floorTo10Minutes(window.start);
-
-const endDate =
-  floorTo10Minutes(window.end);
-
-const startHour =
-  startDate.getHours();
-
-const startMinute =
-  String(startDate.getMinutes()).padStart(2, "0");
-
-const endHour =
-  endDate.getHours();
-
-const endMinute =
-  String(endDate.getMinutes()).padStart(2, "0");
-
-const startText =
-  `${startHour}:${startMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
-
-const endText =
-  `${endHour}:${endMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
-
-  // ▼ 終了時刻が翌日か判定
-const isNextDay =
-  endDate.getFullYear() !== startDate.getFullYear() ||
-  endDate.getMonth() !== startDate.getMonth() ||
-  endDate.getDate() !== startDate.getDate();
-
-  return isNextDay
-    ? `${startText}～<span style="font-size:0.8em;">翌</span>${endText}`
-    : `${startText}～${endText}`;
-}
-
-// ▼ 天文薄明時刻取得
-function getAstronomicalTwilight(date) {
-
-  const startTime = Astronomy.MakeTime(
-    new Date(
+    const startOfDay = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
-      12, 0, 0, 0
-    )
-  );
-
-  try {
-
-    // 太陽が -18°まで下がる
-    const dusk = Astronomy.SearchAltitude(
-      Astronomy.Body.Sun,
-      MOON_OBSERVER,
-      -1,
-      startTime,
-      1,
-      -18
+      0, 0, 0, 0
     );
 
-    // 翌朝、太陽が -18°まで上がる
-    const dawn = Astronomy.SearchAltitude(
+    const event = Astronomy.SearchRiseSet(
       Astronomy.Body.Sun,
       MOON_OBSERVER,
-      1,
-      Astronomy.MakeTime(
-        new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate() + 1,
-          0, 0, 0, 0
-        )
-      ),
-      1,
-      -18
+      direction,
+      Astronomy.MakeTime(startOfDay),
+      1
     );
+
+    if (!event || !event.date) {
+      return null;
+    }
 
     return {
-      dusk: dusk ? dusk.date : null,
-      dawn: dawn ? dawn.date : null
+      date: new Date(
+        Math.round(event.date.getTime() / 60000) * 60000
+      )
     };
+  }
 
-  } catch (error) {
+  // ▼ 日の出・日の入り表示整形
+  function formatSunEvent(event) {
 
-    console.error(
-      "天文薄明時刻取得エラー:",
-      error
+    if (!event) {
+      return null;
+    }
+
+    const d = event.date;
+
+    return `${d.getHours()}:${String(
+      d.getMinutes()
+    ).padStart(2, "0")}`;
+  }
+
+  // ▼ おすすめ時間帯を取得
+  function getObservationWindow(date) {
+
+    const phaseAngle = Astronomy.MoonPhase(
+      Astronomy.MakeTime(getReferenceDate(date))
     );
+
+    const moonrise = getMoonRiseSet(date, 1);
+    const moonset = getMoonRiseSet(date, -1);
+
+    const twilight =
+      getAstronomicalTwilight(date);
+
+    // ▼ 新月～満月（満ちていく月）
+    if (
+      phaseAngle < 180 &&
+      moonset &&
+      twilight &&
+      twilight.dusk &&
+      twilight.dawn
+    ) {
+
+      const startTime =
+        moonset.date.getTime() > twilight.dusk.getTime()
+          ? moonset.date
+          : twilight.dusk;
+
+      const endTime = twilight.dawn;
+
+      if (
+        startTime.getTime() >=
+        endTime.getTime()
+      ) {
+        return null;
+      }
+
+      return {
+        start: startTime,
+        end: endTime
+      };
+    }
+
+    // ▼ 満月～新月（欠けていく月）
+    if (
+      phaseAngle >= 180 &&
+      moonrise &&
+      twilight &&
+      twilight.dusk &&
+      twilight.dawn
+    ) {
+
+      const startTime = twilight.dusk;
+
+      const endTime =
+        moonrise.date.getTime() < twilight.dawn.getTime()
+          ? moonrise.date
+          : twilight.dawn;
+
+      if (
+        endTime.getTime() <=
+        startTime.getTime()
+      ) {
+        return null;
+      }
+
+      return {
+        start: startTime,
+        end: endTime
+      };
+    }
 
     return null;
   }
-}
 
-// ▼ 曜日を取得
-function getWeekdayText(date) {
-  const weekdays = [
-    "日", "月", "火", "水", "木", "金", "土"
-  ];
+  // ▼ 星空期待値を算出
+  function getSkyExpectation(window) {
 
-  return weekdays[date.getDay()];
-}
+    if (!window) {
+      return {
+        stars: "☆☆☆☆☆"
+      };
+    }
+
+    const hours =
+      (window.end.getTime() - window.start.getTime())
+      / (1000 * 60 * 60);
+
+    let stars;
+
+    if (hours >= 8) {
+      stars = 5;
+    } else if (hours >= 6) {
+      stars = 4;
+    } else if (hours >= 4) {
+      stars = 3;
+    } else if (hours >= 2) {
+      stars = 2;
+    } else if (hours >= 1) {
+      stars = 1;
+    } else {
+      stars = 0;
+    }
+
+    return {
+      stars: "★".repeat(stars) +
+        "☆".repeat(5 - stars)
+    };
+  }
+
+  // ▼ 時刻を10分単位で切り捨て
+  function floorTo10Minutes(date) {
+    const rounded = new Date(date);
+
+    rounded.setMinutes(
+      Math.floor(rounded.getMinutes() / 10) * 10,
+      0,
+      0
+    );
+
+    return rounded;
+  }
+
+  // ▼ おすすめ時間帯を表示用に整形
+  function formatObservationWindow(window) {
+
+    if (!window) {
+      return "ありません";
+    }
+
+    const startDate =
+      floorTo10Minutes(window.start);
+
+    const endDate =
+      floorTo10Minutes(window.end);
+
+    const startHour =
+      startDate.getHours();
+
+    const startMinute =
+      String(startDate.getMinutes()).padStart(2, "0");
+
+    const endHour =
+      endDate.getHours();
+
+    const endMinute =
+      String(endDate.getMinutes()).padStart(2, "0");
+
+    const startText =
+      `${startHour}:${startMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
+
+    const endText =
+      `${endHour}:${endMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
+
+    // ▼ 終了時刻が翌日か判定
+    const isNextDay =
+      endDate.getFullYear() !== startDate.getFullYear() ||
+      endDate.getMonth() !== startDate.getMonth() ||
+      endDate.getDate() !== startDate.getDate();
+
+    return isNextDay
+      ? `${startText}～<span style="font-size:0.8em;">翌</span>${endText}`
+      : `${startText}～${endText}`;
+  }
+
+  // ▼ 天文薄明時刻取得
+  function getAstronomicalTwilight(date) {
+
+    const startTime = Astronomy.MakeTime(
+      new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        12, 0, 0, 0
+      )
+    );
+
+    try {
+
+      // 太陽が -18°まで下がる
+      const dusk = Astronomy.SearchAltitude(
+        Astronomy.Body.Sun,
+        MOON_OBSERVER,
+        -1,
+        startTime,
+        1,
+        -18
+      );
+
+      // 翌朝、太陽が -18°まで上がる
+      const dawn = Astronomy.SearchAltitude(
+        Astronomy.Body.Sun,
+        MOON_OBSERVER,
+        1,
+        Astronomy.MakeTime(
+          new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + 1,
+            0, 0, 0, 0
+          )
+        ),
+        1,
+        -18
+      );
+
+      return {
+        dusk: dusk ? dusk.date : null,
+        dawn: dawn ? dawn.date : null
+      };
+
+    } catch (error) {
+
+      console.error(
+        "天文薄明時刻取得エラー:",
+        error
+      );
+
+      return null;
+    }
+  }
+
+  // ▼ 曜日を取得
+  function getWeekdayText(date) {
+    const weekdays = [
+      "日", "月", "火", "水", "木", "金", "土"
+    ];
+
+    return weekdays[date.getDay()];
+  }
 
   // 今夜の観察対象日を取得（午前5時までは前日扱い）
   function getObservationDate() {
@@ -569,19 +569,19 @@ function getWeekdayText(date) {
       const observationWindowText =
         formatObservationWindow(observationWindow);
 
-// 月の出・月の入りの時刻表示（Astronomy Engineで直接計算）
-let moonTimeMessage;
-let sunTimeMessage = "";
+      // 月の出・月の入りの時刻表示（Astronomy Engineで直接計算）
+      let moonTimeMessage;
+      let sunTimeMessage = "";
 
-const sunriseText =
-  formatSunEvent(
-    getSunRiseSet(today, 1)
-  );
+      const sunriseText =
+        formatSunEvent(
+          getSunRiseSet(today, 1)
+        );
 
-const sunsetText =
-  formatSunEvent(
-    getSunRiseSet(today, -1)
-  );
+      const sunsetText =
+        formatSunEvent(
+          getSunRiseSet(today, -1)
+        );
 
       if (isMoonDataOutOfRange(today)) {
         moonTimeMessage = getMoonDataRangeMessage(today);
@@ -589,9 +589,9 @@ const sunsetText =
         const riseText = formatMoonEvent(getMoonRiseSet(today, 1));
         const setText = formatMoonEvent(getMoonRiseSet(today, -1));
 
-if (riseText && setText) {
-  moonTimeMessage =
-  `<img
+        if (riseText && setText) {
+          moonTimeMessage =
+            `<img
       src="image/common/ico-moon.png"
       alt="月"
       style="
@@ -621,9 +621,9 @@ if (riseText && setText) {
       "
     >${setText}`;
 
-} else if (riseText) {
-  moonTimeMessage =
-  `<img
+        } else if (riseText) {
+          moonTimeMessage =
+            `<img
       src="image/common/ico-moon.png"
       alt="月"
       style="
@@ -644,9 +644,9 @@ if (riseText && setText) {
       "
     >${riseText}`;
 
-} else if (setText) {
-  moonTimeMessage =
-    `<img
+        } else if (setText) {
+          moonTimeMessage =
+            `<img
       src="image/common/ico-moon.png"
       alt="月"
       style="
@@ -666,15 +666,15 @@ if (riseText && setText) {
                 margin:3px 0 0 0;
       "
     >${setText}`;
-} else {
-  moonTimeMessage =
-    "月の出入り時刻データなし";
-}
+        } else {
+          moonTimeMessage =
+            "月の出入り時刻データなし";
+        }
 
-if (sunriseText && sunsetText) {
+        if (sunriseText && sunsetText) {
 
-  sunTimeMessage =
-  `<img
+          sunTimeMessage =
+            `<img
     src="image/common/ico-sun.png"
     alt="太陽"
     style="
@@ -704,21 +704,21 @@ if (sunriseText && sunsetText) {
                 margin:3px 2px 0 6px;
     "
   >${sunsetText}`;
-}
+        }
       }
 
       // ▼ 流星群メッセージ取得
-const meteorMessage = getMeteorMessage(today);
+      const meteorMessage = getMeteorMessage(today);
 
       const imagePath =
         "image/common/" + MOON_IMAGES[phaseIndex];
 
-// ▼ 年月日＋曜日表示
-const weekday =
-  getWeekdayText(today);
+      // ▼ 年月日＋曜日表示
+      const weekday =
+        getWeekdayText(today);
 
-const dateText =
-  `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日(${weekday})`;
+      const dateText =
+        `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日(${weekday})`;
 
       content.innerHTML = `
         <div style="
@@ -806,9 +806,8 @@ const dateText =
               </div>
             </div>
 
-${
-  meteorMessage
-    ? `
+${meteorMessage
+          ? `
       <div style="
         display:inline-block;
         margin:2px 0 8px 0;
@@ -835,8 +834,8 @@ ${
         </div>
       </div>
     `
-    : ""
-}
+          : ""
+        }
 
 <div class="sun-moon-times">
   <div class="sun-time">
@@ -845,10 +844,6 @@ ${
 
   <div class="moon-time">
     ${moonTimeMessage}
-  </div>
-
-  <div class="moon-base-location">
-    ※基準地:大阪市
   </div>
 </div>
 
@@ -909,17 +904,16 @@ ${
   ">
     月齢${age.toFixed(1)}
     <br>
-    ${
-      phaseName === "新月"
-        ? "新　月"
-        : phaseName === "満月"
-          ? "満　月"
-          : phaseName === "満ちていく月"
-            ? "満ちる月"
-            : phaseName === "欠けていく月"
-              ? "欠ける月"
-              : phaseName
-    }
+    ${phaseName === "新月"
+          ? "新　月"
+          : phaseName === "満月"
+            ? "満　月"
+            : phaseName === "満ちていく月"
+              ? "満ちる月"
+              : phaseName === "欠けていく月"
+                ? "欠ける月"
+                : phaseName
+        }
   </div>
 
 <button
@@ -952,58 +946,88 @@ ${
 
 </div>
 
+<div class="star-guide-footer">
+
+  <button
+    type="button"
+    id="showPlanetariumBtn"
+    class="datetime-now"
+  >
+    今の空を見る
+  </button>
+
+</div>
+
       `;
+
+      // 「今の空を見る」ボタン
+      const showPlanetariumBtn = content.querySelector(
+        "#showPlanetariumBtn"
+      );
+
+      if (showPlanetariumBtn) {
+
+        showPlanetariumBtn.addEventListener("click", function () {
+
+          // プラネタリウムを開く
+          if (typeof window.openPlanetarium === "function") {
+            window.openPlanetarium();
+          }
+
+        });
+
+      }
 
       // ▲ 前日へ移動
       [
-  ["#moon-date-back-1", -1],
-  ["#moon-date-back-7", -7],
-  ["#moon-date-next-1", 1],
-  ["#moon-date-next-7", 7]
-].forEach(function ([selector, days]) {
+        ["#moon-date-back-1", -1],
+        ["#moon-date-back-7", -7],
+        ["#moon-date-next-1", 1],
+        ["#moon-date-next-7", 7]
+      ].forEach(function ([selector, days]) {
 
-const button = content.querySelector(selector);
+        const button = content.querySelector(selector);
 
-if (!button) {
-  return;
-}
+        if (!button) {
+          return;
+        }
 
-// ▼ ボタン押下後の日付を計算　データ期間外は月送りボタンを押せなくする
-const targetDate = new Date(today);
+        // ▼ ボタン押下後の日付を計算　データ期間外は月送りボタンを押せなくする
+        const targetDate = new Date(today);
 
-targetDate.setDate(
-  targetDate.getDate() + days
-);
+        targetDate.setDate(
+          targetDate.getDate() + days
+        );
 
-const targetKey =
-  getDateKey(targetDate);
+        const targetKey =
+          getDateKey(targetDate);
 
-// ▼ データ期間外なら無効化
-if (
-  targetKey < MOON_DATA_START ||
-  targetKey > MOON_DATA_END
-) {
-  button.disabled = true;
-  button.style.opacity = "0.3";
-  button.style.cursor = "default";
-}
+        // ▼ データ期間外なら無効化
+        if (
+          targetKey < MOON_DATA_START ||
+          targetKey > MOON_DATA_END
+        ) {
+          button.disabled = true;
+          button.style.opacity = "0.3";
+          button.style.cursor = "default";
+        }
 
-button.addEventListener("click", function () {
+        button.addEventListener("click", function () {
 
-  if (button.disabled) {
-    return;
-  }
+          if (button.disabled) {
+            return;
+          }
 
-  playMoonSelectSound();
+          playMoonSelectSound();
 
-  selectedDate.setDate(
-    selectedDate.getDate() + days
-  );
+          selectedDate.setDate(
+            selectedDate.getDate() + days
+          );
 
-  renderMoonObservation();
-});
+          renderMoonObservation();
+        });
 
-});
+      });
 
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
@@ -1011,7 +1035,7 @@ button.addEventListener("click", function () {
     }
   }
 
-    function initMoonObservationPanel() {
+  function initMoonObservationPanel() {
     const panel = document.getElementById("star-guide-panel");
     const closeButton = document.getElementById("starGuideCloseBtn");
     const showButton = document.getElementById("showStarGuideBtn");
@@ -1047,6 +1071,7 @@ button.addEventListener("click", function () {
     if (showButton && panel && !showButton.dataset.initialized) {
       showButton.addEventListener("click", function () {
         panel.style.display = "block";
+        window.bringPanelToFront(panel);
         updateShowButtonState();
       });
 

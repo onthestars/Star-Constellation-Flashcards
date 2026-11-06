@@ -84,12 +84,33 @@
     updateChartTitle(meteor);
 
     overlay.style.display = "block";
+
+    window.bringPanelToFront(overlay);
+
     isOpen = true;
 
     if (frame.getAttribute("src") !== CHART_URL) {
       frame.src = CHART_URL;
     } else {
       sendRadiantCoordinates();
+    }
+  }
+
+  // 通常のプラネタリウムを開く
+  function openPlanetarium() {
+
+    selectedMeteor = null;
+
+    updateChartTitle();
+
+    overlay.style.display = "block";
+
+    window.bringPanelToFront(overlay);
+
+    isOpen = true;
+
+    if (frame.getAttribute("src") !== CHART_URL) {
+      frame.src = CHART_URL;
     }
   }
 
@@ -124,6 +145,9 @@
 
   // meteor-events.js から呼び出す関数
   window.openIndependentChart = openIndependentChart;
+
+  // 星空ガイドから呼び出す関数
+  window.openPlanetarium = openPlanetarium;
 
   console.log("星図カードオーバーレイを初期化しました。");
 })();
