@@ -682,7 +682,9 @@
     document.getElementById("sensor-start");
 
   const sensorStopButton =
-    document.getElementById("sensor-stop");
+  
+  const sensorStatus =
+  document.getElementById("sensor-status");
 
   let sensorActive = false;
 
@@ -715,6 +717,8 @@
 
   // 初期状態は自動方角モード
   setSensorMode("manual");
+
+  sensorStatus.textContent = "センサー待機中";
 
   // スマホ画面正面の向きを計算
   function handleAbsoluteOrientation(event) {
