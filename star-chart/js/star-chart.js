@@ -684,11 +684,6 @@
   const sensorStopButton =
     document.getElementById("sensor-stop");
 
-  const sensorStatus =
-    document.getElementById("sensor-status");
-
-  let sensorActive = false;
-
   // iOS端末かどうかを判定
   const isIOS =
     /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -724,8 +719,6 @@
 
   // 初期状態は自動方角モード
   setSensorMode("manual");
-
-  sensorStatus.textContent = "センサー待機中";
 
   // スマホ画面正面の向きを計算
   function handleAbsoluteOrientation(event) {
@@ -797,14 +790,6 @@
     // 星図を再描画
     drawChart();
 
-    // センサー情報を表示
-    sensorStatus.textContent =
-      `α:${alpha.toFixed(1)} ` +
-      `β:${beta.toFixed(1)} ` +
-      `γ:${gamma.toFixed(1)} ` +
-      `方位:${azimuth.toFixed(1)} ` +
-      `絶対:${event.absolute} ` +
-      `イベント:${event.type}`;
   }
 
   // センサー開始・停止
@@ -844,11 +829,7 @@
           handleAbsoluteOrientation
         );
 
-        sensorActive = true;
-
         setSensorMode("auto");
-
-        console.log("姿勢センサーを開始しました。");
 
       } catch (error) {
 
@@ -869,14 +850,11 @@
         handleAbsoluteOrientation
       );
 
-      sensorActive = false;
-
       setSensorMode("manual");
 
-      console.log("姿勢センサーを停止しました。");
     });
 
-    // ページ読み込み時に自動開始
+    // Androidはページ読み込み時に自動開始
     if (
       window.isSecureContext &&
       "DeviceOrientationEvent" in window &&
