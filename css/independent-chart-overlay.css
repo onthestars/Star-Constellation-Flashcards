@@ -83,6 +83,26 @@
 }
 
 /* =================================
+   タイトルとアイコン
+================================= */
+
+#independent-chart-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#independent-chart-icon {
+  display: block;
+
+  width: 18px;
+  height: 18px;
+
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+/* =================================
    閉じるボタン
 ================================= */
 
