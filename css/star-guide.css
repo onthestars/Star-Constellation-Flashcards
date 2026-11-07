@@ -52,7 +52,7 @@
   z-index: 500;
   box-sizing: border-box;
 
-  overflow: hidden;
+  overflow-y: auto;
 
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.50);
 }
@@ -63,18 +63,13 @@
   font-size: 14px;
   font-family: "Meiryo", sans-serif;
 
-  box-sizing: border-box;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
+  flex: 0 0 auto;
+  min-height: auto;
+  overflow-y: visible;
 
   /* スクロールバーを非表示 */
   scrollbar-width: none;
 
-}
-
-#star-guide-content::-webkit-scrollbar {
-  display: none;
 }
 
 /* ▼ 月相アイコン */
@@ -224,14 +219,4 @@
 
   background: linear-gradient(to bottom, #101C38, #080D1A);
   border-top: 1px solid #263A68;
-}
-
-/* ▼ スマホ：星空ガイドを上基準で配置 */
-@media (max-width: 767px) and (hover: none) and (pointer: coarse) {
-
-  #star-guide-panel {
-    top: 10px;
-    transform: translateX(-50%);
-  }
-
 }
