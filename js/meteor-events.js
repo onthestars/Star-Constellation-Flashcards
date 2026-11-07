@@ -113,7 +113,7 @@ function getMeteorMessage(date) {
   if (activeMessages.length > 0) {
 
     messages.push(
-      `<div style="font-weight:normal;line-height:1.5em;">
+      `<div style="font-weight:normal;line-height:1.8em;">
       ${activeMessages.join("<br>")}
     </div>`
     );
