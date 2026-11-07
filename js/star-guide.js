@@ -956,6 +956,14 @@ ${meteorMessage
     今の空を見る
   </button>
 
+  <button
+    type="button"
+    id="showSelectedDateBtn"
+    class="datetime-now"
+  >
+    選んだ日の20時
+  </button>
+
 </div>
 
       `;
@@ -977,6 +985,29 @@ ${meteorMessage
         });
 
       }
+// 「選んだ日の20時を見る」ボタン
+const showSelectedDateBtn = content.querySelector(
+  "#showSelectedDateBtn"
+);
+
+if (showSelectedDateBtn) {
+  showSelectedDateBtn.addEventListener("click", function () {
+
+    // 選択中の日付を複製
+    const observationDate = new Date(selectedDate);
+
+    // 観測時刻を20:00に設定
+    observationDate.setHours(20, 0, 0, 0);
+
+    // 指定日時でプラネタリウムを開く
+    if (typeof window.openPlanetariumAtDate === "function") {
+      window.openPlanetariumAtDate(
+        observationDate.getTime()
+      );
+    }
+
+  });
+}
 
       // ▲ 前日へ移動
       [
