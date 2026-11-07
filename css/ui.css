@@ -64,3 +64,21 @@
 
   font-family: "Meiryo", sans-serif;
 }
+
+/* PC向け：右上ボタン群の中央配置・サイズ変更 */
+@media (hover: hover) and (pointer: fine) {
+
+  #main-panel-buttons {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    gap: 12px;
+  }
+
+  #main-panel-buttons img {
+    width: 48px;
+    height: 48px;
+    transform: none;
+  }
+
+}
