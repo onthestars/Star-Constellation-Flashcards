@@ -964,7 +964,7 @@ ${meteorMessage
   id="showSelectedDateBtn"
   class="datetime-now"
 >
-  ${today.getMonth() + 1}月${today.getDate()}日20時の空を見る
+  ${today.getMonth() + 1}月${today.getDate()}日20時の空
 </button>
 
 </div>
@@ -988,7 +988,7 @@ ${meteorMessage
         });
 
       }
-      // 「選んだ日の20時の空を見る」ボタン
+      // 「選んだ日の20時の空」を見るボタン
       const showSelectedDateBtn = content.querySelector(
         "#showSelectedDateBtn"
       );
