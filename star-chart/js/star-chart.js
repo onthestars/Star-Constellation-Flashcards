@@ -19,7 +19,7 @@
     large: 1.3
   };
 
-    // 文字サイズ切り替えボタン
+  // 文字サイズ切り替えボタン
   const textSizeButtons = document.querySelectorAll(
     "#chart-text-size-panel button"
   );
@@ -2475,6 +2475,9 @@
         }
       }
 
+      // 恒星名を一時保存する配列
+      const starLabels = [];
+
       for (const star of stars) {
         const projected = projectStar(star, lstDeg, basis, minDot);
 
@@ -2736,20 +2739,29 @@
           projected.label &&
           projected.label.trim() !== "";
 
-        // 恒星名を表示
+        // 恒星名を一時保存
         if (shouldShowStarLabel && (isPolaris || projected.label)) {
-
-          ctx.font = `${9 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
-          ctx.fillStyle = "#F5DFA0";
-          ctx.textAlign = "left";
-          ctx.textBaseline = "middle";
-
-          ctx.fillText(
-            isPolaris ? "北極星" : projected.label,
-            x + 9,
-            y - 8
-          );
+          starLabels.push({
+            text: isPolaris ? "北極星" : projected.label,
+            x: x + 9,
+            y: y - 8
+          });
         }
+      }
+
+      // すべての恒星を描画した後、恒星名を前面に描画
+      ctx.font = `${9 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+      ctx.fillStyle = "#F5DFA0";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+
+      for (const label of starLabels) {
+
+        ctx.fillText(
+          label.text,
+          label.x,
+          label.y
+        );
       }
 
       // 星の描画範囲の制限を解除する
