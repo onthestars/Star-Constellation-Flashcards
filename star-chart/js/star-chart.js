@@ -775,7 +775,7 @@
     );
   }
 
-  // 初期状態は自動方角モード
+  // 初期状態は手動方角モード
   setSensorMode("manual");
 
   // スマホ画面正面の向きを計算
@@ -887,7 +887,7 @@
           handleAbsoluteOrientation
         );
 
-        setSensorMode("manual");
+        setSensorMode("auto");
 
       } catch (error) {
 
@@ -911,15 +911,6 @@
       setSensorMode("manual");
 
     });
-
-    // Androidはページ読み込み時に自動開始
-    if (
-      window.isSecureContext &&
-      "DeviceOrientationEvent" in window &&
-      !isIOS
-    ) {
-      startSensor();
-    }
   }
 
   // 観測日時の地方恒星時を計算する
