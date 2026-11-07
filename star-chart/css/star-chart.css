@@ -185,9 +185,9 @@ body {
   font-size: 11px;
   white-space: nowrap;
 
-background: linear-gradient(to bottom,
-    rgb(6, 7, 64),
-    rgb(13, 31, 104));
+  background: linear-gradient(to bottom,
+      rgb(6, 7, 64),
+      rgb(13, 31, 104));
 
   border: 1px solid #526AAB;
   border-radius: 6px;
@@ -298,11 +298,14 @@ background: linear-gradient(to bottom,
 }
 
 @keyframes datetimeFlash {
-  0%, 100% {
+
+  0%,
+  100% {
     background: transparent;
   }
 
-  10%, 90% {
+  10%,
+  90% {
     background: linear-gradient(to bottom, #FFE080, #D9A928);
   }
 }
@@ -355,11 +358,9 @@ background: linear-gradient(to bottom,
   font-size: 13px;
   font-weight: 400;
 
-background: linear-gradient(
-  180deg,
-  #060740 0%,
-  #0D1F68 100%
-);
+  background: linear-gradient(180deg,
+      #060740 0%,
+      #0D1F68 100%);
 
   border: 1px solid #526AAB;
   border-radius: 6px;
@@ -394,11 +395,9 @@ background: linear-gradient(
 
   color: #E8EDF7;
   font-size: 22px;
-background: linear-gradient(
-  180deg,
-  #060740 0%,
-  #0D1F68 100%
-);
+  background: linear-gradient(180deg,
+      #060740 0%,
+      #0D1F68 100%);
 
   border: 1px solid #526AAB;
   border-radius: 7px;
@@ -550,4 +549,37 @@ background: linear-gradient(
   border-radius: 5px;
 
   pointer-events: none;
+}
+
+/* ============================
+   プラネタリウム文字サイズ切り替え
+============================ */
+#chart-text-size-panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+
+  display: flex;
+  gap: 5px;
+}
+
+#chart-text-size-panel button {
+  width: 30px;
+  height: 25px;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #fff;
+
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#chart-text-size-panel button.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffd700;
+  color: #ffd700;
 }
