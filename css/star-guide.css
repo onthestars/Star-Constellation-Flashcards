@@ -225,3 +225,13 @@
   background: linear-gradient(to bottom, #101C38, #080D1A);
   border-top: 1px solid #263A68;
 }
+
+/* ▼ スマホ：星空ガイドを上基準で配置 */
+@media (max-width: 767px) and (hover: none) and (pointer: coarse) {
+
+  #star-guide-panel {
+    top: 10px;
+    transform: translateX(-50%);
+  }
+
+}
