@@ -745,6 +745,7 @@
 
             <div style="
               display: inline-block;
+              background: rgba(6, 7, 64, 0.8);
               margin: 2px 0 8px 0;
               padding: 3px 12px;
               border: 1px solid currentColor;
@@ -783,6 +784,7 @@
 
             <div style="
               display: inline-block;
+              background: rgba(6, 7, 64, 0.8);
               margin: 2px 0 8px 0;
               padding: 3px 12px;
               border: 1px solid currentColor;
@@ -810,6 +812,7 @@ ${meteorMessage
           ? `
       <div style="
         display:inline-block;
+        background: rgba(6, 7, 64, 0.8);
         margin:2px 0 8px 0;
         padding:3px 12px;
         border:1px solid currentColor;
@@ -985,7 +988,7 @@ ${meteorMessage
         });
 
       }
-      // 「選んだ日の20時を見る」ボタン
+      // 「選んだ日の20時の空を見る」ボタン
       const showSelectedDateBtn = content.querySelector(
         "#showSelectedDateBtn"
       );
