@@ -3206,7 +3206,7 @@
             ctx.font = '10px "Meiryo", sans-serif';
             ctx.fillStyle = "#ffd700";
             ctx.fillText(
-              meteorRadiant.name,
+              meteorRadiant.name + "流星群",
               x + 19,
               y + 5
             );
