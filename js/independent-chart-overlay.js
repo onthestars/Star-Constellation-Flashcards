@@ -33,6 +33,20 @@
   let selectedMeteor = null;
   let isOpen = false;
 
+  // 右上のプラネタリウムボタンの状態を更新
+  function updatePlanetariumButtonState() {
+
+    const button = document.getElementById(
+      "showPlanetariumBtn"
+    );
+
+    if (!button) return;
+
+    button.style.opacity = isOpen ? 0.4 : 1;
+    button.style.pointerEvents = isOpen ? "none" : "auto";
+    button.setAttribute("aria-disabled", String(isOpen));
+  }
+
   // 月日を「10月2日」の形式に変換
   function formatMeteorDate(mmdd) {
     const [month, day] = mmdd.split("-");
@@ -89,6 +103,8 @@
 
     isOpen = true;
 
+    updatePlanetariumButtonState();
+
     if (frame.getAttribute("src") !== CHART_URL) {
       frame.src = CHART_URL;
     } else {
@@ -106,6 +122,18 @@
     overlay.style.display = "block";
 
     window.bringPanelToFront(overlay);
+
+    // パネルを上から下へ表示
+    const panel = document.getElementById(
+      "independent-chart-panel"
+    );
+
+    panel.classList.remove("planetarium-panel-fade-in");
+
+    // アニメーションを再実行
+    void panel.offsetWidth;
+
+    panel.classList.add("planetarium-panel-fade-in");
 
     isOpen = true;
 
@@ -126,6 +154,7 @@
   // オーバーレイを閉じる
   function closeIndependentChart() {
     isOpen = false;
+    updatePlanetariumButtonState();
     selectedMeteor = null;
     overlay.style.display = "none";
     frame.src = "about:blank";
