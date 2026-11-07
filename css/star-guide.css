@@ -160,7 +160,7 @@
 }
 
 /* =================================
-   今の空を見るボタン
+   今の空を見る・選んだ日の20時 ボタン
 ================================= */
 
 #star-guide-panel .datetime-now {
@@ -179,7 +179,7 @@
 
   color: #080D32;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(9px, 2.5vw, 12px);
+  font-size: clamp(9px, 3vw, 13px);
   font-weight: bold;
 
   background: linear-gradient(to bottom, #FFE080, #D9A928);
