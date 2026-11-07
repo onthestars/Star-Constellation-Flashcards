@@ -887,7 +887,7 @@
           handleAbsoluteOrientation
         );
 
-        setSensorMode("auto");
+        setSensorMode("manual");
 
       } catch (error) {
 
