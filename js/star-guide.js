@@ -728,7 +728,7 @@
           gap: 10px;
           width: 100%;
           box-sizing: border-box;
-          margin: 0;
+          margin-top: 3px;
           padding: 0;
           line-height: 1.3;
           font-size: 14px;
@@ -736,9 +736,8 @@
 
           <div style="min-width: 0; margin: 0; padding: 0;">
             <div style="
-              font-size: 0.9em;
               margin: 0 0 2px 0;
-              text-align: left;
+              text-align: center;
             ">
               ${dateText}
             </div>
