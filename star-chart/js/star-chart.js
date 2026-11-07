@@ -3989,6 +3989,23 @@
       // 日時表示を更新
       updateDatetimeDisplay();
 
+            // 日時表示を更新
+      updateDatetimeDisplay();
+
+      // 年月日時分を金色にフラッシュ
+      const datetimeDisplay =
+        document.getElementById("datetime-display");
+
+      datetimeDisplay.classList.remove("datetime-flash");
+
+      // アニメーションを再実行
+      void datetimeDisplay.offsetWidth;
+
+      datetimeDisplay.classList.add("datetime-flash");
+
+      // 星図を再描画
+      drawChart();
+
       // 星図を再描画
       drawChart();
 
