@@ -32,6 +32,31 @@
 
   let selectedMeteor = null;
   let isOpen = false;
+  let pendingObservationTimestamp = null;
+
+  // 観測日時を星図へ送信
+  function sendObservationDate() {
+    if (
+      !isOpen ||
+      !frameReady ||
+      pendingObservationTimestamp === null ||
+      !frame.contentWindow
+    ) {
+      return;
+    }
+
+    frame.contentWindow.postMessage(
+      {
+        type: "set-observation-date",
+        timestamp: pendingObservationTimestamp
+      },
+      CHART_ORIGIN
+    );
+
+    pendingObservationTimestamp = null;
+  }
+
+  let frameReady = false;
 
   // 右上のプラネタリウムボタンの状態を更新
   function updatePlanetariumButtonState() {
@@ -106,6 +131,7 @@
     updatePlanetariumButtonState();
 
     if (frame.getAttribute("src") !== CHART_URL) {
+      frameReady = false;
       frame.src = CHART_URL;
     } else {
       sendRadiantCoordinates();
@@ -138,22 +164,41 @@
     isOpen = true;
 
     if (frame.getAttribute("src") !== CHART_URL) {
+      frameReady = false;
       frame.src = CHART_URL;
     }
   }
 
-  // 星図の読み込み完了後に放射点を送信
+  // 指定した日時でプラネタリウムを開く
+  function openPlanetariumAtDate(timestamp) {
+
+    if (!Number.isFinite(timestamp)) return;
+
+    pendingObservationTimestamp = timestamp;
+
+    openPlanetarium();
+
+    // すでに星図が読み込み済みなら、そのまま日時を送信
+    sendObservationDate();
+  }
+
+  // 星図の読み込み完了後に必要な情報を送信
   frame.addEventListener("load", function () {
     if (!isOpen || frame.src === "about:blank") {
       return;
     }
 
+    frameReady = true;
+
     sendRadiantCoordinates();
+    sendObservationDate();
   });
 
   // オーバーレイを閉じる
   function closeIndependentChart() {
     isOpen = false;
+    frameReady = false;
+    pendingObservationTimestamp = null;
     updatePlanetariumButtonState();
     selectedMeteor = null;
     overlay.style.display = "none";
@@ -177,6 +222,7 @@
 
   // 星空ガイドから呼び出す関数
   window.openPlanetarium = openPlanetarium;
+  window.openPlanetariumAtDate = openPlanetariumAtDate;
 
   console.log("星図カードオーバーレイを初期化しました。");
 })();
