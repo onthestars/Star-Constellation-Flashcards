@@ -98,7 +98,7 @@ function getMeteorMessage(date) {
 
       activeMessages.push(
         `${createMeteorShowerLink(meteor)}
-  <span style="font-size:0.85em;">${Number(peakMonth)}/${Number(peakDay)}頃極大</span>`
+  <span style="font-size:0.85em;">${Number(peakMonth)}/${Number(peakDay)}極大</span>`
       );
 
       continue;
