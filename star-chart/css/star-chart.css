@@ -75,7 +75,7 @@ body {
   font-size: 13px;
 }
 
-/* 独立星図専用の流星描画Canvas */
+/* プラネタリウム専用の流星描画Canvas */
 #star-chart-meteor-layer {
   position: absolute;
   inset: 0;
@@ -556,8 +556,8 @@ body {
 ============================ */
 #chart-text-size-panel {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 6px;
+  right: 8px;
   z-index: 10;
 
   display: flex;
@@ -565,8 +565,8 @@ body {
 }
 
 #chart-text-size-panel button {
-  width: 30px;
-  height: 25px;
+  width: 28px;
+  height: 24px;
 
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 5px;
