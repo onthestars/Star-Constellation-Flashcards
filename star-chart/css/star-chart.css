@@ -552,7 +552,7 @@ body {
 }
 
 /* ============================
-   プラネタリウム文字サイズ切り替え
+   プラネタリウム文字サイズ（大中小）切り替え
 ============================ */
 #chart-text-size-panel {
   position: absolute;
@@ -567,6 +567,15 @@ body {
 #chart-text-size-panel button {
   width: 28px;
   height: 24px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
 
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 5px;
@@ -575,6 +584,9 @@ body {
   color: #fff;
 
   font-size: 11px;
+  line-height: 1;
+  text-align: center;
+
   cursor: pointer;
 }
 
