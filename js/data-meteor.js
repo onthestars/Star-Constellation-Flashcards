@@ -2,7 +2,7 @@
 
 const meteorEvents = [
   {
-    name: "しぶんぎ座流星群",
+    name: "しぶんぎ座",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#quadrantids",
     start: "12-28",
     end: "01-12",
@@ -12,7 +12,7 @@ const meteorEvents = [
   },
 
   {
-    name: "こと座流星群",
+    name: "こと座",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#april-lyrids",
     start: "04-14",
     end: "04-30",
@@ -22,7 +22,7 @@ const meteorEvents = [
   },
 
   {
-    name: "みずがめ座η流星群",
+    name: "みずがめ座η",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#eta-aquariids",
     start: "04-19",
     end: "05-28",
@@ -32,7 +32,7 @@ const meteorEvents = [
   },
 
   {
-    name: "みずがめ座δ南流星群",
+    name: "みずがめ座δ南",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#south-delta-aquariids",
     start: "07-12",
     end: "08-23",
@@ -42,7 +42,7 @@ const meteorEvents = [
   },
 
   {
-    name: "ペルセウス座流星群",
+    name: "ペルセウス座",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#perseids",
     start: "07-17",
     end: "08-24",
@@ -52,7 +52,7 @@ const meteorEvents = [
   },
 
   {
-    name: "10月りゅう座流星群",
+    name: "10月りゅう座",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#october-draconids",
     start: "10-06",
     end: "10-10",
@@ -62,7 +62,7 @@ const meteorEvents = [
   },
 
   {
-    name: "オリオン座流星群",
+    name: "オリオン座",
     start: "10-02",
     end: "11-07",
     peak: "10-21",
@@ -71,7 +71,7 @@ const meteorEvents = [
   },
 
   {
-    name: "おうし座南流星群",
+    name: "おうし座南",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#southern-taurids",
     start: "09-20",
     end: "11-20",
@@ -81,7 +81,7 @@ const meteorEvents = [
   },
 
   {
-    name: "おうし座北流星群",
+    name: "おうし座北",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#northern-taurids",
     start: "10-20",
     end: "12-10",
@@ -91,7 +91,7 @@ const meteorEvents = [
   },
 
   {
-    name: "しし座流星群",
+    name: "しし座",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#leonids",
     start: "11-06",
     end: "11-30",
@@ -101,7 +101,7 @@ const meteorEvents = [
   },
 
   {
-    name: "ふたご座流星群",
+    name: "ふたご座",
     url: "https://www.nao.ac.jp/astro/basic/major-meteor-shower.html#geminids",
     start: "12-04",
     end: "12-20",
