@@ -409,6 +409,17 @@
 
   // 初期観測日時：現在日時
   let observationDate = new Date();
+  
+  // 外部から観測日時を設定する
+window.setPlanetariumDate = function (date) {
+
+  observationDate = new Date(date.getTime());
+
+  updateDatetimeDisplay();
+
+  drawChart();
+
+};
 
   // 観測日時を取得する
   function getObservationDate() {
@@ -3677,11 +3688,31 @@
     // 同じオリジンからのメッセージだけを受け取る
     if (event.origin !== window.location.origin) return;
 
-    const data = event.data;
+const data = event.data;
 
-    if (!data || data.type !== "set-meteor-radiant") {
-      return;
-    }
+if (!data) return;
+
+// 親ページから観測日時を受信
+if (data.type === "set-observation-date") {
+
+  if (!Number.isFinite(data.timestamp)) return;
+
+  const newDate = new Date(data.timestamp);
+
+  if (Number.isNaN(newDate.getTime())) return;
+
+  observationDate = newDate;
+
+  updateDatetimeDisplay();
+  drawChart();
+
+  return;
+}
+
+// 流星群の放射点以外は処理しない
+if (data.type !== "set-meteor-radiant") {
+  return;
+}
 
     // 赤経・赤緯の値を確認
     if (
@@ -3925,7 +3956,7 @@
     // 最初の1回はすぐに変更
     changeObservationDate(direction);
 
-    // 1秒後から連続変更を開始
+    // 設定秒後から連続変更を開始
     datetimeRepeatTimer = setTimeout(() => {
 
       datetimeRepeatTimer = null;
@@ -3936,7 +3967,7 @@
 
       }, 150);
 
-    }, 1000);
+    }, 500);
 
   }
 
