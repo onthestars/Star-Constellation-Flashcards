@@ -164,20 +164,22 @@
 ================================= */
 
 #star-guide-panel .datetime-now {
-  flex: 0 0 auto;
-  width: min(240px, 80%);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 240px;
+  width: auto;
   height: 28px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  margin: 8px auto 12px;
-  padding: 0 12px;
+  margin: 8px 0 12px;
+  padding: 0 4px;
 
   color: #080D32;
   font-family: "Meiryo", sans-serif;
-  font-size: 12px;
+  font-size: clamp(9px, 2.5vw, 12px);
   font-weight: bold;
 
   background: linear-gradient(to bottom, #FFE080, #D9A928);
@@ -210,4 +212,9 @@
 
   background: linear-gradient(to bottom, #101C38, #080D1A);
   border-top: 1px solid #263A68;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
 }
