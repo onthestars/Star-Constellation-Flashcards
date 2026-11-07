@@ -8,10 +8,14 @@
   const ctx = canvas.getContext("2d");
 
   // ==========================================
-  // プラネタリウム文字サイズ設定
+  // プラネタリウム文字サイズ（大中小）設定
   // ==========================================
 
-  let chartTextSize = "medium";
+  const CHART_TEXT_SIZE_KEY = "chartTextSize";
+
+  // 前回の設定を復元（未設定なら中）
+  let chartTextSize =
+    localStorage.getItem(CHART_TEXT_SIZE_KEY) || "medium";
 
   const CHART_TEXT_SIZES = {
     small: 0.8,
@@ -24,35 +28,38 @@
     "#chart-text-size-panel button"
   );
 
+  // 選択中ボタンの表示を更新
+  function updateTextSizeButtons() {
+    textSizeButtons.forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.textSize === chartTextSize
+      );
+    });
+  }
+
+  // ボタンのクリック処理
   textSizeButtons.forEach(button => {
     button.addEventListener("click", () => {
 
       chartTextSize = button.dataset.textSize;
 
+      // 選択したサイズを保存
+      localStorage.setItem(
+        CHART_TEXT_SIZE_KEY,
+        chartTextSize
+      );
+
       // 選択中ボタンの表示を更新
-      textSizeButtons.forEach(btn => {
-        btn.classList.toggle("active", btn === button);
-      });
+      updateTextSizeButtons();
 
       // 星図を再描画
       drawChart();
     });
   });
 
-  textSizeButtons.forEach(button => {
-    button.addEventListener("click", () => {
-
-      chartTextSize = button.dataset.textSize;
-
-      // 選択中ボタンの表示を更新
-      textSizeButtons.forEach(btn => {
-        btn.classList.toggle("active", btn === button);
-      });
-
-      // 星図を再描画
-      drawChart();
-    });
-  });
+  // 初期表示
+  updateTextSizeButtons();
 
   // プラネタリウム専用の流星レイヤー
   const meteorLayer = document.getElementById("star-chart-meteor-layer");
