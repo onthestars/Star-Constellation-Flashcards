@@ -2445,8 +2445,8 @@
           const boxX = labelX - boxWidth / 2;
           const boxY = labelY - boxHeight / 2;
 
-          // 白い背景だけ透明度を設定
-          ctx.globalAlpha = state.opacity * 0.30;
+          // 星座名の白い背景の透明度を設定
+          ctx.globalAlpha = state.opacity * 0.45;
 
           ctx.fillStyle = "#FFFFFF";
           ctx.beginPath();
