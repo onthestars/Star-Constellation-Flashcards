@@ -297,6 +297,21 @@ background: linear-gradient(to bottom,
   font-variant-numeric: tabular-nums;
 }
 
+@keyframes datetimeFlash {
+  0%, 100% {
+    background: transparent;
+  }
+
+  10%, 90% {
+    background: linear-gradient(to bottom, #FFE080, #D9A928);
+  }
+}
+
+#datetime-display.datetime-flash {
+  animation: datetimeFlash 0.10s steps(1, end);
+  border-radius: 5px;
+}
+
 /* 年・月・日・時・分 */
 #datetime-display small {
   margin: 0;
