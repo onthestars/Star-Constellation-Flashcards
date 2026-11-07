@@ -3277,7 +3277,7 @@
               const [month, day] = meteorRadiant.peak.split("-");
 
               const peakText =
-                `${Number(month)}/${Number(day)}頃極大`;
+                `${Number(month)}/${Number(day)}極大`;
 
               ctx.font = '9px "Meiryo", sans-serif';
               ctx.fillText(
