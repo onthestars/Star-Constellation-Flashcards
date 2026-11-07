@@ -7,6 +7,53 @@
   const status = document.getElementById("chart-status");
   const ctx = canvas.getContext("2d");
 
+  // ==========================================
+  // プラネタリウム文字サイズ設定
+  // ==========================================
+
+  let chartTextSize = "medium";
+
+  const CHART_TEXT_SIZES = {
+    small: 0.8,
+    medium: 1.0,
+    large: 1.3
+  };
+
+    // 文字サイズ切り替えボタン
+  const textSizeButtons = document.querySelectorAll(
+    "#chart-text-size-panel button"
+  );
+
+  textSizeButtons.forEach(button => {
+    button.addEventListener("click", () => {
+
+      chartTextSize = button.dataset.textSize;
+
+      // 選択中ボタンの表示を更新
+      textSizeButtons.forEach(btn => {
+        btn.classList.toggle("active", btn === button);
+      });
+
+      // 星図を再描画
+      drawChart();
+    });
+  });
+
+  textSizeButtons.forEach(button => {
+    button.addEventListener("click", () => {
+
+      chartTextSize = button.dataset.textSize;
+
+      // 選択中ボタンの表示を更新
+      textSizeButtons.forEach(btn => {
+        btn.classList.toggle("active", btn === button);
+      });
+
+      // 星図を再描画
+      drawChart();
+    });
+  });
+
   // プラネタリウム専用の流星レイヤー
   const meteorLayer = document.getElementById("star-chart-meteor-layer");
 
@@ -389,9 +436,9 @@
   // 初期の視野角（度）
   let fieldOfViewDeg = 110;
 
-  // 拡大・縮小できる視野角の範囲
+  // 拡大・縮小できる視野角の範囲（最大拡大率、最小縮小率）
   const MIN_FIELD_OF_VIEW_DEG = 10;
-  const MAX_FIELD_OF_VIEW_DEG = 120;
+  const MAX_FIELD_OF_VIEW_DEG = 150;
 
   // 観測地点：大阪付近
   const latitudeDeg = 34.81;
@@ -409,17 +456,17 @@
 
   // 初期観測日時：現在日時
   let observationDate = new Date();
-  
+
   // 外部から観測日時を設定する
-window.setPlanetariumDate = function (date) {
+  window.setPlanetariumDate = function (date) {
 
-  observationDate = new Date(date.getTime());
+    observationDate = new Date(date.getTime());
 
-  updateDatetimeDisplay();
+    updateDatetimeDisplay();
 
-  drawChart();
+    drawChart();
 
-};
+  };
 
   // 観測日時を取得する
   function getObservationDate() {
@@ -2107,10 +2154,10 @@ window.setPlanetariumDate = function (date) {
       if (fieldOfViewDeg > 75) {
         constellationMagLimit = null; // 星座線なし
 
-      } else if (fieldOfViewDeg > 60) {
+      } else if (fieldOfViewDeg > 65) {
         constellationMagLimit = 1.5;  // 1等星をもつ星座
 
-      } else if (fieldOfViewDeg > 30) {
+      } else if (fieldOfViewDeg > 35) {
         constellationMagLimit = 2.5;  // 2等星をもつ星座まで追加
 
       } else {
@@ -2337,8 +2384,8 @@ window.setPlanetariumDate = function (date) {
       // 全星座の名前を描画
       for (const constellation of constellations) {
 
-        // 視野角40°より広い場合は星座名を描画しない
-        if (fieldOfViewDeg > 40) continue;
+        // 指定視野角（拡大率）より広い場合は星座名を描画しない
+        if (fieldOfViewDeg > 50) continue;
 
         const state =
           constellationFadeStates.get(constellation.id);
@@ -2382,7 +2429,7 @@ window.setPlanetariumDate = function (date) {
 
           ctx.save();
 
-          ctx.font = '10px "Meiryo", sans-serif';
+          ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
 
@@ -2683,16 +2730,16 @@ window.setPlanetariumDate = function (date) {
 
         ctx.fill();
 
-        // 拡大率に応じて恒星名の表示対象を切り替える
+        // 拡大率（視野角）に応じて恒星名の表示対象を切り替える
         const shouldShowStarLabel =
-          fieldOfViewDeg <= 60 &&
+          fieldOfViewDeg <= 30 &&
           projected.label &&
           projected.label.trim() !== "";
 
         // 恒星名を表示
         if (shouldShowStarLabel && (isPolaris || projected.label)) {
 
-          ctx.font = '9px "Meiryo", sans-serif';
+          ctx.font = `${9 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
           ctx.fillStyle = "#F5DFA0";
           ctx.textAlign = "left";
           ctx.textBaseline = "middle";
@@ -2770,7 +2817,7 @@ window.setPlanetariumDate = function (date) {
       ctx.restore();
 
       // 太陽の名前
-      ctx.font = '10px "Meiryo", sans-serif';
+      ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
       ctx.fillStyle = "#FFF0A0";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
@@ -2974,7 +3021,7 @@ window.setPlanetariumDate = function (date) {
       }
 
       // 惑星名
-      ctx.font = '10px "Meiryo", sans-serif';
+      ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
       ctx.fillStyle = planet.color;
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
@@ -3161,7 +3208,7 @@ window.setPlanetariumDate = function (date) {
       ctx.restore();
 
       // 月の名前
-      ctx.font = '10px "Meiryo", sans-serif';
+      ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
       ctx.fillStyle = "#FFF2B0";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
@@ -3214,7 +3261,7 @@ window.setPlanetariumDate = function (date) {
             ctx.textBaseline = "top";
 
             // 流星群名（11px）
-            ctx.font = '10px "Meiryo", sans-serif';
+            ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
             ctx.fillStyle = "#ffd700";
             ctx.fillText(
               meteorRadiant.name + "流星群",
@@ -3688,31 +3735,31 @@ window.setPlanetariumDate = function (date) {
     // 同じオリジンからのメッセージだけを受け取る
     if (event.origin !== window.location.origin) return;
 
-const data = event.data;
+    const data = event.data;
 
-if (!data) return;
+    if (!data) return;
 
-// 親ページから観測日時を受信
-if (data.type === "set-observation-date") {
+    // 親ページから観測日時を受信
+    if (data.type === "set-observation-date") {
 
-  if (!Number.isFinite(data.timestamp)) return;
+      if (!Number.isFinite(data.timestamp)) return;
 
-  const newDate = new Date(data.timestamp);
+      const newDate = new Date(data.timestamp);
 
-  if (Number.isNaN(newDate.getTime())) return;
+      if (Number.isNaN(newDate.getTime())) return;
 
-  observationDate = newDate;
+      observationDate = newDate;
 
-  updateDatetimeDisplay();
-  drawChart();
+      updateDatetimeDisplay();
+      drawChart();
 
-  return;
-}
+      return;
+    }
 
-// 流星群の放射点以外は処理しない
-if (data.type !== "set-meteor-radiant") {
-  return;
-}
+    // 流星群の放射点以外は処理しない
+    if (data.type !== "set-meteor-radiant") {
+      return;
+    }
 
     // 赤経・赤緯の値を確認
     if (
@@ -4020,7 +4067,7 @@ if (data.type !== "set-meteor-radiant") {
       // 日時表示を更新
       updateDatetimeDisplay();
 
-            // 日時表示を更新
+      // 日時表示を更新
       updateDatetimeDisplay();
 
       // 年月日時分を金色にフラッシュ
