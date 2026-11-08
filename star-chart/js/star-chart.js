@@ -2905,31 +2905,185 @@
       // 惑星本体
       if (planet.key === "Jupiter") {
 
-        // 木星の円形範囲
+        const r = planet.radius;
+
         ctx.save();
 
+        // 木星の円形範囲でクリッピング
         ctx.beginPath();
-        ctx.arc(x, y, planet.radius, 0, Math.PI * 2);
+        ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.clip();
 
         // 木星の本体
         ctx.fillStyle = "#E8C99A";
         ctx.fillRect(
-          x - planet.radius,
-          y - planet.radius,
-          planet.radius * 2,
-          planet.radius * 2
+          x - r,
+          y - r,
+          r * 2,
+          r * 2
         );
 
-        // 木星の横縞
-        ctx.fillStyle = "#C99F78";
-        ctx.fillRect(x - 7, y - 4, 14, 2);
+        // 上部の濃い縞
+        ctx.beginPath();
+        ctx.moveTo(x - r - 1, y - 5);
+        ctx.bezierCurveTo(
+          x - 3, y - 4,
+          x + 3, y - 6,
+          x + r + 1, y - 5
+        );
+        ctx.lineTo(x + r + 1, y - 3);
+        ctx.bezierCurveTo(
+          x + 3, y - 4,
+          x - 3, y - 2,
+          x - r - 1, y - 3
+        );
+        ctx.closePath();
+        ctx.fillStyle = "#B98560";
+        ctx.fill();
 
+        // 上部の明るい帯
+        ctx.beginPath();
+        ctx.moveTo(x - r - 1, y - 2);
+        ctx.bezierCurveTo(
+          x - 3, y - 3,
+          x + 3, y - 1,
+          x + r + 1, y - 2
+        );
+        ctx.lineTo(x + r + 1, y);
+        ctx.bezierCurveTo(
+          x + 3, y + 1,
+          x - 3, y - 1,
+          x - r - 1, y
+        );
+        ctx.closePath();
         ctx.fillStyle = "#F5E2C2";
-        ctx.fillRect(x - 7, y - 1, 14, 2);
+        ctx.fill();
 
-        ctx.fillStyle = "#C99F78";
-        ctx.fillRect(x - 7, y + 3, 14, 2);
+        // 中央の赤茶色の縞
+        ctx.beginPath();
+        ctx.moveTo(x - r - 1, y + 1);
+        ctx.bezierCurveTo(
+          x - 3, y + 2,
+          x + 3, y,
+          x + r + 1, y + 1
+        );
+        ctx.lineTo(x + r + 1, y + 4);
+        ctx.bezierCurveTo(
+          x + 3, y + 3,
+          x - 3, y + 5,
+          x - r - 1, y + 4
+        );
+        ctx.closePath();
+        ctx.fillStyle = "#C99A72";
+        ctx.fill();
+
+        // 下部の明るい帯
+        ctx.beginPath();
+        ctx.moveTo(x - r - 1, y + 5);
+        ctx.bezierCurveTo(
+          x - 3, y + 4,
+          x + 3, y + 6,
+          x + r + 1, y + 5
+        );
+        ctx.lineTo(x + r + 1, y + 7);
+        ctx.bezierCurveTo(
+          x + 3, y + 8,
+          x - 3, y + 6,
+          x - r - 1, y + 7
+        );
+        ctx.closePath();
+        ctx.fillStyle = "#F0D7B2";
+        ctx.fill();
+
+        // 木星の大赤斑（観測日時に応じて自転）
+
+        // 木星の自転周期：約9時間55分40秒
+        const jupiterRotationPeriod =
+          (9 * 60 + 55) * 60 * 1000 + 40 * 1000;
+
+        // 回転位置の基準日時（2026年11月9日 0時）
+        const jupiterReferenceDate =
+          new Date(2026, 10, 9, 0, 0, 0);
+
+        // 基準日時からの経過時間
+        const elapsedTime =
+          observation.getTime() - jupiterReferenceDate.getTime();
+
+        // 自転による回転角度
+        const rotationAngle =
+          (elapsedTime / jupiterRotationPeriod) *
+          Math.PI * 2 + 0.4;
+
+        // 大赤斑が木星の表側にあるか判定
+        const spotVisible = Math.cos(rotationAngle) > 0;
+
+        if (spotVisible) {
+
+          // 大赤斑の位置
+          const spotX =
+            x + r * 0.62 * Math.sin(rotationAngle);
+
+          const spotY = y + 2.3;
+
+          // 木星の縁に近づくほど大赤斑の横幅を縮める
+          const spotWidth = Math.cos(rotationAngle);
+
+          // 大赤斑の外側
+          ctx.beginPath();
+          ctx.ellipse(
+            spotX,
+            spotY,
+            2.5 * spotWidth,
+            1.3,
+            -0.12,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = "#A95340";
+          ctx.fill();
+
+          // 大赤斑の内側
+          ctx.beginPath();
+          ctx.ellipse(
+            spotX,
+            spotY,
+            1.8 * spotWidth,
+            0.8,
+            -0.12,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = "#C97858";
+          ctx.fill();
+
+        }
+
+                // 木星の球体感を出すための周辺部の陰影
+        const jupiterShade =
+          ctx.createRadialGradient(
+            x, y, r * 0.25,
+            x, y, r
+          );
+
+        jupiterShade.addColorStop(
+          0,
+          "rgba(50, 30, 20, 0)"
+        );
+
+        jupiterShade.addColorStop(
+          0.65,
+          "rgba(50, 30, 20, 0.03)"
+        );
+
+        jupiterShade.addColorStop(
+          1,
+          "rgba(50, 30, 20, 0.38)"
+        );
+
+        ctx.fillStyle = jupiterShade;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
 
         ctx.restore();
 
