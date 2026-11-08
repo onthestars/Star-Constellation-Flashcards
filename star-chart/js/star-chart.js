@@ -23,10 +23,16 @@
     large: 1.3
   };
 
+  // ▼ 天体ラベル表示
+  let objectLabelsVisible = true;
+
   // 文字サイズ切り替えボタン
   const textSizeButtons = document.querySelectorAll(
-    "#chart-text-size-panel button"
+    "#chart-text-size-panel button[data-text-size]"
   );
+
+  const labelToggleButton =
+    document.getElementById("toggle-object-labels");
 
   // 選択中ボタンの表示を更新
   function updateTextSizeButtons() {
@@ -60,6 +66,23 @@
 
   // 初期表示
   updateTextSizeButtons();
+
+  if (labelToggleButton) {
+
+    labelToggleButton.addEventListener("click", () => {
+
+      objectLabelsVisible = !objectLabelsVisible;
+
+      labelToggleButton.classList.toggle(
+        "active",
+        !objectLabelsVisible
+      );
+
+      drawChart();
+
+    });
+
+  }
 
   // プラネタリウム専用の流星レイヤー
   const meteorLayer = document.getElementById("star-chart-meteor-layer");
@@ -2445,29 +2468,34 @@
           const boxX = labelX - boxWidth / 2;
           const boxY = labelY - boxHeight / 2;
 
-          // 星座名の白い背景の透明度を設定
-          ctx.globalAlpha = state.opacity * 0.45;
+          if (objectLabelsVisible) {
 
-          ctx.fillStyle = "#FFFFFF";
-          ctx.beginPath();
-          ctx.roundRect(
-            boxX,
-            boxY,
-            boxWidth,
-            boxHeight,
-            10
-          );
-          ctx.fill();
+            // 星座名の白い背景の透明度を設定
+            ctx.globalAlpha = state.opacity * 0.45;
 
-          // 星座名は完全不透明
-          ctx.globalAlpha = 1.0;
-          ctx.fillStyle = "rgb(6, 7, 64)";
+            ctx.fillStyle = "#FFFFFF";
+            ctx.beginPath();
+            ctx.roundRect(
+              boxX,
+              boxY,
+              boxWidth,
+              boxHeight,
+              10
+            );
+            ctx.fill();
 
-          ctx.fillText(
-            constellation.name,
-            labelX,
-            labelY
-          );
+            // 星座名は完全不透明
+            ctx.globalAlpha = 1.0;
+            ctx.fillStyle = "rgb(6, 7, 64)";
+
+            ctx.fillText(
+              constellation.name,
+              labelX,
+              labelY
+            );
+
+          }
+
 
           ctx.restore();
         }
@@ -2753,13 +2781,18 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      for (const label of starLabels) {
+      if (objectLabelsVisible) {
 
-        ctx.fillText(
-          label.text,
-          label.x,
-          label.y
-        );
+        for (const label of starLabels) {
+
+          ctx.fillText(
+            label.text,
+            label.x,
+            label.y
+          );
+
+        }
+
       }
 
       // 星の描画範囲の制限を解除する
@@ -3036,11 +3069,15 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      ctx.fillText(
-        planet.name,
-        x + planet.radius + 4,
-        y
-      );
+      if (objectLabelsVisible) {
+
+        ctx.fillText(
+          planet.name,
+          x + planet.radius + 4,
+          y
+        );
+
+      }
 
       ctx.restore();
     }
