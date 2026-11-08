@@ -1265,6 +1265,68 @@
     };
   }
 
+  // ==========================================
+  // 土星の環の見え方を計算
+  // ==========================================
+  function getSaturnRingAppearance(date = getObservationDate()) {
+
+    const RAD = Math.PI / 180;
+
+    // 土星の地球から見た位置
+    const saturn = getPlanetEquatorialPosition(
+      "Saturn",
+      date
+    );
+
+    if (!saturn) return null;
+
+    // 土星の自転軸（J2000座標の近似値）
+    const poleRA = 40.589 * RAD;
+    const poleDec = 83.537 * RAD;
+
+    const saturnRA = saturn.ra * RAD;
+    const saturnDec = saturn.dec * RAD;
+
+    // 土星の方向と自転軸の内積
+    const dot =
+      Math.cos(poleDec) *
+      Math.cos(saturnDec) *
+      Math.cos(poleRA - saturnRA) +
+      Math.sin(poleDec) *
+      Math.sin(saturnDec);
+
+    // 地球から見た環の開き角
+    const openingAngleDeg =
+      Math.asin(
+        Math.max(-1, Math.min(1, dot))
+      ) / RAD;
+
+    // 自転軸の天球上での位置角
+    const deltaRA = poleRA - saturnRA;
+
+    const polePositionAngle = Math.atan2(
+      Math.cos(poleDec) * Math.sin(deltaRA),
+      Math.sin(poleDec) * Math.cos(saturnDec) -
+      Math.cos(poleDec) * Math.sin(saturnDec) *
+      Math.cos(deltaRA)
+    );
+
+    // 環の長軸は自転軸の見かけの方向と直角
+    const ringPositionAngleDeg = normalizeDeg(
+      polePositionAngle / RAD + 90
+    );
+
+    return {
+      openingAngleDeg,
+      ringPositionAngleDeg,
+
+      // 環の短軸と長軸の比率
+      minorAxisRatio: Math.abs(
+        Math.sin(openingAngleDeg * RAD)
+      )
+    };
+  }
+
   // 月の満ち欠けを計算する
   function getMoonPhase(date = getObservationDate()) {
 
@@ -2652,33 +2714,33 @@
 
       ctx.save();
 
-// 太陽の周囲に強い光彩を描く
-ctx.save();
+      // 太陽の周囲に強い光彩を描く
+      ctx.save();
 
-const glowRadius = 38;
+      const glowRadius = 38;
 
-const glowGradient = ctx.createRadialGradient(
-  sunX, sunY, sunRadius * 0.5,
-  sunX, sunY, glowRadius
-);
+      const glowGradient = ctx.createRadialGradient(
+        sunX, sunY, sunRadius * 0.5,
+        sunX, sunY, glowRadius
+      );
 
-glowGradient.addColorStop(0, "rgba(255, 255, 120, 0.80)");
-glowGradient.addColorStop(0.2, "rgba(255, 245, 80, 0.45)");
-glowGradient.addColorStop(0.5, "rgba(255, 220, 40, 0.18)");
-glowGradient.addColorStop(1, "rgba(255, 210, 0, 0)");
+      glowGradient.addColorStop(0, "rgba(255, 255, 120, 0.80)");
+      glowGradient.addColorStop(0.2, "rgba(255, 245, 80, 0.45)");
+      glowGradient.addColorStop(0.5, "rgba(255, 220, 40, 0.18)");
+      glowGradient.addColorStop(1, "rgba(255, 210, 0, 0)");
 
-ctx.fillStyle = glowGradient;
-ctx.beginPath();
-ctx.arc(
-  sunX,
-  sunY,
-  glowRadius,
-  0,
-  Math.PI * 2
-);
-ctx.fill();
+      ctx.fillStyle = glowGradient;
+      ctx.beginPath();
+      ctx.arc(
+        sunX,
+        sunY,
+        glowRadius,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
 
-ctx.restore();
+      ctx.restore();
 
       ctx.fillStyle = "#FFD76A";
 
@@ -2873,31 +2935,191 @@ ctx.restore();
 
       } else if (planet.key === "Saturn") {
 
-        // 土星の環（後ろ側）
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(-0.25);
+        // 土星の環の見え方を取得
+        const ringAppearance =
+          getSaturnRingAppearance(observation);
 
-        ctx.strokeStyle = "#BDA77E";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 10, 4, 0, Math.PI, Math.PI * 2);
-        ctx.stroke();
+        if (ringAppearance) {
 
-        // 土星本体
-        ctx.fillStyle = planet.color;
-        ctx.beginPath();
-        ctx.arc(0, 0, planet.radius, 0, Math.PI * 2);
-        ctx.fill();
+          const RAD = Math.PI / 180;
 
-        // 土星の環（前側）
-        ctx.strokeStyle = "#E8D5A8";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 10, 4, 0, 0, Math.PI);
-        ctx.stroke();
+          // 土星の赤経・赤緯
+          const ra = position.ra * RAD;
+          const dec = position.dec * RAD;
 
-        ctx.restore();
+          // 環の長軸の位置角
+          const pa =
+            ringAppearance.ringPositionAngleDeg * RAD;
+
+          // 天球上の東方向ベクトル
+          const east = {
+            x: -Math.sin(ra),
+            y: Math.cos(ra),
+            z: 0
+          };
+
+          // 天球上の北方向ベクトル
+          const north = {
+            x: -Math.sin(dec) * Math.cos(ra),
+            y: -Math.sin(dec) * Math.sin(ra),
+            z: Math.cos(dec)
+          };
+
+          // 環の長軸方向
+          const tangent = {
+            x: north.x * Math.cos(pa) +
+              east.x * Math.sin(pa),
+
+            y: north.y * Math.cos(pa) +
+              east.y * Math.sin(pa),
+
+            z: north.z * Math.cos(pa) +
+              east.z * Math.sin(pa)
+          };
+
+          // 土星の方向ベクトル
+          const saturnVector = {
+            x: Math.cos(dec) * Math.cos(ra),
+            y: Math.cos(dec) * Math.sin(ra),
+            z: Math.sin(dec)
+          };
+
+          // 長軸方向へわずかに移動した点を作る
+          const step = 0.001;
+
+          const vx =
+            saturnVector.x + tangent.x * step;
+
+          const vy =
+            saturnVector.y + tangent.y * step;
+
+          const vz =
+            saturnVector.z + tangent.z * step;
+
+          const length = Math.hypot(vx, vy, vz);
+
+          // 天球座標に戻す
+          const ringRA =
+            normalizeDeg(Math.atan2(vy, vx) / RAD);
+
+          const ringDec =
+            Math.asin(vz / length) / RAD;
+
+          // 星図上に投影
+          const ringPoint = projectStar(
+            {
+              ra: ringRA,
+              dec: ringDec,
+              mag: 0,
+              id: "saturn-ring-direction",
+              label: ""
+            },
+            lstDeg,
+            basis,
+            minDot
+          );
+
+          // 画面上の環の回転角
+          let ringRotation = -0.25;
+
+          if (ringPoint) {
+
+            const ringX =
+              centerX + ringPoint.x * scaleX;
+
+            const ringY =
+              centerY + ringPoint.y * scaleY;
+
+            ringRotation = Math.atan2(
+              ringY - y,
+              ringX - x
+            );
+          }
+
+          // 環の長軸・短軸
+          const ringRadius = 10;
+
+          const ringMinorRadius = Math.max(
+            0.15,
+            ringRadius * ringAppearance.minorAxisRatio
+          );
+
+          // 環の前後関係
+          const frontStart =
+            ringAppearance.openingAngleDeg >= 0
+              ? 0
+              : Math.PI;
+
+          const frontEnd =
+            frontStart + Math.PI;
+
+          const backStart =
+            ringAppearance.openingAngleDeg >= 0
+              ? Math.PI
+              : 0;
+
+          const backEnd =
+            backStart + Math.PI;
+
+          ctx.save();
+
+          ctx.translate(x, y);
+          ctx.rotate(ringRotation);
+
+          // 土星の環（後ろ側）
+          ctx.strokeStyle = "#BDA77E";
+          ctx.lineWidth = 2;
+
+          ctx.beginPath();
+
+          ctx.ellipse(
+            0,
+            0,
+            ringRadius,
+            ringMinorRadius,
+            0,
+            backStart,
+            backEnd
+          );
+
+          ctx.stroke();
+
+          // 土星本体
+          ctx.fillStyle = planet.color;
+
+          ctx.beginPath();
+
+          ctx.arc(
+            0,
+            0,
+            planet.radius,
+            0,
+            Math.PI * 2
+          );
+
+          ctx.fill();
+
+          // 土星の環（前側）
+          ctx.strokeStyle = "#E8D5A8";
+          ctx.lineWidth = 2;
+
+          ctx.beginPath();
+
+          ctx.ellipse(
+            0,
+            0,
+            ringRadius,
+            ringMinorRadius,
+            0,
+            frontStart,
+            frontEnd
+          );
+
+          ctx.stroke();
+
+          ctx.restore();
+
+        }
 
       } else if (
         planet.key === "Venus" ||
