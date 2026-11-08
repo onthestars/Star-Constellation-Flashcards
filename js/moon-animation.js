@@ -15,8 +15,17 @@ function startMoonOrbitSequence() {
     const h = window.innerHeight;
 
     const cx = w / 2;
-    const cy = h * 0.50; // 月の高さ（画面サイズで変わる）
-    const r = Math.min(w, h) * 0.80;
+
+    // ▼ PCとスマホで軌道高さを分離
+    const isMobile = w <= 768;
+
+    const cy = isMobile
+        ? h * 0.50   // スマホ
+        : h * 0.65;  // PCは下げる
+
+    const r = isMobile
+        ? Math.min(w, h) * 0.80
+        : Math.min(w, h) * 0.60;
 
     const baseDeg = 10;
 
