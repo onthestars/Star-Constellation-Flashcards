@@ -237,19 +237,18 @@ specialImg.addEventListener("touchend", (e) => {
 function playStarTwinkle() {
   const overlay = document.getElementById("stars-overlay");
 
+  // ▼ Special Viewerより前面へ
+  overlay.style.zIndex = "999999";
+
   overlay.innerHTML = "";
 
   for (let i = 0; i < 20; i++) {
     const star = document.createElement("div");
     star.classList.add("star");
 
-    const x = Math.random() * 100;
-    const y = Math.random() * 100;
-
-    star.style.left = x + "vw";
-    star.style.top = y + "vh";
-
-    star.style.animationDelay = (Math.random() * 1.5) + "s";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.animationDelay = Math.random() * 1.5 + "s";
 
     overlay.appendChild(star);
   }
