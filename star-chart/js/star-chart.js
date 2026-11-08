@@ -564,19 +564,6 @@
       }
     }
 
-    // 表示対象から外れた星座
-    for (const [id, state] of constellationFadeStates) {
-
-      if (
-        !visibleConstellationIds.has(id) &&
-        state.phase !== "fadeOut"
-      ) {
-        state.phase = "fadeOut";
-        state.startTime = now;
-        state.startOpacity = state.opacity;
-      }
-    }
-
     // フェード中の星座があればアニメーションを開始
     for (const state of constellationFadeStates.values()) {
       if (
@@ -1081,197 +1068,6 @@
     return { ra, dec };
   }
 
-  // ==========================================
-  // 惑星の赤経・赤緯を簡易計算する
-  // ==========================================
-
-  function getPlanetEquatorialPosition(planetName, date = getObservationDate()) {
-
-    const RAD = Math.PI / 180;
-
-    // 2000年1月1日付近を基準とした日数
-    const d =
-      (date.getTime() - Date.UTC(2000, 0, 1, 12)) /
-      86400000;
-
-    // 惑星の軌道要素
-    const orbitalElements = {
-
-      mercury: {
-        N: 48.3313 + 3.24587e-5 * d,
-        i: 7.0047,
-        w: 29.1241 + 1.01444e-5 * d,
-        a: 0.387098,
-        e: 0.205635 + 5.59e-10 * d,
-        M: 168.6562 + 4.0923344368 * d
-      },
-
-      venus: {
-        N: 76.6799 + 2.46590e-5 * d,
-        i: 3.3946,
-        w: 54.8910 + 1.38374e-5 * d,
-        a: 0.723330,
-        e: 0.006773 - 1.302e-9 * d,
-        M: 48.0052 + 1.6021302244 * d
-      },
-
-      earth: {
-        N: 0,
-        i: 0,
-        w: 282.9404 + 4.70935e-5 * d,
-        a: 1,
-        e: 0.016709 - 1.151e-9 * d,
-        M: 356.0470 + 0.9856002585 * d
-      },
-
-      mars: {
-        N: 49.5574 + 2.11081e-5 * d,
-        i: 1.8497,
-        w: 286.5016 + 2.92961e-5 * d,
-        a: 1.523688,
-        e: 0.093405 + 2.516e-9 * d,
-        M: 18.6021 + 0.5240207766 * d
-      },
-
-      jupiter: {
-        N: 100.4542 + 2.76854e-5 * d,
-        i: 1.3030,
-        w: 273.8777 + 1.64505e-5 * d,
-        a: 5.20256,
-        e: 0.048498 + 4.469e-9 * d,
-        M: 19.8950 + 0.0830853001 * d
-      },
-
-      saturn: {
-        N: 113.6634 + 2.38980e-5 * d,
-        i: 2.4886,
-        w: 339.3939 + 2.97661e-5 * d,
-        a: 9.55475,
-        e: 0.055546 - 9.499e-9 * d,
-        M: 316.9670 + 0.0334442282 * d
-      },
-
-      uranus: {
-        N: 74.0005 + 1.3978e-5 * d,
-        i: 0.7733,
-        w: 96.6612 + 3.0565e-5 * d,
-        a: 19.18171 - 1.55e-8 * d,
-        e: 0.047318 + 7.45e-9 * d,
-        M: 142.5905 + 0.011725806 * d
-      },
-
-      neptune: {
-        N: 131.7806 + 3.0173e-5 * d,
-        i: 1.7700,
-        w: 272.8461 - 6.027e-6 * d,
-        a: 30.05826 + 3.313e-8 * d,
-        e: 0.008606 + 2.15e-9 * d,
-        M: 260.2471 + 0.005995147 * d
-      }
-    };
-
-    // 軌道要素を使って太陽中心の座標を求める
-    function getHeliocentricPosition(elements) {
-
-      const N = elements.N * RAD;
-      const i = elements.i * RAD;
-      const w = elements.w * RAD;
-      const e = elements.e;
-      const M = normalizeDeg(elements.M) * RAD;
-
-      // 離心近点角を反復計算
-      let E = M;
-
-      for (let j = 0; j < 8; j++) {
-
-        E -=
-          (E - e * Math.sin(E) - M) /
-          (1 - e * Math.cos(E));
-
-      }
-
-      // 軌道面上の座標
-      const xv = elements.a * (Math.cos(E) - e);
-
-      const yv =
-        elements.a *
-        Math.sqrt(1 - e * e) *
-        Math.sin(E);
-
-      // 真近点角と距離
-      const v = Math.atan2(yv, xv);
-      const r = Math.sqrt(xv * xv + yv * yv);
-
-      // 黄道座標
-      const x =
-        r *
-        (
-          Math.cos(N) * Math.cos(v + w) -
-          Math.sin(N) * Math.sin(v + w) * Math.cos(i)
-        );
-
-      const y =
-        r *
-        (
-          Math.sin(N) * Math.cos(v + w) +
-          Math.cos(N) * Math.sin(v + w) * Math.cos(i)
-        );
-
-      const z =
-        r *
-        Math.sin(v + w) *
-        Math.sin(i);
-
-      return { x, y, z };
-    }
-
-    const planetElements = orbitalElements[planetName.toLowerCase()];
-
-    if (!planetElements) {
-      return null;
-    }
-
-    // 地球の太陽中心座標
-    const earth = getHeliocentricPosition(
-      orbitalElements.earth
-    );
-
-    // 対象惑星の太陽中心座標
-    const planet = getHeliocentricPosition(
-      planetElements
-    );
-
-    // 地球から見た惑星の方向
-    const x = planet.x - earth.x;
-    const y = planet.y - earth.y;
-    const z = planet.z - earth.z;
-
-    // 黄道座標から赤道座標へ変換
-    const epsilon = 23.4393 * RAD;
-
-    const yEq =
-      y * Math.cos(epsilon) -
-      z * Math.sin(epsilon);
-
-    const zEq =
-      y * Math.sin(epsilon) +
-      z * Math.cos(epsilon);
-
-    // 赤経・赤緯
-    const ra = normalizeDeg(
-      Math.atan2(yEq, x) / RAD
-    );
-
-    const dec =
-      Math.atan2(
-        zEq,
-        Math.sqrt(x * x + yEq * y)
-      ) / RAD;
-
-    return { ra, dec };
-  }
-
-
   // 惑星の赤経・赤緯を計算する
   function getPlanetEquatorialPosition(planetName, date = new Date()) {
 
@@ -1408,6 +1204,35 @@
     const y = planet.y + earth.y;
     const z = planet.z + earth.z;
 
+    // 惑星の満ち欠けの割合を計算
+    const planetDistance = Math.hypot(
+      planet.x,
+      planet.y,
+      planet.z
+    );
+
+    const earthDistance = Math.hypot(
+      x,
+      y,
+      z
+    );
+
+    const dot =
+      planet.x * x +
+      planet.y * y +
+      planet.z * z;
+
+    const cosPhaseAngle = Math.max(
+      -1,
+      Math.min(
+        1,
+        dot / (planetDistance * earthDistance)
+      )
+    );
+
+    const illuminatedFraction =
+      (1 + cosPhaseAngle) / 2;
+
     // 黄道座標
     const lon = Math.atan2(y, x);
     const lat = Math.atan2(z, Math.hypot(x, y));
@@ -1433,9 +1258,12 @@
       Math.max(-1, Math.min(1, zEq))
     ) / RAD;
 
-    return { ra, dec };
+    return {
+      ra,
+      dec,
+      illuminatedFraction
+    };
   }
-
 
   // 月の満ち欠けを計算する
   function getMoonPhase(date = getObservationDate()) {
@@ -2820,13 +2648,37 @@
       const sunY = centerY + sunPoint.y * scaleY;
 
       // 太陽の大きさ（仮設定）
-      const sunRadius = 15;
+      const sunRadius = 11;
 
       ctx.save();
 
-      // 太陽の周囲に光彩を描く
-      ctx.shadowColor = "rgba(255, 190, 60, 1.0)";
-      ctx.shadowBlur = 56;
+// 太陽の周囲に強い光彩を描く
+ctx.save();
+
+const glowRadius = 38;
+
+const glowGradient = ctx.createRadialGradient(
+  sunX, sunY, sunRadius * 0.5,
+  sunX, sunY, glowRadius
+);
+
+glowGradient.addColorStop(0, "rgba(255, 255, 120, 0.80)");
+glowGradient.addColorStop(0.2, "rgba(255, 245, 80, 0.45)");
+glowGradient.addColorStop(0.5, "rgba(255, 220, 40, 0.18)");
+glowGradient.addColorStop(1, "rgba(255, 210, 0, 0)");
+
+ctx.fillStyle = glowGradient;
+ctx.beginPath();
+ctx.arc(
+  sunX,
+  sunY,
+  glowRadius,
+  0,
+  Math.PI * 2
+);
+ctx.fill();
+
+ctx.restore();
 
       ctx.fillStyle = "#FFD76A";
 
@@ -2877,35 +2729,35 @@
         name: "水星",
         key: "Mercury",
         color: "#B8B8B8",
-        radius: 3,
+        radius: 5,
         glow: 3
       },
       {
         name: "金星",
         key: "Venus",
         color: "#FFE4A0",
-        radius: 5,
+        radius: 7,
         glow: 16
       },
       {
         name: "火星",
         key: "Mars",
         color: "#FF7040",
-        radius: 4,
+        radius: 5,
         glow: 7
       },
       {
         name: "木星",
         key: "Jupiter",
         color: "#E8C99A",
-        radius: 7,
+        radius: 9,
         glow: 13
       },
       {
         name: "土星",
         key: "Saturn",
         color: "#F0DCA0",
-        radius: 6,
+        radius: 7,
         glow: 6
       },
       {
@@ -3047,6 +2899,112 @@
 
         ctx.restore();
 
+      } else if (
+        planet.key === "Venus" ||
+        planet.key === "Mercury"
+      ) {
+
+        // 太陽の位置を取得
+        const sun = getSunEquatorialPosition(observation);
+
+        // 金星と太陽の方向を地平座標に変換
+        const venusVector = equatorialToHorizontalVector(
+          position.ra,
+          position.dec,
+          lstDeg
+        );
+
+        const sunVector = equatorialToHorizontalVector(
+          sun.ra,
+          sun.dec,
+          lstDeg
+        );
+
+        // 金星から太陽へ向かう方向
+        const sunDotVenus = dot(sunVector, venusVector);
+
+        const lightVector = {
+          x: sunVector.x - sunDotVenus * venusVector.x,
+          y: sunVector.y - sunDotVenus * venusVector.y,
+          z: sunVector.z - sunDotVenus * venusVector.z
+        };
+
+        // 星図上での明るい側の方向
+        const denominator =
+          1 + dot(venusVector, basis.center);
+
+        const venusRight = dot(venusVector, basis.right);
+        const venusUp = dot(venusVector, basis.up);
+
+        const lightRight = dot(lightVector, basis.right);
+        const lightUp = dot(lightVector, basis.up);
+        const lightCenter = dot(lightVector, basis.center);
+
+        const lightX =
+          (lightRight * denominator -
+            venusRight * lightCenter) /
+          (denominator * denominator) * scaleX;
+
+        const lightY =
+          -(lightUp * denominator -
+            venusUp * lightCenter) /
+          (denominator * denominator) * scaleY;
+
+        const lightAngle = Math.atan2(lightY, lightX);
+
+        // 金星の円形クリッピング
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.arc(x, y, planet.radius, 0, Math.PI * 2);
+        ctx.clip();
+
+        // 暗い部分
+        ctx.fillStyle = "#55566A";
+        ctx.fillRect(
+          x - planet.radius,
+          y - planet.radius,
+          planet.radius * 2,
+          planet.radius * 2
+        );
+
+        // 明るい部分の方向に回転
+        ctx.translate(x, y);
+        ctx.rotate(lightAngle);
+        ctx.translate(-x, -y);
+
+        // 明るい部分
+        ctx.fillStyle = planet.color;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          x,
+          y,
+          planet.radius,
+          -Math.PI / 2,
+          Math.PI / 2
+        );
+
+        const phaseWidth =
+          planet.radius *
+          (2 * position.illuminatedFraction - 1);
+
+        ctx.ellipse(
+          x,
+          y,
+          Math.abs(phaseWidth),
+          planet.radius,
+          0,
+          Math.PI / 2,
+          -Math.PI / 2,
+          phaseWidth < 0
+        );
+
+        ctx.fill();
+
+        ctx.restore();
+
       } else {
 
         // そのほかの惑星
@@ -3168,11 +3126,11 @@
       // 月の明るい側を向ける画面上の角度
       const lightAngle = Math.atan2(lightY, lightX);
 
-      // 月の視直径を基準に、見やすさのため2倍に補正
+      // 月の大きさ。月の視直径を基準に、見やすさのため2倍に補正
       const moonRadius = Math.max(
         8,
         Math.min(
-          12,
+          10,
           8 * scale * (0.25 * RAD) /
           (1 + moonPoint.centerDot)
         )
