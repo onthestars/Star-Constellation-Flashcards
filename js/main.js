@@ -351,7 +351,3 @@ function jumpToExplanatoryNote() {
 
   }, 300);
 }
-// Special Thanks
-document.getElementById("specialThanksBtn").addEventListener("click", () => {
-  window.open("https://peteworden.github.io/Soleil/chart.html", "_blank");
-});
