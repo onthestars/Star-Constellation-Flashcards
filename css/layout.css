@@ -3,6 +3,20 @@
    縦置き・横置き・PCレイアウト
    ============================ */
 
+/* アプリタイトル画像 */
+#app-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: min(70%, 500px);
+  height: auto;
+
+  z-index: 2;
+  pointer-events: none;
+}
+
 /* 縦画面（スマホ） */
 @media (orientation: portrait) {
   body {
@@ -136,7 +150,7 @@
   box-shadow: none;
 }
 
-  /* カード枠の幅をpadding込みで計算 */
-  #card-frame {
-    box-sizing: border-box;
-  }
+/* カード枠の幅をpadding込みで計算 */
+#card-frame {
+  box-sizing: border-box;
+}
