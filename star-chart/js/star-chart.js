@@ -3698,9 +3698,8 @@
             if (isPeakDay) {
 
               const labelText = "極大日";
-              const labelX =
-                nameX + ctx.measureText(meteorName).width + 6;
-              const labelY = nameY - 1;
+const labelX = nameX;
+const labelY = nameY - 17;
 
               const labelWidth = 42;
               const labelHeight = 15;
