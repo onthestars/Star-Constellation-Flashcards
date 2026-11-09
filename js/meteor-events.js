@@ -108,7 +108,7 @@ activeMessages.push(
       ${createMeteorShowerLink(meteor)}流星群
     </div>
     <div style="font-size:0.85em;">
-      ${Number(startMonth)}/${Number(startDay)}～${Number(endMonth)}/${Number(endDay)}
+      期間: ${Number(startMonth)}/${Number(startDay)}～${Number(endMonth)}/${Number(endDay)}
     </div>
     <div style="font-size:0.85em;">
       ${Number(peakMonth)}/${Number(peakDay)}頃極大
