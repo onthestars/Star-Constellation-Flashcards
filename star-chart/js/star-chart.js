@@ -3662,29 +3662,90 @@
           ctx.lineWidth = 1.5;
           ctx.stroke();
 
-          // 放射点名・極大日を表示
+                    // 放射点名・極大日を表示
           if (meteorRadiant.name) {
 
             ctx.textAlign = "left";
             ctx.textBaseline = "top";
 
-            // 流星群名（11px）
+            // 流星群名（10px）
             ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+
+            const meteorName =
+              meteorRadiant.name + "流星群";
+
+            const nameX = x + 19;
+            const nameY = y + 5;
+
+            // 流星群名
             ctx.fillStyle = "#ffd700";
             ctx.fillText(
-              meteorRadiant.name + "流星群",
-              x + 19,
-              y + 5
+              meteorName,
+              nameX,
+              nameY
             );
 
-            // 極大日（9px）
+            // 観測日が極大日か判定
+            const monthDay =
+              String(observationDate.getMonth() + 1).padStart(2, "0") +
+              "-" +
+              String(observationDate.getDate()).padStart(2, "0");
+
+            const isPeakDay =
+              meteorRadiant.peak === monthDay;
+
+            // 極大日のみ黄色い角丸ラベルを表示
+            if (isPeakDay) {
+
+              const labelText = "極大日";
+              const labelX =
+                nameX + ctx.measureText(meteorName).width + 6;
+              const labelY = nameY - 1;
+
+              const labelWidth = 42;
+              const labelHeight = 15;
+              const radius = 4;
+
+              ctx.fillStyle = "rgb(255, 215, 0)";
+              ctx.beginPath();
+
+              ctx.roundRect(
+                labelX,
+                labelY,
+                labelWidth,
+                labelHeight,
+                radius
+              );
+
+              ctx.fill();
+
+              // ラベル内の文字
+              ctx.font = 'bold 10px "Meiryo", sans-serif';
+              ctx.fillStyle = "rgb(6, 7, 64)";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+
+              ctx.fillText(
+                labelText,
+                labelX + labelWidth / 2,
+                labelY + labelHeight / 2
+              );
+            }
+
+            // 極大日の案内（従来どおり）
             if (meteorRadiant.peak) {
-              const [month, day] = meteorRadiant.peak.split("-");
+
+              const [month, day] =
+                meteorRadiant.peak.split("-");
 
               const peakText =
                 `${Number(month)}/${Number(day)}頃極大`;
 
               ctx.font = '9px "Meiryo", sans-serif';
+              ctx.fillStyle = "#ffd700";
+              ctx.textAlign = "left";
+              ctx.textBaseline = "top";
+
               ctx.fillText(
                 peakText,
                 x + 19,
