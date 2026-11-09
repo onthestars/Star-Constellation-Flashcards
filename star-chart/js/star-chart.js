@@ -503,6 +503,33 @@
     return new Date(observationDate.getTime());
   }
 
+  // 流星群の活動期間内か確認
+  function isMeteorActive(meteor, date) {
+
+    if (!meteor || !meteor.start || !meteor.end) {
+      return false;
+    }
+
+    const monthDay =
+      String(date.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(date.getDate()).padStart(2, "0");
+
+    // 年をまたがない活動期間
+    if (meteor.start <= meteor.end) {
+      return (
+        monthDay >= meteor.start &&
+        monthDay <= meteor.end
+      );
+    }
+
+    // 年をまたぐ活動期間（しぶんぎ座など）
+    return (
+      monthDay >= meteor.start ||
+      monthDay <= meteor.end
+    );
+  }
+
   let stars = [];
   let dataLoaded = false;
   let canvasWidth = 0;
@@ -3058,7 +3085,7 @@
 
         }
 
-                // 木星の球体感を出すための周辺部の陰影
+        // 木星の球体感を出すための周辺部の陰影
         const jupiterShade =
           ctx.createRadialGradient(
             x, y, r * 0.25,
@@ -3599,7 +3626,7 @@
     }
 
     // 流星群の放射点を赤い十字＋円で表示
-    if (meteorRadiant) {
+    if (meteorRadiant && isMeteorActive(meteorRadiant, observationDate)) {
       const radiantPoint = projectStar(
         { ra: meteorRadiant.ra, dec: meteorRadiant.dec, mag: 0, id: "meteor-radiant", label: "" },
         lstDeg,
@@ -3655,7 +3682,7 @@
               const [month, day] = meteorRadiant.peak.split("-");
 
               const peakText =
-                `${Number(month)}/${Number(day)}極大`;
+                `${Number(month)}/${Number(day)}頃極大`;
 
               ctx.font = '9px "Meiryo", sans-serif';
               ctx.fillText(
@@ -4159,6 +4186,8 @@
     meteorRadiant = {
       name: data.name,
       peak: data.peak,
+      start: data.start,
+      end: data.end,
       ra: data.ra,
       dec: data.dec
     };
