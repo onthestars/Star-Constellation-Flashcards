@@ -59,16 +59,6 @@
   }
 }
 
-/* 横置きレイアウト（Landscape, 幅900px以下） */
-@media (orientation: landscape) and (max-width: 900px) {
-
-  #card-frame,
-  #star-guide-panel {
-    display: none !important;
-  }
-
-}
-
 /* PC専用レイアウト（幅1000px以上） */
 @media (min-width: 1000px) {
 
