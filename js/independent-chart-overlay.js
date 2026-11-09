@@ -90,11 +90,20 @@
       return;
     }
 
+      console.log(
+    "流星群の送信直前:",
+    selectedMeteor.name,
+    selectedMeteor.start,
+    selectedMeteor.end
+  );
+
     frame.contentWindow.postMessage(
       {
         type: "set-meteor-radiant",
         name: selectedMeteor.name,
         peak: selectedMeteor.peak,
+        start: selectedMeteor.start,
+        end: selectedMeteor.end,
         ra: selectedMeteor.radiantRa,
         dec: selectedMeteor.radiantDec
       },
