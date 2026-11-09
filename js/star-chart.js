@@ -503,6 +503,33 @@
     return new Date(observationDate.getTime());
   }
 
+  // 流星群の活動期間内か確認
+  function isMeteorActive(meteor, date) {
+
+    if (!meteor || !meteor.start || !meteor.end) {
+      return false;
+    }
+
+    const monthDay =
+      String(date.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(date.getDate()).padStart(2, "0");
+
+    // 年をまたがない活動期間
+    if (meteor.start <= meteor.end) {
+      return (
+        monthDay >= meteor.start &&
+        monthDay <= meteor.end
+      );
+    }
+
+    // 年をまたぐ活動期間（しぶんぎ座など）
+    return (
+      monthDay >= meteor.start ||
+      monthDay <= meteor.end
+    );
+  }
+
   let stars = [];
   let dataLoaded = false;
   let canvasWidth = 0;
@@ -3058,7 +3085,7 @@
 
         }
 
-                // 木星の球体感を出すための周辺部の陰影
+        // 木星の球体感を出すための周辺部の陰影
         const jupiterShade =
           ctx.createRadialGradient(
             x, y, r * 0.25,
@@ -3599,7 +3626,7 @@
     }
 
     // 流星群の放射点を赤い十字＋円で表示
-    if (meteorRadiant) {
+    if (meteorRadiant && isMeteorActive(meteorRadiant, observationDate)) {
       const radiantPoint = projectStar(
         { ra: meteorRadiant.ra, dec: meteorRadiant.dec, mag: 0, id: "meteor-radiant", label: "" },
         lstDeg,
@@ -3635,29 +3662,89 @@
           ctx.lineWidth = 1.5;
           ctx.stroke();
 
-          // 放射点名・極大日を表示
+                    // 放射点名・極大日を表示
           if (meteorRadiant.name) {
 
             ctx.textAlign = "left";
             ctx.textBaseline = "top";
 
-            // 流星群名（11px）
+            // 流星群名（10px）
             ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+
+            const meteorName =
+              meteorRadiant.name + "流星群";
+
+            const nameX = x + 19;
+            const nameY = y + 5;
+
+            // 流星群名
             ctx.fillStyle = "#ffd700";
             ctx.fillText(
-              meteorRadiant.name + "流星群",
-              x + 19,
-              y + 5
+              meteorName,
+              nameX,
+              nameY
             );
 
-            // 極大日（9px）
+            // 観測日が極大日か判定
+            const monthDay =
+              String(observationDate.getMonth() + 1).padStart(2, "0") +
+              "-" +
+              String(observationDate.getDate()).padStart(2, "0");
+
+            const isPeakDay =
+              meteorRadiant.peak === monthDay;
+
+            // 極大日のみ黄色い角丸ラベルを表示
+            if (isPeakDay) {
+
+              const labelText = "極大日";
+const labelX = nameX;
+const labelY = nameY - 17;
+
+              const labelWidth = 42;
+              const labelHeight = 15;
+              const radius = 4;
+
+              ctx.fillStyle = "rgb(255, 215, 0)";
+              ctx.beginPath();
+
+              ctx.roundRect(
+                labelX,
+                labelY,
+                labelWidth,
+                labelHeight,
+                radius
+              );
+
+              ctx.fill();
+
+              // ラベル内の文字
+              ctx.font = 'bold 10px "Meiryo", sans-serif';
+              ctx.fillStyle = "rgb(6, 7, 64)";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+
+              ctx.fillText(
+                labelText,
+                labelX + labelWidth / 2,
+                labelY + labelHeight / 2
+              );
+            }
+
+            // 極大日の案内（従来どおり）
             if (meteorRadiant.peak) {
-              const [month, day] = meteorRadiant.peak.split("-");
+
+              const [month, day] =
+                meteorRadiant.peak.split("-");
 
               const peakText =
                 `${Number(month)}/${Number(day)}頃極大`;
 
               ctx.font = '9px "Meiryo", sans-serif';
+              ctx.fillStyle = "#ffd700";
+              ctx.textAlign = "left";
+              ctx.textBaseline = "top";
+
               ctx.fillText(
                 peakText,
                 x + 19,
@@ -4159,6 +4246,8 @@
     meteorRadiant = {
       name: data.name,
       peak: data.peak,
+      start: data.start,
+      end: data.end,
       ra: data.ra,
       dec: data.dec
     };
