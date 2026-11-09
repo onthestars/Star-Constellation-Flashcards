@@ -742,66 +742,56 @@
               ${dateText}
             </div>
 
-            <div style="
+                        <div style="
               display: inline-block;
               background: rgba(6, 7, 64, 0.8);
-              margin: 2px 0 8px 0;
-              padding: 3px 12px;
-              border: 1px solid currentColor;
-              box-sizing: border-box;
-              width: 100%;
-            ">
-<div style="
-  text-align:center;
-  margin:8px 0 6px 0;
-">
-  <div style="
-    font-size:0.8rem;
-    margin-bottom:2px;
-  ">
-    この夜の星空期待値
-  </div>
-
-  <div style="
-    font-size:1.5rem;
-    color:rgb(255,215,0);
-    text-shadow:0 0 2px rgba(0,0,0,0.5);
-    line-height:1;
-  ">
-    ${rating.stars}
-  </div>
-
-  <div style="
-    font-size:0.65em;
-    margin-top:4px;
-    line-height:1.2;
-  ">
-    ※晴れていることが条件です
-  </div>
-</div>
-            </div>
-
-            <div style="
-              display: inline-block;
-              background: rgba(6, 7, 64, 0.8);
-              margin: 2px 0 8px 0;
-              padding: 3px 12px;
+              margin: 2px 0 2px 0;
+              padding: 8px 6px 4px 6px;
               border: 1px solid currentColor;
               box-sizing: border-box;
               width: 100%;
             ">
               <div style="
-                font-size: 0.8rem;
-                margin: 4px 0;
-                text-align: center;
+                text-align:center;
+              ">
+                <div style="
+                  font-size:0.8rem;
+                  margin-bottom:2px;
+                ">
+                  この夜の星空期待値
+                </div>
+
+                <div style="
+                  font-size:1.5rem;
+                  color:rgb(255,215,0);
+                  text-shadow:0 0 2px rgba(0,0,0,0.5);
+                  line-height:1;
+                ">
+                  ${rating.stars}
+                </div>
+
+                <div style="
+                  font-size:0.65em;
+                  margin-top:1px;
+                  line-height:1.2;
+                  opacity:0.7;
+                ">
+                  ※晴れていることが条件です
+                </div>
+              </div>
+
+              <div style="
+                font-size:0.8rem;
+                margin:0.5em 0 1px 0;
+                text-align:center;
               ">
                 星空おすすめ時間帯
               </div>
 
               <div style="
-                font-size: 1.2em;
-                font-weight: 600;
-                text-align: center;
+                font-size:1.2em;
+                font-weight:600;
+                text-align:center;
               ">
                 ${observationWindowText}
               </div>
@@ -812,20 +802,12 @@ ${meteorMessage
       <div style="
         display:inline-block;
         background: rgba(6, 7, 64, 0.8);
-        margin:2px 0 8px 0;
-        padding:3px 12px;
+        margin:2px 0 4px 0;
+        padding: 2px 6px 2px 6px;
         border:1px solid currentColor;
         box-sizing:border-box;
         width:100%;
       ">
-        <div style="
-          font-size:0.8rem;
-          margin:4px 0;
-          text-align:center;
-        ">
-          活動中の流星群
-        </div>
-
         <div style="
           font-size:1em;
           font-weight:600;
