@@ -77,14 +77,14 @@ function getMeteorMessage(date) {
     border-radius:4px;
     margin:8px 0;
   ">
-    ☄ 本日
+    本日
     <a
       href="#"
       class="meteor-shower-link"
       data-meteor-name="${meteor.name}"
       style="color:rgb(6,7,64);font-weight:bold;"
     >${meteor.name}</a>
-    が極大
+    流星群が極大
   </div>`
       );
 
