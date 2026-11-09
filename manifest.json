@@ -1,7 +1,7 @@
 ﻿{
-  "name": "暗記カード★トレミーの48星座",
-  "short_name": "48星座カード",
-  "description": "トレミーの48星座を覚えるための暗記カードアプリ",
+  "name": "トレミーの48星座",
+  "short_name": "T's48星座",
+  "description": "星空ガイド、48星座や惑星のプラネタリウム、48星座のフラッシュカードなど",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
