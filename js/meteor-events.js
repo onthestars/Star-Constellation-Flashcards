@@ -96,10 +96,25 @@ function getMeteorMessage(date) {
       const [peakMonth, peakDay] =
         meteor.peak.split("-");
 
-      activeMessages.push(
-        `${createMeteorShowerLink(meteor)}
-  <span style="font-size:0.85em;">${Number(peakMonth)}/${Number(peakDay)}極大</span>`
-      );
+      const [startMonth, startDay] =
+        meteor.start.split("-");
+
+      const [endMonth, endDay] =
+        meteor.end.split("-");
+
+activeMessages.push(
+  `<div style="line-height:1.2; margin-bottom:0.3em;padding-top:0.5em;">
+    <div>
+      ${createMeteorShowerLink(meteor)}流星群
+    </div>
+    <div style="font-size:0.85em;">
+      ${Number(startMonth)}/${Number(startDay)}～${Number(endMonth)}/${Number(endDay)}
+    </div>
+    <div style="font-size:0.85em;">
+      ${Number(peakMonth)}/${Number(peakDay)}頃極大
+    </div>
+  </div>`
+);
 
       continue;
     }
@@ -114,7 +129,7 @@ function getMeteorMessage(date) {
 
     messages.push(
       `<div style="font-weight:normal;line-height:1.8em;">
-      ${activeMessages.join("<br>")}
+${activeMessages.join("")}
     </div>`
     );
   }
