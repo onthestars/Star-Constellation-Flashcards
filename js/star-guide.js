@@ -72,7 +72,7 @@
 
   // 月の日付移動時の効果音
   const moonSelectSound = new Audio(
-    "sound/sound-select2.mp3"
+    "sound/select2.mp3"
   );
 
   moonSelectSound.volume = 0.3; // 月の上下ボタンボリューム
