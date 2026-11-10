@@ -227,7 +227,7 @@
 
   #star-guide-panel .moon-control-group {
     position: absolute;
-    right: 10px;
+    right: 40px;
     top: 50%;
     transform: translateY(-50%);
   }
