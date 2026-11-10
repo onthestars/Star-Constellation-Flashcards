@@ -404,9 +404,7 @@
   window.openSoleilOverlay = openSoleilOverlay;
 })();
 
-/* js/soleil-meteor-overlay.js */
-
-// 活動中の流星群名をクリックしたら星図カードを開く
+// 活動中の流星群名をクリックしたらプラネタリウムを開く
 document.addEventListener("click", function (event) {
   const target = event.target;
   if (!(target instanceof Element)) return;

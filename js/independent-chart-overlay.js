@@ -90,12 +90,12 @@
       return;
     }
 
-      console.log(
-    "流星群の送信直前:",
-    selectedMeteor.name,
-    selectedMeteor.start,
-    selectedMeteor.end
-  );
+    console.log(
+      "流星群の送信直前:",
+      selectedMeteor.name,
+      selectedMeteor.start,
+      selectedMeteor.end
+    );
 
     frame.contentWindow.postMessage(
       {
@@ -112,7 +112,7 @@
   }
 
   // 星図カードを開く
-  function openIndependentChart(meteor) {
+  function openIndependentChart(meteor, timestamp) {
     if (
       !meteor ||
       typeof meteor.name !== "string" ||
@@ -128,6 +128,7 @@
     }
 
     selectedMeteor = meteor;
+    pendingObservationTimestamp = Number.isFinite(timestamp) ? timestamp : null;
 
     updateChartTitle(meteor);
 
@@ -143,6 +144,7 @@
       frameReady = false;
       frame.src = CHART_URL;
     } else {
+      sendObservationDate();
       sendRadiantCoordinates();
     }
   }

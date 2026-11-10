@@ -53,6 +53,23 @@
   // 現在表示している観察対象日
   let selectedDate = null;
 
+  // 星空ガイドで選択中の観測日時を取得する
+  window.getStarGuideObservationTimestamp = function () {
+
+    // 初回表示で日付が未設定の場合
+    if (selectedDate === null) {
+      selectedDate = getObservationDate();
+    }
+
+    // 選択中の日付を複製
+    const observationDate = new Date(selectedDate);
+
+    // 観測時刻を20時に設定
+    observationDate.setHours(20, 0, 0, 0);
+
+    return observationDate.getTime();
+  };
+
   // 月の日付移動時の効果音
   const moonSelectSound = new Audio(
     "sound/sound-select2.mp3"
@@ -551,6 +568,8 @@
 
       // 選択中の日付を使用
       const today = new Date(selectedDate);
+
+      console.log("星空ガイドの選択日時:", today.toString());
 
       // テストする場合は上の行をコメントアウトし、次の行を有効にする
       // 例）2026年10月11日 → 2026,9,11 ※月は-1とする
