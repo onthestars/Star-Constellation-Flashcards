@@ -70,21 +70,24 @@ function getMeteorMessage(date) {
       messages.push(
         `<div style="
     display:inline-block;
-    padding:3px 6px 2px 6px;
+    text-align:center;
+    padding:3px 8px;
     background:rgb(255,215,0);
     color:rgb(6,7,64);
     font-weight:bold;
     border-radius:4px;
     margin:8px 0;
+    line-height:1.2;
   ">
-    本日
-    <a
-      href="#"
-      class="meteor-shower-link"
-      data-meteor-name="${meteor.name}"
-      style="color:rgb(6,7,64);font-weight:bold;"
-    >${meteor.name}</a>
-    流星群が極大
+    <div>本日、極大</div>
+    <div>
+      <a
+        href="#"
+        class="meteor-shower-link"
+        data-meteor-name="${meteor.name}"
+        style="color:rgb(6,7,64);font-weight:bold;text-decoration:none;"
+      >${meteor.name}</a>流星群
+    </div>
   </div>`
       );
 
@@ -102,8 +105,8 @@ function getMeteorMessage(date) {
       const [endMonth, endDay] =
         meteor.end.split("-");
 
-activeMessages.push(
-  `<div style="line-height:1.2; margin-bottom:0.3em;padding-top:0.5em;">
+      activeMessages.push(
+        `<div style="line-height:1.2; margin-bottom:0.3em;padding-top:0.5em;">
     <div>
       ${createMeteorShowerLink(meteor)}流星群
     </div>
@@ -114,7 +117,7 @@ activeMessages.push(
       ${Number(peakMonth)}/${Number(peakDay)}頃極大
     </div>
   </div>`
-);
+      );
 
       continue;
     }
@@ -173,5 +176,5 @@ window.openIndependentChartForMeteorName = function (meteorName) {
   }
 
   const timestamp = window.getStarGuideObservationTimestamp();
-window.openIndependentChart(meteor, timestamp);
+  window.openIndependentChart(meteor, timestamp);
 };
