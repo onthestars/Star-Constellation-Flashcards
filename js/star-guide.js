@@ -753,7 +753,7 @@
           font-size: 14px;
         ">
 
-          <div style="min-width: 0; margin: 0; padding: 0;">
+          <div class="star-guide-info" style="min-width: 0; margin: 0; padding: 0;">
             <div style="
               margin: 0 0 2px 0;
               text-align: center;
@@ -852,14 +852,7 @@ ${meteorMessage
 
 </div>
 
-<div style="
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex:0 0 56px;
-  gap:4px;
-">
+<div class="moon-control-group">
 
 <button
   type="button"
@@ -895,7 +888,7 @@ ${meteorMessage
       width:40px;
       height:40px;
       object-fit:contain;
-      margin:4px 0;
+      margin:4px auto;
     "
   >
 
