@@ -11,7 +11,7 @@
   // ▼ プラネタリウムBGM
   const bgm = new Audio("../sound/space.mp3");
   bgm.loop = false;
-  bgm.volume = 0.1;
+  bgm.volume = 0.05;
 
   // ▼ 他ファイルから参照できるよう公開
   window.bgm = bgm;
