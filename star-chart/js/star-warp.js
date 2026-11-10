@@ -232,6 +232,9 @@
         "../sound/the-spaceship-flew-by.m4a"
       );
 
+      // ▼ ワープ音量
+      warpSound.volume = 0.3;
+
       warpSound.play().catch(error => {
         console.warn("ワープ音を再生できませんでした。", error);
       });
