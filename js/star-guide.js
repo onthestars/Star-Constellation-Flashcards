@@ -949,7 +949,7 @@ ${meteorMessage
     id="showPlanetariumBtn"
     class="datetime-now"
   >
-    今の空を見る
+    今<span style="font-size:0.8em;">の</span>空を見る
   </button>
 
 <button
@@ -957,14 +957,14 @@ ${meteorMessage
   id="showSelectedDateBtn"
   class="datetime-now"
 >
-  ${today.getMonth() + 1}月${today.getDate()}日20時の空
+  ${today.getMonth() + 1}<span style="font-size:0.8em;">月</span>${today.getDate()}<span style="font-size:0.8em;">日</span>20<span style="font-size:0.8em;">時の</span>空
 </button>
 
 </div>
 
       `;
 
-      // 「今の空を見る」ボタン
+      // 「今の星空を見る」ボタン
       const showPlanetariumBtn = content.querySelector(
         "#showPlanetariumBtn"
       );
@@ -981,7 +981,7 @@ ${meteorMessage
         });
 
       }
-      // 「選んだ日の20時の空」を見るボタン
+      // 「選んだ日の20時の星空」を見るボタン
       const showSelectedDateBtn = content.querySelector(
         "#showSelectedDateBtn"
       );
