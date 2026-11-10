@@ -218,3 +218,30 @@
   align-items: center;
   gap: 4px;
 }
+
+/* =================================
+   月相・日付送りボタンの位置固定
+================================= */
+
+@media (min-width: 768px) {
+
+  #star-guide-panel .moon-control-group {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+}
+
+/* スマホ版 */
+@media (max-width: 767px) {
+
+  #star-guide-panel .moon-control-group {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+}
