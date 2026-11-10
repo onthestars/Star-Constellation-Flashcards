@@ -949,7 +949,7 @@ ${meteorMessage
     id="showPlanetariumBtn"
     class="datetime-now"
   >
-    今<span style="font-size:0.8em;">の</span>空を見る
+    今<span style="font-size:0.8em;">の</span>空<span style="font-size:0.8em;">を</span>見る
   </button>
 
 <button
