@@ -23,6 +23,10 @@ function soundControlsInit() {
     localStorage.setItem("soundEnabled", "false");
     soundOnBtn.style.display = "none";
     soundOffBtn.style.display = "inline";
+
+    if (window.bgm) {
+      window.bgm.pause();
+    }
   };
 
   // 音声OFF → ON
