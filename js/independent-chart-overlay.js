@@ -201,8 +201,8 @@
 
     frameReady = true;
 
-    sendRadiantCoordinates();
     sendObservationDate();
+    sendRadiantCoordinates();
   });
 
   // オーバーレイを閉じる
