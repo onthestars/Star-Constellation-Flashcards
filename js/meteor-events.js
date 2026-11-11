@@ -68,7 +68,7 @@ function getMeteorMessage(date) {
     if (meteor.peak === mmdd) {
 
       messages.push(
-        `<div style="
+        `<div class="meteor-peak-card" style="
     display:inline-block;
     text-align:center;
     padding:3px 8px;

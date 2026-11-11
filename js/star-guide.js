@@ -798,9 +798,10 @@
 
 ${meteorMessage
           ? `
-      <div style="
-        display:inline-block;
-        background: rgba(6, 7, 64, 0.8);
+<div id="meteorMessagePanel"
+  style="
+    display:inline-block;
+    background: rgba(6, 7, 64, 0.8);
         margin:2px 0 4px 0;
         padding: 2px 6px 2px 6px;
         border:1px solid currentColor;
@@ -952,6 +953,39 @@ ${meteorMessage
 
       `;
 
+      // ▼ 極大日表示の黄色い四角をクリックしても星図を開く
+const meteorPeakCard = content.querySelector(".meteor-peak-card");
+
+if (meteorPeakCard) {
+
+  meteorPeakCard.style.cursor = "pointer";
+
+  meteorPeakCard.addEventListener("click", function (event) {
+
+    // 流星群名のリンクを押した場合は既存の処理に任せる
+    if (event.target.closest(".meteor-shower-link")) {
+      return;
+    }
+
+    const meteorLink = meteorPeakCard.querySelector(".meteor-shower-link");
+
+    if (!meteorLink) {
+      return;
+    }
+
+    const meteorName = meteorLink.dataset.meteorName;
+
+    if (
+      meteorName &&
+      typeof window.openIndependentChartForMeteorName === "function"
+    ) {
+      window.openIndependentChartForMeteorName(meteorName);
+    }
+
+  });
+
+}
+
       // 「今の星空を見る」ボタン
       const showPlanetariumBtn = content.querySelector(
         "#showPlanetariumBtn"
@@ -969,6 +1003,7 @@ ${meteorMessage
         });
 
       }
+      
       // 「選んだ日の20時の星空」を見るボタン
       const showSelectedDateBtn = content.querySelector(
         "#showSelectedDateBtn"
