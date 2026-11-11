@@ -7,30 +7,6 @@
   const status = document.getElementById("chart-status");
   const ctx = canvas.getContext("2d");
 
-
-  // ▼ プラネタリウムBGM
-  const bgm = new Audio("../sound/space.mp3");
-  bgm.loop = false;
-  bgm.volume = 0.05;
-
-  // ▼ 他ファイルから参照できるよう公開
-  window.bgm = bgm;
-
-console.log("soundEnabled=", window.soundEnabled);
-
-document.addEventListener("click", () => {
-
-  console.log("クリック時 soundEnabled=", window.soundEnabled);
-
-  if (!window.soundEnabled) {
-    console.log("音声OFFのため再生しない");
-    return;
-  }
-
-  bgm.play();
-
-}, { once: true });
-
   // ==========================================
   // プラネタリウム文字サイズ（大中小）設定
   // ==========================================
@@ -4584,22 +4560,3 @@ document.addEventListener("click", () => {
     });
 
 })();
-
-// ▼ 最初の操作でBGM再生
-document.addEventListener("pointerdown", () => {
-
-  const soundEnabled =
-    localStorage.getItem("soundEnabled") !== "false";
-
-  console.log("soundEnabled =", soundEnabled);
-
-  if (!soundEnabled) {
-    console.log("音声OFFのため再生しない");
-    return;
-  }
-
-  bgm.play()
-    .then(() => console.log("再生成功"))
-    .catch(err => console.error("再生失敗", err));
-
-}, { once: true });
