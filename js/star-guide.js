@@ -860,23 +860,31 @@ ${meteorMessage
   >
 </button>
 
-  <img
-    src="${imagePath}"
-    alt="${phaseName}"
-    style="
-      display:block;
-      width:40px;
-      height:40px;
-      object-fit:contain;
-      margin:4px auto;
-    "
-  >
+<img
+  src="${imagePath}"
+  alt="${phaseName}"
+  style="
+    display:block;
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    margin:4px auto;
+
+    border:2px solid rgb(6, 7, 64);
+    border-radius:50%;
+  "
+>
 
   <div style="
     font-size:0.75em;
     text-align:center;
     line-height:1.2;
     margin:2px 0;
+    text-shadow:
+      -1px -1px 0 rgb(6, 7, 64),
+       1px -1px 0 rgb(6, 7, 64),
+      -1px  1px 0 rgb(6, 7, 64),
+       1px  1px 0 rgb(6, 7, 64);
   ">
     月齢${age.toFixed(1)}
     <br>
@@ -1019,19 +1027,19 @@ ${meteorMessage
           button.style.cursor = "default";
         }
 
-button.addEventListener("click", function () {
+        button.addEventListener("click", function () {
 
-  if (button.disabled) {
-    return;
-  }
+          if (button.disabled) {
+            return;
+          }
 
-  selectedDate.setDate(
-    selectedDate.getDate() + days
-  );
+          selectedDate.setDate(
+            selectedDate.getDate() + days
+          );
 
-  renderMoonObservation();
+          renderMoonObservation();
 
-});
+        });
 
       });
 
