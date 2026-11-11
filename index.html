@@ -59,8 +59,17 @@ git push
 
         <img src="image/common/btn-flashcard.png" id="showCardBtn" alt="星座カードパネルを表示" title="星座カードパネルを表示">
 
-        <img src="image/common/btn-audio-on.png" id="soundOnBtn" alt="音声ON">
-        <img src="image/common/btn-audio-off.png" id="soundOffBtn" alt="音声OFF" style="display:none;">
+        <!-- ▼ 将来的な操作音機能用（現在は未使用）
+        <img src="image/common/btn-audio-on.png"
+        id="soundOnBtn"
+        alt="音声ON">
+
+        <img src="image/common/btn-audio-off.png"
+        id="soundOffBtn"
+        alt="音声OFF"
+        style="display:none;">
+        -->
+
       </div>
 
       <div id="rotate-warning">このアプリはスマホ横画面に対応していません</div>
@@ -227,11 +236,6 @@ git push
           <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線なし">
           <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
         </div>
-
-        <audio id="soundFlip" src="sound/sound-flipping-paper.mp3" preload="auto"></audio>
-        <audio id="soundPage" src="sound/sound-flipping-paper2.mp3" preload="auto"></audio>
-        <audio id="soundSeason" src="sound/sound-season.mp3" preload="auto"></audio>
-        <audio id="soundKirakira" src="sound/sound-kirakira.mp3" preload="auto"></audio>
       </div>
     </div>
 
@@ -254,8 +258,7 @@ git push
   <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
   <script src="js/images.js"></script>
 
-  <!-- ▼ サウンド・アニメーションなどのUI補助 -->
-  <script src="js/sound-controls.js"></script>
+  <!-- ▼ アニメーションなどのUI補助 -->
   <script src="js/animation-controls.js"></script>
 
   <!-- ▼ データ系（リンク・季節データ） -->
