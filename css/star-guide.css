@@ -224,24 +224,19 @@
 ================================= */
 
 @media (min-width: 768px) {
-
   #star-guide-panel .moon-control-group {
     position: absolute;
-    right: 40px;
+    right: 8%;
     top: 50%;
     transform: translateY(-50%);
   }
-
 }
 
-/* スマホ版 */
 @media (max-width: 767px) {
-
   #star-guide-panel .moon-control-group {
     position: absolute;
-    right: 5px;
+    right: 3%;
     top: 50%;
     transform: translateY(-50%);
   }
-
 }
