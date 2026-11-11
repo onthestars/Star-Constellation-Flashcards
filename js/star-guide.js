@@ -70,26 +70,6 @@
     return observationDate.getTime();
   };
 
-  // 月の日付移動時の効果音
-  const moonSelectSound = new Audio(
-    "sound/sound-select2.mp3"
-  );
-
-  moonSelectSound.volume = 0.3; // 月の上下ボタンボリューム
-
-  function playMoonSelectSound() {
-    // サウンドOFFなら再生しない
-    if (!window.soundEnabled) {
-      return;
-    }
-
-    moonSelectSound.currentTime = 0;
-
-    moonSelectSound.play().catch(function (error) {
-      console.warn("効果音を再生できませんでした:", error);
-    });
-  }
-
   // 月齢を計算する基準時刻（日本時間の正午）
   function getReferenceDate(date) {
     return new Date(
@@ -1039,20 +1019,19 @@ ${meteorMessage
           button.style.cursor = "default";
         }
 
-        button.addEventListener("click", function () {
+button.addEventListener("click", function () {
 
-          if (button.disabled) {
-            return;
-          }
+  if (button.disabled) {
+    return;
+  }
 
-          playMoonSelectSound();
+  selectedDate.setDate(
+    selectedDate.getDate() + days
+  );
 
-          selectedDate.setDate(
-            selectedDate.getDate() + days
-          );
+  renderMoonObservation();
 
-          renderMoonObservation();
-        });
+});
 
       });
 

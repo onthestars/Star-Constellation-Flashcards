@@ -1,8 +1,5 @@
 // js/main.js
 
-// サウンドON/OFFボタンの初期化（sound-controls.js）
-soundControlsInit();
-
 // カードアニメーション初期化
 animationControlsInit();
 
@@ -27,11 +24,6 @@ const southBtn = document.getElementById("southBtn");
 
 const specialBtn = document.getElementById("specialBtn");
 const peteChartBtn = document.getElementById("peteChartBtn");
-
-// 効果音
-const soundFlip = document.getElementById("soundFlip");
-const soundPage = document.getElementById("soundPage");
-const soundSeason = document.getElementById("soundSeason");
 
 // 季節ジャンプ（フェードアウト → フェードイン）
 function jumpToSeason(season) {
@@ -112,46 +104,26 @@ setupNavigation(
 
 // ▼ 季節ボタン
 springBtn.onclick = () => {
-  if (soundEnabled) {
-    soundSeason.currentTime = 0;
-    soundSeason.play();
-  }
   animationClass = "fade-in";
   jumpToSeason("spring");
 };
 
 summerBtn.onclick = () => {
-  if (soundEnabled) {
-    soundSeason.currentTime = 0;
-    soundSeason.play();
-  }
   animationClass = "fade-in";
   jumpToSeason("summer");
 };
 
 autumnBtn.onclick = () => {
-  if (soundEnabled) {
-    soundSeason.currentTime = 0;
-    soundSeason.play();
-  }
   animationClass = "fade-in";
   jumpToSeason("autumn");
 };
 
 winterBtn.onclick = () => {
-  if (soundEnabled) {
-    soundSeason.currentTime = 0;
-    soundSeason.play();
-  }
   animationClass = "fade-in";
   jumpToSeason("winter");
 };
 
 southBtn.onclick = () => {
-  if (soundEnabled) {
-    soundSeason.currentTime = 0;
-    soundSeason.play();
-  }
   animationClass = "fade-in";
   jumpToSeason("south");
 };

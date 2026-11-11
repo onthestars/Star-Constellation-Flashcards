@@ -1,9 +1,5 @@
 // js/star-special-viewer.js
 
-// 効果音
-const soundKirakira = document.getElementById("soundKirakira");
-soundKirakira.volume = 0.2;   // ★ 音量調節（最大1.0-最小0.0）
-
 // Special Viewer（写真ビューアー）
 let specialIndex = 0;
 let specialMode = "noline";
@@ -87,12 +83,6 @@ specialBtn.onclick = () => {
   specialViewer.style.display = "flex";
 
   window.bringPanelToFront(specialViewer);
-
-  // キラキラ音（音声ON時のみ）
-  if (soundEnabled) {
-    soundKirakira.currentTime = 0;
-    soundKirakira.play();
-  }
 
   nextBtn.disabled = true;
   prevBtn.disabled = true;

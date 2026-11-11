@@ -37,18 +37,6 @@ function updatePeteChartButton(index, peteChartBtn) {
   peteChartBtn.dataset.url = url || "";
 }
 
-
-// ▼ ぴーとの星図を開く効果音
-function playWarpSound() {
-  if (!soundEnabled) return;
-
-  const warpSound = new Audio("sound/the-spaceship-flew-by.m4a");
-
-  warpSound.play().catch(error => {
-    console.warn("星図の効果音を再生できませんでした:", error);
-  });
-}
-
 // ▼ ぴーとの星図ボタンのクリック処理
 function setupPeteChartButton(peteChartBtn) {
   if (!peteChartBtn) return;
@@ -57,8 +45,9 @@ function setupPeteChartButton(peteChartBtn) {
     const url = peteChartBtn.dataset.url;
 
     if (url && !peteChartBtn.disabled) {
-      playWarpSound();
+
       window.open(url, "_blank");
+
     }
   });
 }
@@ -161,8 +150,9 @@ function setupViewerClick(viewer, indexGetter) {
     const url = links[cardName];
 
     if (url) {
-      playWarpSound();
+
       window.open(url, "_blank");
+
     }
 
   });
@@ -183,11 +173,6 @@ function setupFlipButton(
 ) {
 
   flipBtn.addEventListener("click", () => {
-
-    if (soundEnabled) {
-      soundFlip.currentTime = 0;
-      soundFlip.play();
-    }
 
     flipBtn.disabled = true;
 

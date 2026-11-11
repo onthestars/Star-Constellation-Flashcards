@@ -181,12 +181,6 @@ function openMoonSpecialViewer() {
 
   updateMoonButtons();
 
-  if (soundEnabled) {
-    soundKirakira.currentTime = 0;
-    soundKirakira.volume = 0.2;
-    soundKirakira.play();
-  }
-
   playStarTwinkle();
 }
 

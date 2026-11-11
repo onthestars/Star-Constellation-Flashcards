@@ -45,11 +45,6 @@ function setupNavigation(
   // ▼ 次へ
   nextBtn.onclick = () => {
 
-    if (soundEnabled) {
-      soundPage.currentTime = 0;
-      soundPage.play();
-    }
-
     if (getIsFinalNull()) return;
 
     nextBtn.disabled = true;
@@ -86,11 +81,6 @@ function setupNavigation(
 
   // ▼ 前へ
   prevBtn.onclick = () => {
-
-    if (soundEnabled) {
-      soundPage.currentTime = 0;
-      soundPage.play();
-    }
 
     if (getIndex() === 0) return;
 
