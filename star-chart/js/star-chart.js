@@ -23,6 +23,9 @@
     large: 1.3
   };
 
+  // 文字表示・非表示設定
+  const CHART_LABELS_VISIBLE_KEY = "chartLabelsVisible";
+
   // ==========================================
   // 星座のお気に入り評価（☆☆☆）
   // ==========================================
@@ -70,8 +73,9 @@
     saveConstellationRatings();
   }
 
-  // ▼ 天体ラベル表示
-  let objectLabelsVisible = true;
+  // ▼ 天体ラベル表示（前回の設定を復元）
+  let objectLabelsVisible =
+    localStorage.getItem(CHART_LABELS_VISIBLE_KEY) !== "false";
 
   // 文字サイズ切り替えボタン
   const textSizeButtons = document.querySelectorAll(
@@ -116,9 +120,21 @@
 
   if (labelToggleButton) {
 
+    // 保存された設定をボタンに反映
+    labelToggleButton.classList.toggle(
+      "active",
+      !objectLabelsVisible
+    );
+
     labelToggleButton.addEventListener("click", () => {
 
       objectLabelsVisible = !objectLabelsVisible;
+
+      // 表示状態を保存
+      localStorage.setItem(
+        CHART_LABELS_VISIBLE_KEY,
+        objectLabelsVisible
+      );
 
       labelToggleButton.classList.toggle(
         "active",
@@ -4353,7 +4369,7 @@
       return;
     }
 
-        // 親ページから星座カードの中心座標を受信
+    // 親ページから星座カードの中心座標を受信
     if (data.type === "set-constellation-center") {
 
       // 赤経・赤緯の値を確認
