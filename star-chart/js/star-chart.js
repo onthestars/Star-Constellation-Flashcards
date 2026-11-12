@@ -4910,10 +4910,10 @@
 
     shareNotice.hidden = false;
 
-    // 6秒後に自動で消す
+    // 秒後に自動で消す
     shareNoticeTimer = setTimeout(() => {
       hideShareNotice();
-    }, 6000);
+    }, 9000);
 
   }
 
