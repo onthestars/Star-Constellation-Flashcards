@@ -4353,6 +4353,74 @@
       return;
     }
 
+        // 親ページから星座カードの中心座標を受信
+    if (data.type === "set-constellation-center") {
+
+      // 赤経・赤緯の値を確認
+      if (
+        !Number.isFinite(data.ra) ||
+        !Number.isFinite(data.dec) ||
+        data.ra < 0 ||
+        data.ra >= 360 ||
+        data.dec < -90 ||
+        data.dec > 90
+      ) {
+        console.error("星座カードの中心座標が不正です。", data);
+        return;
+      }
+
+      // 以前の流星群の放射点表示を解除
+      meteorRadiant = null;
+
+      // 現在の地方恒星時を取得
+      const lstDeg = getLocalSiderealTimeDeg();
+
+      // 赤経・赤緯から水平座標の方向ベクトルを求める
+      const centerVector = equatorialToHorizontalVector(
+        data.ra,
+        data.dec,
+        lstDeg
+      );
+
+      // 方位角を計算（北0°、東90°）
+      const constellationAzDeg = normalizeDeg(
+        Math.atan2(
+          centerVector.x,
+          centerVector.y
+        ) / RAD
+      );
+
+      // 高度を計算
+      const constellationAltDeg = Math.asin(
+        Math.max(
+          -1,
+          Math.min(1, centerVector.z)
+        )
+      ) / RAD;
+
+      // 星図の中心を星座カードの中心に合わせる
+      centerAzDeg = constellationAzDeg;
+      centerAltDeg = constellationAltDeg;
+      fieldOfViewDeg = 30; //プラネタリウムパネルの初期拡大率（視野角）
+
+      // 星図を再描画
+      drawChart();
+
+      // 状態を表示
+      status.textContent =
+        `${data.name || "星座カード"}の中心を表示中`;
+
+      console.log("星座カードの中心座標を受信しました:", {
+        name: data.name,
+        ra: data.ra,
+        dec: data.dec,
+        az: constellationAzDeg,
+        alt: constellationAltDeg
+      });
+
+      return;
+    }
+
     // 流星群の放射点以外は処理しない
     if (data.type !== "set-meteor-radiant") {
       return;
