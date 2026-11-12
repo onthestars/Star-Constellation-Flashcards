@@ -26,6 +26,23 @@ function setupNavigation(
     return n;
   }
 
+  // ▼ カード画像を事前に読み込む
+  function preloadCardImage(src) {
+    return new Promise((resolve) => {
+      const img = new Image();
+
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+
+      img.src = src;
+
+      // キャッシュ済み画像への対応
+      if (img.complete) {
+        resolve(img.naturalWidth > 0);
+      }
+    });
+  }
+
   // ▼ 前の index を探す
   function findPrevIndex(i) {
     let p = i - 1;
@@ -42,80 +59,205 @@ function setupNavigation(
     }
   }
 
-  // ▼ 次へ
-  nextBtn.onclick = () => {
+  // ▼ 次へ（JavaScriptアニメーション）
+  nextBtn.onclick = async () => {
 
     if (getIsFinalNull()) return;
 
     nextBtn.disabled = true;
 
-    viewer.classList.remove("slide-out-left", "fade-in");
-    void viewer.offsetWidth;
-    viewer.classList.add("slide-out-left");
+    // 次のカードを決定
+    const next = findNextIndex(getIndex());
+    const isLast = next >= images.length;
 
-    setTimeout(() => {
+    // 次に表示する画像のパス
+    let nextSrc;
 
-      let next = findNextIndex(getIndex());
+    if (isLast) {
+      nextSrc = "image/common/card-null.png";
+    } else if (images[next] === null) {
+      nextSrc = "image/common/null-card.png";
+    } else {
+      nextSrc = images[next];
+    }
 
-      if (next >= images.length) {
-        // nullカードへ
-        setIsFinalNull(true);
-        setIsBack(true);
-      } else {
-        setIndex(next);
-        setIsBack(false);
-      }
+    // 画像を先に読み込む
+    const loaded = await preloadCardImage(nextSrc);
 
-      viewer.classList.remove("slide-out-left");
-      void viewer.offsetWidth;
-      viewer.classList.add("fade-in");
-
-      updateViewer(getIndex(), getIsBack());
-
-      autoSeasonUpdate(getIndex());
-
+    if (!loaded) {
+      console.error("次のカード画像を読み込めませんでした:", nextSrc);
       nextBtn.disabled = false;
+      return;
+    }
 
-    }, 400);
+    // CSSアニメーションとの重複を防ぐ
+    viewer.classList.remove(
+      "slide-out-left",
+      "slide-out-right",
+      "fade-in"
+    );
+
+    // 現在のカードを左へ退場
+    const exitAnimation = viewer.animate(
+      [
+        {
+          transform: "translateX(0)",
+          opacity: 1
+        },
+        {
+          transform: "translateX(-40px)",
+          opacity: 0
+        }
+      ],
+      {
+        duration: 400,
+        easing: "ease",
+        fill: "forwards"
+      }
+    );
+
+    await exitAnimation.finished;
+
+    exitAnimation.cancel();
+
+    // 次のカードへ切り替える
+    if (isLast) {
+
+      setIsFinalNull(true);
+      setIsBack(true);
+
+    } else {
+
+      setIndex(next);
+      setIsBack(false);
+
+    }
+
+    // 画像とボタンを更新
+    updateViewer(getIndex(), getIsBack());
+
+    // 季節表示を更新
+    autoSeasonUpdate(getIndex());
+
+    // 新しいカードを右から表示
+    const enterAnimation = viewer.animate(
+      [
+        {
+          transform: "translateX(30px) scale(0.98)",
+          opacity: 0
+        },
+        {
+          transform: "translateX(0) scale(1)",
+          opacity: 1
+        }
+      ],
+      {
+        duration: 400,
+        easing: "ease",
+        fill: "forwards"
+      }
+    );
+
+    await enterAnimation.finished;
+
+    enterAnimation.cancel();
   };
 
-  // ▼ 前へ
-  prevBtn.onclick = () => {
+  // ▼ 前へ（JavaScriptアニメーション）
+  prevBtn.onclick = async () => {
 
     if (getIndex() === 0) return;
 
     prevBtn.disabled = true;
 
-    viewer.classList.remove("slide-out-left", "slide-out-right", "fade-in");
-    void viewer.offsetWidth;
-    viewer.classList.add("slide-out-right");
+    // 戻る先の index を決定
+    let prev;
 
-    setTimeout(() => {
+    if (getIsFinalNull()) {
+      prev = ARGO_Q_INDEX;
+    } else {
+      prev = findPrevIndex(getIndex());
+    }
 
-      if (getIsFinalNull()) {
-        // nullカードから戻る
-        setIsFinalNull(false);
-        setIndex(ARGO_Q_INDEX);
-        setIsBack(false);
-      } else {
-        let prev = findPrevIndex(getIndex());
-        if (prev >= 0) {
-          setIndex(prev);
-          setIsBack(false);
-        }
-      }
-
-      viewer.classList.remove("slide-out-right");
-      void viewer.offsetWidth;
-      viewer.classList.add("fade-in");
-
-      updateViewer(getIndex(), getIsBack());
-
-      autoSeasonUpdate(getIndex());
-
+    if (prev < 0) {
       prevBtn.disabled = false;
+      return;
+    }
 
-    }, 400);
+    // 戻る先の画像を決定
+    const prevSrc = images[prev] === null
+      ? "image/common/null-card.png"
+      : images[prev];
+
+    // 画像を先に読み込む
+    const loaded = await preloadCardImage(prevSrc);
+
+    if (!loaded) {
+      console.error("前のカード画像を読み込めませんでした:", prevSrc);
+      prevBtn.disabled = false;
+      return;
+    }
+
+    viewer.classList.remove(
+      "slide-out-left",
+      "slide-out-right",
+      "fade-in"
+    );
+
+    // 現在のカードを右へ退場
+    const exitAnimation = viewer.animate(
+      [
+        {
+          transform: "translateX(0)",
+          opacity: 1
+        },
+        {
+          transform: "translateX(40px)",
+          opacity: 0
+        }
+      ],
+      {
+        duration: 400,
+        easing: "ease",
+        fill: "forwards"
+      }
+    );
+
+    await exitAnimation.finished;
+    exitAnimation.cancel();
+
+    // カードを切り替える
+    setIsFinalNull(false);
+    setIndex(prev);
+    setIsBack(false);
+
+    updateViewer(getIndex(), getIsBack());
+
+    autoSeasonUpdate(getIndex());
+
+    // 新しいカードを左から表示
+    const enterAnimation = viewer.animate(
+      [
+        {
+          transform: "translateX(-30px) scale(0.98)",
+          opacity: 0
+        },
+        {
+          transform: "translateX(0) scale(1)",
+          opacity: 1
+        }
+      ],
+      {
+        duration: 400,
+        easing: "ease",
+        fill: "forwards"
+      }
+    );
+
+    await enterAnimation.finished;
+    enterAnimation.cancel();
+
+    prevBtn.disabled = false;
   };
 
   // ▼ スワイプ操作
