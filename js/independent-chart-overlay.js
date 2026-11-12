@@ -178,7 +178,7 @@
   }
 
   // 通常のプラネタリウムを開く
-  function openPlanetarium() {
+  function openPlanetarium(sharedSearch = "") {
 
     selectedMeteor = null;
 
@@ -202,9 +202,11 @@
 
     isOpen = true;
 
-    if (frame.getAttribute("src") !== CHART_URL) {
+    const chartTargetURL = CHART_URL + sharedSearch;
+
+    if (frame.getAttribute("src") !== chartTargetURL) {
       frameReady = false;
-      frame.src = CHART_URL;
+      frame.src = chartTargetURL;
     }
   }
 
@@ -306,6 +308,24 @@
 
   window.openPlanetariumAtConstellation =
     openPlanetariumAtConstellation;
+
+  // 共有URLからアクセスした場合はプラネタリウムを自動表示
+  const sharedParams = new URLSearchParams(
+    window.location.search
+  );
+
+  const hasSharedChartState = [
+    "chartDate",
+    "az",
+    "alt",
+    "fov",
+    "text",
+    "labels"
+  ].some(param => sharedParams.has(param));
+
+  if (hasSharedChartState) {
+    openPlanetarium(window.location.search);
+  }
 
   console.log("星図カードオーバーレイを初期化しました。");
 })();
