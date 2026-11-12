@@ -134,7 +134,6 @@ function updateViewer(
   updatePrevNextButtons(index, prevBtn, nextBtn);
 }
 
-
 // ▼ カードクリック → 星図リンクを開く
 function setupViewerClick(viewer, indexGetter) {
 
