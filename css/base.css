@@ -59,7 +59,8 @@ body {
   max-width: 480px;
   height: auto;
   object-fit: contain;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: none;
+  will-change: transform, opacity;
 }
 
 /* ボタンブロック（縦置き） */
