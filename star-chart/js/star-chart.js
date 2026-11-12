@@ -4513,7 +4513,7 @@
 
   });
 
-    // ==========================================
+  // ==========================================
   // 共有URLから星空の状態を復元
   // ==========================================
 
@@ -4942,7 +4942,7 @@
 
       // 共有URLを作成（公開ページのURLを使用）
       const shareURL = new URL(
-        "https://onthestars.github.io/Star-Constellation-Flashcards/star-chart/"
+        "https://onthestars.github.io/Star-Constellation-Flashcards/"
       );
 
       shareURL.searchParams.set("chartDate", localDateTime);
