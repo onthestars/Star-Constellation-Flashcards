@@ -24,31 +24,47 @@ function updateSpecialButton(index, specialBtn) {
   }
 }
 
-
-// ▼ ぴーとの星図ボタンの表示・リンク制御
+// ▼ プラネタリウムボタンの表示・有効状態
 function updatePeteChartButton(index, peteChartBtn) {
   if (!peteChartBtn) return;
 
   const cardName = getCardName(index);
-  const url = cardName ? links[cardName] : null;
+  const center = cardName
+    ? getStarChartCenter(cardName)
+    : null;
 
-  peteChartBtn.disabled = !url;
-  peteChartBtn.style.opacity = url ? "1" : "0.2";
-  peteChartBtn.dataset.url = url || "";
+  peteChartBtn.disabled = !center;
+  peteChartBtn.style.opacity = center ? "1" : "0.2";
+  peteChartBtn.dataset.cardName = center ? cardName : "";
 }
 
-// ▼ ぴーとの星図ボタンのクリック処理
+// ▼ プラネタリウムボタンのクリック処理
 function setupPeteChartButton(peteChartBtn) {
   if (!peteChartBtn) return;
 
   peteChartBtn.addEventListener("click", () => {
-    const url = peteChartBtn.dataset.url;
 
-    if (url && !peteChartBtn.disabled) {
+    const cardName = peteChartBtn.dataset.cardName;
 
-      window.open(url, "_blank");
-
+    if (!cardName || peteChartBtn.disabled) {
+      return;
     }
+
+    const center = getStarChartCenter(cardName);
+
+    if (!center) {
+      return;
+    }
+
+    if (typeof window.openPlanetariumAtConstellation === "function") {
+      window.openPlanetariumAtConstellation(
+        center.ra,
+        center.dec,
+        Date.now(),
+        cardName
+      );
+    }
+
   });
 }
 

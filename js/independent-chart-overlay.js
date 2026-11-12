@@ -34,6 +34,9 @@
   let isOpen = false;
   let pendingObservationTimestamp = null;
 
+  // 星座カードから受け取った中心座標
+  let pendingConstellationCenter = null;
+
   // 観測日時を星図へ送信
   function sendObservationDate() {
     if (
@@ -109,6 +112,31 @@
       },
       CHART_ORIGIN
     );
+  }
+
+  // 星座カードの中心座標を星図へ送信
+  function sendConstellationCenter() {
+
+    if (
+      !isOpen ||
+      !frameReady ||
+      !pendingConstellationCenter ||
+      !frame.contentWindow
+    ) {
+      return;
+    }
+
+    frame.contentWindow.postMessage(
+      {
+        type: "set-constellation-center",
+        name: pendingConstellationCenter.name,
+        ra: pendingConstellationCenter.ra,
+        dec: pendingConstellationCenter.dec
+      },
+      CHART_ORIGIN
+    );
+
+    pendingConstellationCenter = null;
   }
 
   // 星図カードを開く
@@ -193,6 +221,45 @@
     sendObservationDate();
   }
 
+  // 星座カードから中心座標を指定してプラネタリウムを開く
+  function openPlanetariumAtConstellation(
+    ra,
+    dec,
+    timestamp,
+    name
+  ) {
+
+    if (
+      !Number.isFinite(ra) ||
+      !Number.isFinite(dec) ||
+      ra < 0 ||
+      ra >= 360 ||
+      dec < -90 ||
+      dec > 90 ||
+      !Number.isFinite(timestamp)
+    ) {
+      console.error("星座の中心座標が不正です。");
+      return;
+    }
+
+    // 観測日時を設定
+    pendingObservationTimestamp = timestamp;
+
+    // 通常のプラネタリウムを開く
+    openPlanetarium();
+
+    // 中心座標を保留
+    pendingConstellationCenter = {
+      name: name,
+      ra: ra,
+      dec: dec
+    };
+
+    // 読み込み済みなら直ちに送信
+    sendObservationDate();
+    sendConstellationCenter();
+  }
+
   // 星図の読み込み完了後に必要な情報を送信
   frame.addEventListener("load", function () {
     if (!isOpen || frame.src === "about:blank") {
@@ -203,6 +270,7 @@
 
     sendObservationDate();
     sendRadiantCoordinates();
+    sendConstellationCenter();
   });
 
   // オーバーレイを閉じる
@@ -210,6 +278,7 @@
     isOpen = false;
     frameReady = false;
     pendingObservationTimestamp = null;
+    pendingConstellationCenter = null;
     updatePlanetariumButtonState();
     selectedMeteor = null;
     overlay.style.display = "none";
@@ -234,6 +303,9 @@
   // 星空ガイドから呼び出す関数
   window.openPlanetarium = openPlanetarium;
   window.openPlanetariumAtDate = openPlanetariumAtDate;
+
+  window.openPlanetariumAtConstellation =
+    openPlanetariumAtConstellation;
 
   console.log("星図カードオーバーレイを初期化しました。");
 })();

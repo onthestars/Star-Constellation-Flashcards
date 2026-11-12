@@ -92,3 +92,24 @@ links["Lupus"] = makeLink(225.425, -40.103, 34.81, 135.53, 40.00);
 links["Centaurus"] = makeLink(200.39, -47.137, 34.81, 135.53, 40.00);
 links["Ara"] = makeLink(258.045, -55.031, 34.81, 135.53, 40.00);
 links["Argo-Puppis-Vela-Carina-Pyxis"] = makeLink(130.126, -62.094, 34.81, 135.53, 70.00);
+
+// ▼ カード名からプラネタリウム用の中心座標を取得
+window.getStarChartCenter = function (cardName) {
+
+  const url = links[cardName];
+
+  if (!url) {
+    return null;
+  }
+
+  const params = new URL(url).searchParams;
+
+  const ra = Number(params.get("ra"));
+  const dec = Number(params.get("dec"));
+
+  if (!Number.isFinite(ra) || !Number.isFinite(dec)) {
+    return null;
+  }
+
+  return { ra, dec };
+};
