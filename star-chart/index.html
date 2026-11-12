@@ -40,6 +40,20 @@
       <!-- 星図の読み込み状態 -->
       <div id="chart-status" aria-live="polite"></div>
 
+      <!-- 共有完了メッセージ -->
+      <div id="chart-share-notice" hidden aria-live="polite">
+        <span id="chart-share-notice-text">
+          プラネタリウム（URL）をコピーしました。
+
+          LINEなどに貼り付けて共有できます。
+        </span>
+        <button
+          type="button"
+          id="chart-share-notice-close"
+          aria-label="閉じる"
+        >✕</button>
+      </div>
+
       <!-- モード切り替えボタン -->
       <div id="sensor-test-panel">
         <button id="sensor-start" type="button" aria-pressed="true">
@@ -52,15 +66,19 @@
 
       <!-- 文字サイズ切り替え -->
       <div id="chart-text-size-panel">
-
         <button type="button" id="toggle-object-labels">
           消
         </button>
-
         <button type="button" data-text-size="small">小</button>
         <button type="button" data-text-size="medium" class="active">中</button>
         <button type="button" data-text-size="large">大</button>
-
+        <button type="button" id="chart-share-button" aria-label="プラネタリウムをコピー" title="プラネタリウムをコピー">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="8" y="8" width="12" height="13" rx="2" />
+            <path d="M16 8V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h2" />
+          </svg>
+        </button>
       </div>
 
     </section>
