@@ -559,6 +559,18 @@
       const phaseIndex = getMoonPhaseIndex(today);
       const phaseName = getPhaseName(today);
 
+            // 月の照明率（0～100%）
+      const phaseAngle = Astronomy.MoonPhase(
+        Astronomy.MakeTime(getReferenceDate(today))
+      );
+
+      const illumination =
+        (1 - Math.cos(phaseAngle * Math.PI / 180)) / 2;
+
+      // 照明率に応じたグローの強さ
+      const glowOpacity = illumination * 0.8;
+      const glowBlur = illumination * 8;
+
       const observationWindow =
         getObservationWindow(today);
 
@@ -879,8 +891,10 @@ ${meteorMessage
     object-fit:contain;
     margin:4px auto;
 
-    border:2px solid rgb(6, 7, 64);
-    border-radius:50%;
+    filter:drop-shadow(
+      0 0 ${glowBlur}px
+      rgba(255, 255, 240, ${glowOpacity})
+    );
   "
 >
 
