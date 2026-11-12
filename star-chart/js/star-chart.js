@@ -23,6 +23,53 @@
     large: 1.3
   };
 
+  // ==========================================
+  // 星座のお気に入り評価（☆☆☆）
+  // ==========================================
+
+  // 星座ごとの評価を保存するキー
+  const CONSTELLATION_RATINGS_KEY =
+    "constellationRatings";
+
+  // 星座ごとの評価データを読み込む
+  let constellationRatings = {};
+
+  // 星座評価のタップ判定領域
+  let constellationRatingHitAreas = [];
+
+  try {
+    constellationRatings = JSON.parse(
+      localStorage.getItem(CONSTELLATION_RATINGS_KEY) || "{}"
+    );
+  } catch (error) {
+    constellationRatings = {};
+  }
+
+  // 星座の評価を取得する
+  function getConstellationRating(constellationId) {
+    return constellationRatings[constellationId] || 0;
+  }
+
+  // 星座の評価を保存する
+  function saveConstellationRatings() {
+    localStorage.setItem(
+      CONSTELLATION_RATINGS_KEY,
+      JSON.stringify(constellationRatings)
+    );
+  }
+
+  // 星座の評価を1つ進める
+  function incrementConstellationRating(constellationId) {
+
+    const currentRating =
+      getConstellationRating(constellationId);
+
+    constellationRatings[constellationId] =
+      (currentRating + 1) % 4;
+
+    saveConstellationRatings();
+  }
+
   // ▼ 天体ラベル表示
   let objectLabelsVisible = true;
 
@@ -1542,6 +1589,32 @@
     );
   }
 
+  // タップ位置から星座評価を判定
+  function findConstellationRatingAt(x, y) {
+
+    const rect = canvas.getBoundingClientRect();
+
+    const px = x - rect.left;
+    const py = y - rect.top;
+
+    // 星のタップ領域を調べる
+    for (let i = constellationRatingHitAreas.length - 1; i >= 0; i--) {
+
+      const area = constellationRatingHitAreas[i];
+
+      if (
+        px >= area.x &&
+        px <= area.x + area.width &&
+        py >= area.y &&
+        py <= area.y + area.height
+      ) {
+        return area.id;
+      }
+    }
+
+    return null;
+  }
+
   // タップ位置から星座線を判定
   function findConstellationAt(x, y) {
 
@@ -2319,6 +2392,9 @@
 
       // 恒星を描画
 
+      // 星座評価のタップ判定領域を初期化
+      constellationRatingHitAreas = [];
+
       // 全星座の名前を描画
       for (const constellation of constellations) {
 
@@ -2413,8 +2489,44 @@
 
           }
 
+          // 星座の評価を描画
+          if (objectLabelsVisible) {
 
-          ctx.restore();
+            const rating = getConstellationRating(constellation.id);
+            const ratingText =
+              "★".repeat(rating) +
+              "☆".repeat(3 - rating);
+
+            // 選択中の文字サイズに合わせる
+            const ratingFontSize =
+              13 * (CHART_TEXT_SIZES[chartTextSize] || 1);
+
+            ctx.save();
+            ctx.globalAlpha = state.opacity;
+            ctx.font = `bold ${ratingFontSize}px "Meiryo", sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+            ctx.fillStyle = "#FFD700";
+
+            ctx.fillText(
+              ratingText,
+              labelX,
+              boxY + boxHeight + 2
+            );
+
+            ctx.restore();
+
+            // 星のタップ判定領域を記録
+            constellationRatingHitAreas.push({
+              id: constellation.id,
+              x: labelX - 22,
+              y: boxY + boxHeight + 2,
+              width: 44,
+              height: 22
+            });
+
+          }
+
         }
       }
 
@@ -4043,18 +4155,35 @@
       !isMultiPointerGesture &&
       moveDistance <= 8;
 
-    // タップした星座線を判定
+    // タップした位置を判定
     if (wasTap) {
-      const selected = findConstellationAt(
+
+      // まず星座評価のタップを判定
+      const ratingId = findConstellationRatingAt(
         event.clientX,
         event.clientY
       );
 
-      if (selected) {
-        console.log("選択した星座:", selected.name);
+      if (ratingId) {
 
-        // 選択した星座線のアニメーションを開始
-        startConstellationLineAnimation(selected);
+        // 評価を1つ進める
+        incrementConstellationRating(ratingId);
+
+        // 星図を再描画
+        drawChart();
+
+      } else {
+
+        // 星座評価以外なら、従来の星座線を判定
+        const selected = findConstellationAt(
+          event.clientX,
+          event.clientY
+        );
+
+        if (selected) {
+          console.log("選択した星座:", selected.name);
+          startConstellationLineAnimation(selected);
+        }
       }
     }
 
