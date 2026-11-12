@@ -4513,6 +4513,106 @@
 
   });
 
+    // ==========================================
+  // 共有URLから星空の状態を復元
+  // ==========================================
+
+  function restoreSharedChartState() {
+
+    const params = new URLSearchParams(
+      window.location.search
+    );
+
+    // 観測日時
+    const sharedDate = params.get("chartDate");
+
+    if (sharedDate) {
+
+      const date = new Date(sharedDate);
+
+      if (!Number.isNaN(date.getTime())) {
+        observationDate = date;
+      }
+
+    }
+
+    // 方角
+    if (params.has("az")) {
+
+      const az = Number(params.get("az"));
+
+      if (Number.isFinite(az)) {
+        centerAzDeg = normalizeDeg(az);
+      }
+
+    }
+
+    // 高度
+    if (params.has("alt")) {
+
+      const alt = Number(params.get("alt"));
+
+      if (Number.isFinite(alt)) {
+
+        centerAltDeg = Math.max(
+          -89.5,
+          Math.min(89.5, alt)
+        );
+
+      }
+
+    }
+
+    // 拡大率（視野角）
+    if (params.has("fov")) {
+
+      const fov = Number(params.get("fov"));
+
+      if (
+        Number.isFinite(fov) &&
+        fov >= MIN_FIELD_OF_VIEW_DEG &&
+        fov <= MAX_FIELD_OF_VIEW_DEG
+      ) {
+        fieldOfViewDeg = fov;
+      }
+
+    }
+
+    // 文字サイズ
+    const sharedText = params.get("text");
+
+    if (
+      ["small", "medium", "large"].includes(sharedText)
+    ) {
+      chartTextSize = sharedText;
+    }
+
+    // 天体ラベルの表示・非表示
+    const sharedLabels = params.get("labels");
+
+    if (sharedLabels === "1") {
+      objectLabelsVisible = true;
+    } else if (sharedLabels === "0") {
+      objectLabelsVisible = false;
+    }
+
+    // 文字サイズボタンの選択状態を更新
+    document.querySelectorAll(
+      "#chart-text-size-panel button[data-text-size]"
+    ).forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.textSize === chartTextSize
+      );
+
+    });
+
+  }
+
+  // 共有情報を初回描画前に反映
+  restoreSharedChartState();
+
   // 初回表示
   resizeCanvas();
 
@@ -4767,9 +4867,116 @@
       // 星図を再描画
       drawChart();
 
+
       // 星図を再描画
       drawChart();
 
     });
+
+
+  // =================================
+  // プラネタリウムの共有
+  // =================================
+
+  const shareButton =
+    document.getElementById("chart-share-button");
+
+  const shareNotice =
+    document.getElementById("chart-share-notice");
+
+  const shareNoticeClose =
+    document.getElementById("chart-share-notice-close");
+
+  let shareNoticeTimer = null;
+
+  // メッセージを閉じる
+  function hideShareNotice() {
+
+    shareNotice.hidden = true;
+
+    if (shareNoticeTimer !== null) {
+      clearTimeout(shareNoticeTimer);
+      shareNoticeTimer = null;
+    }
+
+  }
+
+  // メッセージを表示する
+  function showShareNotice() {
+
+    if (shareNoticeTimer !== null) {
+      clearTimeout(shareNoticeTimer);
+    }
+
+    shareNotice.hidden = false;
+
+    // 6秒後に自動で消す
+    shareNoticeTimer = setTimeout(() => {
+      hideShareNotice();
+    }, 6000);
+
+  }
+
+  // ×ボタン
+  if (shareNoticeClose) {
+    shareNoticeClose.addEventListener(
+      "click",
+      hideShareNotice
+    );
+  }
+
+  // 共有ボタン
+  if (shareButton) {
+
+    shareButton.addEventListener("click", async () => {
+
+      // 現在の観測日時
+      const date = getObservationDate();
+
+      const localDateTime =
+        `${date.getFullYear()}-` +
+        `${String(date.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(date.getDate()).padStart(2, "0")}T` +
+        `${String(date.getHours()).padStart(2, "0")}:` +
+        `${String(date.getMinutes()).padStart(2, "0")}`;
+
+      // 共有URLを作成（公開ページのURLを使用）
+      const shareURL = new URL(
+        "https://onthestars.github.io/Star-Constellation-Flashcards/star-chart/"
+      );
+
+      shareURL.searchParams.set("chartDate", localDateTime);
+      shareURL.searchParams.set("az", centerAzDeg.toFixed(2));
+      shareURL.searchParams.set("alt", centerAltDeg.toFixed(2));
+      shareURL.searchParams.set("fov", fieldOfViewDeg.toFixed(2));
+      shareURL.searchParams.set("text", chartTextSize);
+      shareURL.searchParams.set(
+        "labels",
+        objectLabelsVisible ? "1" : "0"
+      );
+
+      // クリップボードにコピー
+      try {
+
+        await navigator.clipboard.writeText(
+          shareURL.toString()
+        );
+
+        showShareNotice();
+
+      } catch (error) {
+
+        console.error(
+          "共有情報のコピーに失敗しました:",
+          error
+        );
+
+        hideShareNotice();
+
+      }
+
+    });
+
+  }
 
 })();
