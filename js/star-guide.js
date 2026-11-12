@@ -735,18 +735,26 @@
 
           <div class="star-guide-info" style="min-width: 0; margin: 0; padding: 0;">
             <div style="
-              margin: 0 0 2px 0;
-              text-align: center;
-            ">
-              ${dateText}
-            </div>
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 2px 0;
+  padding: 2px 12px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  color: #060740;
+  border-radius: 3px;
+  font-weight: bold;
+">
+  ${dateText}
+</div>
 
                         <div style="
               display: inline-block;
               background: rgba(6, 7, 64, 0.8);
               margin: 2px 0 2px 0;
               padding: 8px 6px 4px 6px;
-              border: 1px solid currentColor;
+              border: 1px solid rgba(255, 255, 255, 0.8);
               box-sizing: border-box;
               width: 100%;
             ">
@@ -804,7 +812,7 @@ ${meteorMessage
     background: rgba(6, 7, 64, 0.8);
         margin:2px 0 4px 0;
         padding: 2px 6px 2px 6px;
-        border:1px solid currentColor;
+        border: 1px solid rgba(255, 255, 255, 0.8);
         box-sizing:border-box;
         width:100%;
       ">
