@@ -595,3 +595,54 @@ body {
   border-color: #ffd700;
   color: #ffd700;
 }
+
+
+/* 共有完了メッセージ */
+#chart-share-notice {
+  position: absolute;
+  z-index: 20;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: calc(100% - 32px);
+  max-width: 420px;
+  box-sizing: border-box;
+
+  padding: 14px 34px 14px 14px;
+
+  background: rgba(6, 7, 64, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-line;
+  text-align: center;
+}
+
+/* 閉じるボタン */
+#chart-share-notice-close {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+
+  margin: 0 0 4px 4px;
+  padding: 0;
+
+  background: none;
+  border: none;
+
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Meiryo", sans-serif;
+
+  cursor: pointer;
+}
+
+/* 閉じるボタン：ホバー */
+#chart-share-notice-close:hover {
+  opacity: 0.7;
+}
