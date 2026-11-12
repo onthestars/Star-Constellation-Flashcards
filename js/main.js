@@ -128,17 +128,6 @@ southBtn.onclick = () => {
   jumpToSeason("south");
 };
 
-// 初期表示
-updateViewer(
-  index,
-  isBack,
-  viewer,
-  specialBtn,
-  prevBtn,
-  nextBtn,
-  peteChartBtn
-);
-
 // 外部リンクから戻った場合の復帰処理
 window.addEventListener("load", () => {
 
