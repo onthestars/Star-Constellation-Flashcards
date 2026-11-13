@@ -18,14 +18,11 @@
   const closeButton = document.getElementById(
     "independent-chart-close"
   );
-  const shareButton = document.getElementById(
-    "independent-chart-share"
-  );
   const frame = document.getElementById(
     "independent-chart-frame"
   );
 
-  if (!overlay || !title || !closeButton || !shareButton || !frame) {
+  if (!overlay || !title || !closeButton || !frame) {
     console.error(
       "星図カードオーバーレイのHTML要素が見つかりません。"
     );
@@ -62,21 +59,6 @@
   }
 
   let frameReady = false;
-
-  // ヘッダーのシェアボタンから星図へ共有処理を依頼
-  shareButton.addEventListener("click", function () {
-    if (!isOpen || !frameReady || !frame.contentWindow) {
-      return;
-    }
-
-    // 星図側にフォーカスを移す
-    frame.contentWindow.focus();
-
-    frame.contentWindow.postMessage(
-      { type: "request-chart-share" },
-      CHART_ORIGIN
-    );
-  });
 
   // 右上のプラネタリウムボタンの状態を更新
   function updatePlanetariumButtonState() {
@@ -278,6 +260,24 @@
     sendObservationDate();
     sendConstellationCenter();
   }
+
+  // 星図内の共有ボタンからの依頼を受信
+window.addEventListener("message", function (event) {
+
+  if (event.origin !== CHART_ORIGIN) return;
+  if (event.source !== frame.contentWindow) return;
+  if (!isOpen || !frameReady) return;
+
+  if (event.data?.type === "request-chart-share") {
+
+    // 星図側の既存共有処理を実行
+    frame.contentWindow.postMessage(
+      { type: "request-chart-share" },
+      CHART_ORIGIN
+    );
+  }
+
+});
 
   // 星図の読み込み完了後に必要な情報を送信
   frame.addEventListener("load", function () {
