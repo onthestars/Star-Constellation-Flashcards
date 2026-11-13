@@ -1876,7 +1876,8 @@
     constellationAnimationProgress = 0;
     constellationLineAnimationPhase = "drawing";
 
-    const drawDuration = 2600;
+    // 星座線を結ぶ速度（スピード）
+    const drawDuration = 5200;
     let phaseStartTime = null;
 
     function animateConstellation(timestamp) {
