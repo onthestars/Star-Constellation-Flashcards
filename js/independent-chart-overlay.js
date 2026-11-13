@@ -1,4 +1,3 @@
-
 // js/independent-chart-overlay.js
 "use strict";
 
@@ -19,11 +18,14 @@
   const closeButton = document.getElementById(
     "independent-chart-close"
   );
+  const shareButton = document.getElementById(
+    "independent-chart-share"
+  );
   const frame = document.getElementById(
     "independent-chart-frame"
   );
 
-  if (!overlay || !title || !closeButton || !frame) {
+  if (!overlay || !title || !closeButton || !shareButton || !frame) {
     console.error(
       "星図カードオーバーレイのHTML要素が見つかりません。"
     );
@@ -60,6 +62,21 @@
   }
 
   let frameReady = false;
+
+  // ヘッダーのシェアボタンから星図へ共有処理を依頼
+  shareButton.addEventListener("click", function () {
+    if (!isOpen || !frameReady || !frame.contentWindow) {
+      return;
+    }
+
+    // 星図側にフォーカスを移す
+    frame.contentWindow.focus();
+
+    frame.contentWindow.postMessage(
+      { type: "request-chart-share" },
+      CHART_ORIGIN
+    );
+  });
 
   // 右上のプラネタリウムボタンの状態を更新
   function updatePlanetariumButtonState() {
