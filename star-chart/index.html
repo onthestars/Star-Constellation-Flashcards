@@ -68,6 +68,44 @@
       <button type="button" id="toggle-constellation-ratings" aria-label="星座評価を非表示" title="星座評価を非表示">
         ★
       </button>
+      
+      <!-- 星座線の表示切り替え -->
+      <button
+        type="button"
+        id="toggle-constellation-lines"
+        aria-label="星座線を非表示"
+        title="星座線を非表示"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          aria-hidden="true"
+        >
+          <!-- 星をつなぐ線 -->
+          <path
+            d="M5 17 L12 7 L19 14"
+            stroke="#FF3CC8"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+
+          <!-- 白い星 -->
+          <path
+            d="M5 13.5 L6 16 L8 17 L6 18 L5 20.5 L4 18 L2 17 L4 16 Z"
+            fill="#FFFFFF"
+          />
+          <path
+            d="M12 2 L13.5 5.5 L16 7 L13.5 8.5 L12 12 L10.5 8.5 L8 7 L10.5 5.5 Z"
+            fill="#FFFFFF"
+          />
+          <path
+            d="M19 10 L20 12.5 L22 13.5 L20 14.5 L19 17 L18 14.5 L16 13.5 L18 12.5 Z"
+            fill="#FFFFFF"
+          />
+        </svg>
+      </button>
 
       <!-- 親パネルから共有処理を呼び出すための内部ボタン -->
       <button type="button" id="chart-share-button" hidden></button>
