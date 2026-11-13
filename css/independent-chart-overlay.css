@@ -80,3 +80,37 @@
 #independent-chart-panel.planetarium-panel-fade-in {
   animation: cardPanelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
 }
+
+/* =================================
+   プラネタリウム共有ボタン
+================================= */
+
+#independent-chart-share {
+  position: absolute;
+  top: 48px;
+  left: 8px;
+  z-index: 10;
+
+  width: 28px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #ffd700;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#independent-chart-share svg {
+  display: block;
+}
