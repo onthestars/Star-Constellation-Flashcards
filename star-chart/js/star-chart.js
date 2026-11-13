@@ -4629,6 +4629,33 @@
       objectLabelsVisible = false;
     }
 
+    // 星座評価（★★★）の表示・非表示
+    const sharedRatings = params.get("ratings");
+
+    if (sharedRatings === "1") {
+      constellationRatingsVisible = true;
+    } else if (sharedRatings === "0") {
+      constellationRatingsVisible = false;
+    }
+
+    // 星座評価ボタンの表示を更新
+    const ratingButton = document.getElementById(
+      "toggle-constellation-ratings"
+    );
+
+    if (ratingButton) {
+
+      const icon = constellationRatingsVisible ? "★" : "☆";
+      const label = constellationRatingsVisible
+        ? "星座評価を非表示"
+        : "星座評価を表示";
+
+      ratingButton.textContent = icon;
+      ratingButton.setAttribute("aria-label", label);
+      ratingButton.title = label;
+
+    }
+
     // 文字サイズボタンの選択状態を更新
     document.querySelectorAll(
       "#chart-text-size-panel button[data-text-size]"
@@ -4991,6 +5018,12 @@
         objectLabelsVisible ? "1" : "0"
       );
 
+      // ★★★の表示・非表示状態
+      shareURL.searchParams.set(
+        "ratings",
+        constellationRatingsVisible ? "1" : "0"
+      );
+
       // クリップボードにコピー
       try {
 
@@ -5016,11 +5049,11 @@
   }
 
   // 画面上の共有ボタンから既存の共有処理を呼び出す
-if (visibleShareButton) {
-  visibleShareButton.addEventListener("click", () => {
-    shareButton?.click();
-  });
-}
+  if (visibleShareButton) {
+    visibleShareButton.addEventListener("click", () => {
+      shareButton?.click();
+    });
+  }
 
   // 親パネルからの共有リクエストを受信
   window.addEventListener("message", function (event) {
