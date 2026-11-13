@@ -2846,7 +2846,7 @@
         // 恒星名を一時保存
         if (shouldShowStarLabel && (isPolaris || projected.label)) {
           starLabels.push({
-            text: isPolaris ? "北極星" : projected.label,
+            text: isPolaris ? "北極星(ポラリス)" : projected.label,
             x: x + 9,
             y: y - 8
           });
