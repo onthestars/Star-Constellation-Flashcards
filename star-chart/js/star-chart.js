@@ -4979,4 +4979,19 @@
 
   }
 
+  // 親パネルからの共有リクエストを受信
+  window.addEventListener("message", function (event) {
+
+    if (event.source !== window.parent) return;
+    if (event.origin !== window.location.origin) return;
+
+    if (event.data?.type !== "request-chart-share") {
+      return;
+    }
+
+    // 既存の共有処理を実行
+    shareButton?.click();
+
+  });
+
 })();
