@@ -2,10 +2,8 @@
 
 /* ▼ 月移動ボタン */
 .moon-date-button {
-  width: 48px;
-  /* 当たり判定 */
-  height: 32px;
-  /* ボタン同士のマージン調整にも */
+  width: 58px;   /* 48px → 58px */
+  height: 38px;  /* 32px → 38px */
 
   display: flex;
   align-items: center;
@@ -21,7 +19,7 @@
 
 /* ▼ ボタン画像 */
 .moon-date-button img {
-  width: 16px;
+  width: 19px;  /* 16px → 19px */
   height: auto;
   display: block;
 }
@@ -236,7 +234,7 @@
 @media (max-width: 767px) {
   #star-guide-panel .moon-control-group {
     position: absolute;
-    right: 3%;
+    right: 1%;
     top: 50%;
     transform: translateY(-50%);
   }
