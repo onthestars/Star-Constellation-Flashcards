@@ -106,6 +106,48 @@
 
   }
 
+  // ==========================================
+  // 星座線の表示・非表示切り替え
+  // ==========================================
+
+  const constellationLinesToggle =
+    document.getElementById("toggle-constellation-lines");
+
+  if (constellationLinesToggle) {
+
+    constellationLinesToggle.addEventListener("click", () => {
+
+      // 表示状態を切り替える
+      constellationLinesVisible =
+        !constellationLinesVisible;
+
+      // 発見した星座と進行中のアニメーションをリセット
+      discoveredConstellationIds.clear();
+
+      if (constellationLineAnimationFrame !== null) {
+        cancelAnimationFrame(constellationLineAnimationFrame);
+        constellationLineAnimationFrame = null;
+      }
+
+      selectedConstellationId = null;
+      constellationAnimationProgress = 0;
+      constellationLineAnimationPhase = "idle";
+
+      // ボタンの説明を更新
+      const label = constellationLinesVisible
+        ? "星座線を非表示"
+        : "星座線を表示";
+
+      constellationLinesToggle.setAttribute("aria-label", label);
+      constellationLinesToggle.title = label;
+
+      // 星図を再描画
+      drawChart();
+
+    });
+
+  }
+
   // ▼ 天体ラベル表示（前回の設定を復元）
   let objectLabelsVisible =
     localStorage.getItem(CHART_LABELS_VISIBLE_KEY) !== "false";
@@ -636,6 +678,12 @@
   let selectedConstellationId = null;
   let constellationAnimationProgress = 0;
   let constellationAnimationFrame = null;
+
+  // 星座線の表示・非表示
+  let constellationLinesVisible = true;
+
+  // 非表示中にタップして表示した星座を記録
+  const discoveredConstellationIds = new Set();
 
   // 星座ごとのフェード専用アニメーションフレーム
   let constellationFadeAnimationFrame = null;
@@ -1783,6 +1831,9 @@
 
     if (!constellation) return;
 
+    // 通常表示中はアニメーションしない
+    if (constellationLinesVisible) return;
+
     // 進行中のアニメーションを停止
     if (constellationLineAnimationFrame !== null) {
       cancelAnimationFrame(constellationLineAnimationFrame);
@@ -1791,11 +1842,9 @@
 
     selectedConstellationId = constellation.id;
     constellationAnimationProgress = 0;
-    constellationLineAnimationPhase = "fadeOut";
+    constellationLineAnimationPhase = "drawing";
 
-    const fadeDuration = 800;
     const drawDuration = 2600;
-
     let phaseStartTime = null;
 
     function animateConstellation(timestamp) {
@@ -1806,42 +1855,26 @@
 
       const elapsed = timestamp - phaseStartTime;
 
-      if (constellationLineAnimationPhase === "fadeOut") {
+      const progress = Math.min(
+        elapsed / drawDuration,
+        1
+      );
 
-        const progress = Math.min(
-          elapsed / fadeDuration,
-          1
-        );
+      constellationAnimationProgress =
+        progress * progress * (3 - 2 * progress);
 
-        constellationAnimationProgress =
-          progress * progress * (3 - 2 * progress);
+      if (progress >= 1) {
 
-        if (progress >= 1) {
-          constellationLineAnimationPhase = "drawing";
-          constellationAnimationProgress = 0;
-          phaseStartTime = timestamp;
-        }
+        // 描画が完了した星座を記録
+        discoveredConstellationIds.add(constellation.id);
 
-      } else if (constellationLineAnimationPhase === "drawing") {
+        constellationLineAnimationPhase = "idle";
+        constellationAnimationProgress = 1;
 
-        const progress = Math.min(
-          elapsed / drawDuration,
-          1
-        );
+        drawChart();
 
-        // 始まりと終わりを穏やかにする
-        constellationAnimationProgress =
-          progress * progress * (3 - 2 * progress);
-
-        if (progress >= 1) {
-          constellationLineAnimationPhase = "idle";
-          constellationAnimationProgress = 1;
-
-          drawChart();
-
-          constellationLineAnimationFrame = null;
-          return;
-        }
+        constellationLineAnimationFrame = null;
+        return;
       }
 
       drawChart();
@@ -2265,20 +2298,17 @@
       // 星座ごとのフェード状態を更新
       updateConstellationFadeStates(visibleConstellationIds);
 
+
       // 星座ごとの透明度に応じて星座線を描画
       for (const constellation of constellations) {
+
+        // 星座線の非表示中は通常の星座線を描かない
+        if (!constellationLinesVisible) continue;
 
         const state =
           constellationFadeStates.get(constellation.id);
 
-        // フェード状態がない星座は描画しない
         if (!state || state.opacity <= 0) continue;
-
-        // タップアニメーション中の星座は通常描画から除外
-        if (
-          constellation.id === selectedConstellationId &&
-          constellationLineAnimationPhase !== "idle"
-        ) continue;
 
         ctx.globalAlpha = state.opacity;
 
@@ -2317,124 +2347,147 @@
         ctx.globalAlpha = 1;
       }
 
+      // 星座線の非表示中に発見済みの星座を描画
+      if (!constellationLinesVisible) {
+
+        for (const constellation of constellations) {
+
+          if (
+            !discoveredConstellationIds.has(constellation.id)
+          ) continue;
+
+          ctx.beginPath();
+          ctx.strokeStyle =
+            constellation.lineColor || "#FF3CC8";
+          ctx.lineWidth = 0.75;
+          ctx.globalAlpha = 1;
+
+          for (const segment of constellation.segments) {
+
+            const starA = starById.get(segment[0]);
+            const starB = starById.get(segment[1]);
+
+            if (!starA || !starB) continue;
+
+            const pointA =
+              projectStar(starA, lstDeg, basis, minDot);
+
+            const pointB =
+              projectStar(starB, lstDeg, basis, minDot);
+
+            if (!pointA || !pointB) continue;
+
+            ctx.moveTo(
+              centerX + pointA.x * scaleX,
+              centerY + pointA.y * scaleY
+            );
+
+            ctx.lineTo(
+              centerX + pointB.x * scaleX,
+              centerY + pointB.y * scaleY
+            );
+          }
+
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      }
+
       // 選択した星座線のアニメーション描画
       if (
-        constellationLineAnimationPhase !== "idle" &&
-        selectedConstellationId !== null &&
-        constellationMagLimit !== null
+        !constellationLinesVisible &&
+        constellationLineAnimationPhase === "drawing" &&
+        selectedConstellationId !== null
       ) {
+
         const selectedConstellation = constellations.find(
-          constellation => constellation.id === selectedConstellationId
+          constellation =>
+            constellation.id === selectedConstellationId
         );
 
         if (selectedConstellation) {
 
-          // 表示対象となる星座か確認
-          const memberIds = new Set(
-            selectedConstellation.segments.flat()
-          );
+          // 星座線を配列順に投影
+          const projectedSegments = [];
 
-          const magnitudes = [];
+          for (const segment of selectedConstellation.segments) {
 
-          for (const id of memberIds) {
-            const star = starById.get(id);
+            const starA = starById.get(segment[0]);
+            const starB = starById.get(segment[1]);
 
-            if (
-              star &&
-              star.mag != null &&
-              Number.isFinite(Number(star.mag))
-            ) {
-              magnitudes.push(Number(star.mag));
-            }
-          }
+            if (!starA || !starB) continue;
+            if (starA.id === starB.id) continue;
 
-          const brightestMag =
-            magnitudes.length > 0 ? Math.min(...magnitudes) : Infinity;
+            const pointA =
+              projectStar(starA, lstDeg, basis, minDot);
 
-          if (brightestMag < constellationMagLimit) {
+            const pointB =
+              projectStar(starB, lstDeg, basis, minDot);
 
-            // 星座線を配列順に投影
-            const projectedSegments = [];
+            if (!pointA || !pointB) continue;
 
-            for (const segment of selectedConstellation.segments) {
-              const starA = starById.get(segment[0]);
-              const starB = starById.get(segment[1]);
+            const ax = centerX + pointA.x * scaleX;
+            const ay = centerY + pointA.y * scaleY;
+            const bx = centerX + pointB.x * scaleX;
+            const by = centerY + pointB.y * scaleY;
 
-              if (!starA || !starB) continue;
-              if (starA.id === starB.id) continue;
-
-              const pointA = projectStar(starA, lstDeg, basis, minDot);
-              const pointB = projectStar(starB, lstDeg, basis, minDot);
-
-              if (!pointA || !pointB) continue;
-
-              const ax = centerX + pointA.x * scaleX;
-              const ay = centerY + pointA.y * scaleY;
-              const bx = centerX + pointB.x * scaleX;
-              const by = centerY + pointB.y * scaleY;
-
-              const length = Math.hypot(bx - ax, by - ay);
-
-              if (length === 0) continue;
-
-              projectedSegments.push({
-                ax, ay, bx, by, length
-              });
-            }
-
-            const totalLength = projectedSegments.reduce(
-              (sum, segment) => sum + segment.length,
-              0
+            const length = Math.hypot(
+              bx - ax,
+              by - ay
             );
 
-            if (totalLength > 0) {
+            if (length === 0) continue;
 
-              const progress = constellationAnimationProgress;
+            projectedSegments.push({
+              ax, ay, bx, by, length
+            });
+          }
 
-              // フェードアウト中は透明度を下げる
-              const opacity =
-                constellationLineAnimationPhase === "fadeOut"
-                  ? 1 - progress
-                  : 1;
+          const totalLength = projectedSegments.reduce(
+            (sum, segment) => sum + segment.length,
+            0
+          );
 
-              // 描画中は進行距離を計算
-              let remainingLength =
-                constellationLineAnimationPhase === "drawing"
-                  ? totalLength * progress
-                  : totalLength;
+          if (totalLength > 0) {
 
-              ctx.strokeStyle =
-                selectedConstellation.lineColor || "#FF3CC8";
-              ctx.lineWidth = 0.75;
-              ctx.globalAlpha = opacity;
+            let remainingLength =
+              totalLength * constellationAnimationProgress;
 
-              // 配列順に一本ずつ描画
-              for (const segment of projectedSegments) {
+            ctx.strokeStyle =
+              selectedConstellation.lineColor || "#FF3CC8";
+            ctx.lineWidth = 0.75;
+            ctx.globalAlpha = 1;
 
-                if (remainingLength <= 0) break;
+            // 配列順に一本ずつ描画
+            for (const segment of projectedSegments) {
 
-                const drawLength = Math.min(
-                  segment.length,
-                  remainingLength
-                );
+              if (remainingLength <= 0) break;
 
-                const ratio = drawLength / segment.length;
+              const drawLength = Math.min(
+                segment.length,
+                remainingLength
+              );
 
-                const endX =
-                  segment.ax + (segment.bx - segment.ax) * ratio;
-                const endY =
-                  segment.ay + (segment.by - segment.ay) * ratio;
+              const ratio =
+                drawLength / segment.length;
 
-                ctx.beginPath();
-                ctx.moveTo(segment.ax, segment.ay);
-                ctx.lineTo(endX, endY);
-                ctx.stroke();
+              const endX =
+                segment.ax +
+                (segment.bx - segment.ax) * ratio;
 
-                remainingLength -= drawLength;
-              }
+              const endY =
+                segment.ay +
+                (segment.by - segment.ay) * ratio;
 
-              ctx.globalAlpha = 1;
+              ctx.beginPath();
+              ctx.moveTo(segment.ax, segment.ay);
+              ctx.lineTo(endX, endY);
+              ctx.stroke();
+
+              remainingLength -= drawLength;
             }
+
+            ctx.globalAlpha = 1;
           }
         }
       }
@@ -4221,9 +4274,9 @@
         // 星図を再描画
         drawChart();
 
-      } else {
+      } else if (!constellationLinesVisible) {
 
-        // 星座評価以外なら、従来の星座線を判定
+        // 星座線の非表示中だけ星座を判定
         const selected = findConstellationAt(
           event.clientX,
           event.clientY
@@ -4638,6 +4691,33 @@
       constellationRatingsVisible = false;
     }
 
+    // 星座線の表示・非表示
+    const sharedConstellationLines =
+      params.get("constellationLines");
+
+    if (sharedConstellationLines === "1") {
+      constellationLinesVisible = true;
+    } else if (sharedConstellationLines === "0") {
+      constellationLinesVisible = false;
+    }
+
+    // 限定表示する星座のIDを復元
+    const sharedConstellations =
+      params.get("constellations");
+
+    if (sharedConstellations !== null) {
+
+      discoveredConstellationIds.clear();
+
+      sharedConstellations
+        .split(",")
+        .filter(id => id !== "")
+        .forEach(id => {
+          discoveredConstellationIds.add(id);
+        });
+
+    }
+
     // 星座評価ボタンの表示を更新
     const ratingButton = document.getElementById(
       "toggle-constellation-ratings"
@@ -4653,6 +4733,21 @@
       ratingButton.textContent = icon;
       ratingButton.setAttribute("aria-label", label);
       ratingButton.title = label;
+
+    }
+
+    // 星座線ボタンの説明を更新
+    const constellationLinesButton =
+      document.getElementById("toggle-constellation-lines");
+
+    if (constellationLinesButton) {
+
+      const label = constellationLinesVisible
+        ? "星座線を非表示"
+        : "星座線を表示";
+
+      constellationLinesButton.setAttribute("aria-label", label);
+      constellationLinesButton.title = label;
 
     }
 
@@ -5022,6 +5117,18 @@
       shareURL.searchParams.set(
         "ratings",
         constellationRatingsVisible ? "1" : "0"
+      );
+
+      // 星座線の表示状態
+      shareURL.searchParams.set(
+        "constellationLines",
+        constellationLinesVisible ? "1" : "0"
+      );
+
+      // 限定表示中の星座ID一覧
+      shareURL.searchParams.set(
+        "constellations",
+        Array.from(discoveredConstellationIds).join(",")
       );
 
       // クリップボードにコピー
