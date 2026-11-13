@@ -4914,6 +4914,9 @@
   const shareButton =
     document.getElementById("chart-share-button");
 
+  const visibleShareButton =
+    document.getElementById("chart-share-visible-button");
+
   const shareNotice =
     document.getElementById("chart-share-notice");
 
@@ -5011,6 +5014,13 @@
     });
 
   }
+
+  // 画面上の共有ボタンから既存の共有処理を呼び出す
+if (visibleShareButton) {
+  visibleShareButton.addEventListener("click", () => {
+    shareButton?.click();
+  });
+}
 
   // 親パネルからの共有リクエストを受信
   window.addEventListener("message", function (event) {
