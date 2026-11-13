@@ -40,6 +40,9 @@
   // 星座評価のタップ判定領域
   let constellationRatingHitAreas = [];
 
+  // 星座名のタップ判定領域
+  let constellationNameHitAreas = [];
+
   try {
     constellationRatings = JSON.parse(
       localStorage.getItem(CONSTELLATION_RATINGS_KEY) || "{}"
@@ -1712,6 +1715,35 @@
     return null;
   }
 
+  // タップ位置から星座名を判定
+  function findConstellationNameAt(x, y) {
+
+    const rect = canvas.getBoundingClientRect();
+
+    const px = x - rect.left;
+    const py = y - rect.top;
+
+    // 星座名のタップ領域を調べる
+    for (
+      let i = constellationNameHitAreas.length - 1;
+      i >= 0;
+      i--
+    ) {
+      const area = constellationNameHitAreas[i];
+
+      if (
+        px >= area.x &&
+        px <= area.x + area.width &&
+        py >= area.y &&
+        py <= area.y + area.height
+      ) {
+        return area.id;
+      }
+    }
+
+    return null;
+  }
+
   // タップ位置から星座線を判定
   function findConstellationAt(x, y) {
 
@@ -2497,6 +2529,9 @@
       // 星座評価のタップ判定領域を初期化
       constellationRatingHitAreas = [];
 
+      // 星座名のタップ判定領域を初期化
+      constellationNameHitAreas = [];
+
       // 全星座の名前を描画
       for (const constellation of constellations) {
 
@@ -2588,6 +2623,15 @@
               labelX,
               labelY
             );
+
+            // 星座名のタップ判定領域を記録
+            constellationNameHitAreas.push({
+              id: constellation.id,
+              x: boxX,
+              y: boxY,
+              width: boxWidth,
+              height: boxHeight
+            });
 
           }
 
@@ -4276,17 +4320,27 @@
 
       } else if (!constellationLinesVisible) {
 
-        // 星座線の非表示中だけ星座を判定
-        const selected = findConstellationAt(
+        // まず星座名のタップを判定
+        const nameId = findConstellationNameAt(
           event.clientX,
           event.clientY
         );
+
+        // 星座名がタップされていれば、その星座を取得
+        const selectedByName = nameId
+          ? constellations.find(c => c.id === nameId)
+          : null;
+
+        // 星座名で見つからなければ、星座線の位置を判定
+        const selected = selectedByName ||
+          findConstellationAt(event.clientX, event.clientY);
 
         if (selected) {
           console.log("選択した星座:", selected.name);
           startConstellationLineAnimation(selected);
         }
       }
+
     }
 
     activePointers.delete(event.pointerId);
