@@ -607,9 +607,9 @@
   // 初期の視野角（度）
   let fieldOfViewDeg = 110;
 
-  // 拡大・縮小できる視野角の範囲（最大拡大率、最小縮小率）
-  const MIN_FIELD_OF_VIEW_DEG = 10;
-  const MAX_FIELD_OF_VIEW_DEG = 150;
+  // 拡大・縮小できる視野角の範囲（最大拡大率（最大視野角）、最小縮小率（最小視野角））
+  const MIN_FIELD_OF_VIEW_DEG = 5;
+  const MAX_FIELD_OF_VIEW_DEG = 160;
 
   // 観測地点：大阪付近
   const latitudeDeg = 34.81;
