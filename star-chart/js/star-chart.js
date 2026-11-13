@@ -73,6 +73,39 @@
     saveConstellationRatings();
   }
 
+  // ==========================================
+  // 星座評価（☆☆☆）の表示切り替え
+  // ==========================================
+
+  // 初期状態は表示
+  let constellationRatingsVisible = true;
+
+  // 表示切り替えボタン
+  const constellationRatingToggle =
+    document.getElementById("toggle-constellation-ratings");
+
+  if (constellationRatingToggle) {
+
+    constellationRatingToggle.addEventListener("click", () => {
+
+      constellationRatingsVisible =
+        !constellationRatingsVisible;
+
+      const icon = constellationRatingsVisible ? "★" : "☆";
+      const label = constellationRatingsVisible
+        ? "星座評価を非表示"
+        : "星座評価を表示";
+
+      constellationRatingToggle.textContent = icon;
+      constellationRatingToggle.setAttribute("aria-label", label);
+      constellationRatingToggle.title = label;
+
+      drawChart();
+
+    });
+
+  }
+
   // ▼ 天体ラベル表示（前回の設定を復元）
   let objectLabelsVisible =
     localStorage.getItem(CHART_LABELS_VISIBLE_KEY) !== "false";
@@ -2453,9 +2486,9 @@
           const minY = Math.min(...points.map(p => p.y));
           const maxY = Math.max(...points.map(p => p.y));
 
-          // 星座の中央部に配置
-          const labelX = (minX + maxX) / 2;
-          const labelY = (minY + maxY) / 2;
+          // 星座名の表示位置
+          const labelX = minX + (maxX - minX) * 0.5;
+          const labelY = minY + (maxY - minY) * 0.5;
 
           ctx.save();
 
@@ -2506,7 +2539,7 @@
           }
 
           // 星座の評価を描画
-          if (objectLabelsVisible) {
+          if (constellationRatingsVisible) {
 
             const rating = getConstellationRating(constellation.id);
             const ratingText =
