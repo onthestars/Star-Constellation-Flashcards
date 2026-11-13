@@ -54,6 +54,39 @@ body {
   background-color: #080D1A;
 }
 
+/* 星座評価★★★の表示切り替えボタン */
+#toggle-constellation-ratings {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  z-index: 10;
+
+  width: 28px;
+  height: 24px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #ffd700;
+
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* 星図キャンバス */
 #star-chart-canvas {
   display: block;
@@ -609,7 +642,7 @@ body {
   max-width: 420px;
   box-sizing: border-box;
 
-  padding: 14px 34px 14px 14px;
+  padding: 18px 12px 0px 12px;
 
   background: rgba(6, 7, 64, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.6);
