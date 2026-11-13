@@ -58,7 +58,7 @@ body {
 #toggle-constellation-ratings {
   position: absolute;
   top: 6px;
-  left: 8px;
+  left: 48px;
   z-index: 10;
 
   width: 28px;
@@ -85,6 +85,51 @@ body {
 
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* プラネタリウム共有ボタン */
+#chart-share-visible-button {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  z-index: 10;
+
+  width: 28px;
+  height: 24px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #ffd700;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 共有ボタンを押したときの反応 */
+#chart-share-visible-button {
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+
+#chart-share-visible-button:active {
+  background: rgba(255, 215, 0, 0.28);
+  border-color: #ffd700;
+  color: #ffffff;
+}
+
+#chart-share-visible-button svg {
+  display: block;
 }
 
 /* 星図キャンバス */
