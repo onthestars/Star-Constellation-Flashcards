@@ -5830,6 +5830,22 @@
 
     }
 
+    // 表示する特別な線のIDを復元
+    const sharedAsterisms = params.get("asterisms");
+
+    if (sharedAsterisms !== null) {
+
+      discoveredAsterismIds.clear();
+
+      sharedAsterisms
+        .split(",")
+        .filter(id => id !== "")
+        .forEach(id => {
+          discoveredAsterismIds.add(id);
+        });
+
+    }
+
     // 星座評価ボタンの表示を更新
     const ratingButton = document.getElementById(
       "toggle-constellation-ratings"
@@ -6231,6 +6247,12 @@
       shareURL.searchParams.set(
         "constellations",
         Array.from(discoveredConstellationIds).join(",")
+      );
+
+      // 表示中の特別な線のID一覧
+      shareURL.searchParams.set(
+        "asterisms",
+        Array.from(discoveredAsterismIds).join(",")
       );
 
       // クリップボードにコピー
