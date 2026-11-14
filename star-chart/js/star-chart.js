@@ -83,8 +83,8 @@
   // 星座評価（☆☆☆）の表示切り替え
   // ==========================================
 
-  // 初期状態は表示
-  let constellationRatingsVisible = true;
+  // 初期状態は非表示
+  let constellationRatingsVisible = false;
 
   // 表示切り替えボタン
   const constellationRatingToggle =
@@ -2727,6 +2727,7 @@
 
         if (points.length < 2) return;
 
+
         // Catmull-Rom曲線を生成
         const curvePoints = [points[0]];
 
@@ -2737,6 +2738,81 @@
           const p2 = points[i + 1];
           const p3 = points[Math.min(points.length - 1, i + 2)];
 
+          // ミザール → アルカイドをわずかに左へ膨らませる
+          if (i === 1) {
+
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const length = Math.hypot(dx, dy);
+
+            // 星と星の間隔に比例した膨らみ量
+            const bulge = length * 0.08;
+
+            const controlX =
+              (p1.x + p2.x) / 2 - (dy / length) * bulge;
+
+            const controlY =
+              (p1.y + p2.y) / 2 + (dx / length) * bulge;
+
+            for (let step = 1; step <= 12; step++) {
+
+              const t = step / 12;
+              const invT = 1 - t;
+
+              curvePoints.push({
+                x:
+                  invT * invT * p1.x +
+                  2 * invT * t * controlX +
+                  t * t * p2.x,
+
+                y:
+                  invT * invT * p1.y +
+                  2 * invT * t * controlY +
+                  t * t * p2.y
+              });
+            }
+
+            continue;
+          }
+
+          // アルカイド → アークトゥルスを少し左へ膨らませる
+          if (i === 2) {
+
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const length = Math.hypot(dx, dy);
+
+            // 星と星の間隔に比例した膨らみ量
+            const bulge = length * 0.04;
+
+            const controlX =
+              (p1.x + p2.x) / 2 - (dy / length) * bulge;
+
+            const controlY =
+              (p1.y + p2.y) / 2 + (dx / length) * bulge;
+
+            for (let step = 1; step <= 12; step++) {
+
+              const t = step / 12;
+              const invT = 1 - t;
+
+              curvePoints.push({
+                x:
+                  invT * invT * p1.x +
+                  2 * invT * t * controlX +
+                  t * t * p2.x,
+
+                y:
+                  invT * invT * p1.y +
+                  2 * invT * t * controlY +
+                  t * t * p2.y
+              });
+            }
+
+            continue;
+          }
+
+          // それ以外は滑らかなCatmull-Rom曲線
           for (let step = 1; step <= 12; step++) {
 
             const t = step / 12;
