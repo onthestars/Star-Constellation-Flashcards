@@ -651,7 +651,7 @@
         width:16px;
         height:16px;
         vertical-align:-3px;
-                margin:3px 0 0 0;
+                margin:3px 2px 0 0;
       "
     >${riseText}`;
 
@@ -674,7 +674,7 @@
         width:16px;
         height:16px;
         vertical-align:-3px;
-                margin:3px 0 0 0;
+                margin:3px 2px 0 0;
       "
     >${setText}`;
         } else {
@@ -751,7 +751,7 @@
   width: 100%;
   box-sizing: border-box;
   margin:  ${window.innerWidth >= 768 ? '6px 0px 2px 0px' : '2px 0px'};
-  padding: ${window.innerWidth >= 768 ? '6px 2px 4px 2px' : '3px 2px'};
+  padding: ${window.innerWidth >= 768 ? '6px 2px 4px 2px' : '6px 2px'};
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
   color: #060740;
