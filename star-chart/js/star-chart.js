@@ -136,13 +136,18 @@
       constellationAnimationProgress = 0;
       constellationLineAnimationPhase = "idle";
 
-      // ボタンの説明を更新
-      const label = constellationLinesVisible
-        ? "星座線を非表示"
-        : "星座線を表示";
+      // ボタン内の星座線アイコンを更新
+      const iconLine = constellationLinesToggle.querySelector(
+        "#constellation-lines-icon-path"
+      );
 
-      constellationLinesToggle.setAttribute("aria-label", label);
-      constellationLinesToggle.title = label;
+      if (iconLine) {
+        iconLine.style.display =
+          constellationLinesVisible ? "block" : "none";
+      }
+
+      // ボタンの表示を更新
+      updateConstellationLinesButton();
 
       // 星図を再描画
       drawChart();
@@ -684,6 +689,33 @@
 
   // 星座線の表示・非表示
   let constellationLinesVisible = true;
+
+  // 星座線ボタンのアイコンを更新
+  function updateConstellationLinesButton() {
+
+    const button = document.getElementById(
+      "toggle-constellation-lines"
+    );
+
+    if (!button) return;
+
+    const iconLine = button.querySelector(
+      "#constellation-lines-icon-path"
+    );
+
+    if (iconLine) {
+      iconLine.style.display =
+        constellationLinesVisible ? "" : "none";
+    }
+
+    const label = constellationLinesVisible
+      ? "星座線を非表示"
+      : "星座線を表示";
+
+    button.setAttribute("aria-label", label);
+    button.title = label;
+
+  }
 
   // 非表示中にタップして表示した星座を記録
   const discoveredConstellationIds = new Set();
@@ -4791,20 +4823,8 @@
 
     }
 
-    // 星座線ボタンの説明を更新
-    const constellationLinesButton =
-      document.getElementById("toggle-constellation-lines");
-
-    if (constellationLinesButton) {
-
-      const label = constellationLinesVisible
-        ? "星座線を非表示"
-        : "星座線を表示";
-
-      constellationLinesButton.setAttribute("aria-label", label);
-      constellationLinesButton.title = label;
-
-    }
+    // 星座線ボタンの表示を更新
+    updateConstellationLinesButton();
 
     // 文字サイズボタンの選択状態を更新
     document.querySelectorAll(
