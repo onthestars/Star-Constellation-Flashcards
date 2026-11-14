@@ -179,5 +179,39 @@ const moonData = [
     location: "紀伊半島南部",
     photographer: "K-A-Z"
   },
-
+  {
+    image: "image/moon/Special/Moon-pic032.jpg",
+    caption: "月齢3.8",
+    date: "2026年11月13日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+    {
+    image: "image/moon/Special/Moon-pic033.jpg",
+    caption: "月齢3.8",
+    date: "2026年11月13日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+    {
+    image: "image/moon/Special/Moon-pic034.jpg",
+    caption: "月齢3.8",
+    date: "2026年11月13日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+    {
+    image: "image/moon/Special/Moon-pic035.jpg",
+    caption: "月齢3.8",
+    date: "2026年11月13日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+    {
+    image: "image/moon/Special/Moon-pic036.jpg",
+    caption: "月齢3.8",
+    date: "2026年11月13日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
 ];
