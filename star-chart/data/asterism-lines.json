@@ -40,7 +40,7 @@
       "id": "spring-triangle",
       "name": "春の大三角",
       "lineColor": "#439F85",
-      "lineWidth": 2.4,
+      "lineWidth": 2.8,
       "segments": [
         [
           "hip-69673",
@@ -60,7 +60,7 @@
       "id": "spring-arc",
       "name": "春の大曲線",
       "lineColor": "#FF69B4",
-      "lineWidth": 2.4,
+      "lineWidth": 2.7,
       "segments": [
         [
           "hip-62956",
@@ -84,7 +84,7 @@
       "id": "summer-triangle",
       "name": "夏の大三角",
       "lineColor": "#439F85",
-      "lineWidth": 2.4,
+      "lineWidth": 2.8,
       "segments": [
         [
           "hip-91262",
@@ -104,7 +104,7 @@
       "id": "autumn-square",
       "name": "秋の四辺形",
       "lineColor": "#439F85",
-      "lineWidth": 2.4,
+      "lineWidth": 2.8,
       "segments": [
         [
           "hip-677",
@@ -128,7 +128,7 @@
       "id": "winter-triangle",
       "name": "冬の大三角",
       "lineColor": "#439F85",
-      "lineWidth": 2.4,
+      "lineWidth": 2.8,
       "segments": [
         [
           "hip-27989",
