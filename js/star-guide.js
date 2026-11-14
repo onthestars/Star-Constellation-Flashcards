@@ -882,6 +882,7 @@ ${meteorMessage
 </button>
 
 <img
+  id="starGuideMoonImage"
   src="${imagePath}"
   alt="${phaseName}"
   style="
@@ -890,6 +891,7 @@ ${meteorMessage
     height:40px;
     object-fit:contain;
     margin:4px auto;
+    cursor:pointer;
 
     filter:drop-shadow(
       0 0 ${glowBlur}px
@@ -1097,6 +1099,23 @@ if (meteorPeakCard) {
           renderMoonObservation();
 
         });
+
+        // ▼ 月相画像クリックで月Special Viewer起動
+const moonImage = content.querySelector(
+  "#starGuideMoonImage"
+);
+
+if (
+  moonImage &&
+  typeof openMoonSpecialViewer === "function"
+) {
+
+  moonImage.addEventListener(
+    "click",
+    openMoonSpecialViewer
+  );
+
+}
 
       });
 
