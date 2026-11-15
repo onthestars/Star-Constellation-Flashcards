@@ -746,6 +746,8 @@
         ">
 
           <div class="star-guide-info" style="min-width: 0; margin: 0; padding: 0;">
+
+          <!-- 星座ガイドパネル 上部年月日表示領域 -->
             <div style="
   display: block;
   width: 100%;
@@ -755,7 +757,7 @@
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
   color: #060740;
-  border-radius: 3px;
+  border-radius: 6px 6px 0 0;
   font-weight: bold;
 ">
   ${dateText}
