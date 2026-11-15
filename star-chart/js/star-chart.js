@@ -4201,11 +4201,15 @@
       ctx.restore();
 
       // 太陽の名前
-      ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
-      ctx.fillStyle = "#FFF0A0";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText("太陽", sunX + sunRadius + 4, sunY);
+      if (objectLabelsVisible) {
+
+        ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+        ctx.fillStyle = "#FFF0A0";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText("太陽", sunX + sunRadius + 4, sunY);
+
+      }
 
     }
 
@@ -5016,11 +5020,15 @@
       ctx.restore();
 
       // 月の名前
-      ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
-      ctx.fillStyle = "#FFF2B0";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText("月", moonX + moonRadius + 4, moonY);
+      if (objectLabelsVisible) {
+
+        ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+        ctx.fillStyle = "#FFF2B0";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText("月", moonX + moonRadius + 4, moonY);
+
+      }
 
       ctx.restore();
     }
