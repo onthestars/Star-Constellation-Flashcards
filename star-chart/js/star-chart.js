@@ -173,28 +173,50 @@
     localStorage.getItem(CHART_LABELS_VISIBLE_KEY) !== "false";
 
   // 文字サイズ切り替えボタン
-  const textSizeButtons = document.querySelectorAll(
-    "#chart-text-size-panel button[data-text-size]"
-  );
+  const textSizeButton =
+    document.getElementById("toggle-text-size");
 
-  const labelToggleButton =
+      const labelToggleButton =
     document.getElementById("toggle-object-labels");
 
-  // 選択中ボタンの表示を更新
-  function updateTextSizeButtons() {
-    textSizeButtons.forEach(button => {
-      button.classList.toggle(
-        "active",
-        button.dataset.textSize === chartTextSize
-      );
-    });
+  const TEXT_SIZE_ORDER = [
+    "large",
+    "medium",
+    "small"
+  ];
+
+  // ボタンの表示を更新
+  function updateTextSizeButton() {
+
+    const labels = {
+      large: "字大",
+      medium: "字中",
+      small: "字小"
+    };
+
+    if (!textSizeButton) return;
+
+    textSizeButton.textContent =
+      labels[chartTextSize] || "中";
+
+    textSizeButton.dataset.textSize = chartTextSize;
+
+    textSizeButton.classList.add("active");
   }
 
   // ボタンのクリック処理
-  textSizeButtons.forEach(button => {
-    button.addEventListener("click", () => {
+  if (textSizeButton) {
 
-      chartTextSize = button.dataset.textSize;
+    textSizeButton.addEventListener("click", () => {
+
+      // 現在のサイズの次を選択
+      const currentIndex =
+        TEXT_SIZE_ORDER.indexOf(chartTextSize);
+
+      const nextIndex =
+        (currentIndex + 1) % TEXT_SIZE_ORDER.length;
+
+      chartTextSize = TEXT_SIZE_ORDER[nextIndex];
 
       // 選択したサイズを保存
       localStorage.setItem(
@@ -202,16 +224,19 @@
         chartTextSize
       );
 
-      // 選択中ボタンの表示を更新
-      updateTextSizeButtons();
+      // ボタン表示を更新
+      updateTextSizeButton();
 
       // 星図を再描画
       drawChart();
+
     });
-  });
+
+  }
 
   // 初期表示
-  updateTextSizeButtons();
+  updateTextSizeButton();
+
 
   if (labelToggleButton) {
 
@@ -3917,11 +3942,11 @@
           const boxX = labelX - boxWidth / 2;
           const boxY = labelY - boxHeight / 2;
 
-          // 線と同じフェード状態で背景を描画
+          // 線と同じフェード状態で背景（角丸矩形）を描画
           ctx.globalAlpha = state.opacity * 0.65;
           ctx.fillStyle =
             asterism.id === "spring-arc"
-              ? "rgba(255, 210, 230, 0.88)"
+              ? "rgba(255, 170, 205, 0.90)" //春の大曲線専用
               : "#439F85";
 
           ctx.beginPath();
@@ -6247,6 +6272,11 @@
       shareURL.searchParams.set(
         "constellations",
         Array.from(discoveredConstellationIds).join(",")
+      );
+
+      console.log(
+        "共有する特別な線:",
+        Array.from(discoveredAsterismIds)
       );
 
       // 表示中の特別な線のID一覧
