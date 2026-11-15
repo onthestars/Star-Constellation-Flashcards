@@ -176,7 +176,7 @@
   const textSizeButton =
     document.getElementById("toggle-text-size");
 
-      const labelToggleButton =
+  const labelToggleButton =
     document.getElementById("toggle-object-labels");
 
   const TEXT_SIZE_ORDER = [
@@ -721,6 +721,37 @@
   let canvasWidth = 0;
   let canvasHeight = 0;
   let constellations = [];
+
+  // 深空天体データ
+  let deepSkyObjects = [];
+  let deepSkyObjectsLoaded = false;
+
+  // ==========================================
+  // 深空天体アイコン
+  // ==========================================
+
+  const deepSkyIcons = {
+    "open-cluster": new Image(),
+    "globular-cluster": new Image(),
+    "nebula": new Image(),
+    "galaxy": new Image()
+  };
+
+  deepSkyIcons["open-cluster"].src =
+    "../image/common/ico-star-cluster.png";
+
+  deepSkyIcons["globular-cluster"].src =
+    "../image/common/ico-star-cluster.png";
+
+  deepSkyIcons["nebula"].src =
+    "../image/common/ico-nebula.png";
+
+  deepSkyIcons["galaxy"].src =
+    "../image/common/ico-galaxy.png";
+
+  for (const icon of Object.values(deepSkyIcons)) {
+    icon.onload = () => drawChart();
+  }
 
   // アステリズムデータ
   let asterisms = [];
@@ -1741,6 +1772,77 @@
     };
   }
 
+  // ==========================================
+  // 天体の共通描画処理
+  // ==========================================
+
+  function drawCelestialObject(
+    object,
+    ctx,
+    lstDeg,
+    basis,
+    minDot,
+    centerX,
+    centerY,
+    scaleX,
+    scaleY
+  ) {
+
+    // 星図上の位置を計算
+    const point = projectStar(
+      object,
+      lstDeg,
+      basis,
+      minDot
+    );
+
+    if (!point) return;
+
+    const x = centerX + point.x * scaleX;
+    const y = centerY + point.y * scaleY;
+
+    // 天体の種類に対応するアイコンを取得
+    const icon = deepSkyIcons[object.type];
+
+    if (
+      !icon ||
+      !icon.complete ||
+      icon.naturalWidth === 0
+    ) return;
+
+    // アイコンを描画
+    const size = 20;
+
+    ctx.drawImage(
+      icon,
+      x - size / 2,
+      y - size / 2,
+      size,
+      size
+    );
+
+    // 天体名を描画
+    if (objectLabelsVisible) {
+
+      ctx.save();
+
+      ctx.font = `${9 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+
+      ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+      ctx.shadowBlur = 3;
+
+      ctx.fillText(
+        object.name,
+        x + size / 2 + 4,
+        y
+      );
+
+      ctx.restore();
+    }
+  }
 
   // ==========================================
   // 線分専用：視野境界で切り取って投影する
@@ -2172,7 +2274,7 @@
     constellationLineAnimationPhase = "drawing";
 
     // 星座線を結ぶ速度（スピード）
-    const drawDuration = 5200;
+    const drawDuration = 4800;
     let phaseStartTime = null;
 
     function animateConstellation(timestamp) {
@@ -2638,7 +2740,7 @@
       } else if (fieldOfViewDeg > 65) {
         constellationMagLimit = 1.5;  // 1等星をもつ星座
 
-      } else if (fieldOfViewDeg > 35) {
+      } else if (fieldOfViewDeg > 55) {
         constellationMagLimit = 2.5;  // 2等星をもつ星座まで追加
 
       } else {
@@ -3986,6 +4088,32 @@
 
       // 星の描画範囲の制限を解除する
       ctx.restore();
+    }
+
+    // ==========================================
+    // 深空天体を表示
+    // ==========================================
+
+    if (
+      deepSkyObjectsLoaded &&
+      fieldOfViewDeg <= 55
+    ) {
+
+      for (const object of deepSkyObjects) {
+
+        drawCelestialObject(
+          object,
+          ctx,
+          lstDeg,
+          basis,
+          minDot,
+          centerX,
+          centerY,
+          scaleX,
+          scaleY
+        );
+
+      }
     }
 
     // 太陽を星図に表示
@@ -5486,6 +5614,45 @@
     }
   }
 
+  // ==========================================
+  // 深空天体データを読み込む（M44のテスト）
+  // ==========================================
+
+  async function loadDeepSkyObjects() {
+
+    console.log("深空天体データ読み込み開始");
+
+    try {
+      const response = await fetch("data/deep-sky-objects.json");
+
+      if (!response.ok) {
+        throw new Error(`HTTPエラー: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error("深空天体データが配列形式ではありません。");
+      }
+
+      // 有効な深空天体をすべて表示対象にする
+      deepSkyObjects = data.filter(object =>
+        Number.isFinite(object.ra) &&
+        Number.isFinite(object.dec) &&
+        deepSkyIcons[object.type]
+      );
+
+      deepSkyObjectsLoaded = true;
+
+      console.log("深空天体データ読み込み:", deepSkyObjects);
+
+      drawChart();
+
+    } catch (error) {
+      console.error("深空天体データの読み込みに失敗しました:", error);
+    }
+  }
+
   // 星座線データを読み込む
   async function loadConstellationLines() {
     try {
@@ -5926,12 +6093,11 @@
 
   loadStarData();
   loadConstellationLines();
-
   loadAsterismLines();
+  loadDeepSkyObjects();
 
   // プラネタリウムの流星アニメーションを開始
   startChartMeteorAnimation();
-
 
   // =================================
   // 観測日時ボタンの選択
