@@ -58,7 +58,7 @@ body {
 #toggle-constellation-ratings {
   position: absolute;
   top: 6px;
-  right: 145px;
+  left: 74px;
   z-index: 10;
 
   width: 28px;
@@ -91,7 +91,7 @@ body {
 #toggle-constellation-lines {
   position: absolute;
   top: 6px;
-  right: 178px;
+  left: 41px;
   z-index: 10;
 
   width: 28px;
