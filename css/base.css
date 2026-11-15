@@ -27,7 +27,7 @@ body {
   align-items: center;
 
   /* 通常の背景画像表示 */
-  background-image: url("./image/common/background-image-vertical1.jpg");
+  background-image: url("../image/common/background-image-vertical1.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
