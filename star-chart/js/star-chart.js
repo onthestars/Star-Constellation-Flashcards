@@ -2260,15 +2260,13 @@
 
     if (!constellation) return;
 
-    // 通常表示中はアニメーションしない
-    if (constellationLinesVisible) return;
-
     // 進行中のアニメーションを停止
     if (constellationLineAnimationFrame !== null) {
       cancelAnimationFrame(constellationLineAnimationFrame);
       constellationLineAnimationFrame = null;
     }
 
+    discoveredConstellationIds.delete(constellation.id);
     selectedConstellationId = constellation.id;
     constellationAnimationProgress = 0;
     constellationLineAnimationPhase = "drawing";
@@ -3144,6 +3142,12 @@
         // 星座線の非表示中は通常の星座線を描かない
         if (!constellationLinesVisible) continue;
 
+        // アニメーション中の星座は通常描画から除外
+        if (
+          constellationLineAnimationPhase === "drawing" &&
+          constellation.id === selectedConstellationId
+        ) continue;
+
         const state =
           constellationFadeStates.get(constellation.id);
 
@@ -3421,7 +3425,6 @@
 
       // 選択した星座線のアニメーション描画
       if (
-        !constellationLinesVisible &&
         constellationLineAnimationPhase === "drawing" &&
         selectedConstellationId !== null
       ) {
@@ -5474,7 +5477,10 @@
         // 星図を再描画
         drawChart();
 
-      } else if (!constellationLinesVisible) {
+      } else if (
+        !constellationLinesVisible ||
+        findConstellationNameAt(event.clientX, event.clientY)
+      ) {
 
         // まずアステリズム名のタップを判定
         const asterismId = findAsterismNameAt(
