@@ -763,7 +763,7 @@
 
                         <div style="
               display: inline-block;
-              background: rgba(6, 7, 64, 0.8);
+              background: rgba(6, 7, 64, 0.1);
               margin: 2px 0 2px 0;
               padding: 8px 6px 4px 6px;
               border: 1px solid rgba(255, 255, 255, 0.8);
@@ -783,7 +783,7 @@
                 <div style="
                   font-size:1.5rem;
                   color:rgb(255,215,0);
-                  text-shadow:0 0 2px rgba(0,0,0,0.5);
+                  text-shadow:0 0 2px rgba(0,0,0,0.8);
                   line-height:1;
                 ">
                   ${rating.stars}
@@ -821,7 +821,7 @@ ${meteorMessage
 <div id="meteorMessagePanel"
   style="
     display:inline-block;
-    background: rgba(6, 7, 64, 0.8);
+    background: rgba(6, 7, 64, 0.1);
         margin:2px 0 4px 0;
         padding: 2px 6px 2px 6px;
         border: 1px solid rgba(255, 255, 255, 0.8);
