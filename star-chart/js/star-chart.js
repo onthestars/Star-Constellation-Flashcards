@@ -189,9 +189,9 @@
   function updateTextSizeButton() {
 
     const labels = {
-      large: "字大",
-      medium: "字中",
-      small: "字小"
+      large: "大",
+      medium: "中",
+      small: "小"
     };
 
     if (!textSizeButton) return;
