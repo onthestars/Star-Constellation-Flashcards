@@ -3739,7 +3739,7 @@
         let color =
           style.spectralColors?.[spectralClass] || "#FFFFFF";
 
-        // ▼ ズベンエシャマリ（HIP 74785）はわずかに緑色
+        // ▼ てんびん座のズベンエシャマリ（HIP 74785）はわずかに緑色
         if (star.id === "hip-74785") {
           color = "#D8FFD8";
         }
@@ -3753,19 +3753,19 @@
           radius = 4.5;
         } else if (mag < 2.5) {
           // 2等星
-          radius = 2.5;
+          radius = 3.0;
         } else if (mag < 3.5) {
           // 3等星
-          radius = 1.5;
+          radius = 2.0;
         } else if (mag < 4.5) {
           // 4等星
-          radius = 1.0;
+          radius = 1.5;
         } else if (mag < 5.5) {
           // 5等星
-          radius = 0.8;
+          radius = 0.7;
         } else {
           // 6等星
-          radius = 0.5;
+          radius = 0.4;
         }
 
         // グローの設定
