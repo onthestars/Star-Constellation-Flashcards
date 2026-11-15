@@ -3736,8 +3736,14 @@
         const spectralClass = spect.match(/^[OBAFGKM]/)?.[0] || "";
 
         const style = window.STAR_STYLE_CONFIG || {};
-        const color =
+        let color =
           style.spectralColors?.[spectralClass] || "#FFFFFF";
+
+        // ▼ ズベンエシャマリ（HIP 74785）はわずかに緑色
+        if (star.id === "hip-74785") {
+          color = "#D8FFD8";
+        }
+
 
         // 等星の区分に応じて星の半径を決める
         let radius;
