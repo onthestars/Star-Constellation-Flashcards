@@ -752,8 +752,8 @@
   display: block;
   width: 100%;
   box-sizing: border-box;
-  margin:  ${window.innerWidth >= 768 ? '6px 0px 2px 0px' : '2px 0px'};
-  padding: ${window.innerWidth >= 768 ? '6px 2px 4px 2px' : '6px 2px'};
+  margin:  ${window.innerWidth >= 768 ? '10px 0px 2px 0px' : '2px 0px'};
+  padding: ${window.innerWidth >= 768 ? '6px 2px 4px 2px' : '4px 2px'};
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
   color: #060740;
