@@ -6137,6 +6137,54 @@
       window.location.search
     );
 
+    // 流星群情報を共有URLから復元
+    const meteorName = params.get("meteorName");
+    const meteorPeak = params.get("meteorPeak");
+    const meteorStart = params.get("meteorStart");
+    const meteorEnd = params.get("meteorEnd");
+    const meteorRa = params.get("meteorRa");
+    const meteorDec = params.get("meteorDec");
+
+    // 6項目がすべて存在する場合のみ復元
+    if (
+      meteorName &&
+      meteorPeak &&
+      meteorStart &&
+      meteorEnd &&
+      meteorRa !== null &&
+      meteorDec !== null
+    ) {
+
+      const ra = Number(meteorRa);
+      const dec = Number(meteorDec);
+
+      const startDate = new Date(meteorStart);
+      const endDate = new Date(meteorEnd);
+
+      if (
+        Number.isFinite(ra) &&
+        ra >= 0 &&
+        ra < 360 &&
+        Number.isFinite(dec) &&
+        dec >= -90 &&
+        dec <= 90 &&
+        !Number.isNaN(startDate.getTime()) &&
+        !Number.isNaN(endDate.getTime())
+      ) {
+
+        meteorRadiant = {
+          name: meteorName,
+          peak: meteorPeak,
+          start: meteorStart,
+          end: meteorEnd,
+          ra: ra,
+          dec: dec
+        };
+
+      }
+
+    }
+
     // 観測日時
     const sharedDate = params.get("chartDate");
 
@@ -6677,6 +6725,49 @@
         "asterisms",
         Array.from(discoveredAsterismIds).join(",")
       );
+
+      // 流星群情報を共有URLに追加
+      if (
+        meteorRadiant &&
+        meteorRadiant.name &&
+        meteorRadiant.peak &&
+        meteorRadiant.start &&
+        meteorRadiant.end &&
+        Number.isFinite(Number(meteorRadiant.ra)) &&
+        Number.isFinite(Number(meteorRadiant.dec))
+      ) {
+
+        shareURL.searchParams.set(
+          "meteorName",
+          meteorRadiant.name
+        );
+
+        shareURL.searchParams.set(
+          "meteorPeak",
+          meteorRadiant.peak
+        );
+
+        shareURL.searchParams.set(
+          "meteorStart",
+          meteorRadiant.start
+        );
+
+        shareURL.searchParams.set(
+          "meteorEnd",
+          meteorRadiant.end
+        );
+
+        shareURL.searchParams.set(
+          "meteorRa",
+          meteorRadiant.ra
+        );
+
+        shareURL.searchParams.set(
+          "meteorDec",
+          meteorRadiant.dec
+        );
+
+      }
 
       // クリップボードにコピー
       try {
