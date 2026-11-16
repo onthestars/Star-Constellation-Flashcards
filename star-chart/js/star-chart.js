@@ -3746,8 +3746,8 @@
 
           if (objectLabelsVisible) {
 
-            // 星座名の白い背景の透明度を設定
-            ctx.globalAlpha = state.opacity * 0.45;
+            // 星座名などの背景（角丸矩形）の透明度を設定
+            ctx.globalAlpha = state.opacity * 0.30;
 
             ctx.fillStyle = "#FFFFFF";
             ctx.beginPath();
