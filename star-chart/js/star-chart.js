@@ -1785,7 +1785,8 @@
     centerX,
     centerY,
     scaleX,
-    scaleY
+    scaleY,
+    occupiedLabelAreas
   ) {
 
     // 星図上の位置を計算
@@ -1826,7 +1827,12 @@
 
       ctx.save();
 
-      ctx.font = `${9 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+      const fontSize =
+        9 * CHART_TEXT_SIZES[chartTextSize];
+
+      ctx.font =
+        `${fontSize}px "Meiryo", sans-serif`;
+
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
@@ -1834,11 +1840,63 @@
       ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
       ctx.shadowBlur = 3;
 
-      ctx.fillText(
-        object.name,
-        x + size / 2 + 4,
-        y
-      );
+      // ラベルの基本位置
+      const labelX = x + size / 2 + 4;
+
+      const labelWidth =
+        ctx.measureText(object.name).width;
+
+      const labelHeight = fontSize * 1.3;
+
+      // 上下にずらす候補
+      const verticalOffsets = [
+        0,
+        -14, 14,
+        -28, 28,
+        -42, 42,
+        -56, 56
+      ];
+
+      let selectedLabel = null;
+
+      // 重ならない位置を探す
+      for (const offset of verticalOffsets) {
+
+        const labelY = y + offset;
+
+        const candidate = {
+          left: labelX,
+          right: labelX + labelWidth,
+          top: labelY - labelHeight / 2,
+          bottom: labelY + labelHeight / 2
+        };
+
+        const overlaps =
+          occupiedLabelAreas.some(area =>
+            candidate.left < area.right + 4 &&
+            candidate.right > area.left - 4 &&
+            candidate.top < area.bottom + 3 &&
+            candidate.bottom > area.top - 3
+          );
+
+        if (!overlaps) {
+          selectedLabel = candidate;
+          break;
+        }
+      }
+
+      // 重ならない位置が見つかった場合だけ描画
+      if (selectedLabel) {
+
+        ctx.fillText(
+          object.name,
+          labelX,
+          (selectedLabel.top + selectedLabel.bottom) / 2
+        );
+
+        // 描画済みラベルの領域を記録
+        occupiedLabelAreas.push(selectedLabel);
+      }
 
       ctx.restore();
     }
@@ -4253,13 +4311,16 @@
     }
 
     // ==========================================
-    // 深空天体を表示
+    // 深空天体（星団、星雲、銀河など）を表示
     // ==========================================
 
     if (
       deepSkyObjectsLoaded &&
-      fieldOfViewDeg <= 55
+      fieldOfViewDeg <= 30 // 表示を開始する拡大率（視野角）
     ) {
+
+      // 描画済みラベルの領域を記録
+      const occupiedLabelAreas = [];
 
       for (const object of deepSkyObjects) {
 
@@ -4272,7 +4333,8 @@
           centerX,
           centerY,
           scaleX,
-          scaleY
+          scaleY,
+          occupiedLabelAreas
         );
 
       }
