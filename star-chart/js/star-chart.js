@@ -5382,8 +5382,8 @@
       fieldOfViewDeg / 90
     );
 
-    dragVelocityAz *= 0.5;
-    dragVelocityAlt *= 0.5;
+    dragVelocityAz *= 0.5 * zoomSensitivity;
+    dragVelocityAlt *= 0.5 * zoomSensitivity;
 
     // 速度が小さければ慣性を開始しない
     if (
@@ -6434,7 +6434,7 @@
 
       }, 150);
 
-    }, 500);
+    }, 300);
 
   }
 
@@ -6487,9 +6487,6 @@
       // 日時表示を更新
       updateDatetimeDisplay();
 
-      // 日時表示を更新
-      updateDatetimeDisplay();
-
       // 年月日時分を金色にフラッシュ
       const datetimeDisplay =
         document.getElementById("datetime-display");
@@ -6504,12 +6501,7 @@
       // 星図を再描画
       drawChart();
 
-
-      // 星図を再描画
-      drawChart();
-
     });
-
 
   // =================================
   // プラネタリウムの共有
