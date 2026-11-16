@@ -3951,28 +3951,119 @@
           starLabels.push({
             text: isPolaris ? "北極星(ポラリス)" : projected.label,
             x: x + 9,
-            y: y - 8
+            y: y - 8,
+            mag: mag
           });
         }
       }
 
-      // すべての恒星を描画した後、恒星名を前面に描画
-      ctx.font = `${9 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+      // ==========================================
+      // 恒星名の重なりを回避して描画
+      // ==========================================
+
+      const starLabelFontSize =
+        9 * CHART_TEXT_SIZES[chartTextSize];
+
+      ctx.font =
+        `${starLabelFontSize}px "Meiryo", sans-serif`;
+
       ctx.fillStyle = "#F5DFA0";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      if (objectLabelsVisible) {
+      // 明るい恒星の名前から優先的に配置
+      const sortedStarLabels = [...starLabels].sort(
+        (a, b) => a.mag - b.mag
+      );
 
-        for (const label of starLabels) {
+      // すでに配置した文字の領域
+      const occupiedLabelAreas = [];
 
-          ctx.fillText(
-            label.text,
-            label.x,
-            label.y
+      // 文字の配置候補
+      for (const label of sortedStarLabels) {
+
+        const textWidth =
+          ctx.measureText(label.text).width;
+
+        const textHeight =
+          starLabelFontSize;
+
+        const padding = 2;
+
+        const boxWidth = textWidth + padding * 2;
+        const boxHeight = textHeight + padding * 2;
+
+        // 元の位置を最優先し、重なる場合は周囲へ移動
+        const gap = 4;
+        const moveY = boxHeight + gap;
+        const moveX = boxWidth + gap;
+
+        const candidates = [
+          { x: 0, y: 0 },
+          { x: 0, y: -moveY },
+          { x: 0, y: moveY },
+          { x: moveX, y: 0 },
+          { x: -moveX, y: 0 },
+          { x: moveX, y: -moveY },
+          { x: -moveX, y: -moveY },
+          { x: moveX, y: moveY },
+          { x: -moveX, y: moveY },
+          { x: 0, y: -moveY * 2 },
+          { x: 0, y: moveY * 2 }
+        ];
+
+        let selectedPosition = null;
+
+        for (const candidate of candidates) {
+
+          const x = label.x + candidate.x;
+          const y = label.y + candidate.y;
+
+          const area = {
+            left: x - padding,
+            right: x + textWidth + padding,
+            top: y - boxHeight / 2,
+            bottom: y + boxHeight / 2
+          };
+
+          // 星図の表示範囲からはみ出さないか
+          if (
+            area.left < 0 ||
+            area.right > canvasWidth ||
+            area.top < 0 ||
+            area.bottom > canvasHeight
+          ) {
+            continue;
+          }
+
+          // 既存のラベルと重ならないか
+          const overlaps = occupiedLabelAreas.some(
+            other =>
+              area.left < other.right &&
+              area.right > other.left &&
+              area.top < other.bottom &&
+              area.bottom > other.top
           );
 
+          if (!overlaps) {
+            selectedPosition = { x, y, area };
+            break;
+          }
+
         }
+
+        // 配置できる場所がなければ、この名前は描画しない
+        if (!selectedPosition) continue;
+
+        // 配置領域を記録
+        occupiedLabelAreas.push(selectedPosition.area);
+
+        // 恒星名を描画
+        ctx.fillText(
+          label.text,
+          selectedPosition.x,
+          selectedPosition.y
+        );
 
       }
 
