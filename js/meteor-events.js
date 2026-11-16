@@ -175,6 +175,6 @@ window.openIndependentChartForMeteorName = function (meteorName) {
     return;
   }
 
-  const timestamp = window.getStarGuideObservationTimestamp();
+  const timestamp = Date.now();getStarGuideObservationTimestamp();
   window.openIndependentChart(meteor, timestamp);
 };
