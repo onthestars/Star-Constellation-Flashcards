@@ -2549,6 +2549,31 @@
     // 観測日時に基づく地方恒星時
     const lstDeg = getLocalSiderealTimeDeg(observation);
 
+    // ==========================================
+    // 空の明るさ：太陽高度を取得
+    // ==========================================
+
+    // 太陽の赤経・赤緯を取得
+    const sunForSky =
+      getSunEquatorialPosition(observation);
+
+    // 太陽を水平座標系に変換
+    const sunVectorForSky =
+      equatorialToHorizontalVector(
+        sunForSky.ra,
+        sunForSky.dec,
+        lstDeg
+      );
+
+    // 太陽高度を角度に変換
+    const sunAltitudeDeg =
+      Math.asin(
+        Math.max(
+          -1,
+          Math.min(1, sunVectorForSky.z)
+        )
+      ) / RAD;
+
     const basis = getProjectionBasis();
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
@@ -2574,35 +2599,149 @@
         centerY - (dot(zenithVector, basis.up) / zenithDenominator) * scaleY;
     }
 
-    // 星図背景（天頂を中心とした同心円状の夜空）
-    const gradientRadius = scale;
+    // ==========================================
+    // 星図背景：太陽高度に応じた空の色彩
+    // ==========================================
 
-    const backgroundGradient = ctx.createRadialGradient(
+    // 地平線・目盛り線の色調整用（既存処理との互換性を維持）
+    const dayMix = Math.max(
+      0,
+      Math.min(1, (sunAltitudeDeg + 18) / 18)
+    );
+
+    // 太陽高度ごとの空の色彩
+    // zenith：天頂
+    // middle：中間高度
+    // horizon：地平線
+    const skyPalette = [
+      {
+        altitude: -18,
+        zenith: [2, 8, 42],
+        middle: [4, 13, 58],
+        horizon: [8, 23, 78]
+      },
+      {
+        altitude: -12,
+        zenith: [4, 12, 52],
+        middle: [8, 21, 72],
+        horizon: [20, 35, 98]
+      },
+      {
+        altitude: -6,
+        zenith: [25, 38, 74],
+        middle: [63, 66, 112],
+        horizon: [137, 91, 124]
+      },
+      {
+        altitude: 0,
+        zenith: [48, 76, 125],
+        middle: [111, 105, 145],
+        horizon: [218, 145, 128]
+      },
+      {
+        altitude: 6,
+        zenith: [48, 105, 166],
+        middle: [101, 151, 190],
+        horizon: [167, 199, 222]
+      },
+      {
+        altitude: 18,
+        zenith: [43, 103, 165],
+        middle: [100, 151, 193],
+        horizon: [173, 207, 232]
+      }
+    ];
+
+    // 太陽高度に応じて色を滑らかに補間
+    function getSkyColors(altitude) {
+
+      let lower = skyPalette[0];
+      let upper = skyPalette[skyPalette.length - 1];
+
+      for (let i = 0; i < skyPalette.length - 1; i++) {
+
+        if (altitude <= skyPalette[i + 1].altitude) {
+          lower = skyPalette[i];
+          upper = skyPalette[i + 1];
+          break;
+        }
+      }
+
+      const ratio = Math.max(
+        0,
+        Math.min(
+          1,
+          (altitude - lower.altitude) /
+          (upper.altitude - lower.altitude)
+        )
+      );
+
+      function mixColor(a, b) {
+        return a.map((value, index) =>
+          Math.round(
+            value + (b[index] - value) * ratio
+          )
+        );
+      }
+
+      return {
+        zenith: mixColor(lower.zenith, upper.zenith),
+        middle: mixColor(lower.middle, upper.middle),
+        horizon: mixColor(lower.horizon, upper.horizon)
+      };
+    }
+
+    // RGB配列をCanvas用の色に変換
+    function skyColorToCss(color) {
+      return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    }
+
+    const skyColors = getSkyColors(sunAltitudeDeg);
+
+    // 天頂から地平線へ広がるグラデーション
+    const skyGradient = ctx.createRadialGradient(
       gradientCenterX,
       gradientCenterY,
       0,
       gradientCenterX,
       gradientCenterY,
-      gradientRadius
+      scale
     );
 
-    // 星図背景の色（天頂から外側へ緩やかに変化）
-    backgroundGradient.addColorStop(0.00, "#000008");
-    backgroundGradient.addColorStop(0.25, "#00000F");
-    backgroundGradient.addColorStop(0.42, "#010116");
-    backgroundGradient.addColorStop(0.62, "#02021D");
-    backgroundGradient.addColorStop(0.85, "#040626");
-    backgroundGradient.addColorStop(1.00, "#080D32");
+    skyGradient.addColorStop(
+      0.00,
+      skyColorToCss(skyColors.zenith)
+    );
 
-    ctx.fillStyle = backgroundGradient;
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    skyGradient.addColorStop(
+      0.48,
+      skyColorToCss(skyColors.middle)
+    );
 
+    skyGradient.addColorStop(
+      1.00,
+      skyColorToCss(skyColors.horizon)
+    );
 
+    // 背景を描画
+    ctx.fillStyle = skyGradient;
+    ctx.fillRect(
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
 
     // 地平線（高度0°）を描画
     ctx.save();
     ctx.beginPath();
-    ctx.strokeStyle = "rgba(180, 200, 220, 0.65)";
+    ctx.strokeStyle = `rgba(
+  ${Math.round(180 - 130 * dayMix)},
+  ${Math.round(200 - 135 * dayMix)},
+  ${Math.round(220 - 135 * dayMix)},
+  ${0.65 + 0.15 * dayMix}
+)`;
+
     ctx.lineWidth = 1;
 
     let horizonDrawing = false;
@@ -2637,11 +2776,18 @@
     ctx.stroke();
     ctx.restore();
 
-
     // 地平座標の目盛り線
     ctx.save();
 
-    ctx.strokeStyle = "rgba(160, 180, 200, 0.25)";
+    // 昼間は濃い色、夜間は従来の色にする
+    const gridLineColor = `rgba(
+      ${Math.round(160 - 125 * dayMix)},
+      ${Math.round(180 - 125 * dayMix)},
+      ${Math.round(200 - 120 * dayMix)},
+      ${0.25 + 0.17 * dayMix}
+    )`;
+
+    ctx.strokeStyle = gridLineColor;
     ctx.lineWidth = 0.7;
 
     // 高度線：10°刻み（地平線の0°は既存の線を使用）
