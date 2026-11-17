@@ -3814,160 +3814,6 @@
       // 配置済みラベルの領域（星座名・アステリズム名・恒星名で共有）
       const occupiedLabelAreas = [];
 
-      // 全星座の名前を描画
-      for (const constellation of constellations) {
-
-        // 指定視野角（拡大率）より広い場合は星座名を描画しない
-        if (fieldOfViewDeg > 50) continue;
-
-        const state =
-          constellationFadeStates.get(constellation.id);
-
-        if (!state || state.opacity <= 0) continue;
-
-        // 星座を構成する恒星の位置を取得
-        const memberIds = new Set(
-          constellation.segments.flat()
-        );
-
-        const points = [];
-
-        for (const id of memberIds) {
-
-          const star = starById.get(id);
-          if (!star) continue;
-
-          const projected =
-            projectStar(star, lstDeg, basis, minDot);
-
-          if (!projected) continue;
-
-          points.push({
-            x: centerX + projected.x * scaleX,
-            y: centerY + projected.y * scaleY
-          });
-        }
-
-        if (points.length > 0) {
-
-          // 星座の表示範囲を計算
-          const minX = Math.min(...points.map(p => p.x));
-          const maxX = Math.max(...points.map(p => p.x));
-          const minY = Math.min(...points.map(p => p.y));
-          const maxY = Math.max(...points.map(p => p.y));
-
-          // 星座名の表示位置
-          const labelX = minX + (maxX - minX) * 0.5;
-          const labelY = minY + (maxY - minY) * 0.5;
-
-          ctx.save();
-
-          ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-
-          // 星座名の幅を取得
-          const textWidth =
-            ctx.measureText(constellation.name).width;
-
-          // 角丸背景のサイズ
-          const paddingX = 5;
-          const paddingY = 4;
-          const boxWidth = textWidth + paddingX * 2;
-          const boxHeight = 20;
-
-          // 背景の位置
-          const boxX = labelX - boxWidth / 2;
-          const boxY = labelY - boxHeight / 2;
-
-          // 星座名の表示領域を記録
-          if (objectLabelsVisible) {
-            occupiedLabelAreas.push({
-              left: boxX,
-              right: boxX + boxWidth,
-              top: boxY,
-              bottom: boxY + boxHeight
-            });
-          }
-
-          if (objectLabelsVisible) {
-
-            // 星座名などの背景（角丸矩形）の透明度を設定
-            ctx.globalAlpha = state.opacity * 0.30;
-
-            ctx.fillStyle = "#FFFFFF";
-            ctx.beginPath();
-            ctx.roundRect(
-              boxX,
-              boxY,
-              boxWidth,
-              boxHeight,
-              10
-            );
-            ctx.fill();
-
-            // 星座名は完全不透明
-            ctx.globalAlpha = 1.0;
-            ctx.fillStyle = "rgb(6, 7, 64)";
-
-            ctx.fillText(
-              constellation.name,
-              labelX,
-              labelY
-            );
-
-            // 星座名のタップ判定領域を記録
-            constellationNameHitAreas.push({
-              id: constellation.id,
-              x: boxX,
-              y: boxY,
-              width: boxWidth,
-              height: boxHeight
-            });
-
-          }
-
-          // 星座の評価を描画
-          if (constellationRatingsVisible) {
-
-            const rating = getConstellationRating(constellation.id);
-            const ratingText =
-              "★".repeat(rating) +
-              "☆".repeat(3 - rating);
-
-            // 選択中の文字サイズに合わせる
-            const ratingFontSize =
-              13 * (CHART_TEXT_SIZES[chartTextSize] || 1);
-
-            ctx.save();
-            ctx.globalAlpha = state.opacity;
-            ctx.font = `bold ${ratingFontSize}px "Meiryo", sans-serif`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillStyle = "#FFD700";
-
-            ctx.fillText(
-              ratingText,
-              labelX,
-              boxY + boxHeight + 2
-            );
-
-            ctx.restore();
-
-            // 星のタップ判定領域を記録
-            constellationRatingHitAreas.push({
-              id: constellation.id,
-              x: labelX - 22,
-              y: boxY + boxHeight + 2,
-              width: 44,
-              height: 22
-            });
-
-          }
-
-        }
-      }
-
       // 恒星名を一時保存する配列
       const starLabels = [];
 
@@ -4246,6 +4092,160 @@
             y: y - 8,
             mag: mag
           });
+        }
+      }
+
+      // 全星座の名前を描画
+      for (const constellation of constellations) {
+
+        // 指定視野角（拡大率）より広い場合は星座名を描画しない
+        if (fieldOfViewDeg > 50) continue;
+
+        const state =
+          constellationFadeStates.get(constellation.id);
+
+        if (!state || state.opacity <= 0) continue;
+
+        // 星座を構成する恒星の位置を取得
+        const memberIds = new Set(
+          constellation.segments.flat()
+        );
+
+        const points = [];
+
+        for (const id of memberIds) {
+
+          const star = starById.get(id);
+          if (!star) continue;
+
+          const projected =
+            projectStar(star, lstDeg, basis, minDot);
+
+          if (!projected) continue;
+
+          points.push({
+            x: centerX + projected.x * scaleX,
+            y: centerY + projected.y * scaleY
+          });
+        }
+
+        if (points.length > 0) {
+
+          // 星座の表示範囲を計算
+          const minX = Math.min(...points.map(p => p.x));
+          const maxX = Math.max(...points.map(p => p.x));
+          const minY = Math.min(...points.map(p => p.y));
+          const maxY = Math.max(...points.map(p => p.y));
+
+          // 星座名の表示位置
+          const labelX = minX + (maxX - minX) * 0.5;
+          const labelY = minY + (maxY - minY) * 0.5;
+
+          ctx.save();
+
+          ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          // 星座名の幅を取得
+          const textWidth =
+            ctx.measureText(constellation.name).width;
+
+          // 角丸背景のサイズ
+          const paddingX = 5;
+          const paddingY = 4;
+          const boxWidth = textWidth + paddingX * 2;
+          const boxHeight = 20;
+
+          // 背景の位置
+          const boxX = labelX - boxWidth / 2;
+          const boxY = labelY - boxHeight / 2;
+
+          // 星座名の表示領域を記録
+          if (objectLabelsVisible) {
+            occupiedLabelAreas.push({
+              left: boxX,
+              right: boxX + boxWidth,
+              top: boxY,
+              bottom: boxY + boxHeight
+            });
+          }
+
+          if (objectLabelsVisible) {
+
+            // 星座名などの背景（角丸矩形）の透明度を設定
+            ctx.globalAlpha = state.opacity * 0.30;
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.beginPath();
+            ctx.roundRect(
+              boxX,
+              boxY,
+              boxWidth,
+              boxHeight,
+              10
+            );
+            ctx.fill();
+
+            // 星座名は完全不透明
+            ctx.globalAlpha = 1.0;
+            ctx.fillStyle = "rgb(6, 7, 64)";
+
+            ctx.fillText(
+              constellation.name,
+              labelX,
+              labelY
+            );
+
+            // 星座名のタップ判定領域を記録
+            constellationNameHitAreas.push({
+              id: constellation.id,
+              x: boxX,
+              y: boxY,
+              width: boxWidth,
+              height: boxHeight
+            });
+
+          }
+
+          // 星座の評価を描画
+          if (constellationRatingsVisible) {
+
+            const rating = getConstellationRating(constellation.id);
+            const ratingText =
+              "★".repeat(rating) +
+              "☆".repeat(3 - rating);
+
+            // 選択中の文字サイズに合わせる
+            const ratingFontSize =
+              13 * (CHART_TEXT_SIZES[chartTextSize] || 1);
+
+            ctx.save();
+            ctx.globalAlpha = state.opacity;
+            ctx.font = `bold ${ratingFontSize}px "Meiryo", sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+            ctx.fillStyle = "#FFD700";
+
+            ctx.fillText(
+              ratingText,
+              labelX,
+              boxY + boxHeight + 2
+            );
+
+            ctx.restore();
+
+            // 星のタップ判定領域を記録
+            constellationRatingHitAreas.push({
+              id: constellation.id,
+              x: labelX - 22,
+              y: boxY + boxHeight + 2,
+              width: 44,
+              height: 22
+            });
+
+          }
+
         }
       }
 
