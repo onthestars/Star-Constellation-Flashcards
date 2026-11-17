@@ -2616,15 +2616,15 @@
     const skyPalette = [
       {
         altitude: -18,
-        zenith: [2, 8, 42],
-        middle: [4, 13, 58],
-        horizon: [8, 23, 78]
+        zenith: [1, 4, 25],
+        middle: [2, 8, 38],
+        horizon: [5, 16, 58]
       },
       {
         altitude: -12,
-        zenith: [4, 12, 52],
-        middle: [8, 21, 72],
-        horizon: [20, 35, 98]
+        zenith: [2, 7, 32],
+        middle: [5, 13, 48],
+        horizon: [12, 25, 72]
       },
       {
         altitude: -6,
