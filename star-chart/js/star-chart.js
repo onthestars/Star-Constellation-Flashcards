@@ -2635,8 +2635,8 @@
       {
         altitude: 0,
         zenith: [48, 76, 125],
-        middle: [125, 105, 125],
-        horizon: [235, 135, 75]
+        middle: [115, 105, 135],
+        horizon: [205, 125, 105]
       },
       {
         altitude: 6,
