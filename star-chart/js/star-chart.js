@@ -2630,13 +2630,13 @@
         altitude: -6,
         zenith: [25, 38, 74],
         middle: [63, 66, 112],
-        horizon: [137, 91, 124]
+        horizon: [165, 91, 91]
       },
       {
         altitude: 0,
         zenith: [48, 76, 125],
-        middle: [111, 105, 145],
-        horizon: [218, 145, 128]
+        middle: [125, 105, 125],
+        horizon: [235, 135, 75]
       },
       {
         altitude: 6,
