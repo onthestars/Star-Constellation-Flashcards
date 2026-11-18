@@ -1,0 +1,23 @@
+/* css/panel-management.css */
+
+/* ============================
+   パネル共通アニメーション
+   ============================ */
+
+@keyframes panelReveal {
+
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+
+}
+
+.panel-fade-in {
+  animation: panelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
+}

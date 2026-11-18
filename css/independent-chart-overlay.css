@@ -72,11 +72,3 @@
   }
 
 }
-
-/* =================================
-   プラネタリウム：上から下へ表示
-================================= */
-
-#independent-chart-panel.planetarium-panel-fade-in {
-  animation: cardPanelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
-}

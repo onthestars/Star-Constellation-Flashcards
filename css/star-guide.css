@@ -99,28 +99,6 @@
   z-index: 2;
 }
 
-/* =================================
-   星座カードパネル：上から下へ表示
-================================= */
-
-@keyframes cardPanelReveal {
-
-  from {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0;
-  }
-
-  to {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
-  }
-
-}
-
-.constellation-card-panel.card-panel-fade-in {
-  animation: cardPanelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
-}
-
 /* ▼ 日の出入り・月の出入り */
 .sun-moon-times {
   display: flex;
@@ -151,11 +129,6 @@
     margin-left: auto;
     white-space: nowrap;
   }
-}
-
-/* 星空ガイド：上から下へ表示 */
-#star-guide-panel.moon-panel-fade-in {
-  animation: cardPanelReveal 0.8s cubic-bezier(0.2, 0, 0.2, 1) both;
 }
 
 /* =================================

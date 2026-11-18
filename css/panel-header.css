@@ -170,8 +170,9 @@
 }
 
 /* 基準地 */
-#star-guide-location {
-  color: rgba(255, 255, 255, 0.75);
+#star-guide-location,
+#independent-chart-location {
+  color: #ffffff;
   font-family: "Meiryo", sans-serif;
   font-size: 10px;
   font-weight: 400;
