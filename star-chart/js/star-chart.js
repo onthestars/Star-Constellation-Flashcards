@@ -2931,12 +2931,16 @@
     ctx.setLineDash([]);
     ctx.restore();
 
-    // 地平線上の東西南北を表示
+    // 地平線上の東西南北・中間方位を表示
     const directions = [
-      { az: 0, label: "北" },
-      { az: 90, label: "東" },
-      { az: 180, label: "南" },
-      { az: 270, label: "西" }
+      { az: 0, label: "北", primary: true },
+      { az: 45, label: "北東" },
+      { az: 90, label: "東", primary: true },
+      { az: 135, label: "南東" },
+      { az: 180, label: "南", primary: true },
+      { az: 225, label: "南西" },
+      { az: 270, label: "西", primary: true },
+      { az: 315, label: "北西" }
     ];
 
     ctx.font = 'bold 16px "Meiryo", sans-serif';
@@ -2964,14 +2968,25 @@
       // 方位表示：半透明の白い丸＋濃紺の文字
       ctx.save();
 
+      const isPrimary = direction.primary;
+
       // 背景の白い丸
       ctx.beginPath();
-      ctx.arc(labelX, labelY, 18, 0, Math.PI * 2);
+      ctx.arc(
+        labelX,
+        labelY,
+        isPrimary ? 13 : 10,
+        0,
+        Math.PI * 2
+      );
       ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
       ctx.fill();
 
-      // 方位の文字（従来の16pxから24pxへ約1.5倍）
-      ctx.font = 'bold 24px "Meiryo", sans-serif';
+      // 方位の文字
+      ctx.font = isPrimary
+        ? 'bold 16px "Meiryo", sans-serif'
+        : 'bold 8px "Meiryo", sans-serif';
+
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = "rgb(6, 7, 64)";
@@ -6111,6 +6126,32 @@
     const data = event.data;
 
     if (!data) return;
+
+    // 親ページから観測地点を受信
+    if (data.type === "set-observation-location") {
+
+      // 緯度・経度の値を確認
+      if (
+        !Number.isFinite(data.latitude) ||
+        !Number.isFinite(data.longitude) ||
+        data.latitude < -90 ||
+        data.latitude > 90 ||
+        data.longitude < -180 ||
+        data.longitude > 180
+      ) {
+        console.error("観測地点のデータが不正です。", data);
+        return;
+      }
+
+      // 観測地点を更新
+      latitudeDeg = data.latitude;
+      longitudeDeg = data.longitude;
+
+      // 星図を再描画
+      drawChart();
+
+      return;
+    }
 
     // 親ページから観測日時を受信
     if (data.type === "set-observation-date") {
