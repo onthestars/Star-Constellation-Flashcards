@@ -753,39 +753,32 @@
         `${today.getFullYear()}<span style="font-size:0.80em;">年</span>${today.getMonth() + 1}<span style="font-size:0.80em;">月</span>${today.getDate()}<span style="font-size:0.80em;">日</span>(${weekday})`;
 
       content.innerHTML = `
-        <div style="
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          width: 100%;
-          box-sizing: border-box;
-          margin-top: 3px;
-          padding: 0;
-          line-height: 1.3;
-          font-size: 14px;
-        ">
+        <div class="star-guide-header">
 
-          <div class="star-guide-info" style="min-width: 0; margin: 0; padding: 0;">
+  <button
+    type="button"
+    id="showSelectedDateBtn"
+    class="datetime-now selected-date-button"
+  >
+    ${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日の夜空を見る
+  </button>
 
-          <!-- 上部年月日 表示領域 -->
-            <div style="
-  display: block;
+</div>
+
+<div style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
   box-sizing: border-box;
-  margin:  ${window.innerWidth >= 768 ? '10px 0px 2px 0px' : '2px 0px'};
-  padding: ${window.innerWidth >= 768 ? '6px 2px 4px 2px' : '4px 2px'};
-  text-align: center;
-background: transparent;
-color: #ffffff;
-border: 1px solid rgba(255,255,255,0.7);
-border-radius: 6px;
-padding: 6px 12px 6px 12px;
-font-size: 1.1em;
-font-weight: 400;
+  margin-top: 0;
+  padding: 0;
+  line-height: 1.3;
+  font-size: 14px;
 ">
-  ${dateText}
-</div>
+
+  <div class="star-guide-info" style="min-width:0; margin:0; padding:0;">
 
 <!-- この夜の星空期待値 表示領域 -->
                         <div style="
@@ -906,7 +899,7 @@ ${meteorMessage
 >
   <img
     src="image/common/btn-moon-back-7days.png"
-    alt=""
+    alt="7日前"
   >
 </button>
 
@@ -919,7 +912,7 @@ ${meteorMessage
 >
   <img
     src="image/common/btn-moon-back-1day.png"
-    alt=""
+    alt="1日前"
   >
 </button>
 
@@ -976,7 +969,7 @@ ${meteorMessage
 >
   <img
     src="image/common/btn-moon-next-1day.png"
-    alt=""
+    alt="1日後"
   >
 </button>
 
@@ -989,34 +982,13 @@ ${meteorMessage
 >
   <img
     src="image/common/btn-moon-next-7days.png"
-    alt=""
+    alt="7日後"
   >
 </button>
 
 </div>
 
 </div>
-
-<div class="star-guide-footer">
-
-  <button
-    type="button"
-    id="showPlanetariumBtn"
-    class="datetime-now"
-  >
-    今<span style="font-size:0.8em;">の</span>空<span style="font-size:0.8em;">を</span>見る
-  </button>
-
-<button
-  type="button"
-  id="showSelectedDateBtn"
-  class="datetime-now"
->
-  ${today.getMonth() + 1}<span style="font-size:0.8em;">月</span>${today.getDate()}<span style="font-size:0.8em;">日</span>20<span style="font-size:0.8em;">時の</span>空
-</button>
-
-</div>
-
       `;
 
       // ▼ 極大日表示の黄色い四角をクリックしても星図を開く
@@ -1052,12 +1024,15 @@ ${meteorMessage
 
       }
 
-      // 「今の星空を見る」ボタン
-      const showPlanetariumBtn = content.querySelector(
-        "#showPlanetariumBtn"
+      // 「今の空を見る」ボタン
+      const showPlanetariumBtn = document.getElementById(
+        "showPlanetariumFromGuideBtn"
       );
 
-      if (showPlanetariumBtn) {
+      if (
+        showPlanetariumBtn &&
+        !showPlanetariumBtn.dataset.initialized
+      ) {
 
         showPlanetariumBtn.addEventListener("click", function () {
 
@@ -1067,6 +1042,8 @@ ${meteorMessage
           }
 
         });
+
+        showPlanetariumBtn.dataset.initialized = "true";
 
       }
 
