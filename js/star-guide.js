@@ -750,7 +750,7 @@
         getWeekdayText(today);
 
       const dateText =
-        `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日(${weekday})`;
+        `${today.getFullYear()}<span style="font-size:0.80em;">年</span>${today.getMonth() + 1}<span style="font-size:0.80em;">月</span>${today.getDate()}<span style="font-size:0.80em;">日</span>(${weekday})`;
 
       content.innerHTML = `
         <div style="
@@ -768,7 +768,7 @@
 
           <div class="star-guide-info" style="min-width: 0; margin: 0; padding: 0;">
 
-          <!-- 星座ガイドパネル 上部年月日表示領域 -->
+          <!-- 上部年月日 表示領域 -->
             <div style="
   display: block;
   width: 100%;
@@ -776,20 +776,24 @@
   margin:  ${window.innerWidth >= 768 ? '10px 0px 2px 0px' : '2px 0px'};
   padding: ${window.innerWidth >= 768 ? '6px 2px 4px 2px' : '4px 2px'};
   text-align: center;
-  background: rgba(255, 255, 255, 0.8);
-  color: #060740;
-  border-radius: 6px 6px 0 0;
-  font-weight: bold;
+background: transparent;
+color: #ffffff;
+border: 1px solid rgba(255,255,255,0.7);
+border-radius: 6px;
+padding: 6px 12px 6px 12px;
+font-size: 1.1em;
+font-weight: 400;
 ">
   ${dateText}
 </div>
 
+<!-- この夜の星空期待値 表示領域 -->
                         <div style="
               display: inline-block;
-              background: rgba(6, 7, 64, 0.1);
+              background: transparent;
               margin: 2px 0 2px 0;
               padding: 8px 6px 4px 6px;
-              border: 1px solid rgba(255, 255, 255, 0.8);
+              border: none;
               box-sizing: border-box;
               width: 100%;
             ">
@@ -838,16 +842,24 @@
                 ${observationWindowText}
               </div>
             </div>
+            <!-- 区切り線 -->
+            <div style="
+  width:100%;
+  height:1px;
+  background:rgba(255,255,255,0.45);
+  margin:1px 0 1px 0;
+"></div>
 
 ${meteorMessage
           ? `
+          <!-- 活動中の流星群 表示領域 -->
 <div id="meteorMessagePanel"
   style="
     display:inline-block;
-    background: rgba(6, 7, 64, 0.1);
+    background: transparent;
         margin:2px 0 4px 0;
         padding: 2px 6px 2px 6px;
-        border: 1px solid rgba(255, 255, 255, 0.8);
+        border: none;
         box-sizing:border-box;
         width:100%;
       ">
@@ -860,6 +872,13 @@ ${meteorMessage
           ${meteorMessage}
         </div>
       </div>
+                  <!-- 区切り線 -->
+            <div style="
+  width:100%;
+  height:1px;
+  background:rgba(255,255,255,0.45);
+  margin:2px 0 4px 0;
+"></div>
     `
           : ""
         }
