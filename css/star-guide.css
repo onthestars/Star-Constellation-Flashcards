@@ -148,7 +148,7 @@
 
   color: #080D32;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(11px, 3vw, 14px);
+  font-size: clamp(14px, 3.5vw, 18px); /* プラネタリウムを見るボタンの文字の大きさ */
   font-weight: bold;
 
   background: linear-gradient(to bottom, #FFE080, #D9A928);
@@ -226,7 +226,7 @@
 
   color: #080D32;
   font-family: "Meiryo", sans-serif;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: bold;
 
   background:
