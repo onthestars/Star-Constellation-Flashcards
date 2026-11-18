@@ -520,7 +520,7 @@ body {
 }
 
 /* =================================
-   現在の空に戻すボタン
+   今の空に戻すボタン
 ================================= */
 
 .datetime-now {
@@ -534,11 +534,11 @@ body {
   align-items: center;
 
   margin: 0;
-  padding: 0 12px;
+  padding: 0 4px;
 
   color: #080D32;
   font-family: "Meiryo", sans-serif;
-  font-size: 12px;
+  font-size: clamp(14px, 2vw, 16px);
   font-weight: bold;
 
   background: linear-gradient(to bottom,
