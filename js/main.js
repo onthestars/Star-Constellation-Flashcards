@@ -931,7 +931,9 @@ function updateObservationLocationLabel(location) {
   if (!location) return;
 
   const displayName =
-    location.displayName || location.name || "";
+    location.prefecture
+      ? `（${location.prefecture}）`
+      : "";
 
   // 星空ガイド
   const starGuideLabel = document.getElementById(
