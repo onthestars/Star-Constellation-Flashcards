@@ -2732,15 +2732,130 @@
       canvasHeight
     );
 
-    // 地平線（高度0°）を描画
+    // ==========================================
+    // 地面：低解像度Canvasによる海のグラデーション
+    // ==========================================
+
+    // 地面専用Canvasを初回だけ作成
+    if (!groundCanvas) {
+      groundCanvas = document.createElement("canvas");
+      groundCtx = groundCanvas.getContext("2d");
+    }
+
+    // 元のCanvasの解像度を下げる
+    const groundWidth = Math.max(
+      1,
+      Math.ceil(canvasWidth * 0.75)
+    );
+
+    const groundHeight = Math.max(
+      1,
+      Math.ceil(canvasHeight * 0.75)
+    );
+
+    // サイズが変わったときだけ再設定
+    if (
+      groundCanvas.width !== groundWidth ||
+      groundCanvas.height !== groundHeight
+    ) {
+      groundCanvas.width = groundWidth;
+      groundCanvas.height = groundHeight;
+
+      groundImageData = groundCtx.createImageData(
+        groundWidth,
+        groundHeight
+      );
+    }
+
+    const pixels = groundImageData.data;
+    pixels.fill(0);
+
+    // 低解像度の各画素を調べる
+    for (let y = 0; y < groundHeight; y++) {
+
+      const fullY =
+        (y + 0.5) * canvasHeight / groundHeight;
+
+      const q = (centerY - fullY) / scaleY;
+
+      for (let x = 0; x < groundWidth; x++) {
+
+        const fullX =
+          (x + 0.5) * canvasWidth / groundWidth;
+
+        const p = (fullX - centerX) / scaleX;
+
+        // 逆投影して高度を計算
+        const numerator =
+          basis.center.z * (1 - p * p - q * q) +
+          2 * p * basis.right.z +
+          2 * q * basis.up.z;
+
+        const denominator =
+          1 + p * p + q * q;
+
+        const altitudeDeg =
+          Math.asin(
+            Math.max(
+              -1,
+              Math.min(1, numerator / denominator)
+            )
+          ) / RAD;
+
+        // 地平線より上は透明のまま
+        if (altitudeDeg > 0) continue;
+
+        // グラデーション調整（数字が小さいほどグラデーションするが負荷がかかる）
+        const depth = Math.max(
+          0,
+          Math.min(1, -altitudeDeg / 90)
+        );
+
+        // 太陽高度に応じて海の色を変化させる
+        const r = Math.round(8 + 10 * dayMix + 10 * depth);
+        const g = Math.round(30 + 65 * dayMix + 35 * depth);
+        const b = Math.round(75 + 60 * dayMix + 65 * depth);
+
+        const index =
+          (y * groundWidth + x) * 4;
+
+        pixels[index] = r;
+        pixels[index + 1] = g;
+        pixels[index + 2] = b;
+        pixels[index + 3] = 128;
+      }
+    }
+
+    // 低解像度Canvasに反映
+    groundCtx.putImageData(groundImageData, 0, 0);
+
+    // 星図サイズに滑らかに拡大して重ねる
     ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = `rgba(
-  ${Math.round(180 - 130 * dayMix)},
-  ${Math.round(200 - 135 * dayMix)},
-  ${Math.round(220 - 135 * dayMix)},
-  ${0.65 + 0.15 * dayMix}
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+      groundCanvas,
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
+
+    ctx.restore();
+
+    // 地平線・目盛り線の共通色
+    const gridLineColor = `rgba(
+  ${Math.round(160 - 125 * dayMix)},
+  ${Math.round(180 - 125 * dayMix)},
+  ${Math.round(200 - 120 * dayMix)},
+  ${0.25 + 0.17 * dayMix}
 )`;
+
+    ctx.strokeStyle = gridLineColor;
 
     ctx.lineWidth = 1;
 
@@ -2778,14 +2893,6 @@
 
     // 地平座標の目盛り線
     ctx.save();
-
-    // 昼間は濃い色、夜間は従来の色にする
-    const gridLineColor = `rgba(
-      ${Math.round(160 - 125 * dayMix)},
-      ${Math.round(180 - 125 * dayMix)},
-      ${Math.round(200 - 120 * dayMix)},
-      ${0.25 + 0.17 * dayMix}
-    )`;
 
     ctx.strokeStyle = gridLineColor;
     ctx.lineWidth = 0.7;
@@ -5583,6 +5690,10 @@
 
   // ▲▲▲drawChart();ここまで
 
+  // 地面描画専用Canvas（低解像度）
+  let groundCanvas = null;
+  let groundCtx = null;
+  let groundImageData = null;
 
 
   // 慣性移動
