@@ -71,7 +71,7 @@ function getMeteorMessage(date) {
         `<div class="meteor-peak-card" style="
     display:inline-block;
     text-align:center;
-    padding:3px 8px;
+    padding:6px 14px;
     background:rgb(255,215,0);
     color:rgb(6,7,64);
     font-weight:bold;
@@ -79,13 +79,13 @@ function getMeteorMessage(date) {
     margin:8px 0;
     line-height:1.2;
   ">
-    <div>本日、極大</div>
+    <div>本日 極大</div>
     <div>
       <a
         href="#"
         class="meteor-shower-link"
         data-meteor-name="${meteor.name}"
-        style="color:rgb(6,7,64);font-weight:bold;text-decoration:none;"
+        style="color:rgb(6,7,64);font-weight:bold;text-decoration:underline;"
       >${meteor.name}</a>流星群
     </div>
   </div>`
