@@ -6769,7 +6769,7 @@
   window.addEventListener("blur", stopDatetimeRepeat);
 
   // =================================
-  // 現在の空に戻す
+  // 今の空に戻す
   // =================================
 
   document.getElementById("datetime-now")
