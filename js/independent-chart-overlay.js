@@ -58,6 +58,32 @@
     pendingObservationTimestamp = null;
   }
 
+  // 観測地点を星図へ送信
+  function sendObservationLocation() {
+
+    if (
+      !isOpen ||
+      !frameReady ||
+      !frame.contentWindow ||
+      typeof window.getObservationLocation !== "function"
+    ) {
+      return;
+    }
+
+    const location = window.getObservationLocation();
+
+    if (!location) return;
+
+    frame.contentWindow.postMessage(
+      {
+        type: "set-observation-location",
+        latitude: location.latitude,
+        longitude: location.longitude
+      },
+      CHART_ORIGIN
+    );
+  }
+
   let frameReady = false;
 
   // 右上のプラネタリウムボタンの状態を更新
@@ -83,7 +109,7 @@
 
   // ヘッダーのタイトルを設定
   function updateChartTitle() {
-    title.textContent = "トレミーのプラネタリウム";
+    title.textContent = "プラネタリウム";
   }
 
   // 選択した流星群の放射点を星図へ送信
@@ -171,6 +197,7 @@
       frameReady = false;
       frame.src = CHART_URL;
     } else {
+      sendObservationLocation();
       sendObservationDate();
       sendRadiantCoordinates();
     }
@@ -187,17 +214,17 @@
 
     window.bringPanelToFront(overlay);
 
-    // パネルを上から下へ表示
+    // 共通アニメーションを再実行
     const panel = document.getElementById(
       "independent-chart-panel"
     );
 
-    panel.classList.remove("planetarium-panel-fade-in");
+    panel.classList.remove("panel-fade-in");
 
     // アニメーションを再実行
     void panel.offsetWidth;
 
-    panel.classList.add("planetarium-panel-fade-in");
+    panel.classList.add("panel-fade-in");
 
     isOpen = true;
 
@@ -206,6 +233,8 @@
     if (frame.getAttribute("src") !== chartTargetURL) {
       frameReady = false;
       frame.src = chartTargetURL;
+    } else {
+      sendObservationLocation();
     }
   }
 
@@ -262,22 +291,22 @@
   }
 
   // 星図内の共有ボタンからの依頼を受信
-window.addEventListener("message", function (event) {
+  window.addEventListener("message", function (event) {
 
-  if (event.origin !== CHART_ORIGIN) return;
-  if (event.source !== frame.contentWindow) return;
-  if (!isOpen || !frameReady) return;
+    if (event.origin !== CHART_ORIGIN) return;
+    if (event.source !== frame.contentWindow) return;
+    if (!isOpen || !frameReady) return;
 
-  if (event.data?.type === "request-chart-share") {
+    if (event.data?.type === "request-chart-share") {
 
-    // 星図側の既存共有処理を実行
-    frame.contentWindow.postMessage(
-      { type: "request-chart-share" },
-      CHART_ORIGIN
-    );
-  }
+      // 星図側の既存共有処理を実行
+      frame.contentWindow.postMessage(
+        { type: "request-chart-share" },
+        CHART_ORIGIN
+      );
+    }
 
-});
+  });
 
   // 星図の読み込み完了後に必要な情報を送信
   frame.addEventListener("load", function () {
@@ -287,10 +316,19 @@ window.addEventListener("message", function (event) {
 
     frameReady = true;
 
+    sendObservationLocation();
     sendObservationDate();
     sendRadiantCoordinates();
     sendConstellationCenter();
   });
+
+  // 観測地点の変更を受信
+  window.addEventListener(
+    "observation-location-changed",
+    function () {
+      sendObservationLocation();
+    }
+  );
 
   // オーバーレイを閉じる
   function closeIndependentChart() {
