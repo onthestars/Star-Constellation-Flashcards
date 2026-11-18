@@ -172,8 +172,29 @@
       : "欠けていく月";
   }
 
-  // 観測地点：大阪府大阪市（緯度34.6937、経度135.5023、標高0m）
-  const MOON_OBSERVER = new Astronomy.Observer(34.6937, 135.5023, 0);
+  // 観測地点
+  let MOON_OBSERVER =
+    new Astronomy.Observer(34.6937, 135.5023, 0);
+
+  // 観測地点の変更
+  window.setStarGuideObserver = function (latitude, longitude) {
+
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude)
+    ) {
+      return;
+    }
+
+    MOON_OBSERVER = new Astronomy.Observer(
+      latitude,
+      longitude,
+      0
+    );
+
+    // 月の出入り・日の出入りなどを再計算
+    renderMoonObservation();
+  };
 
   // direction: 1 = 月の出、-1 = 月の入り
   // 観察対象日の正午から翌日の正午直前までを検索対象にする。
@@ -559,7 +580,7 @@
       const phaseIndex = getMoonPhaseIndex(today);
       const phaseName = getPhaseName(today);
 
-            // 月の照明率（0～100%）
+      // 月の照明率（0～100%）
       const phaseAngle = Astronomy.MoonPhase(
         Astronomy.MakeTime(getReferenceDate(today))
       );
@@ -980,37 +1001,37 @@ ${meteorMessage
       `;
 
       // ▼ 極大日表示の黄色い四角をクリックしても星図を開く
-const meteorPeakCard = content.querySelector(".meteor-peak-card");
+      const meteorPeakCard = content.querySelector(".meteor-peak-card");
 
-if (meteorPeakCard) {
+      if (meteorPeakCard) {
 
-  meteorPeakCard.style.cursor = "pointer";
+        meteorPeakCard.style.cursor = "pointer";
 
-  meteorPeakCard.addEventListener("click", function (event) {
+        meteorPeakCard.addEventListener("click", function (event) {
 
-    // 流星群名のリンクを押した場合は既存の処理に任せる
-    if (event.target.closest(".meteor-shower-link")) {
-      return;
-    }
+          // 流星群名のリンクを押した場合は既存の処理に任せる
+          if (event.target.closest(".meteor-shower-link")) {
+            return;
+          }
 
-    const meteorLink = meteorPeakCard.querySelector(".meteor-shower-link");
+          const meteorLink = meteorPeakCard.querySelector(".meteor-shower-link");
 
-    if (!meteorLink) {
-      return;
-    }
+          if (!meteorLink) {
+            return;
+          }
 
-    const meteorName = meteorLink.dataset.meteorName;
+          const meteorName = meteorLink.dataset.meteorName;
 
-    if (
-      meteorName &&
-      typeof window.openIndependentChartForMeteorName === "function"
-    ) {
-      window.openIndependentChartForMeteorName(meteorName);
-    }
+          if (
+            meteorName &&
+            typeof window.openIndependentChartForMeteorName === "function"
+          ) {
+            window.openIndependentChartForMeteorName(meteorName);
+          }
 
-  });
+        });
 
-}
+      }
 
       // 「今の星空を見る」ボタン
       const showPlanetariumBtn = content.querySelector(
@@ -1029,7 +1050,7 @@ if (meteorPeakCard) {
         });
 
       }
-      
+
       // 「選んだ日の20時の星空」を見るボタン
       const showSelectedDateBtn = content.querySelector(
         "#showSelectedDateBtn"
@@ -1103,21 +1124,21 @@ if (meteorPeakCard) {
         });
 
         // ▼ 月相画像クリックで月Special Viewer起動
-const moonImage = content.querySelector(
-  "#starGuideMoonImage"
-);
+        const moonImage = content.querySelector(
+          "#starGuideMoonImage"
+        );
 
-if (
-  moonImage &&
-  typeof openMoonSpecialViewer === "function"
-) {
+        if (
+          moonImage &&
+          typeof openMoonSpecialViewer === "function"
+        ) {
 
-  moonImage.addEventListener(
-    "click",
-    openMoonSpecialViewer
-  );
+          moonImage.addEventListener(
+            "click",
+            openMoonSpecialViewer
+          );
 
-}
+        }
 
       });
 
@@ -1144,9 +1165,9 @@ if (
       showButton.style.opacity = showButton.disabled ? 0.4 : 1;
     }
 
-    // 初回表示時にフェードイン
+    // 初回表示時に共通アニメーション
     if (panel) {
-      panel.classList.add("moon-panel-fade-in");
+      panel.classList.add("panel-fade-in");
     }
 
     // 閉じるボタンの初期化
