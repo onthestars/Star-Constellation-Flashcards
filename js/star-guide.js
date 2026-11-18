@@ -760,7 +760,7 @@
     id="showSelectedDateBtn"
     class="datetime-now selected-date-button"
   >
-    ${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日の夜空を見る
+    ${today.getFullYear()}<span style="font-size:0.8em;">年</span>${today.getMonth() + 1}<span style="font-size:0.8em;">月</span>${today.getDate()}<span style="font-size:0.8em;">日の</span>夜空
   </button>
 
 </div>
@@ -797,7 +797,7 @@
                   font-size:0.8rem;
                   margin-bottom:2px;
                 ">
-                  この夜の星空期待値
+                  星空期待値
                 </div>
 
                 <div style="
