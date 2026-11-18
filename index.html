@@ -117,14 +117,10 @@
         </div>
 
         <div class="star-guide-footer">
-  <button
-    type="button"
-    id="showPlanetariumFromGuideBtn"
-    class="datetime-now"
-  >
-    今<span style="font-size:0.8em;">の</span>空<span style="font-size:0.8em;">を</span>見る
-  </button>
-</div>
+          <button type="button" id="showPlanetariumFromGuideBtn" class="datetime-now">
+            今<span style="font-size:0.8em;">の</span>空<span style="font-size:0.8em;">を</span>見る
+          </button>
+        </div>
 
       </div>
 
@@ -267,10 +263,17 @@
   <div class="sub-panels">
 
     <div class="constellation-special-panel">
-      <div id="special-viewer" style="display:none;">
-        <img id="special-img" src="" alt="Special画像">
-        <div id="special-caption"></div>
 
+      <!-- 星座スペシャルビューア -->
+      <div id="special-viewer" style="display:none;">
+
+        <!-- 画像・キャプション領域 -->
+        <div class="special-content">
+          <img id="special-img" src="" alt="Special画像">
+          <div id="special-caption"></div>
+        </div>
+
+        <!-- 操作ボタン専用領域 -->
         <div class="special-controls-row">
           <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
           <img src="image/common/btn-3stars.png" id="special-clear" class="special-btn" alt="星座線あり">
@@ -278,21 +281,31 @@
           <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線なし">
           <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
         </div>
+
       </div>
+
     </div>
 
     <div class="moon-special-panel">
-      <!-- 月専用 Special Viewer -->
-      <div id="moon-special-viewer" style="display:none;">
-        <img id="moon-special-img" src="">
-        <div id="moon-special-caption"></div>
 
+      <!-- 月スペシャルビューア -->
+      <div id="moon-special-viewer" style="display:none;">
+
+        <!-- 画像・キャプション領域 -->
+        <div class="special-content">
+          <img id="moon-special-img" src="">
+          <div id="moon-special-caption"></div>
+        </div>
+
+        <!-- 操作ボタン専用領域 -->
         <div class="special-controls-row">
           <img src="image/common/btn-back.png" id="moon-special-prev" class="special-btn">
           <img src="image/common/btn-close.png" id="moon-special-close" class="special-btn">
           <img src="image/common/btn-next.png" id="moon-special-next" class="special-btn">
         </div>
+
       </div>
+
     </div>
 
   </div>
