@@ -681,7 +681,7 @@ const OBSERVATION_LOCATIONS = {
   // ================================
 
   "north-pole": {
-    prefecture: "海外・その他",
+    prefecture: "北極点",
     name: "北極点",
     displayName: "北極点",
     group: "海外・その他",
@@ -689,7 +689,7 @@ const OBSERVATION_LOCATIONS = {
     longitude: 0
   },
   "south-pole": {
-    prefecture: "海外・その他",
+    prefecture: "南極点",
     name: "南極点",
     displayName: "南極点",
     group: "海外・その他",
