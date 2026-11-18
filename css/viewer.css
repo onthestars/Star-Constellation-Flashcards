@@ -94,7 +94,7 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   overflow: hidden;
@@ -103,7 +103,7 @@
 /* 月ビューア画像 */
 #moon-special-img {
   max-width: 95vw;
-  max-height: 80vh;
+  max-height: calc(100vh - 150px);
   height: auto;
   object-fit: contain;
 
@@ -166,5 +166,136 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+#special-caption,
+#moon-special-caption {
+  margin: 0.5em 0 6px 0;
+  max-width: 94vw;
+  flex: 0 0 auto;
+}
+
+/* ボタン行を画面下部に固定 */
+#special-viewer .special-controls-row,
+#moon-special-viewer .special-controls-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 10;
+
+  height: 200px;
+  flex: none;
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* =================================
+   スマホ：スペシャルビューアのレイアウト
+   ================================= */
+
+@media (max-width: 767px) {
+
+  /* ビューア全体 */
+  #special-viewer,
+  #moon-special-viewer {
+    height: 100vh;
+    height: 100dvh;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    overflow: hidden;
+  }
+
+  /* 画像・キャプションのグループ */
+  #special-viewer .special-content,
+  #moon-special-viewer .special-content {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
+  /* 画像 */
+  #special-img,
+  #moon-special-img {
+    display: block;
+
+    max-width: 95vw;
+    max-height: 100%;
+
+    width: auto;
+    height: auto;
+
+    flex: 0 1 auto;
+    min-height: 0;
+
+    align-self: center;
+    object-fit: contain;
+
+    margin: 0;
+  }
+
+  /* キャプション */
+  #special-caption,
+  #moon-special-caption {
+    min-height: 24px;
+    max-width: 94vw;
+
+    flex: 0 0 auto;
+
+    margin: 0 0 8px 0;
+
+    text-align: center;
+    overflow: visible;
+  }
+
+  /* 操作ボタン専用領域 */
+  #special-viewer .special-controls-row,
+  #moon-special-viewer .special-controls-row {
+    position: relative;
+
+    left: auto;
+    right: auto;
+    bottom: auto;
+
+    z-index: 10;
+
+    width: 100%;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+
+    flex: 0 0 auto;
+    box-sizing: border-box;
+
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* PCでは従来どおり画像とキャプションを直接配置 */
+@media (min-width: 768px) {
+  .special-content {
+    display: contents;
   }
 }
