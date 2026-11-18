@@ -81,7 +81,7 @@
       <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
 
       <div id="copyright">
-        ©2026 K-A-Z/トレミーの48星座 ver.2.6 All rights reserved.
+        ©2026 K-A-Z/トレミーの48星座 ver.2.7 All rights reserved.
       </div>
 
       <div id="specialThanksBtn" class="special-thanks-btn">
@@ -185,222 +185,161 @@
 
             <h3>◆ 観測地点</h3>
 
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">大阪府</span>
-              <label><input type="radio" name="observation-location" value="osaka-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="osaka-central" checked> 中</label>
-              <label><input type="radio" name="observation-location" value="osaka-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">兵庫県</span>
-              <label><input type="radio" name="observation-location" value="hyogo-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="hyogo-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="hyogo-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">京都府</span>
-              <label><input type="radio" name="observation-location" value="kyoto-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="kyoto-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="kyoto-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">滋賀県</span>
-              <label><input type="radio" name="observation-location" value="shiga-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="shiga-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="shiga-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">奈良県</span>
-              <label><input type="radio" name="observation-location" value="nara-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="nara-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="nara-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">三重県</span>
-              <label><input type="radio" name="observation-location" value="mie-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="mie-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="mie-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">和歌山県</span>
-              <label><input type="radio" name="observation-location" value="wakayama-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="wakayama-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="wakayama-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">愛知県</span>
-              <label><input type="radio" name="observation-location" value="aichi-north"> 北</label>
-              <label><input type="radio" name="observation-location" value="aichi-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="aichi-south"> 南</label>
-            </div>
-
-            <div class="observation-prefecture-row">
-              <span class="prefecture-name">神奈川県</span>
-              <label><input type="radio" name="observation-location" value="kanagawa-west"> 西</label>
-              <label><input type="radio" name="observation-location" value="kanagawa-central"> 中</label>
-              <label><input type="radio" name="observation-location" value="kanagawa-east"> 東</label>
-            </div>
+            <div id="observation-location-list"></div>
 
           </section>
 
         </div>
-        </div> <!-- setting-panel を閉じる -->
+      </div> <!-- setting-panel を閉じる -->
 
-        <!-- ▼ 星座カード -->
-        <div class="constellation-card-panel">
+      <!-- ▼ 星座カード -->
+      <div class="constellation-card-panel">
 
-          <!-- 星座カードのヘッダー -->
-          <div id="card-panel-header">
+        <!-- 星座カードのヘッダー -->
+        <div id="card-panel-header">
 
-            <div id="card-panel-title-group">
-              <img src="image/common/btn-flashcard.png" alt="" id="card-panel-icon">
-              <span id="card-panel-title">トレミーの48星座カード</span>
-            </div>
-
-            <button id="cardPanelCloseBtn" type="button" aria-label="閉じる">
-              ✕
-            </button>
-
+          <div id="card-panel-title-group">
+            <img src="image/common/btn-flashcard.png" alt="" id="card-panel-icon">
+            <span id="card-panel-title">トレミーの48星座カード</span>
           </div>
 
-          <!-- 星座カード本体 -->
-          <div id="card-frame" class="card-frame">
+          <button id="cardPanelCloseBtn" type="button" aria-label="閉じる">
+            ✕
+          </button>
 
-            <div class="card-image-area">
-              <div id="card-anim-wrapper">
-                <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
-              </div>
-            </div>
-
-            <div class="button-block">
-
-              <div class="season-group">
-                <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
-                <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
-                <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
-                <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
-                <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
-              </div>
-
-              <!-- ぴーとの星図ボタン（独立した上段） -->
-              <div class="pete-chart-group">
-                <img src="image/common/btn-star-chart.png" id="peteChartBtn" class="btn-special" alt="ぴーとの星図"
-                  role="button" tabindex="0">
-              </div>
-
-              <!-- 操作ボタン（下段） -->
-              <div class="control-group">
-                <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
-                <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
-                <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
-              </div>
-
-              <div class="special-group">
-                <img src="image/common/btn-camera.png" class="btn-special" id="specialBtn" alt="Special">
-              </div>
-
-            </div>
-          </div>
         </div>
 
-      </div>
+        <!-- 星座カード本体 -->
+        <div id="card-frame" class="card-frame">
 
-    </div>
-
-    <!-- ▼ サブパネル -->
-    <div class="sub-panels">
-
-      <div class="constellation-special-panel">
-        <div id="special-viewer" style="display:none;">
-          <img id="special-img" src="" alt="Special画像">
-          <div id="special-caption"></div>
-
-          <div class="special-controls-row">
-            <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
-            <img src="image/common/btn-3stars.png" id="special-clear" class="special-btn" alt="星座線あり">
-            <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
-            <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線なし">
-            <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
+          <div class="card-image-area">
+            <div id="card-anim-wrapper">
+              <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード">
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="moon-special-panel">
-        <!-- 月専用 Special Viewer -->
-        <div id="moon-special-viewer" style="display:none;">
-          <img id="moon-special-img" src="">
-          <div id="moon-special-caption"></div>
+          <div class="button-block">
 
-          <div class="special-controls-row">
-            <img src="image/common/btn-back.png" id="moon-special-prev" class="special-btn">
-            <img src="image/common/btn-close.png" id="moon-special-close" class="special-btn">
-            <img src="image/common/btn-next.png" id="moon-special-next" class="special-btn">
+            <div class="season-group">
+              <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春">
+              <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏">
+              <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋">
+              <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬">
+              <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南">
+            </div>
+
+            <!-- ぴーとの星図ボタン（独立した上段） -->
+            <div class="pete-chart-group">
+              <img src="image/common/btn-star-chart.png" id="peteChartBtn" class="btn-special" alt="ぴーとの星図"
+                role="button" tabindex="0">
+            </div>
+
+            <!-- 操作ボタン（下段） -->
+            <div class="control-group">
+              <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ">
+              <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す">
+              <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ">
+            </div>
+
+            <div class="special-group">
+              <img src="image/common/btn-camera.png" class="btn-special" id="specialBtn" alt="Special">
+            </div>
+
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
-    <script src="js/images.js"></script>
+  </div>
 
-    <!-- ▼ アニメーションなどのUI補助 -->
-    <script src="js/animation-controls.js"></script>
+  <!-- ▼ サブパネル -->
+  <div class="sub-panels">
 
-    <!-- ▼ データ系（リンク・季節データ） -->
-    <script src="js/data-links.js"></script>
-    <script src="js/data-season.js"></script>
+    <div class="constellation-special-panel">
+      <div id="special-viewer" style="display:none;">
+        <img id="special-img" src="" alt="Special画像">
+        <div id="special-caption"></div>
 
-    <script src="js/update-season-buttons.js"></script>
+        <div class="special-controls-row">
+          <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ">
+          <img src="image/common/btn-3stars.png" id="special-clear" class="special-btn" alt="星座線あり">
+          <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる">
+          <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線なし">
+          <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ">
+        </div>
+      </div>
+    </div>
 
-    <!-- ▼ viewer / navigation（カード表示と移動の中核） -->
-    <script src="js/viewer.js"></script>
-    <script src="js/navigation.js"></script>
+    <div class="moon-special-panel">
+      <!-- 月専用 Special Viewer -->
+      <div id="moon-special-viewer" style="display:none;">
+        <img id="moon-special-img" src="">
+        <div id="moon-special-caption"></div>
 
-    <!-- ▼ 背景・月アニメーションなどの視覚効果 -->
-    <script src="js/background-image.js"></script>
+        <div class="special-controls-row">
+          <img src="image/common/btn-back.png" id="moon-special-prev" class="special-btn">
+          <img src="image/common/btn-close.png" id="moon-special-close" class="special-btn">
+          <img src="image/common/btn-next.png" id="moon-special-next" class="special-btn">
+        </div>
+      </div>
+    </div>
 
-    <!-- ▼ 星座カード専用スペシャルビューア（特別カード表示） -->
-    <script src="js/data-star-special.js"></script>
-    <script src="js/star-special-viewer.js"></script>
+  </div>
 
-    <!-- ▼月専用スペシャルビューア -->
-    <script src="js/moon-animation.js"></script>
-    <script src="js/data-moon-special.js"></script>
-    <script src="js/moon-special-viewer.js"></script>
+  <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
+  <script src="js/images.js"></script>
 
-    <!-- ▼流星イベント -->
-    <script src="js/meteor.js"></script>
+  <!-- ▼ アニメーションなどのUI補助 -->
+  <script src="js/animation-controls.js"></script>
 
-    <!-- ▼ 外部リンク（依存なし） -->
-    <script src="js/external-links.js"></script>
+  <!-- ▼ データ系（リンク・季節データ） -->
+  <script src="js/data-links.js"></script>
+  <script src="js/data-season.js"></script>
 
-    <!-- ▼ 画面向き警告 -->
-    <script src="js/orientation-warning.js"></script>
+  <script src="js/update-season-buttons.js"></script>
 
-    <!-- 月齢計算ライブラリ読み込み -->
-    <script src="js/vendor/astronomy.browser.min.js"></script>
+  <!-- ▼ viewer / navigation（カード表示と移動の中核） -->
+  <script src="js/viewer.js"></script>
+  <script src="js/navigation.js"></script>
 
-    <!-- ▼ 今夜の月 -->
-    <script src="js/data-meteor.js"></script>
-    <script src="js/meteor-events.js"></script>
-    <script src="js/star-guide.js"></script>
+  <!-- ▼ 背景・月アニメーションなどの視覚効果 -->
+  <script src="js/background-image.js"></script>
 
-    <!-- ▼ 最後に main.js（全ての初期化を行う） -->
-    <script src="js/main.js"></script>
+  <!-- ▼ 星座カード専用スペシャルビューア（特別カード表示） -->
+  <script src="js/data-star-special.js"></script>
+  <script src="js/star-special-viewer.js"></script>
 
-    <!-- index.html：Soleilオーバーレイの処理 -->
-    <script src="js/soleil-meteor-overlay.js"></script>
+  <!-- ▼月専用スペシャルビューア -->
+  <script src="js/moon-animation.js"></script>
+  <script src="js/data-moon-special.js"></script>
+  <script src="js/moon-special-viewer.js"></script>
 
-    <!-- 星図カードの処理：HTML要素より後に読み込む -->
-    <script src="js/independent-chart-overlay.js"></script>
+  <!-- ▼流星イベント -->
+  <script src="js/meteor.js"></script>
+
+  <!-- ▼ 外部リンク（依存なし） -->
+  <script src="js/external-links.js"></script>
+
+  <!-- ▼ 画面向き警告 -->
+  <script src="js/orientation-warning.js"></script>
+
+  <!-- 月齢計算ライブラリ読み込み -->
+  <script src="js/vendor/astronomy.browser.min.js"></script>
+
+  <!-- ▼ 今夜の月 -->
+  <script src="js/data-meteor.js"></script>
+  <script src="js/meteor-events.js"></script>
+  <script src="js/star-guide.js"></script>
+
+  <!-- ▼ 最後に main.js（全ての初期化を行う） -->
+  <script src="js/main.js"></script>
+
+  <!-- index.html：Soleilオーバーレイの処理 -->
+  <script src="js/soleil-meteor-overlay.js"></script>
+
+  <!-- 星図カードの処理：HTML要素より後に読み込む -->
+  <script src="js/independent-chart-overlay.js"></script>
 
 </body>
 
