@@ -214,4 +214,11 @@ const moonData = [
     location: "大阪府",
     photographer: "筏 正明さん"
   },
+      {
+    image: "image/moon/Special/Moon-pic037.jpg",
+    caption: "上弦の月",
+    date: "2026年11月18日",
+    location: "大阪府",
+    photographer: "塚本たかしさん"
+  }
 ];
