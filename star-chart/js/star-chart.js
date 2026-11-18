@@ -656,9 +656,9 @@
   const MIN_FIELD_OF_VIEW_DEG = 5;
   const MAX_FIELD_OF_VIEW_DEG = 160;
 
-  // 観測地点：大阪付近
-  const latitudeDeg = 34.81;
-  const longitudeDeg = 135.53;
+  // 観測地点：初期設定（大阪付近）
+  let latitudeDeg = 34.81;
+  let longitudeDeg = 135.53;
 
   // 初期表示方向：北、高度45°
   let centerAzDeg = 0;
@@ -6679,7 +6679,7 @@
     // 最初の1回はすぐに変更
     changeObservationDate(direction);
 
-    // 設定秒後から連続変更を開始
+    // 設定ミリ秒後から連続変更を開始
     datetimeRepeatTimer = setTimeout(() => {
 
       datetimeRepeatTimer = null;
@@ -6946,19 +6946,45 @@
     });
   }
 
-  // 親パネルからの共有リクエストを受信
+  // 親ページからのメッセージを受信
   window.addEventListener("message", function (event) {
 
     if (event.source !== window.parent) return;
     if (event.origin !== window.location.origin) return;
 
-    if (event.data?.type !== "request-chart-share") {
+    // 共有リクエスト
+    if (event.data?.type === "request-chart-share") {
+
+      // 既存の共有処理を実行
+      shareButton?.click();
+
       return;
     }
 
-    // 既存の共有処理を実行
-    shareButton?.click();
+    // 観測地点の変更を受信
+    if (event.data?.type === "set-observation-location") {
+
+      const latitude = Number(event.data.latitude);
+      const longitude = Number(event.data.longitude);
+
+      if (
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude) ||
+        latitude < -90 ||
+        latitude > 90 ||
+        longitude < -180 ||
+        longitude > 180
+      ) {
+        return;
+      }
+
+      latitudeDeg = latitude;
+      longitudeDeg = longitude;
+
+      drawChart();
+    }
 
   });
+
 
 })();
