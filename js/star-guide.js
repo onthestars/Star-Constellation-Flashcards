@@ -760,7 +760,7 @@
     id="showSelectedDateBtn"
     class="datetime-now selected-date-button"
   >
-    ${today.getFullYear()}<span style="font-size:0.8em;">年</span>${today.getMonth() + 1}<span style="font-size:0.8em;">月</span>${today.getDate()}<span style="font-size:0.8em;">日の</span>夜空
+    ${today.getFullYear()}<span style="font-size:0.8em;">年</span>${today.getMonth() + 1}<span style="font-size:0.8em;">月</span>${today.getDate()}<span style="font-size:0.8em;">日の</span>夜空<span style="font-size:0.8em;">を</span>見る
   </button>
 
 </div>
