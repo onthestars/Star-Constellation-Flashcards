@@ -216,7 +216,7 @@ const moonData = [
   },
       {
     image: "image/moon/Special/Moon-pic037.jpg",
-    caption: "上弦の月",
+    caption: "月齢8.8",
     date: "2026年11月18日",
     location: "大阪府",
     photographer: "塚本たかしさん"
