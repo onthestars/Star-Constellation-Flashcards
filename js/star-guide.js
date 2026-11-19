@@ -755,8 +755,9 @@
   margin:1px 0 1px 0;
 "></div>
 
-${meteorMessage
-        ? `
+${
+  meteorMessage
+    ? `
           <!-- 活動中の流星群 表示領域 -->
 <div id="meteorMessagePanel"
   style="
@@ -785,8 +786,8 @@ ${meteorMessage
   margin:2px 0 4px 0;
 "></div>
     `
-        : ""
-      }
+    : ""
+}
 
 <div class="sun-moon-times">
   <div class="sun-time">
@@ -861,7 +862,8 @@ ${meteorMessage
   ">
     月齢${age.toFixed(1)}
     <br>
-    ${phaseName === "新月"
+    ${
+      phaseName === "新月"
         ? "新　月"
         : phaseName === "満月"
           ? "満　月"
@@ -870,7 +872,7 @@ ${meteorMessage
             : phaseName === "欠けていく月"
               ? "欠ける月"
               : phaseName
-      }
+    }
   </div>
 
   <button
@@ -929,7 +931,7 @@ ${meteorMessage
     button.classList.add("is-date-flash");
   }
 
-    // =================================
+  // =================================
   // 月相の日付ボタン・長押し連続変更
   // =================================
 
@@ -973,10 +975,7 @@ ${meteorMessage
 
   // 長押し開始
   function startMoonDateRepeat(days) {
-    if (
-      moonDateRepeatTimer !== null ||
-      moonDateRepeatInterval !== null
-    ) {
+    if (moonDateRepeatTimer !== null || moonDateRepeatInterval !== null) {
       return;
     }
 
@@ -995,7 +994,6 @@ ${meteorMessage
           stopMoonDateRepeat();
         }
       }, 150);
-
     }, 300);
   }
 
@@ -1010,7 +1008,6 @@ ${meteorMessage
 
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
-
     // ▼ 今日に戻るボタン
     const todayButton = content.querySelector("#moon-date-today");
 
@@ -1050,6 +1047,11 @@ ${meteorMessage
         button.style.opacity = "0.3";
         button.style.cursor = "default";
       }
+
+      // 画像の長押しメニューを抑止
+      button.addEventListener("contextmenu", function (event) {
+        event.preventDefault();
+      });
 
       // ▼ 長押し・連続変更
       button.addEventListener("pointerdown", function (event) {
