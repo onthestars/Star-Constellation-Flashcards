@@ -317,3 +317,12 @@
     filter: brightness(1);
   }
 }
+
+/* 月相の日付変更ボタン：画像の長押しメニューを抑止 */
+#star-guide-panel .moon-date-button img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
