@@ -1128,7 +1128,7 @@ ${
     // 月の満ち欠けパネル再表示ボタンの初期化
     if (showButton && panel && !showButton.dataset.initialized) {
       showButton.addEventListener("click", function () {
-        panel.style.display = "block";
+        panel.style.display = "flex";
         window.bringPanelToFront(panel);
         updateShowButtonState();
       });
