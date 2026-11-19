@@ -929,6 +929,85 @@ ${meteorMessage
     button.classList.add("is-date-flash");
   }
 
+    // =================================
+  // 月相の日付ボタン・長押し連続変更
+  // =================================
+
+  let moonDateRepeatTimer = null;
+  let moonDateRepeatInterval = null;
+
+  // 連続変更を停止
+  function stopMoonDateRepeat() {
+    if (moonDateRepeatTimer !== null) {
+      clearTimeout(moonDateRepeatTimer);
+      moonDateRepeatTimer = null;
+    }
+
+    if (moonDateRepeatInterval !== null) {
+      clearInterval(moonDateRepeatInterval);
+      moonDateRepeatInterval = null;
+    }
+  }
+
+  // 日付を変更
+  function changeMoonDate(days) {
+    const targetDate = new Date(selectedDate);
+
+    targetDate.setDate(targetDate.getDate() + days);
+
+    const targetKey = getDateKey(targetDate);
+
+    // データ期間外なら変更しない
+    if (targetKey < MOON_DATA_START || targetKey > MOON_DATA_END) {
+      return false;
+    }
+
+    selectedDate.setDate(selectedDate.getDate() + days);
+
+    renderMoonObservation();
+
+    flashSelectedDateButton();
+
+    return true;
+  }
+
+  // 長押し開始
+  function startMoonDateRepeat(days) {
+    if (
+      moonDateRepeatTimer !== null ||
+      moonDateRepeatInterval !== null
+    ) {
+      return;
+    }
+
+    // 最初の1回はすぐに変更
+    if (!changeMoonDate(days)) {
+      return;
+    }
+
+    // 300ミリ秒後から連続変更
+    moonDateRepeatTimer = setTimeout(() => {
+      moonDateRepeatTimer = null;
+
+      moonDateRepeatInterval = setInterval(() => {
+        // データ期間の端に達したら停止
+        if (!changeMoonDate(days)) {
+          stopMoonDateRepeat();
+        }
+      }, 150);
+
+    }, 300);
+  }
+
+  // 指やマウスを離したら停止
+  window.addEventListener("pointerup", stopMoonDateRepeat);
+
+  // 操作キャンセル時も停止
+  window.addEventListener("pointercancel", stopMoonDateRepeat);
+
+  // ウィンドウからフォーカスが外れたら停止
+  window.addEventListener("blur", stopMoonDateRepeat);
+
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
 
@@ -972,16 +1051,15 @@ ${meteorMessage
         button.style.cursor = "default";
       }
 
-      button.addEventListener("click", function () {
-        if (button.disabled) {
+      // ▼ 長押し・連続変更
+      button.addEventListener("pointerdown", function (event) {
+        if (event.button !== 0 || button.disabled) {
           return;
         }
 
-        selectedDate.setDate(selectedDate.getDate() + days);
+        event.preventDefault();
 
-        renderMoonObservation();
-
-        flashSelectedDateButton();
+        startMoonDateRepeat(days);
       });
     });
 
