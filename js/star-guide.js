@@ -906,6 +906,98 @@ ${
   `;
   }
 
+  // ▼ 星空ガイドイベント初期化
+  function initializeStarGuideEvents(content, today) {
+    // ▼ 日付移動ボタン
+    [
+      ["#moon-date-back-1", -1],
+      ["#moon-date-back-7", -7],
+      ["#moon-date-next-1", 1],
+      ["#moon-date-next-7", 7],
+    ].forEach(function ([selector, days]) {
+      const button = content.querySelector(selector);
+
+      if (!button) {
+        return;
+      }
+
+      // ▼ ボタン押下後の日付を計算
+      const targetDate = new Date(today);
+
+      targetDate.setDate(targetDate.getDate() + days);
+
+      const targetKey = getDateKey(targetDate);
+
+      // ▼ データ期間外なら無効化
+      if (targetKey < MOON_DATA_START || targetKey > MOON_DATA_END) {
+        button.disabled = true;
+        button.style.opacity = "0.3";
+        button.style.cursor = "default";
+      }
+
+      button.addEventListener("click", function () {
+        if (button.disabled) {
+          return;
+        }
+
+        selectedDate.setDate(selectedDate.getDate() + days);
+
+        renderMoonObservation();
+      });
+    });
+
+    const showSelectedDateBtn = content.querySelector("#showSelectedDateBtn");
+
+    if (showSelectedDateBtn) {
+      showSelectedDateBtn.addEventListener("click", function () {
+        // 選択中の日付を複製
+        const observationDate = new Date(selectedDate);
+
+        // 観測時刻を20:00に設定
+        observationDate.setHours(20, 0, 0, 0);
+
+        // 指定日時でプラネタリウムを開く
+        if (typeof window.openPlanetariumAtDate === "function") {
+          window.openPlanetariumAtDate(observationDate.getTime());
+        }
+      });
+    }
+
+    const meteorPeakCard = content.querySelector(".meteor-peak-card");
+
+    if (meteorPeakCard) {
+      meteorPeakCard.style.cursor = "pointer";
+
+      meteorPeakCard.addEventListener("click", function (event) {
+        // 流星群名のリンクを押した場合は既存の処理に任せる
+        if (event.target.closest(".meteor-shower-link")) {
+          return;
+        }
+
+        const meteorLink = meteorPeakCard.querySelector(".meteor-shower-link");
+
+        if (!meteorLink) {
+          return;
+        }
+
+        const meteorName = meteorLink.dataset.meteorName;
+
+        if (
+          meteorName &&
+          typeof window.openIndependentChartForMeteorName === "function"
+        ) {
+          window.openIndependentChartForMeteorName(meteorName);
+        }
+      });
+    }
+    // ▼ 月相画像クリックで月Special Viewer起動
+    const moonImage = content.querySelector("#starGuideMoonImage");
+
+    if (moonImage && typeof openMoonSpecialViewer === "function") {
+      moonImage.addEventListener("click", openMoonSpecialViewer);
+    }
+  }
+
   function renderMoonObservation() {
     const content = document.getElementById("star-guide-content");
 
@@ -978,36 +1070,7 @@ ${
         meteorMessage,
       });
 
-      // ▼ 極大日表示の黄色い四角をクリックしても星図を開く
-      const meteorPeakCard = content.querySelector(".meteor-peak-card");
-
-      if (meteorPeakCard) {
-        meteorPeakCard.style.cursor = "pointer";
-
-        meteorPeakCard.addEventListener("click", function (event) {
-          // 流星群名のリンクを押した場合は既存の処理に任せる
-          if (event.target.closest(".meteor-shower-link")) {
-            return;
-          }
-
-          const meteorLink = meteorPeakCard.querySelector(
-            ".meteor-shower-link",
-          );
-
-          if (!meteorLink) {
-            return;
-          }
-
-          const meteorName = meteorLink.dataset.meteorName;
-
-          if (
-            meteorName &&
-            typeof window.openIndependentChartForMeteorName === "function"
-          ) {
-            window.openIndependentChartForMeteorName(meteorName);
-          }
-        });
-      }
+      initializeStarGuideEvents(content, today);
 
       // 「今の空を見る」ボタン
       const showPlanetariumBtn = document.getElementById(
@@ -1024,69 +1087,6 @@ ${
 
         showPlanetariumBtn.dataset.initialized = "true";
       }
-
-      // 「選んだ日の20時の星空」を見るボタン
-      const showSelectedDateBtn = content.querySelector("#showSelectedDateBtn");
-
-      if (showSelectedDateBtn) {
-        showSelectedDateBtn.addEventListener("click", function () {
-          // 選択中の日付を複製
-          const observationDate = new Date(selectedDate);
-
-          // 観測時刻を20:00に設定
-          observationDate.setHours(20, 0, 0, 0);
-
-          // 指定日時でプラネタリウムを開く
-          if (typeof window.openPlanetariumAtDate === "function") {
-            window.openPlanetariumAtDate(observationDate.getTime());
-          }
-        });
-      }
-
-      // ▲ 前日へ移動
-      [
-        ["#moon-date-back-1", -1],
-        ["#moon-date-back-7", -7],
-        ["#moon-date-next-1", 1],
-        ["#moon-date-next-7", 7],
-      ].forEach(function ([selector, days]) {
-        const button = content.querySelector(selector);
-
-        if (!button) {
-          return;
-        }
-
-        // ▼ ボタン押下後の日付を計算　データ期間外は月送りボタンを押せなくする
-        const targetDate = new Date(today);
-
-        targetDate.setDate(targetDate.getDate() + days);
-
-        const targetKey = getDateKey(targetDate);
-
-        // ▼ データ期間外なら無効化
-        if (targetKey < MOON_DATA_START || targetKey > MOON_DATA_END) {
-          button.disabled = true;
-          button.style.opacity = "0.3";
-          button.style.cursor = "default";
-        }
-
-        button.addEventListener("click", function () {
-          if (button.disabled) {
-            return;
-          }
-
-          selectedDate.setDate(selectedDate.getDate() + days);
-
-          renderMoonObservation();
-        });
-
-        // ▼ 月相画像クリックで月Special Viewer起動
-        const moonImage = content.querySelector("#starGuideMoonImage");
-
-        if (moonImage && typeof openMoonSpecialViewer === "function") {
-          moonImage.addEventListener("click", openMoonSpecialViewer);
-        }
-      });
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
       content.textContent = "月の情報を取得できませんでした。";
