@@ -223,7 +223,7 @@ const moonData = [
   },
         {
     image: "image/moon/Special/Moon-pic038.jpg",
-    caption: "月齢8.8（半月の翌日）",
+    caption: "月齢9.8（半月の翌々日）",
     date: "2026年11月19日",
     location: "大阪府",
     photographer: "塚本たかしさん"
