@@ -990,11 +990,26 @@ ${
         }
       });
     }
+
     // ▼ 月相画像クリックで月Special Viewer起動
     const moonImage = content.querySelector("#starGuideMoonImage");
 
     if (moonImage && typeof openMoonSpecialViewer === "function") {
       moonImage.addEventListener("click", openMoonSpecialViewer);
+    }
+    // ▼ 今の空を見るボタン
+    const showPlanetariumBtn = document.getElementById(
+      "showPlanetariumFromGuideBtn",
+    );
+
+    if (showPlanetariumBtn && !showPlanetariumBtn.dataset.initialized) {
+      showPlanetariumBtn.addEventListener("click", function () {
+        if (typeof window.openPlanetarium === "function") {
+          window.openPlanetarium();
+        }
+      });
+
+      showPlanetariumBtn.dataset.initialized = "true";
     }
   }
 
@@ -1072,21 +1087,6 @@ ${
 
       initializeStarGuideEvents(content, today);
 
-      // 「今の空を見る」ボタン
-      const showPlanetariumBtn = document.getElementById(
-        "showPlanetariumFromGuideBtn",
-      );
-
-      if (showPlanetariumBtn && !showPlanetariumBtn.dataset.initialized) {
-        showPlanetariumBtn.addEventListener("click", function () {
-          // プラネタリウムを開く
-          if (typeof window.openPlanetarium === "function") {
-            window.openPlanetarium();
-          }
-        });
-
-        showPlanetariumBtn.dataset.initialized = "true";
-      }
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
       content.textContent = "月の情報を取得できませんでした。";
