@@ -1535,6 +1535,7 @@
       id: star.id,
       label: star.label || "",
       centerDot: centerDot,
+      altitude: Math.asin(Math.max(-1, Math.min(1, v.z))) / RAD,
     };
   }
 
@@ -3465,6 +3466,10 @@
           radius = 0.4;
         }
 
+        // 地平線より下の星を半透明にする
+        ctx.save();
+        ctx.globalAlpha = projected.altitude < 0 ? 0.1 : 1.0;
+
         // グローの設定
         const glow = style.glow || {};
         const glowEnabled = glow.enabled !== false;
@@ -3630,6 +3635,8 @@
         ctx.arc(x, y, radius, 0, Math.PI * 2);
 
         ctx.fill();
+
+        ctx.restore();
 
         // 拡大率（視野角）に応じて恒星名の表示対象を切り替える
         const shouldShowStarLabel =
@@ -3982,6 +3989,9 @@
 
       ctx.save();
 
+      // 地平線の下で太陽の光彩を半透明処理
+      ctx.globalAlpha = sunPoint.altitude < 0 ? 0.1 : 1.0;
+
       // 太陽の周囲に強い光彩を描く
       ctx.save();
 
@@ -4018,6 +4028,9 @@
 
       // 太陽本体
       ctx.save();
+
+      // 地平線の下で太陽本体を半透明処理
+      ctx.globalAlpha = sunPoint.altitude < 0 ? 0.1 : 1.0;
 
       ctx.fillStyle = "#FFF0A0";
 
@@ -4132,6 +4145,9 @@
       }
 
       ctx.save();
+
+      // 地平線の下で惑星を半透明処理
+      ctx.globalAlpha = point.altitude < 0 ? 0.1 : 1.0;
 
       // 惑星の光彩
       ctx.save();
@@ -4551,6 +4567,9 @@
       const moonY = centerY + moonPoint.y * scaleY;
 
       ctx.save();
+
+      // 地平線の下で月を半透明処理
+      ctx.globalAlpha = moonPoint.altitude < 0 ? 0.1 : 1.0;
 
       // 月の満ち欠けを取得
       const phase = getMoonPhase(observation);
