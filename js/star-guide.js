@@ -558,9 +558,9 @@
 
     const endMinute = String(endDate.getMinutes()).padStart(2, "0");
 
-    const startText = `${startHour}:${startMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
+    const startText = `${startHour}:${startMinute}`;
 
-    const endText = `${endHour}:${endMinute}<span style="font-size:0.8em; font-weight:normal;"></span>`;
+    const endText = `${endHour}:${endMinute}`;
 
     // ▼ 終了時刻が翌日か判定
     const isNextDay =
@@ -875,19 +875,15 @@ ${
     }
   </div>
 
-  <!-- 今日の日付に戻るボタン -->
-  <!-- 
   <button
   type="button"
   id="moon-date-today"
   class="moon-date-button"
-  aria-label="今日"
-  title="今日"
->
-  今日
-  <img src="image/common/btn-moon-today.png">
-</button>
--->
+  aria-label="今日へ"
+  title="今日へ"
+  >
+  今日<span style="font-size:0.8em;">へ</span>
+  </button>
 
 <button
   type="button"
