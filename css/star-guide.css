@@ -210,6 +210,12 @@
   }
 }
 
+/* 月相画像と日付送りボタンの間隔 */
+#star-guide-panel .moon-date-button {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
 /* css/star-guide.css */
 
 /* ▼ 選択日の夜空を見る */
