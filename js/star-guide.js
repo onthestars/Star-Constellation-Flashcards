@@ -755,9 +755,8 @@
   margin:1px 0 1px 0;
 "></div>
 
-${
-  meteorMessage
-    ? `
+${meteorMessage
+        ? `
           <!-- 活動中の流星群 表示領域 -->
 <div id="meteorMessagePanel"
   style="
@@ -786,8 +785,8 @@ ${
   margin:2px 0 4px 0;
 "></div>
     `
-    : ""
-}
+        : ""
+      }
 
 <div class="sun-moon-times">
   <div class="sun-time">
@@ -862,8 +861,7 @@ ${
   ">
     月齢${age.toFixed(1)}
     <br>
-    ${
-      phaseName === "新月"
+    ${phaseName === "新月"
         ? "新　月"
         : phaseName === "満月"
           ? "満　月"
@@ -872,7 +870,7 @@ ${
             : phaseName === "欠けていく月"
               ? "欠ける月"
               : phaseName
-    }
+      }
   </div>
 
   <button
@@ -917,6 +915,20 @@ ${
   `;
   }
 
+  // ▼ 上部の日付ボタンをフラッシュ
+  function flashSelectedDateButton() {
+    const button = document.querySelector("#showSelectedDateBtn");
+
+    if (!button) return;
+
+    button.classList.remove("is-date-flash");
+
+    // 連続操作でもアニメーションを最初から再生
+    void button.offsetWidth;
+
+    button.classList.add("is-date-flash");
+  }
+
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
 
@@ -928,6 +940,8 @@ ${
         selectedDate = getObservationDate();
 
         renderMoonObservation();
+
+        flashSelectedDateButton();
       });
     }
 
@@ -966,6 +980,8 @@ ${
         selectedDate.setDate(selectedDate.getDate() + days);
 
         renderMoonObservation();
+
+        flashSelectedDateButton();
       });
     });
 
