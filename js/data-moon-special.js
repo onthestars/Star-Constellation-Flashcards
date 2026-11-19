@@ -220,5 +220,33 @@ const moonData = [
     date: "2026年11月18日",
     location: "大阪府",
     photographer: "塚本たかしさん"
+  },
+        {
+    image: "image/moon/Special/Moon-pic038.jpg",
+    caption: "月齢8.8（半月の翌日）",
+    date: "2026年11月19日",
+    location: "大阪府",
+    photographer: "塚本たかしさん"
+  },
+        {
+    image: "image/moon/Special/Moon-pic039.jpg",
+    caption: "右を向いたアザラシにしか見えない",
+    date: "2026年11月19日",
+    location: "摂津市市場池公園じゃぶじゃぶ池",
+    photographer: "筏 正明さん"
+  },
+        {
+    image: "image/moon/Special/Moon-pic040.jpg",
+    caption: "何に見える？",
+    date: "2026年11月19日",
+    location: "大阪府",
+    photographer: "筏 正明さん"
+  },
+        {
+    image: "image/moon/Special/Moon-pic041.jpg",
+    caption: "天体観察会にて",
+    date: "2026年11月19日",
+    location: "摂津市市場池公園じゃぶじゃぶ池",
+    photographer: "ちひろさん"
   }
 ];
