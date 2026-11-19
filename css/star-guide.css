@@ -210,6 +210,29 @@
   }
 }
 
+/* 今日ボタン */
+#star-guide-panel #moon-date-today {
+  width: 42px;
+  height: 19px;
+
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+
+  background: #ffffff;
+  color: rgb(6, 7, 64);
+
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
 /* 月相画像と日付送りボタンの間隔 */
 #star-guide-panel .moon-date-button {
   margin-top: 8px;
