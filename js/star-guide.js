@@ -829,6 +829,7 @@ ${
   >
 </button>
 
+<!-- 月相画像（月の画像） -->
 <img
   id="starGuideMoonImage"
   src="${imagePath}"
@@ -838,7 +839,7 @@ ${
     width:40px;
     height:40px;
     object-fit:contain;
-    margin:4px auto;
+    margin:10px auto;
     cursor:pointer;
 
     filter:drop-shadow(
@@ -874,6 +875,20 @@ ${
     }
   </div>
 
+  <!-- 今日の日付に戻るボタン -->
+  <!-- 
+  <button
+  type="button"
+  id="moon-date-today"
+  class="moon-date-button"
+  aria-label="今日"
+  title="今日"
+>
+  今日
+  <img src="image/common/btn-moon-today.png">
+</button>
+-->
+
 <button
   type="button"
   id="moon-date-next-1"
@@ -908,6 +923,18 @@ ${
 
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
+
+    // ▼ 今日に戻るボタン
+    const todayButton = content.querySelector("#moon-date-today");
+
+    if (todayButton) {
+      todayButton.addEventListener("click", function () {
+        selectedDate = getObservationDate();
+
+        renderMoonObservation();
+      });
+    }
+
     // ▼ 日付移動ボタン
     [
       ["#moon-date-back-1", -1],
@@ -1086,7 +1113,6 @@ ${
       });
 
       initializeStarGuideEvents(content, today);
-
     } catch (error) {
       console.error("月の情報の取得に失敗しました:", error);
       content.textContent = "月の情報を取得できませんでした。";
