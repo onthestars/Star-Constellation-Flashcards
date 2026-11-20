@@ -568,12 +568,12 @@
   // 特別な星の並び（アステリズム）データ
   const ASTERISM_DATA_PATH = "data/asterism-lines.json";
 
-  // 初期の視野角（度）
-  let fieldOfViewDeg = 110;
+  // 初期の視野角（度）(拡大率の初期設定）
+  let fieldOfViewDeg = 100;
 
   // 拡大・縮小できる視野角の範囲（最大拡大率（最大視野角）、最小縮小率（最小視野角））
   const MIN_FIELD_OF_VIEW_DEG = 5;
-  const MAX_FIELD_OF_VIEW_DEG = 160;
+  const MAX_FIELD_OF_VIEW_DEG = 115;
 
   // 観測地点：初期設定（大阪付近）
   let latitudeDeg = 34.81;
@@ -581,7 +581,7 @@
 
   // 初期表示方向：北、高度45°
   let centerAzDeg = 0;
-  let centerAltDeg = 45;
+  let centerAltDeg = 35;
 
   const RAD = Math.PI / 180;
 
