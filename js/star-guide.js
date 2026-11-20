@@ -185,6 +185,29 @@
     renderMoonObservation();
   };
 
+  // ▼ 指定した天体の地平線からの高度を取得
+  function getBodyAltitude(body, date) {
+    const time = Astronomy.MakeTime(date);
+
+    const equ = Astronomy.Equator(
+      body,
+      time,
+      MOON_OBSERVER,
+      true,
+      true,
+    );
+
+    const horizontal = Astronomy.Horizon(
+      time,
+      MOON_OBSERVER,
+      equ.ra,
+      equ.dec,
+      "normal",
+    );
+
+    return horizontal.altitude;
+  }
+
   // direction: 1 = 月の出、-1 = 月の入り
   // 観察対象日の正午から翌日の正午直前までを検索対象にする。
   function getMoonRiseSet(date, direction) {
@@ -360,8 +383,50 @@
 
     const sunsetText = formatSunEvent(getSunRiseSet(today, -1));
 
+    // 日の出・日の入りが両方ない場合
+    if (!sunriseText && !sunsetText) {
+      const noon = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        12, 0, 0, 0,
+      );
+
+      const altitude = getBodyAltitude(
+        Astronomy.Body.Sun,
+        noon,
+      );
+
+      const sunIcon = `
+        <img
+          src="image/common/ico-sun.png"
+          alt="太陽"
+          style="width:16px;height:16px;vertical-align:-3px;margin-right:3px;"
+        >
+      `;
+
+      if (altitude > 0) {
+        return sunIcon + "白夜（太陽は一日中、地平線の上）";
+      }
+
+      if (altitude < 0) {
+        return sunIcon + "極夜（太陽は一日中、地平線の下）";
+      }
+
+      return sunIcon + "日の出・日の入り時刻を取得できません";
+    }
+
+    // 片方だけ取得できた場合
     if (!sunriseText || !sunsetText) {
-      return "";
+      const sunriseLabel = sunriseText
+        ? `日の出 ${sunriseText}`
+        : "日の出なし";
+
+      const sunsetLabel = sunsetText
+        ? `日の入り ${sunsetText}`
+        : "日の入りなし";
+
+      return `☀ ${sunriseLabel}　${sunsetLabel}`;
     }
 
     return `<img
@@ -395,16 +460,20 @@
   >${sunsetText}`;
   }
 
-  // ▼ 日の出・日の入り取得
+    // ▼ 日の出・日の入り取得
   function getSunRiseSet(date, direction) {
     const startOfDay = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
-      0,
-      0,
-      0,
-      0,
+      0, 0, 0, 0,
+    );
+
+    const endOfDay = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1,
+      0, 0, 0, 0,
     );
 
     const event = Astronomy.SearchRiseSet(
@@ -419,8 +488,18 @@
       return null;
     }
 
+    // 当日以外の時刻は表示しない
+    if (
+      event.date.getTime() < startOfDay.getTime() ||
+      event.date.getTime() >= endOfDay.getTime()
+    ) {
+      return null;
+    }
+
     return {
-      date: new Date(Math.round(event.date.getTime() / 60000) * 60000),
+      date: new Date(
+        Math.round(event.date.getTime() / 60000) * 60000
+      ),
     };
   }
 
@@ -435,6 +514,7 @@
     return `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
   }
 
+  
   // ▼ おすすめ時間帯を取得
   function getObservationWindow(date) {
     const phaseAngle = Astronomy.MoonPhase(
@@ -446,58 +526,105 @@
 
     const twilight = getAstronomicalTwilight(date);
 
-    // ▼ 新月～満月（満ちていく月）
-    if (
-      phaseAngle < 180 &&
-      moonset &&
-      twilight &&
-      twilight.dusk &&
-      twilight.dawn
-    ) {
-      const startTime =
-        moonset.date.getTime() > twilight.dusk.getTime()
-          ? moonset.date
-          : twilight.dusk;
-
-      const endTime = twilight.dawn;
-
-      if (startTime.getTime() >= endTime.getTime()) {
-        return null;
-      }
-
-      return {
-        start: startTime,
-        end: endTime,
-      };
+    // 天文薄明の開始・終了が取得できなければ判定できない
+    if (!twilight || !twilight.dusk || !twilight.dawn) {
+      return null;
     }
+
+    let startTime;
+    let endTime;
+
+    // ▼ 新月～満月（満ちていく月）
+    if (phaseAngle < 180) {
+      if (moonset) {
+        // 通常：月の入りから夜明けまで
+        startTime =
+          moonset.date.getTime() > twilight.dusk.getTime()
+            ? moonset.date
+            : twilight.dusk;
+
+        endTime = twilight.dawn;
+
+      } else if (moonrise) {
+        // 極地など：月の出しか取得できない場合
+        startTime = twilight.dusk;
+
+        endTime =
+          moonrise.date.getTime() < twilight.dawn.getTime()
+            ? moonrise.date
+            : twilight.dawn;
+
+      } else {
+        // 月の出・月の入りが両方取得できない場合
+        const middleDate = new Date(
+          (twilight.dusk.getTime() + twilight.dawn.getTime()) / 2,
+        );
+
+        const moonAltitude = getBodyAltitude(
+          Astronomy.Body.Moon,
+          middleDate,
+        );
+
+        // 夜間ずっと月が地平線の下にあると判断
+        if (moonAltitude < 0) {
+          startTime = twilight.dusk;
+          endTime = twilight.dawn;
+        } else {
+          return null;
+        }
+      }
 
     // ▼ 満月～新月（欠けていく月）
-    if (
-      phaseAngle >= 180 &&
-      moonrise &&
-      twilight &&
-      twilight.dusk &&
-      twilight.dawn
-    ) {
-      const startTime = twilight.dusk;
+    } else {
+      if (moonrise) {
+        // 通常：日暮れから月の出まで
+        startTime = twilight.dusk;
 
-      const endTime =
-        moonrise.date.getTime() < twilight.dawn.getTime()
-          ? moonrise.date
-          : twilight.dawn;
+        endTime =
+          moonrise.date.getTime() < twilight.dawn.getTime()
+            ? moonrise.date
+            : twilight.dawn;
 
-      if (endTime.getTime() <= startTime.getTime()) {
-        return null;
+      } else if (moonset) {
+        // 極地など：月の入りしか取得できない場合
+        startTime =
+          moonset.date.getTime() > twilight.dusk.getTime()
+            ? moonset.date
+            : twilight.dusk;
+
+        endTime = twilight.dawn;
+
+      } else {
+        // 月の出・月の入りが両方取得できない場合
+        const middleDate = new Date(
+          (twilight.dusk.getTime() + twilight.dawn.getTime()) / 2,
+        );
+
+        const moonAltitude = getBodyAltitude(
+          Astronomy.Body.Moon,
+          middleDate,
+        );
+
+        if (moonAltitude < 0) {
+          startTime = twilight.dusk;
+          endTime = twilight.dawn;
+        } else {
+          return null;
+        }
       }
-
-      return {
-        start: startTime,
-        end: endTime,
-      };
     }
 
-    return null;
+    // 時間帯が成立しているか確認
+    if (endTime.getTime() <= startTime.getTime()) {
+      return null;
+    }
+
+    return {
+      start: startTime,
+      end: endTime,
+    };
   }
+
 
   // ▼ 星空期待値を算出
   function getSkyExpectation(window) {
@@ -573,22 +700,28 @@
       : `${startText}～${endText}`;
   }
 
+  
   // ▼ 天文薄明時刻取得
   function getAstronomicalTwilight(date) {
-    const startTime = Astronomy.MakeTime(
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        12,
-        0,
-        0,
-        0,
-      ),
+    const startDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      12, 0, 0, 0,
     );
 
+    const endDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1,
+      12, 0, 0, 0,
+    );
+
+    const startTime = Astronomy.MakeTime(startDate);
+    const endTime = Astronomy.MakeTime(endDate);
+
     try {
-      // 太陽が -18°まで下がる
+      // 太陽が -18°まで下がる時刻
       const dusk = Astronomy.SearchAltitude(
         Astronomy.Body.Sun,
         MOON_OBSERVER,
@@ -598,7 +731,7 @@
         -18,
       );
 
-      // 翌朝、太陽が -18°まで上がる
+      // 太陽が -18°まで上がる時刻
       const dawn = Astronomy.SearchAltitude(
         Astronomy.Body.Sun,
         MOON_OBSERVER,
@@ -608,26 +741,65 @@
             date.getFullYear(),
             date.getMonth(),
             date.getDate() + 1,
-            0,
-            0,
-            0,
-            0,
+            0, 0, 0, 0,
           ),
         ),
         1,
         -18,
       );
 
+      // 観察対象日の範囲内にある時刻だけを採用
+      const duskDate =
+        dusk &&
+        dusk.date >= startDate &&
+        dusk.date < endDate
+          ? dusk.date
+          : null;
+
+      const dawnDate =
+        dawn &&
+        dawn.date >= startDate &&
+        dawn.date < endDate
+          ? dawn.date
+          : null;
+
+      // 両方の時刻が取得できない場合は極地の可能性を確認
+      if (!duskDate && !dawnDate) {
+        const middleDate = new Date(
+          (startDate.getTime() + endDate.getTime()) / 2,
+        );
+
+        const sunAltitude = getBodyAltitude(
+          Astronomy.Body.Sun,
+          middleDate,
+        );
+
+        // 一日中、太陽が -18°より下なら終日天文的な夜
+        if (sunAltitude < -18) {
+          return {
+            dusk: startDate,
+            dawn: endDate,
+          };
+        }
+
+        // 一日中、天文的な夜にならない
+        return {
+          dusk: null,
+          dawn: null,
+        };
+      }
+
       return {
-        dusk: dusk ? dusk.date : null,
-        dawn: dawn ? dawn.date : null,
+        dusk: duskDate,
+        dawn: dawnDate,
       };
+
     } catch (error) {
       console.error("天文薄明時刻取得エラー:", error);
-
       return null;
     }
   }
+
 
   // ▼ 曜日を取得
   function getWeekdayText(date) {
