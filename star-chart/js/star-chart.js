@@ -2486,6 +2486,9 @@
 
     ctx.lineWidth = 1;
 
+    // 前回の描画パスを引き継がない
+    ctx.beginPath();
+
     let horizonDrawing = false;
 
     for (let az = 0; az <= 360; az += 1) {
@@ -5805,21 +5808,21 @@
         break;
     }
 
-observationDate = date;
+    observationDate = date;
 
-updateDatetimeDisplay();
+    updateDatetimeDisplay();
 
-// 年月日時分を金色にフラッシュ
-const datetimeDisplay = document.getElementById("datetime-display");
+    // 年月日時分を金色にフラッシュ
+    const datetimeDisplay = document.getElementById("datetime-display");
 
-datetimeDisplay.classList.remove("datetime-flash");
+    datetimeDisplay.classList.remove("datetime-flash");
 
-// アニメーションを再実行
-void datetimeDisplay.offsetWidth;
+    // アニメーションを再実行
+    void datetimeDisplay.offsetWidth;
 
-datetimeDisplay.classList.add("datetime-flash");
+    datetimeDisplay.classList.add("datetime-flash");
 
-drawChart();
+    drawChart();
   }
 
   // =================================
