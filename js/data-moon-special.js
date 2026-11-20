@@ -257,7 +257,7 @@ const moonData = [
     image: "image/moon/Special/Moon-pic042.jpg",
     caption: "「月面ス」を探せ",
     date: "2026年11月19日",
-    location: "",
-    photographer: "",
+    location: "摂津市市場池公園じゃぶじゃぶ池",
+    photographer: "筏 正明さん",
   }
 ];
