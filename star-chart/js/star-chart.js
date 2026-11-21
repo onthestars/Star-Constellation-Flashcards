@@ -1376,7 +1376,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1400,11 +1400,9 @@
     const RAD = Math.PI / 180;
 
     // 計算済みの太陽と月の位置を再利用
-    const moon =
-      moonPosition || getMoonEquatorialPosition(date);
+    const moon = moonPosition || getMoonEquatorialPosition(date);
 
-    const sun =
-      sunPosition || getSunEquatorialPosition(date);
+    const sun = sunPosition || getSunEquatorialPosition(date);
 
     // 赤経・赤緯を三次元ベクトルに変換
     function toVector(position) {
@@ -1440,7 +1438,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -1962,7 +1960,6 @@
         if (starA.id === starB.id) continue;
 
         const pointA = projectStar(starA, lstDeg, basis, minDot);
-
         const pointB = projectStar(starB, lstDeg, basis, minDot);
 
         if (!pointA || !pointB) continue;
@@ -2253,6 +2250,25 @@
     // 星図の表示範囲を計算（描画中は共通）
     const minDot = Math.cos(getMaxVisibleAngleDeg() * RAD);
 
+    // ==========================================
+    // 恒星の投影座標を描画中だけ一時保存
+    // ==========================================
+
+    const projectedStarCache = new Map();
+
+    function getCachedProjectedStar(star, projectionMinDot = minDot) {
+      const cacheKey = `${star.id}|${projectionMinDot}`;
+
+      if (!projectedStarCache.has(cacheKey)) {
+        projectedStarCache.set(
+          cacheKey,
+          projectStar(star, lstDeg, basis, projectionMinDot),
+        );
+      }
+
+      return projectedStarCache.get(cacheKey);
+    }
+
     // 天頂の投影座標を計算
     const zenithVector = horizontalToVector(0, 90);
     const zenithDot = dot(zenithVector, basis.center);
@@ -2424,7 +2440,6 @@
 
     // 条件が変わったときだけ地面を再計算
     if (groundCacheKey !== currentGroundCacheKey) {
-
       const pixels = groundImageData.data;
       pixels.fill(0);
 
@@ -2869,7 +2884,7 @@
           const star = starById.get(id);
           if (!star) return;
 
-          const projected = projectStar(star, lstDeg, basis, -0.999999);
+          const projected = getCachedProjectedStar(star, -0.999999);
 
           if (!projected) return;
 
@@ -3174,9 +3189,9 @@
 
             if (!starA || !starB) continue;
 
-            const pointA = projectStar(starA, lstDeg, basis, minDot);
+            const pointA = getCachedProjectedStar(starA);
 
-            const pointB = projectStar(starB, lstDeg, basis, minDot);
+            const pointB = getCachedProjectedStar(starB);
 
             if (!pointA || !pointB) continue;
 
@@ -3278,9 +3293,9 @@
               if (!starA || !starB) continue;
               if (starA.id === starB.id) continue;
 
-              const pointA = projectStar(starA, lstDeg, basis, minDot);
+              const pointA = getCachedProjectedStar(starA);
 
-              const pointB = projectStar(starB, lstDeg, basis, minDot);
+              const pointB = getCachedProjectedStar(starB);
 
               if (!pointA || !pointB) continue;
 
@@ -3361,9 +3376,9 @@
             if (!starA || !starB) continue;
             if (starA.id === starB.id) continue;
 
-            const pointA = projectStar(starA, lstDeg, basis, minDot);
+            const pointA = getCachedProjectedStar(starA);
 
-            const pointB = projectStar(starB, lstDeg, basis, minDot);
+            const pointB = getCachedProjectedStar(starB);
 
             if (!pointA || !pointB) continue;
 
@@ -3440,7 +3455,7 @@
       const starLabels = [];
 
       for (const star of stars) {
-        const projected = projectStar(star, lstDeg, basis, minDot);
+        const projected = getCachedProjectedStar(star);
 
         if (!projected) continue;
 
@@ -3734,7 +3749,7 @@
           const star = starById.get(id);
           if (!star) continue;
 
-          const projected = projectStar(star, lstDeg, basis, minDot);
+          const projected = getCachedProjectedStar(star);
 
           if (!projected) continue;
 
@@ -3860,7 +3875,7 @@
             const star = starById.get(id);
             if (!star) continue;
 
-            const projected = projectStar(star, lstDeg, basis, minDot);
+            const projected = getCachedProjectedStar(star);
 
             if (!projected) continue;
 
@@ -4351,7 +4366,6 @@
 
         ctx.restore();
       } else if (planet.key === "Saturn") {
-
         // 土星の環の見え方を取得
         const ringAppearance = getSaturnRingAppearance(observation, position);
 
@@ -4497,7 +4511,6 @@
 
           ctx.restore();
         }
-
       } else if (planet.key === "Venus" || planet.key === "Mercury") {
         // 金星と太陽の方向を地平座標に変換
         const venusVector = equatorialToHorizontalVector(
