@@ -2371,6 +2371,25 @@
       groundImageData = groundCtx.createImageData(groundWidth, groundHeight);
     }
 
+    // 地面の描画条件を確認
+const currentGroundCacheKey = [
+  canvasWidth,
+  canvasHeight,
+  groundWidth,
+  groundHeight,
+  centerX,
+  centerY,
+  scaleX,
+  scaleY,
+  basis.center.z,
+  basis.right.z,
+  basis.up.z,
+  dayMix,
+].join("|");
+
+// 条件が変わったときだけ地面を再計算
+if (groundCacheKey !== currentGroundCacheKey) {
+
     const pixels = groundImageData.data;
     pixels.fill(0);
 
@@ -2461,6 +2480,10 @@
 
     // 低解像度Canvasに反映
     groundCtx.putImageData(groundImageData, 0, 0);
+
+      // 今回の描画条件を保存
+  groundCacheKey = currentGroundCacheKey;
+}
 
     // 星図サイズに滑らかに拡大して重ねる
     ctx.save();
@@ -4852,10 +4875,11 @@
 
   // ▲▲▲drawChart();ここまで
 
-  // 地面描画専用Canvas（低解像度）
-  let groundCanvas = null;
-  let groundCtx = null;
-  let groundImageData = null;
+// 地面描画専用Canvas（低解像度）
+let groundCanvas = null;
+let groundCtx = null;
+let groundImageData = null;
+let groundCacheKey = null;
 
   // 慣性移動
   function startInertia() {
