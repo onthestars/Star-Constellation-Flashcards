@@ -67,7 +67,6 @@
 
 /* PC向け：右上ボタン群の中央配置・サイズ変更 */
 @media (hover: hover) and (pointer: fine) {
-
   #main-panel-buttons {
     left: 50%;
     right: auto;
@@ -80,5 +79,10 @@
     height: 48px;
     transform: none;
   }
+}
 
+/* テキスト左右反転（絵文字も） */
+.flip-text {
+  display: inline-block;
+  transform: scaleX(-1);
 }
