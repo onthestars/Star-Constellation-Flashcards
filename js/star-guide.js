@@ -25,9 +25,9 @@
   function getMoonDataRangeMessage(date) {
     const key = getDateKey(date);
     if (key < MOON_DATA_START) {
-      return "2026年9月30日以前の月の出・月の入りの時刻データはありません";
+      return "1900年1月1日以前の月の出・月の入りの時刻データはありません";
     }
-    return "2036年10月1日以降の月の出・月の入りの時刻データはありません";
+    return "2100年12月31日以降の月の出・月の入りの時刻データはありません";
   }
 
   // 月相画像16枚（満月から始まる順番）
