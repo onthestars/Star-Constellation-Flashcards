@@ -568,6 +568,9 @@
   // 特別な星の並び（アステリズム）データ
   const ASTERISM_DATA_PATH = "data/asterism-lines.json";
 
+  // 天の川の輪郭データ
+  const MILKY_WAY_BOUNDARY_PATH = "data/milky-way-boundary.json";
+
   // 初期の視野角（度）(拡大率の初期設定）
   let fieldOfViewDeg = 100;
 
@@ -631,6 +634,10 @@
   let canvasWidth = 0;
   let canvasHeight = 0;
   let constellations = [];
+
+  // 天の川の輪郭データ
+  let milkyWaySegments = [];
+  let milkyWayBoundaryLoaded = false;
 
   // 深空天体データ
   let deepSkyObjects = [];
@@ -1376,7 +1383,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1438,7 +1445,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -2546,6 +2553,78 @@
     ctx.drawImage(groundCanvas, 0, 0, canvasWidth, canvasHeight);
 
     ctx.restore();
+
+    // ==========================================
+    // 天の川の輪郭
+    // ==========================================
+
+    if (milkyWayBoundaryLoaded && milkyWaySegments.length > 0) {
+      ctx.save();
+
+      ctx.strokeStyle = "rgba(190, 205, 225, 0.35)";
+      ctx.lineWidth = 1;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      for (const segment of milkyWaySegments) {
+        let drawing = false;
+
+        ctx.beginPath();
+
+        for (let i = 0; i < segment.ra.length; i++) {
+          const v = equatorialToHorizontalVector(
+            segment.ra[i],
+            segment.dec[i],
+            lstDeg,
+          );
+
+          // 地平線より下は描かない
+          if (v.z < 0) {
+            drawing = false;
+            continue;
+          }
+
+          const centerDot = dot(v, basis.center);
+
+          // 視野角の外側は描かない
+          if (centerDot < minDot) {
+            drawing = false;
+            continue;
+          }
+
+          const denominator = 1 + centerDot;
+
+          if (denominator <= 1e-12) {
+            drawing = false;
+            continue;
+          }
+
+          const x =
+            centerX +
+            (dot(v, basis.right) / denominator) * scaleX;
+
+          const y =
+            centerY -
+            (dot(v, basis.up) / denominator) * scaleY;
+
+          if (!Number.isFinite(x) || !Number.isFinite(y)) {
+            drawing = false;
+            continue;
+          }
+
+          if (!drawing) {
+            ctx.moveTo(x, y);
+            drawing = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
 
     // 地平線・目盛り線の共通色
     const gridLineColor = `rgba(
@@ -5372,6 +5451,41 @@
     }
   }
 
+  // 天の川の輪郭データを読み込む
+  async function loadMilkyWayBoundary() {
+    try {
+      const response = await fetch(MILKY_WAY_BOUNDARY_PATH);
+
+      if (!response.ok) {
+        throw new Error(`HTTPエラー: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data.segments)) {
+        throw new Error("天の川の輪郭データの形式が正しくありません。");
+      }
+
+      milkyWaySegments = data.segments.filter(
+        (segment) =>
+          Array.isArray(segment.ra) &&
+          Array.isArray(segment.dec) &&
+          segment.ra.length === segment.dec.length &&
+          segment.ra.length >= 2 &&
+          segment.ra.every(Number.isFinite) &&
+          segment.dec.every(Number.isFinite),
+      );
+
+      milkyWayBoundaryLoaded = true;
+
+      console.log("天の川の輪郭データを読み込みました:", milkyWaySegments);
+
+      drawChart();
+    } catch (error) {
+      console.error("天の川の輪郭データの読み込みに失敗しました:", error);
+    }
+  }
+
   // 親ページから流星群の放射点を受信する
   window.addEventListener("message", function (event) {
     // iframeの親ページからのメッセージだけを受け取る
@@ -5778,6 +5892,7 @@
   loadConstellationLines();
   loadAsterismLines();
   loadDeepSkyObjects();
+  loadMilkyWayBoundary();
 
   // プラネタリウムの流星アニメーションを開始
   startChartMeteorAnimation();
