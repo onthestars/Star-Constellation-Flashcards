@@ -1392,19 +1392,19 @@
   }
 
   // 月の満ち欠けを計算する
-function getMoonPhase(
-  date = getObservationDate(),
-  moonPosition = null,
-  sunPosition = null,
-) {
-  const RAD = Math.PI / 180;
+  function getMoonPhase(
+    date = getObservationDate(),
+    moonPosition = null,
+    sunPosition = null,
+  ) {
+    const RAD = Math.PI / 180;
 
-  // 計算済みの太陽と月の位置を再利用
-  const moon =
-    moonPosition || getMoonEquatorialPosition(date);
+    // 計算済みの太陽と月の位置を再利用
+    const moon =
+      moonPosition || getMoonEquatorialPosition(date);
 
-  const sun =
-    sunPosition || getSunEquatorialPosition(date);
+    const sun =
+      sunPosition || getSunEquatorialPosition(date);
 
     // 赤経・赤緯を三次元ベクトルに変換
     function toVector(position) {
@@ -2182,6 +2182,30 @@ function getMoonPhase(
 
     // 空き場所がなければ配置しない
     return null;
+  }
+
+  // 惑星位置の計算結果を一時保存
+  let planetPositionCacheTime = null;
+  const planetPositionCache = new Map();
+
+  function getCachedPlanetPosition(planetKey, observation) {
+    const currentTime = observation.getTime();
+
+    // 観測日時が変わった場合だけキャッシュを更新
+    if (planetPositionCacheTime !== currentTime) {
+      planetPositionCache.clear();
+      planetPositionCacheTime = currentTime;
+    }
+
+    // まだ計算していない惑星だけ位置を計算
+    if (!planetPositionCache.has(planetKey)) {
+      planetPositionCache.set(
+        planetKey,
+        getPlanetEquatorialPosition(planetKey, observation),
+      );
+    }
+
+    return planetPositionCache.get(planetKey);
   }
 
   // ▼▼▼drawChart();ここから
@@ -4151,7 +4175,7 @@ function getMoonPhase(
     ];
 
     for (const planet of planetDisplayList) {
-      const position = getPlanetEquatorialPosition(planet.key, observation);
+      const position = getCachedPlanetPosition(planet.key, observation);
 
       if (!position) {
         continue;
@@ -4611,11 +4635,11 @@ function getMoonPhase(
       // 地平線の下で月を半透明処理
       ctx.globalAlpha = moonPoint.altitude < 0 ? 0.1 : 1.0;
 
-// 太陽の位置はdrawChart冒頭で計算済みの値を再利用
-const sun = sunForSky;
+      // 太陽の位置はdrawChart冒頭で計算済みの値を再利用
+      const sun = sunForSky;
 
-// 月の満ち欠けを取得（計算済みの位置を再利用）
-const phase = getMoonPhase(observation, moon, sun);
+      // 月の満ち欠けを取得（計算済みの位置を再利用）
+      const phase = getMoonPhase(observation, moon, sun);
 
       // 月と太陽の方向を地平座標のベクトルに変換
       const moonVector = equatorialToHorizontalVector(
