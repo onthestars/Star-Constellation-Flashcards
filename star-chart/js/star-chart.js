@@ -3990,8 +3990,8 @@ if (groundCacheKey !== currentGroundCacheKey) {
       }
     }
 
-    // 太陽を星図に表示
-    const sun = getSunEquatorialPosition(observation);
+// 太陽を星図に表示
+const sun = sunForSky;
 
     const sunPoint = projectStar(
       {
@@ -4461,18 +4461,20 @@ if (groundCacheKey !== currentGroundCacheKey) {
 
           ctx.restore();
         }
-      } else if (planet.key === "Venus" || planet.key === "Mercury") {
-        // 太陽の位置を取得
-        const sun = getSunEquatorialPosition(observation);
+        
+} else if (planet.key === "Venus" || planet.key === "Mercury") {
+  // 金星と太陽の方向を地平座標に変換
+  const venusVector = equatorialToHorizontalVector(
+    position.ra,
+    position.dec,
+    lstDeg,
+  );
 
-        // 金星と太陽の方向を地平座標に変換
-        const venusVector = equatorialToHorizontalVector(
-          position.ra,
-          position.dec,
-          lstDeg,
-        );
-
-        const sunVector = equatorialToHorizontalVector(sun.ra, sun.dec, lstDeg);
+  const sunVector = equatorialToHorizontalVector(
+    sunForSky.ra,
+    sunForSky.dec,
+    lstDeg,
+  );
 
         // 金星から太陽へ向かう方向
         const sunDotVenus = dot(sunVector, venusVector);
