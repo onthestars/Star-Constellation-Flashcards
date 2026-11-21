@@ -1343,11 +1343,15 @@
   // ==========================================
   // 土星の環の見え方を計算
   // ==========================================
-  function getSaturnRingAppearance(date = getObservationDate()) {
+  function getSaturnRingAppearance(
+    date = getObservationDate(),
+    saturnPosition = null,
+  ) {
     const RAD = Math.PI / 180;
 
-    // 土星の地球から見た位置
-    const saturn = getPlanetEquatorialPosition("Saturn", date);
+    // 土星の地球から見た位置（計算済みの位置を再利用）
+    const saturn =
+      saturnPosition || getPlanetEquatorialPosition("Saturn", date);
 
     if (!saturn) return null;
 
@@ -1372,7 +1376,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1388,12 +1392,19 @@
   }
 
   // 月の満ち欠けを計算する
-  function getMoonPhase(date = getObservationDate()) {
-    const RAD = Math.PI / 180;
+function getMoonPhase(
+  date = getObservationDate(),
+  moonPosition = null,
+  sunPosition = null,
+) {
+  const RAD = Math.PI / 180;
 
-    // 同じ日時で太陽と月の位置を取得
-    const moon = getMoonEquatorialPosition(date);
-    const sun = getSunEquatorialPosition(date);
+  // 計算済みの太陽と月の位置を再利用
+  const moon =
+    moonPosition || getMoonEquatorialPosition(date);
+
+  const sun =
+    sunPosition || getSunEquatorialPosition(date);
 
     // 赤経・赤緯を三次元ベクトルに変換
     function toVector(position) {
@@ -1429,7 +1440,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -2372,118 +2383,118 @@
     }
 
     // 地面の描画条件を確認
-const currentGroundCacheKey = [
-  canvasWidth,
-  canvasHeight,
-  groundWidth,
-  groundHeight,
-  centerX,
-  centerY,
-  scaleX,
-  scaleY,
-  basis.center.z,
-  basis.right.z,
-  basis.up.z,
-  dayMix,
-].join("|");
+    const currentGroundCacheKey = [
+      canvasWidth,
+      canvasHeight,
+      groundWidth,
+      groundHeight,
+      centerX,
+      centerY,
+      scaleX,
+      scaleY,
+      basis.center.z,
+      basis.right.z,
+      basis.up.z,
+      dayMix,
+    ].join("|");
 
-// 条件が変わったときだけ地面を再計算
-if (groundCacheKey !== currentGroundCacheKey) {
+    // 条件が変わったときだけ地面を再計算
+    if (groundCacheKey !== currentGroundCacheKey) {
 
-    const pixels = groundImageData.data;
-    pixels.fill(0);
+      const pixels = groundImageData.data;
+      pixels.fill(0);
 
-    // 色の境界を滑らかにつなぐ
-    const smoothstep = (edge0, edge1, value) => {
-      const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
-      return t * t * (3 - 2 * t);
-    };
+      // 色の境界を滑らかにつなぐ
+      const smoothstep = (edge0, edge1, value) => {
+        const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+        return t * t * (3 - 2 * t);
+      };
 
-    // 2色を滑らかに混ぜる
-    const mixColor = (a, b, t) => {
-      return Math.round(a + (b - a) * t);
-    };
+      // 2色を滑らかに混ぜる
+      const mixColor = (a, b, t) => {
+        return Math.round(a + (b - a) * t);
+      };
 
-    // 低解像度の各画素を調べる
-    for (let y = 0; y < groundHeight; y++) {
-      const fullY = ((y + 0.5) * canvasHeight) / groundHeight;
+      // 低解像度の各画素を調べる
+      for (let y = 0; y < groundHeight; y++) {
+        const fullY = ((y + 0.5) * canvasHeight) / groundHeight;
 
-      const q = (centerY - fullY) / scaleY;
+        const q = (centerY - fullY) / scaleY;
 
-      for (let x = 0; x < groundWidth; x++) {
-        const fullX = ((x + 0.5) * canvasWidth) / groundWidth;
+        for (let x = 0; x < groundWidth; x++) {
+          const fullX = ((x + 0.5) * canvasWidth) / groundWidth;
 
-        const p = (fullX - centerX) / scaleX;
+          const p = (fullX - centerX) / scaleX;
 
-        // 逆投影して高度を計算
-        const numerator =
-          basis.center.z * (1 - p * p - q * q) +
-          2 * p * basis.right.z +
-          2 * q * basis.up.z;
+          // 逆投影して高度を計算
+          const numerator =
+            basis.center.z * (1 - p * p - q * q) +
+            2 * p * basis.right.z +
+            2 * q * basis.up.z;
 
-        const denominator = 1 + p * p + q * q;
+          const denominator = 1 + p * p + q * q;
 
-        const altitudeDeg =
-          Math.asin(Math.max(-1, Math.min(1, numerator / denominator))) / RAD;
+          const altitudeDeg =
+            Math.asin(Math.max(-1, Math.min(1, numerator / denominator))) / RAD;
 
-        // 地平線より上は透明のまま
-        if (altitudeDeg > 0) continue;
+          // 地平線より上は透明のまま
+          if (altitudeDeg > 0) continue;
 
-        // 地平線から足元に向かう距離感
-        const depth = Math.max(0, Math.min(1, -altitudeDeg / 90));
+          // 地平線から足元に向かう距離感
+          const depth = Math.max(0, Math.min(1, -altitudeDeg / 90));
 
-        // 太陽高度による明るさ
-        const day = dayMix;
+          // 太陽高度による明るさ
+          const day = dayMix;
 
-        // 4種類の地形の色
-        const deepSea = [8 + 10 * day, 30 + 65 * day, 75 + 60 * day];
+          // 4種類の地形の色
+          const deepSea = [8 + 10 * day, 30 + 65 * day, 75 + 60 * day];
 
-        const shallowSea = [10 + 15 * day, 70 + 95 * day, 95 + 105 * day];
+          const shallowSea = [10 + 15 * day, 70 + 95 * day, 95 + 105 * day];
 
-        const sand = [105 + 85 * day, 82 + 90 * day, 45 + 55 * day];
+          const sand = [105 + 85 * day, 82 + 90 * day, 45 + 55 * day];
 
-        const grass = [12 + 28 * day, 42 + 90 * day, 20 + 35 * day];
+          const grass = [12 + 28 * day, 42 + 90 * day, 20 + 35 * day];
 
-        // 海岸線に自然な凹凸を加える
-        const coastOffset =
-          (Math.sin(p * 5.5) + 0.45 * Math.sin(p * 11 + q * 3)) * 0.012;
+          // 海岸線に自然な凹凸を加える
+          const coastOffset =
+            (Math.sin(p * 5.5) + 0.45 * Math.sin(p * 11 + q * 3)) * 0.012;
 
-        // 海から浅瀬へ
-        let t = smoothstep(0.03 + coastOffset, 0.09 + coastOffset, depth);
+          // 海から浅瀬へ
+          let t = smoothstep(0.03 + coastOffset, 0.09 + coastOffset, depth);
 
-        let r = mixColor(deepSea[0], shallowSea[0], t);
-        let g = mixColor(deepSea[1], shallowSea[1], t);
-        let b = mixColor(deepSea[2], shallowSea[2], t);
+          let r = mixColor(deepSea[0], shallowSea[0], t);
+          let g = mixColor(deepSea[1], shallowSea[1], t);
+          let b = mixColor(deepSea[2], shallowSea[2], t);
 
-        // 浅瀬から砂浜へ
-        t = smoothstep(0.11 + coastOffset, 0.17 + coastOffset, depth);
+          // 浅瀬から砂浜へ
+          t = smoothstep(0.11 + coastOffset, 0.17 + coastOffset, depth);
 
-        r = mixColor(r, sand[0], t);
-        g = mixColor(g, sand[1], t);
-        b = mixColor(b, sand[2], t);
+          r = mixColor(r, sand[0], t);
+          g = mixColor(g, sand[1], t);
+          b = mixColor(b, sand[2], t);
 
-        // 砂浜から緑地へ
-        t = smoothstep(0.17 + coastOffset, 0.26 + coastOffset, depth);
+          // 砂浜から緑地へ
+          t = smoothstep(0.17 + coastOffset, 0.26 + coastOffset, depth);
 
-        r = mixColor(r, grass[0], t);
-        g = mixColor(g, grass[1], t);
-        b = mixColor(b, grass[2], t);
+          r = mixColor(r, grass[0], t);
+          g = mixColor(g, grass[1], t);
+          b = mixColor(b, grass[2], t);
 
-        const index = (y * groundWidth + x) * 4;
+          const index = (y * groundWidth + x) * 4;
 
-        pixels[index] = r;
-        pixels[index + 1] = g;
-        pixels[index + 2] = b;
-        pixels[index + 3] = 128;
+          pixels[index] = r;
+          pixels[index + 1] = g;
+          pixels[index + 2] = b;
+          pixels[index + 3] = 128;
+        }
       }
-    }
 
-    // 低解像度Canvasに反映
-    groundCtx.putImageData(groundImageData, 0, 0);
+      // 低解像度Canvasに反映
+      groundCtx.putImageData(groundImageData, 0, 0);
 
       // 今回の描画条件を保存
-  groundCacheKey = currentGroundCacheKey;
-}
+      groundCacheKey = currentGroundCacheKey;
+    }
 
     // 星図サイズに滑らかに拡大して重ねる
     ctx.save();
@@ -3990,8 +4001,8 @@ if (groundCacheKey !== currentGroundCacheKey) {
       }
     }
 
-// 太陽を星図に表示
-const sun = sunForSky;
+    // 太陽を星図に表示
+    const sun = sunForSky;
 
     const sunPoint = projectStar(
       {
@@ -4316,8 +4327,9 @@ const sun = sunForSky;
 
         ctx.restore();
       } else if (planet.key === "Saturn") {
+
         // 土星の環の見え方を取得
-        const ringAppearance = getSaturnRingAppearance(observation);
+        const ringAppearance = getSaturnRingAppearance(observation, position);
 
         if (ringAppearance) {
           const RAD = Math.PI / 180;
@@ -4461,20 +4473,20 @@ const sun = sunForSky;
 
           ctx.restore();
         }
-        
-} else if (planet.key === "Venus" || planet.key === "Mercury") {
-  // 金星と太陽の方向を地平座標に変換
-  const venusVector = equatorialToHorizontalVector(
-    position.ra,
-    position.dec,
-    lstDeg,
-  );
 
-  const sunVector = equatorialToHorizontalVector(
-    sunForSky.ra,
-    sunForSky.dec,
-    lstDeg,
-  );
+      } else if (planet.key === "Venus" || planet.key === "Mercury") {
+        // 金星と太陽の方向を地平座標に変換
+        const venusVector = equatorialToHorizontalVector(
+          position.ra,
+          position.dec,
+          lstDeg,
+        );
+
+        const sunVector = equatorialToHorizontalVector(
+          sunForSky.ra,
+          sunForSky.dec,
+          lstDeg,
+        );
 
         // 金星から太陽へ向かう方向
         const sunDotVenus = dot(sunVector, venusVector);
@@ -4574,7 +4586,7 @@ const sun = sunForSky;
       ctx.restore();
     }
 
-    // 月を星図に表示
+    // 月を星図に表示（月を描画）
     const moon = getMoonEquatorialPosition(observation);
 
     const moonPoint = projectStar(
@@ -4599,24 +4611,11 @@ const sun = sunForSky;
       // 地平線の下で月を半透明処理
       ctx.globalAlpha = moonPoint.altitude < 0 ? 0.1 : 1.0;
 
-      // 月の満ち欠けを取得
-      const phase = getMoonPhase(observation);
+// 太陽の位置はdrawChart冒頭で計算済みの値を再利用
+const sun = sunForSky;
 
-      // 太陽の位置を星図の投影座標に変換
-      const sun = getSunEquatorialPosition(observation);
-
-      const sunPoint = projectStar(
-        {
-          ra: sun.ra,
-          dec: sun.dec,
-          mag: 0,
-          id: "sun",
-          label: "",
-        },
-        lstDeg,
-        basis,
-        -1,
-      );
+// 月の満ち欠けを取得（計算済みの位置を再利用）
+const phase = getMoonPhase(observation, moon, sun);
 
       // 月と太陽の方向を地平座標のベクトルに変換
       const moonVector = equatorialToHorizontalVector(
@@ -4877,11 +4876,11 @@ const sun = sunForSky;
 
   // ▲▲▲drawChart();ここまで
 
-// 地面描画専用Canvas（低解像度）
-let groundCanvas = null;
-let groundCtx = null;
-let groundImageData = null;
-let groundCacheKey = null;
+  // 地面描画専用Canvas（低解像度）
+  let groundCanvas = null;
+  let groundCtx = null;
+  let groundImageData = null;
+  let groundCacheKey = null;
 
   // 慣性移動
   function startInertia() {
