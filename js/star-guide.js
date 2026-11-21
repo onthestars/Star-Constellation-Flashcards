@@ -7,8 +7,8 @@
 
   // 月の出・月の入りの表示対象期間
   // この期間外では時刻を表示せず、月齢・月相画像などは通常どおり表示する。
-  const MOON_DATA_START = "2026-10-01";
-  const MOON_DATA_END = "2036-09-30";
+  const MOON_DATA_START = "1900-01-01";
+  const MOON_DATA_END = "2100-12-31";
 
   function getDateKey(date) {
     const year = date.getFullYear();
@@ -460,7 +460,7 @@
   >${sunsetText}`;
   }
 
-    // ▼ 日の出・日の入り取得
+  // ▼ 日の出・日の入り取得
   function getSunRiseSet(date, direction) {
     const startOfDay = new Date(
       date.getFullYear(),
@@ -514,7 +514,7 @@
     return `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
   }
 
-  
+
   // ▼ おすすめ時間帯を取得
   function getObservationWindow(date) {
     const phaseAngle = Astronomy.MoonPhase(
@@ -574,7 +574,7 @@
         }
       }
 
-    // ▼ 満月～新月（欠けていく月）
+      // ▼ 満月～新月（欠けていく月）
     } else {
       if (moonrise) {
         // 通常：日暮れから月の出まで
@@ -700,7 +700,7 @@
       : `${startText}～${endText}`;
   }
 
-  
+
   // ▼ 天文薄明時刻取得
   function getAstronomicalTwilight(date) {
     const startDate = new Date(
@@ -751,15 +751,15 @@
       // 観察対象日の範囲内にある時刻だけを採用
       const duskDate =
         dusk &&
-        dusk.date >= startDate &&
-        dusk.date < endDate
+          dusk.date >= startDate &&
+          dusk.date < endDate
           ? dusk.date
           : null;
 
       const dawnDate =
         dawn &&
-        dawn.date >= startDate &&
-        dawn.date < endDate
+          dawn.date >= startDate &&
+          dawn.date < endDate
           ? dawn.date
           : null;
 
@@ -927,9 +927,8 @@
   margin:1px 0 1px 0;
 "></div>
 
-${
-  meteorMessage
-    ? `
+${meteorMessage
+        ? `
           <!-- 活動中の流星群 表示領域 -->
 <div id="meteorMessagePanel"
   style="
@@ -958,8 +957,8 @@ ${
   margin:2px 0 4px 0;
 "></div>
     `
-    : ""
-}
+        : ""
+      }
 
 <div class="sun-moon-times">
   <div class="sun-time">
@@ -1034,8 +1033,7 @@ ${
   ">
     月齢${age.toFixed(1)}
     <br>
-    ${
-      phaseName === "新月"
+    ${phaseName === "新月"
         ? "新　月"
         : phaseName === "満月"
           ? "満　月"
@@ -1044,7 +1042,7 @@ ${
             : phaseName === "欠けていく月"
               ? "欠ける月"
               : phaseName
-    }
+      }
   </div>
 
   <button
