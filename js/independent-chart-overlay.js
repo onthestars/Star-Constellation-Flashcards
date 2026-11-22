@@ -102,6 +102,102 @@
     title.textContent = "プラネタリウム";
   }
 
+
+  // プラネタリウムの地点名だけを更新
+  function updatePlanetariumLocationLabel(location) {
+    const label = document.getElementById("independent-chart-location");
+
+    if (!label) return;
+
+    label.textContent = location?.prefecture
+      ? `（${location.prefecture}）`
+      : "（共有地点）";
+  }
+
+
+  // 共有URLの座標から登録済みの観測地点を特定
+  function updatePlanetariumLocationFromSharedParams(params) {
+    const latValue = params.get("lat");
+    const lonValue = params.get("lon");
+
+    if (latValue === null || lonValue === null) {
+      updatePlanetariumLocationLabel(null);
+      return;
+    }
+
+    const latitude = Number(latValue);
+    const longitude = Number(lonValue);
+
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      updatePlanetariumLocationLabel(null);
+      return;
+    }
+
+    // 2地点間の距離をキロメートルで計算
+    function getDistanceKm(lat1, lon1, lat2, lon2) {
+      const toRad = (degree) => degree * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) ** 2;
+
+      return 6371 * 2 * Math.atan2(
+        Math.sqrt(a),
+        Math.sqrt(1 - a),
+      );
+    }
+
+    let nearestLocation = null;
+    let nearestDistance = Infinity;
+
+    for (const location of Object.values(OBSERVATION_LOCATIONS)) {
+      if (
+        !Number.isFinite(location.latitude) ||
+        !Number.isFinite(location.longitude)
+      ) {
+        continue;
+      }
+
+      const distance = getDistanceKm(
+        latitude,
+        longitude,
+        location.latitude,
+        location.longitude,
+      );
+
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestLocation = location;
+      }
+    }
+
+    // 登録地点から20km以内なら、その地点名を表示
+    updatePlanetariumLocationLabel(
+      nearestDistance <= 20 ? nearestLocation : null,
+    );
+  }
+
+  // 通常の観測地点名をプラネタリウムに反映
+  function updatePlanetariumLocationFromCurrentSetting() {
+    const location =
+      typeof window.getEffectiveObservationLocation === "function"
+        ? window.getEffectiveObservationLocation()
+        : window.getObservationLocation?.();
+
+    updatePlanetariumLocationLabel(location);
+  }
+
   // 選択した流星群の放射点を星図へ送信
   function sendRadiantCoordinates() {
     if (!isOpen || !selectedMeteor || !frame.contentWindow) {
@@ -192,12 +288,20 @@
     }
   }
 
-  // 通常のプラネタリウムを開く
   function openPlanetarium(sharedSearch = "") {
+    console.log("openPlanetarium 呼び出し:", sharedSearch);
+    console.trace("呼び出し元");
+
     const sharedParams = new URLSearchParams(sharedSearch);
 
     hasSharedChartLocation =
       sharedParams.has("lat") && sharedParams.has("lon");
+
+    if (hasSharedChartLocation) {
+      updatePlanetariumLocationFromSharedParams(sharedParams);
+    } else {
+      updatePlanetariumLocationFromCurrentSetting();
+    }
 
     selectedMeteor = null;
 
@@ -299,11 +403,7 @@
 
     // 共有URLに観測地点が含まれている場合は、
     // 星図側で復元した観測地点を優先する
-    const params = new URLSearchParams(window.location.search);
-    const hasSharedLocation =
-      params.has("lat") && params.has("lon");
-
-    if (!hasSharedLocation) {
+    if (!hasSharedChartLocation) {
       sendObservationLocation();
     }
 
@@ -333,6 +433,9 @@
     if (typeof window.restoreStarGuideSharedState === "function") {
       window.restoreStarGuideSharedState();
     }
+
+    updatePlanetariumLocationFromCurrentSetting();
+
   }
 
   closeButton.addEventListener("click", closeIndependentChart);
