@@ -4,17 +4,11 @@
 function isMeteorActive(mmdd, meteor) {
   // ▼ 通常期間
   if (meteor.start <= meteor.end) {
-    return (
-      mmdd >= meteor.start &&
-      mmdd <= meteor.end
-    );
+    return mmdd >= meteor.start && mmdd <= meteor.end;
   }
 
   // ▼ 年またぎ期間
-  return (
-    mmdd >= meteor.start ||
-    mmdd <= meteor.end
-  );
+  return mmdd >= meteor.start || mmdd <= meteor.end;
 }
 
 // ▼ Soleil表示用の流星群リンク
@@ -50,7 +44,6 @@ function getMeteorActivityLevel(date = new Date()) {
 
 // ▼ 流星群メッセージ取得
 function getMeteorMessage(date) {
-
   const mmdd =
     String(date.getMonth() + 1).padStart(2, "0") +
     "-" +
@@ -60,13 +53,11 @@ function getMeteorMessage(date) {
   const activeMessages = [];
 
   for (const meteor of meteorEvents) {
-
     if (!isMeteorActive(mmdd, meteor)) {
       continue;
     }
 
     if (meteor.peak === mmdd) {
-
       messages.push(
         `<div class="meteor-peak-card" style="
     display:inline-block;
@@ -88,22 +79,18 @@ function getMeteorMessage(date) {
         style="color:rgb(6,7,64);font-weight:bold;text-decoration:underline;"
       >${meteor.name}</a>流星群
     </div>
-  </div>`
+  </div>`,
       );
 
       continue;
     }
 
     if (meteor.peak) {
+      const [peakMonth, peakDay] = meteor.peak.split("-");
 
-      const [peakMonth, peakDay] =
-        meteor.peak.split("-");
+      const [startMonth, startDay] = meteor.start.split("-");
 
-      const [startMonth, startDay] =
-        meteor.start.split("-");
-
-      const [endMonth, endDay] =
-        meteor.end.split("-");
+      const [endMonth, endDay] = meteor.end.split("-");
 
       activeMessages.push(
         `<div style="line-height:1.2; margin-bottom:0.3em;padding-top:0.5em;">
@@ -116,24 +103,21 @@ function getMeteorMessage(date) {
     <div style="font-size:0.85em;">
       ${Number(peakMonth)}/${Number(peakDay)}頃極大
     </div>
-  </div>`
+  </div>`,
       );
 
       continue;
     }
 
-    messages.push(
-      `☄ ${createMeteorShowerLink(meteor)}活動中`
-    );
+    messages.push(`☄ ${createMeteorShowerLink(meteor)}活動中`);
   }
 
   // ▼ 活動中流星群一覧
   if (activeMessages.length > 0) {
-
     messages.push(
       `<div style="font-weight:normal;line-height:1.8em;">
 ${activeMessages.join("")}
-    </div>`
+    </div>`,
     );
   }
 
@@ -175,6 +159,17 @@ window.openIndependentChartForMeteorName = function (meteorName) {
     return;
   }
 
-  const timestamp = Date.now();getStarGuideObservationTimestamp();
+  // 星空ガイドの選択日と現在時刻を組み合わせる
+  const now = new Date();
+
+  const timestamp = new Date(
+    window.getStarGuideObservationDate() +
+      "T" +
+      String(now.getHours()).padStart(2, "0") +
+      ":" +
+      String(now.getMinutes()).padStart(2, "0") +
+      ":00",
+  ).getTime();
+
   window.openIndependentChart(meteor, timestamp);
 };
