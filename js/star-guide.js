@@ -53,12 +53,71 @@
   // 現在表示している観察対象日
   let selectedDate = null;
 
-  // 星空ガイドで選択中の観測日時を取得する
-  window.getStarGuideObservationTimestamp = function () {
-    // 初回表示で日付が未設定の場合
+    // =================================
+  // 選択日の一時保存（同じタブ内）
+  // =================================
+
+  const STAR_GUIDE_DATE_SESSION_KEY = "starGuideSelectedDate";
+
+  // 保存された選択日を復元
+  function restoreSelectedDate() {
+    if (selectedDate !== null) return;
+
+    try {
+      const savedDate = sessionStorage.getItem(
+        STAR_GUIDE_DATE_SESSION_KEY
+      );
+
+      if (savedDate && /^\d{4}-\d{2}-\d{2}$/.test(savedDate)) {
+        const [year, month, day] = savedDate.split("-").map(Number);
+
+        const targetDate = new Date(
+          year,
+          month - 1,
+          day,
+          12,
+          0,
+          0,
+          0
+        );
+
+        if (
+          targetDate.getFullYear() === year &&
+          targetDate.getMonth() === month - 1 &&
+          targetDate.getDate() === day &&
+          !isMoonDataOutOfRange(targetDate)
+        ) {
+          selectedDate = targetDate;
+        }
+      }
+    } catch (error) {
+      console.warn("選択日の復元ができませんでした。", error);
+    }
+
+    // 保存日がなければ今夜の日付を使用
     if (selectedDate === null) {
       selectedDate = getObservationDate();
     }
+  }
+
+  // 現在の選択日を保存
+  function saveSelectedDate() {
+    if (selectedDate === null) return;
+
+    try {
+      sessionStorage.setItem(
+        STAR_GUIDE_DATE_SESSION_KEY,
+        getDateKey(selectedDate)
+      );
+    } catch (error) {
+      console.warn("選択日の保存ができませんでした。", error);
+    }
+  }
+
+  // 星空ガイドで選択中の観測日時を取得する
+  window.getStarGuideObservationTimestamp = function () {
+    // 初回表示で日付が未設定の場合
+    restoreSelectedDate();
 
     // 選択中の日付を複製
     const observationDate = new Date(selectedDate);
@@ -189,13 +248,7 @@
   function getBodyAltitude(body, date) {
     const time = Astronomy.MakeTime(date);
 
-    const equ = Astronomy.Equator(
-      body,
-      time,
-      MOON_OBSERVER,
-      true,
-      true,
-    );
+    const equ = Astronomy.Equator(body, time, MOON_OBSERVER, true, true);
 
     const horizontal = Astronomy.Horizon(
       time,
@@ -389,13 +442,13 @@
         today.getFullYear(),
         today.getMonth(),
         today.getDate(),
-        12, 0, 0, 0,
+        12,
+        0,
+        0,
+        0,
       );
 
-      const altitude = getBodyAltitude(
-        Astronomy.Body.Sun,
-        noon,
-      );
+      const altitude = getBodyAltitude(Astronomy.Body.Sun, noon);
 
       const sunIcon = `
         <img
@@ -418,9 +471,7 @@
 
     // 片方だけ取得できた場合
     if (!sunriseText || !sunsetText) {
-      const sunriseLabel = sunriseText
-        ? `日の出 ${sunriseText}`
-        : "日の出なし";
+      const sunriseLabel = sunriseText ? `日の出 ${sunriseText}` : "日の出なし";
 
       const sunsetLabel = sunsetText
         ? `日の入り ${sunsetText}`
@@ -466,14 +517,20 @@
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
-      0, 0, 0, 0,
+      0,
+      0,
+      0,
+      0,
     );
 
     const endOfDay = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate() + 1,
-      0, 0, 0, 0,
+      0,
+      0,
+      0,
+      0,
     );
 
     const event = Astronomy.SearchRiseSet(
@@ -497,9 +554,7 @@
     }
 
     return {
-      date: new Date(
-        Math.round(event.date.getTime() / 60000) * 60000
-      ),
+      date: new Date(Math.round(event.date.getTime() / 60000) * 60000),
     };
   }
 
@@ -513,7 +568,6 @@
 
     return `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
   }
-
 
   // ▼ おすすめ時間帯を取得
   function getObservationWindow(date) {
@@ -544,7 +598,6 @@
             : twilight.dusk;
 
         endTime = twilight.dawn;
-
       } else if (moonrise) {
         // 極地など：月の出しか取得できない場合
         startTime = twilight.dusk;
@@ -553,17 +606,13 @@
           moonrise.date.getTime() < twilight.dawn.getTime()
             ? moonrise.date
             : twilight.dawn;
-
       } else {
         // 月の出・月の入りが両方取得できない場合
         const middleDate = new Date(
           (twilight.dusk.getTime() + twilight.dawn.getTime()) / 2,
         );
 
-        const moonAltitude = getBodyAltitude(
-          Astronomy.Body.Moon,
-          middleDate,
-        );
+        const moonAltitude = getBodyAltitude(Astronomy.Body.Moon, middleDate);
 
         // 夜間ずっと月が地平線の下にあると判断
         if (moonAltitude < 0) {
@@ -584,7 +633,6 @@
           moonrise.date.getTime() < twilight.dawn.getTime()
             ? moonrise.date
             : twilight.dawn;
-
       } else if (moonset) {
         // 極地など：月の入りしか取得できない場合
         startTime =
@@ -593,17 +641,13 @@
             : twilight.dusk;
 
         endTime = twilight.dawn;
-
       } else {
         // 月の出・月の入りが両方取得できない場合
         const middleDate = new Date(
           (twilight.dusk.getTime() + twilight.dawn.getTime()) / 2,
         );
 
-        const moonAltitude = getBodyAltitude(
-          Astronomy.Body.Moon,
-          middleDate,
-        );
+        const moonAltitude = getBodyAltitude(Astronomy.Body.Moon, middleDate);
 
         if (moonAltitude < 0) {
           startTime = twilight.dusk;
@@ -624,7 +668,6 @@
       end: endTime,
     };
   }
-
 
   // ▼ 星空期待値を算出
   function getSkyExpectation(window) {
@@ -700,21 +743,26 @@
       : `${startText}～${endText}`;
   }
 
-
   // ▼ 天文薄明時刻取得
   function getAstronomicalTwilight(date) {
     const startDate = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
-      12, 0, 0, 0,
+      12,
+      0,
+      0,
+      0,
     );
 
     const endDate = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate() + 1,
-      12, 0, 0, 0,
+      12,
+      0,
+      0,
+      0,
     );
 
     const startTime = Astronomy.MakeTime(startDate);
@@ -741,7 +789,10 @@
             date.getFullYear(),
             date.getMonth(),
             date.getDate() + 1,
-            0, 0, 0, 0,
+            0,
+            0,
+            0,
+            0,
           ),
         ),
         1,
@@ -750,16 +801,12 @@
 
       // 観察対象日の範囲内にある時刻だけを採用
       const duskDate =
-        dusk &&
-          dusk.date >= startDate &&
-          dusk.date < endDate
+        dusk && dusk.date >= startDate && dusk.date < endDate
           ? dusk.date
           : null;
 
       const dawnDate =
-        dawn &&
-          dawn.date >= startDate &&
-          dawn.date < endDate
+        dawn && dawn.date >= startDate && dawn.date < endDate
           ? dawn.date
           : null;
 
@@ -769,10 +816,7 @@
           (startDate.getTime() + endDate.getTime()) / 2,
         );
 
-        const sunAltitude = getBodyAltitude(
-          Astronomy.Body.Sun,
-          middleDate,
-        );
+        const sunAltitude = getBodyAltitude(Astronomy.Body.Sun, middleDate);
 
         // 一日中、太陽が -18°より下なら終日天文的な夜
         if (sunAltitude < -18) {
@@ -793,13 +837,11 @@
         dusk: duskDate,
         dawn: dawnDate,
       };
-
     } catch (error) {
       console.error("天文薄明時刻取得エラー:", error);
       return null;
     }
   }
-
 
   // ▼ 曜日を取得
   function getWeekdayText(date) {
@@ -818,6 +860,54 @@
 
     return now;
   }
+
+  // =================================
+  // 星空ガイドの日付取得・設定（共有機能用）
+  // =================================
+
+  // 現在選択中の日付を取得
+  window.getStarGuideObservationDate = function () {
+    restoreSelectedDate();
+
+    return getDateKey(selectedDate);
+  };
+
+  // 指定された日付を設定
+  window.setStarGuideObservationDate = function (dateString) {
+    // YYYY-MM-DD 形式を確認
+    if (
+      typeof dateString !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(dateString)
+    ) {
+      return false;
+    }
+
+    const [year, month, day] = dateString.split("-").map(Number);
+
+    const targetDate = new Date(year, month - 1, day, 12, 0, 0, 0);
+
+    // 実在する日付か確認
+    if (
+      targetDate.getFullYear() !== year ||
+      targetDate.getMonth() !== month - 1 ||
+      targetDate.getDate() !== day
+    ) {
+      return false;
+    }
+
+    // 月のデータ期間外は受け付けない
+    const targetKey = getDateKey(targetDate);
+
+    if (targetKey < MOON_DATA_START || targetKey > MOON_DATA_END) {
+      return false;
+    }
+
+    selectedDate = targetDate;
+
+    renderMoonObservation();
+
+    return true;
+  };
 
   // ▼ 星空ガイドHTML生成
   function buildStarGuideHtml(data) {
@@ -847,6 +937,35 @@
     <span class="flip-text">🔭</span>${today.getFullYear()}<span style="font-size:0.8em;">年</span>${today.getMonth() + 1}<span style="font-size:0.8em;">月</span>${today.getDate()}<span style="font-size:0.8em;">日の</span>夜空<span style="font-size:0.8em;">を</span>見る🔭
   </button>
 
+</div>
+
+<!-- 星空ガイド共有ボタン -->
+<div class="star-guide-share-row">
+  <button
+    type="button"
+    id="star-guide-share-visible-button"
+    class="star-guide-share-button"
+    aria-label="星空ガイドを共有"
+    title="星空ガイドを共有"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="M8.6 10.5 15.4 6.5" />
+      <path d="M8.6 13.5 15.4 17.5" />
+    </svg>
+  </button>
 </div>
 
 <div style="
@@ -927,8 +1046,9 @@
   margin:1px 0 1px 0;
 "></div>
 
-${meteorMessage
-        ? `
+${
+  meteorMessage
+    ? `
           <!-- 活動中の流星群 表示領域 -->
 <div id="meteorMessagePanel"
   style="
@@ -957,8 +1077,8 @@ ${meteorMessage
   margin:2px 0 4px 0;
 "></div>
     `
-        : ""
-      }
+    : ""
+}
 
 <div class="sun-moon-times">
   <div class="sun-time">
@@ -1033,7 +1153,8 @@ ${meteorMessage
   ">
     月齢${age.toFixed(1)}
     <br>
-    ${phaseName === "新月"
+    ${
+      phaseName === "新月"
         ? "新　月"
         : phaseName === "満月"
           ? "満　月"
@@ -1042,7 +1163,7 @@ ${meteorMessage
             : phaseName === "欠けていく月"
               ? "欠ける月"
               : phaseName
-      }
+    }
   </div>
 
   <button
@@ -1178,6 +1299,42 @@ ${meteorMessage
 
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
+    // ▼ 星空ガイド共有ボタン
+    const guideShareButton = content.querySelector(
+      "#star-guide-share-visible-button",
+    );
+
+    if (guideShareButton) {
+      guideShareButton.addEventListener("click", async function () {
+        // 観測地点IDと選択日を取得
+        const locationId = window.getSavedObservationLocationId();
+
+        const observationDate = window.getStarGuideObservationDate();
+
+        if (!locationId || !observationDate) {
+          console.error("共有情報を取得できませんでした。");
+          return;
+        }
+
+        // 星空ガイド専用の共有URLを作成
+        const shareURL = new URL(
+          "https://onthestars.github.io/Star-Constellation-Flashcards/",
+        );
+
+        shareURL.searchParams.set("guideLocation", locationId);
+        shareURL.searchParams.set("guideDate", observationDate);
+
+        // クリップボードにコピー
+        try {
+          await navigator.clipboard.writeText(shareURL.toString());
+
+          console.log("星空ガイド共有URL:", shareURL.toString());
+        } catch (error) {
+          console.error("星空ガイド共有URLのコピーに失敗しました:", error);
+        }
+      });
+    }
+
     // ▼ 今日に戻るボタン
     const todayButton = content.querySelector("#moon-date-today");
 
@@ -1315,10 +1472,11 @@ ${meteorMessage
     }
 
     try {
-      // 初回表示では、今夜の観察対象日を設定
-      if (selectedDate === null) {
-        selectedDate = getObservationDate();
-      }
+      // 選択日を復元（初回は今夜の日付）
+      restoreSelectedDate();
+
+      // 選択日を保存
+      saveSelectedDate();
 
       // 選択中の日付を使用
       const today = new Date(selectedDate);
@@ -1408,6 +1566,11 @@ ${meteorMessage
       closeButton.addEventListener("click", function () {
         panel.style.display = "none";
         updateShowButtonState();
+
+        // 星空ガイド共有状態の解除・復元を確認
+        if (typeof window.restoreStarGuideSharedState === "function") {
+          window.restoreStarGuideSharedState();
+        }
       });
 
       closeButton.dataset.initialized = "true";
@@ -1426,6 +1589,22 @@ ${meteorMessage
 
     // 初期状態を反映
     updateShowButtonState();
+
+    // 外部から星空ガイドを開けるようにする
+    window.openStarGuide = function () {
+      if (!panel) return;
+
+      panel.style.display = "flex";
+
+      window.bringPanelToFront(panel);
+
+      // 共通アニメーションを再実行
+      panel.classList.remove("panel-fade-in");
+      void panel.offsetWidth;
+      panel.classList.add("panel-fade-in");
+
+      updateShowButtonState();
+    };
   }
 
   // 既存の main.js から呼び出せるようにする

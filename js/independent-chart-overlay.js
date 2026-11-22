@@ -2,30 +2,17 @@
 "use strict";
 
 (function () {
-  const CHART_URL = new URL(
-    "star-chart/index.html",
-    document.baseURI
-  ).href;
+  const CHART_URL = new URL("star-chart/index.html", document.baseURI).href;
 
   const CHART_ORIGIN = new URL(CHART_URL).origin;
 
-  const overlay = document.getElementById(
-    "independent-chart-overlay"
-  );
-  const title = document.getElementById(
-    "independent-chart-title"
-  );
-  const closeButton = document.getElementById(
-    "independent-chart-close"
-  );
-  const frame = document.getElementById(
-    "independent-chart-frame"
-  );
+  const overlay = document.getElementById("independent-chart-overlay");
+  const title = document.getElementById("independent-chart-title");
+  const closeButton = document.getElementById("independent-chart-close");
+  const frame = document.getElementById("independent-chart-frame");
 
   if (!overlay || !title || !closeButton || !frame) {
-    console.error(
-      "星図カードオーバーレイのHTML要素が見つかりません。"
-    );
+    console.error("星図カードオーバーレイのHTML要素が見つかりません。");
     return;
   }
 
@@ -50,9 +37,9 @@
     frame.contentWindow.postMessage(
       {
         type: "set-observation-date",
-        timestamp: pendingObservationTimestamp
+        timestamp: pendingObservationTimestamp,
       },
-      CHART_ORIGIN
+      CHART_ORIGIN,
     );
 
     pendingObservationTimestamp = null;
@@ -60,7 +47,6 @@
 
   // 観測地点を星図へ送信
   function sendObservationLocation() {
-
     if (
       !isOpen ||
       !frameReady ||
@@ -70,7 +56,10 @@
       return;
     }
 
-    const location = window.getObservationLocation();
+    const location =
+      typeof window.getEffectiveObservationLocation === "function"
+        ? window.getEffectiveObservationLocation()
+        : window.getObservationLocation();
 
     if (!location) return;
 
@@ -78,9 +67,9 @@
       {
         type: "set-observation-location",
         latitude: location.latitude,
-        longitude: location.longitude
+        longitude: location.longitude,
       },
-      CHART_ORIGIN
+      CHART_ORIGIN,
     );
   }
 
@@ -88,10 +77,7 @@
 
   // 右上のプラネタリウムボタンの状態を更新
   function updatePlanetariumButtonState() {
-
-    const button = document.getElementById(
-      "showPlanetariumBtn"
-    );
+    const button = document.getElementById("showPlanetariumBtn");
 
     if (!button) return;
 
@@ -122,7 +108,7 @@
       "流星群の送信直前:",
       selectedMeteor.name,
       selectedMeteor.start,
-      selectedMeteor.end
+      selectedMeteor.end,
     );
 
     frame.contentWindow.postMessage(
@@ -133,15 +119,14 @@
         start: selectedMeteor.start,
         end: selectedMeteor.end,
         ra: selectedMeteor.radiantRa,
-        dec: selectedMeteor.radiantDec
+        dec: selectedMeteor.radiantDec,
       },
-      CHART_ORIGIN
+      CHART_ORIGIN,
     );
   }
 
   // 星座カードの中心座標を星図へ送信
   function sendConstellationCenter() {
-
     if (
       !isOpen ||
       !frameReady ||
@@ -156,9 +141,9 @@
         type: "set-constellation-center",
         name: pendingConstellationCenter.name,
         ra: pendingConstellationCenter.ra,
-        dec: pendingConstellationCenter.dec
+        dec: pendingConstellationCenter.dec,
       },
-      CHART_ORIGIN
+      CHART_ORIGIN,
     );
 
     pendingConstellationCenter = null;
@@ -205,7 +190,6 @@
 
   // 通常のプラネタリウムを開く
   function openPlanetarium(sharedSearch = "") {
-
     selectedMeteor = null;
 
     updateChartTitle();
@@ -215,9 +199,7 @@
     window.bringPanelToFront(overlay);
 
     // 共通アニメーションを再実行
-    const panel = document.getElementById(
-      "independent-chart-panel"
-    );
+    const panel = document.getElementById("independent-chart-panel");
 
     panel.classList.remove("panel-fade-in");
 
@@ -240,7 +222,6 @@
 
   // 指定した日時でプラネタリウムを開く
   function openPlanetariumAtDate(timestamp) {
-
     if (!Number.isFinite(timestamp)) return;
 
     pendingObservationTimestamp = timestamp;
@@ -252,13 +233,7 @@
   }
 
   // 星座カードから中心座標を指定してプラネタリウムを開く
-  function openPlanetariumAtConstellation(
-    ra,
-    dec,
-    timestamp,
-    name
-  ) {
-
+  function openPlanetariumAtConstellation(ra, dec, timestamp, name) {
     if (
       !Number.isFinite(ra) ||
       !Number.isFinite(dec) ||
@@ -282,7 +257,7 @@
     pendingConstellationCenter = {
       name: name,
       ra: ra,
-      dec: dec
+      dec: dec,
     };
 
     // 読み込み済みなら直ちに送信
@@ -292,20 +267,17 @@
 
   // 星図内の共有ボタンからの依頼を受信
   window.addEventListener("message", function (event) {
-
     if (event.origin !== CHART_ORIGIN) return;
     if (event.source !== frame.contentWindow) return;
     if (!isOpen || !frameReady) return;
 
     if (event.data?.type === "request-chart-share") {
-
       // 星図側の既存共有処理を実行
       frame.contentWindow.postMessage(
         { type: "request-chart-share" },
-        CHART_ORIGIN
+        CHART_ORIGIN,
       );
     }
-
   });
 
   // 星図の読み込み完了後に必要な情報を送信
@@ -323,12 +295,9 @@
   });
 
   // 観測地点の変更を受信
-  window.addEventListener(
-    "observation-location-changed",
-    function () {
-      sendObservationLocation();
-    }
-  );
+  window.addEventListener("observation-location-changed", function () {
+    sendObservationLocation();
+  });
 
   // オーバーレイを閉じる
   function closeIndependentChart() {
@@ -340,12 +309,14 @@
     selectedMeteor = null;
     overlay.style.display = "none";
     frame.src = "about:blank";
+
+    // 星空ガイド共有状態の解除・復元を確認
+    if (typeof window.restoreStarGuideSharedState === "function") {
+      window.restoreStarGuideSharedState();
+    }
   }
 
-  closeButton.addEventListener(
-    "click",
-    closeIndependentChart
-  );
+  closeButton.addEventListener("click", closeIndependentChart);
 
   // Escapeキーでも閉じる
   document.addEventListener("keydown", function (event) {
@@ -361,13 +332,10 @@
   window.openPlanetarium = openPlanetarium;
   window.openPlanetariumAtDate = openPlanetariumAtDate;
 
-  window.openPlanetariumAtConstellation =
-    openPlanetariumAtConstellation;
+  window.openPlanetariumAtConstellation = openPlanetariumAtConstellation;
 
   // 共有URLからアクセスした場合はプラネタリウムを自動表示
-  const sharedParams = new URLSearchParams(
-    window.location.search
-  );
+  const sharedParams = new URLSearchParams(window.location.search);
 
   const hasSharedChartState = [
     "chartDate",
@@ -375,8 +343,8 @@
     "alt",
     "fov",
     "text",
-    "labels"
-  ].some(param => sharedParams.has(param));
+    "labels",
+  ].some((param) => sharedParams.has(param));
 
   if (hasSharedChartState) {
     openPlanetarium(window.location.search);
