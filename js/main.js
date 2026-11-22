@@ -27,14 +27,17 @@ const peteChartBtn = document.getElementById("peteChartBtn");
 
 // 季節ジャンプ（フェードアウト → フェードイン）
 function jumpToSeason(season) {
-
   viewer.classList.remove("flip-rotate");
-  viewer.classList.remove("fade-out", "fade-in", "slide-out-left", "slide-out-right");
+  viewer.classList.remove(
+    "fade-out",
+    "fade-in",
+    "slide-out-left",
+    "slide-out-right",
+  );
   void viewer.offsetWidth;
   viewer.classList.add("fade-out");
 
   setTimeout(() => {
-
     currentSeason = season;
     updateSeasonButtons(currentSeason, seasonImages);
 
@@ -53,9 +56,8 @@ function jumpToSeason(season) {
       specialBtn,
       prevBtn,
       nextBtn,
-      peteChartBtn
+      peteChartBtn,
     );
-
   }, 300);
 }
 
@@ -68,11 +70,13 @@ setupFlipButton(
   viewer,
   () => index,
   () => isBack,
-  (v) => { isBack = v; },
+  (v) => {
+    isBack = v;
+  },
   specialBtn,
   prevBtn,
   nextBtn,
-  peteChartBtn
+  peteChartBtn,
 );
 
 // ▼ navigation.js のセットアップ
@@ -81,25 +85,28 @@ setupNavigation(
   prevBtn,
   viewer,
   () => index,
-  (v) => { index = v; },
+  (v) => {
+    index = v;
+  },
   () => isBack,
-  (v) => { isBack = v; },
+  (v) => {
+    isBack = v;
+  },
   () => isFinalNull,
-  (v) => { isFinalNull = v; },
+  (v) => {
+    isFinalNull = v;
+  },
   () => currentSeason,
-  (v) => { currentSeason = v; },
+  (v) => {
+    currentSeason = v;
+  },
   () => animationClass,
-  (v) => { animationClass = v; },
-  (idx, back) => updateViewer(
-    idx,
-    back,
-    viewer,
-    specialBtn,
-    prevBtn,
-    nextBtn,
-    peteChartBtn
-  ),
-  () => updateSeasonButtons(currentSeason, seasonImages)
+  (v) => {
+    animationClass = v;
+  },
+  (idx, back) =>
+    updateViewer(idx, back, viewer, specialBtn, prevBtn, nextBtn, peteChartBtn),
+  () => updateSeasonButtons(currentSeason, seasonImages),
 );
 
 // ▼ 季節ボタン
@@ -130,14 +137,11 @@ southBtn.onclick = () => {
 
 // 外部リンクから戻った場合の復帰処理
 window.addEventListener("load", () => {
-
   if (sessionStorage.getItem("fromExternal") === "true") {
-
     const saved = sessionStorage.getItem("lastCardIndex");
-    index = (saved !== null) ? Number(saved) : 0;
+    index = saved !== null ? Number(saved) : 0;
 
     sessionStorage.removeItem("fromExternal");
-
   } else {
     index = 0;
   }
@@ -152,7 +156,7 @@ window.addEventListener("load", () => {
     specialBtn,
     prevBtn,
     nextBtn,
-    peteChartBtn
+    peteChartBtn,
   );
 });
 
@@ -171,68 +175,44 @@ initMoonObservationPanel();
 let highestPanelZIndex = 10000;
 
 window.bringPanelToFront = function (panel) {
-
   if (!panel) return;
 
   highestPanelZIndex++;
 
   panel.style.zIndex = highestPanelZIndex;
-
 };
 
 function initConstellationCardPanel() {
+  const panel = document.querySelector(".constellation-card-panel");
 
-  const panel = document.querySelector(
-    ".constellation-card-panel"
-  );
+  const closeButton = document.getElementById("cardPanelCloseBtn");
 
-  const closeButton = document.getElementById(
-    "cardPanelCloseBtn"
-  );
-
-  const showButton = document.getElementById(
-    "showCardBtn"
-  );
+  const showButton = document.getElementById("showCardBtn");
 
   // 再表示ボタンの状態を更新
   function updateShowButtonState() {
-
     if (!panel || !showButton) {
       return;
     }
 
-    const isVisible =
-      getComputedStyle(panel).display !== "none";
+    const isVisible = getComputedStyle(panel).display !== "none";
 
-    showButton.style.opacity =
-      isVisible ? 0.4 : 1;
+    showButton.style.opacity = isVisible ? 0.4 : 1;
   }
 
   // 閉じるボタン
-  if (
-    closeButton &&
-    panel &&
-    !closeButton.dataset.initialized
-  ) {
-
+  if (closeButton && panel && !closeButton.dataset.initialized) {
     closeButton.addEventListener("click", function () {
-
       panel.style.display = "none";
 
       updateShowButtonState();
-
     });
 
     closeButton.dataset.initialized = "true";
   }
 
   // 再表示ボタン
-  if (
-    showButton &&
-    panel &&
-    !showButton.dataset.initialized
-  ) {
-
+  if (showButton && panel && !showButton.dataset.initialized) {
     showButton.addEventListener("click", function () {
       panel.style.display = "flex";
 
@@ -258,13 +238,10 @@ initConstellationCardPanel();
 // 観測地点の共通管理
 // =================================
 
-const OBSERVATION_LOCATION_KEY =
-  "starConstellationObservationLocation";
-
+const OBSERVATION_LOCATION_KEY = "starConstellationObservationLocation";
 
 // 観測地点データ
 const OBSERVATION_LOCATIONS = {
-
   // ================================
   // 北海道・東北地方
   // ================================
@@ -275,7 +252,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "北海道／札幌市",
     group: "北海道・東北地方",
     latitude: 43.06417,
-    longitude: 141.34694
+    longitude: 141.34694,
   },
   aomori: {
     prefecture: "青森県",
@@ -283,7 +260,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "青森県／青森市",
     group: "北海道・東北地方",
     latitude: 40.82444,
-    longitude: 140.74000
+    longitude: 140.74,
   },
   iwate: {
     prefecture: "岩手県",
@@ -291,7 +268,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "岩手県／盛岡市",
     group: "北海道・東北地方",
     latitude: 39.70361,
-    longitude: 141.15250
+    longitude: 141.1525,
   },
   miyagi: {
     prefecture: "宮城県",
@@ -299,7 +276,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "宮城県／仙台市",
     group: "北海道・東北地方",
     latitude: 38.26889,
-    longitude: 140.87194
+    longitude: 140.87194,
   },
   akita: {
     prefecture: "秋田県",
@@ -307,7 +284,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "秋田県／秋田市",
     group: "北海道・東北地方",
     latitude: 39.71861,
-    longitude: 140.10250
+    longitude: 140.1025,
   },
   yamagata: {
     prefecture: "山形県",
@@ -315,15 +292,15 @@ const OBSERVATION_LOCATIONS = {
     displayName: "山形県／山形市",
     group: "北海道・東北地方",
     latitude: 38.24056,
-    longitude: 140.36333
+    longitude: 140.36333,
   },
   fukushima: {
     prefecture: "福島県",
     name: "福島市",
     displayName: "福島県／福島市",
     group: "北海道・東北地方",
-    latitude: 37.75000,
-    longitude: 140.46778
+    latitude: 37.75,
+    longitude: 140.46778,
   },
 
   // ================================
@@ -336,7 +313,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "茨城県／水戸市",
     group: "関東地方",
     latitude: 36.34139,
-    longitude: 140.44667
+    longitude: 140.44667,
   },
   tochigi: {
     prefecture: "栃木県",
@@ -344,7 +321,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "栃木県／宇都宮市",
     group: "関東地方",
     latitude: 36.56583,
-    longitude: 139.88361
+    longitude: 139.88361,
   },
   gunma: {
     prefecture: "群馬県",
@@ -352,7 +329,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "群馬県／前橋市",
     group: "関東地方",
     latitude: 36.39111,
-    longitude: 139.06083
+    longitude: 139.06083,
   },
   saitama: {
     prefecture: "埼玉県",
@@ -360,7 +337,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "埼玉県／さいたま市",
     group: "関東地方",
     latitude: 35.85694,
-    longitude: 139.64889
+    longitude: 139.64889,
   },
   chiba: {
     prefecture: "千葉県",
@@ -368,7 +345,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "千葉県／千葉市",
     group: "関東地方",
     latitude: 35.60472,
-    longitude: 140.12333
+    longitude: 140.12333,
   },
   tokyo: {
     prefecture: "東京都",
@@ -376,7 +353,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "東京都／新宿区",
     group: "関東地方",
     latitude: 35.68944,
-    longitude: 139.69167
+    longitude: 139.69167,
   },
   kanagawa: {
     prefecture: "神奈川県",
@@ -384,7 +361,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "神奈川県／横浜市",
     group: "関東地方",
     latitude: 35.44778,
-    longitude: 139.64250
+    longitude: 139.6425,
   },
 
   // ================================
@@ -397,7 +374,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "新潟県／新潟市",
     group: "中部地方",
     latitude: 37.90222,
-    longitude: 139.02361
+    longitude: 139.02361,
   },
   toyama: {
     prefecture: "富山県",
@@ -405,7 +382,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "富山県／富山市",
     group: "中部地方",
     latitude: 36.69528,
-    longitude: 137.21139
+    longitude: 137.21139,
   },
   ishikawa: {
     prefecture: "石川県",
@@ -413,7 +390,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "石川県／金沢市",
     group: "中部地方",
     latitude: 36.59444,
-    longitude: 136.62556
+    longitude: 136.62556,
   },
   fukui: {
     prefecture: "福井県",
@@ -421,7 +398,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "福井県／福井市",
     group: "中部地方",
     latitude: 36.06528,
-    longitude: 136.22194
+    longitude: 136.22194,
   },
   yamanashi: {
     prefecture: "山梨県",
@@ -429,7 +406,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "山梨県／甲府市",
     group: "中部地方",
     latitude: 35.66389,
-    longitude: 138.56833
+    longitude: 138.56833,
   },
   nagano: {
     prefecture: "長野県",
@@ -437,7 +414,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "長野県／長野市",
     group: "中部地方",
     latitude: 36.65139,
-    longitude: 138.18111
+    longitude: 138.18111,
   },
   gifu: {
     prefecture: "岐阜県",
@@ -445,7 +422,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "岐阜県／岐阜市",
     group: "中部地方",
     latitude: 35.39111,
-    longitude: 136.72222
+    longitude: 136.72222,
   },
   shizuoka: {
     prefecture: "静岡県",
@@ -453,7 +430,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "静岡県／静岡市",
     group: "中部地方",
     latitude: 34.97694,
-    longitude: 138.38306
+    longitude: 138.38306,
   },
   aichi: {
     prefecture: "愛知県",
@@ -461,7 +438,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "愛知県／名古屋市",
     group: "中部地方",
     latitude: 35.18028,
-    longitude: 136.90667
+    longitude: 136.90667,
   },
 
   // ================================
@@ -474,7 +451,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "三重県／津市",
     group: "近畿地方",
     latitude: 34.73028,
-    longitude: 136.50861
+    longitude: 136.50861,
   },
   shiga: {
     prefecture: "滋賀県",
@@ -482,7 +459,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "滋賀県／大津市",
     group: "近畿地方",
     latitude: 35.00444,
-    longitude: 135.86833
+    longitude: 135.86833,
   },
   kyoto: {
     prefecture: "京都府",
@@ -490,7 +467,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "京都府／京都市",
     group: "近畿地方",
     latitude: 35.02139,
-    longitude: 135.75556
+    longitude: 135.75556,
   },
   osaka: {
     prefecture: "大阪府",
@@ -498,7 +475,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "大阪府／大阪市",
     group: "近畿地方",
     latitude: 34.68639,
-    longitude: 135.52000
+    longitude: 135.52,
   },
   hyogo: {
     prefecture: "兵庫県",
@@ -506,7 +483,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "兵庫県／神戸市",
     group: "近畿地方",
     latitude: 34.69139,
-    longitude: 135.18306
+    longitude: 135.18306,
   },
   nara: {
     prefecture: "奈良県",
@@ -514,7 +491,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "奈良県／奈良市",
     group: "近畿地方",
     latitude: 34.68528,
-    longitude: 135.83278
+    longitude: 135.83278,
   },
   wakayama: {
     prefecture: "和歌山県",
@@ -522,7 +499,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "和歌山県／和歌山市",
     group: "近畿地方",
     latitude: 34.22611,
-    longitude: 135.16750
+    longitude: 135.1675,
   },
 
   // ================================
@@ -535,7 +512,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "鳥取県／鳥取市",
     group: "中国地方",
     latitude: 35.50361,
-    longitude: 134.23833
+    longitude: 134.23833,
   },
   shimane: {
     prefecture: "島根県",
@@ -543,7 +520,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "島根県／松江市",
     group: "中国地方",
     latitude: 35.47222,
-    longitude: 133.05056
+    longitude: 133.05056,
   },
   okayama: {
     prefecture: "岡山県",
@@ -551,7 +528,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "岡山県／岡山市",
     group: "中国地方",
     latitude: 34.66167,
-    longitude: 133.93500
+    longitude: 133.935,
   },
   hiroshima: {
     prefecture: "広島県",
@@ -559,7 +536,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "広島県／広島市",
     group: "中国地方",
     latitude: 34.39639,
-    longitude: 132.45944
+    longitude: 132.45944,
   },
   yamaguchi: {
     prefecture: "山口県",
@@ -567,7 +544,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "山口県／山口市",
     group: "中国地方",
     latitude: 34.18583,
-    longitude: 131.47139
+    longitude: 131.47139,
   },
 
   // ================================
@@ -580,7 +557,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "徳島県／徳島市",
     group: "四国地方",
     latitude: 34.06583,
-    longitude: 134.55944
+    longitude: 134.55944,
   },
   kagawa: {
     prefecture: "香川県",
@@ -588,7 +565,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "香川県／高松市",
     group: "四国地方",
     latitude: 34.34028,
-    longitude: 134.04333
+    longitude: 134.04333,
   },
   ehime: {
     prefecture: "愛媛県",
@@ -596,7 +573,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "愛媛県／松山市",
     group: "四国地方",
     latitude: 33.84167,
-    longitude: 132.76611
+    longitude: 132.76611,
   },
   kochi: {
     prefecture: "高知県",
@@ -604,7 +581,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "高知県／高知市",
     group: "四国地方",
     latitude: 33.55972,
-    longitude: 133.53111
+    longitude: 133.53111,
   },
 
   // ================================
@@ -617,7 +594,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "福岡県／福岡市",
     group: "九州・沖縄地方",
     latitude: 33.60639,
-    longitude: 130.41806
+    longitude: 130.41806,
   },
   saga: {
     prefecture: "佐賀県",
@@ -625,7 +602,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "佐賀県／佐賀市",
     group: "九州・沖縄地方",
     latitude: 33.24944,
-    longitude: 130.29889
+    longitude: 130.29889,
   },
   nagasaki: {
     prefecture: "長崎県",
@@ -633,7 +610,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "長崎県／長崎市",
     group: "九州・沖縄地方",
     latitude: 32.74472,
-    longitude: 129.87361
+    longitude: 129.87361,
   },
   kumamoto: {
     prefecture: "熊本県",
@@ -641,7 +618,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "熊本県／熊本市",
     group: "九州・沖縄地方",
     latitude: 32.78972,
-    longitude: 130.74167
+    longitude: 130.74167,
   },
   oita: {
     prefecture: "大分県",
@@ -649,7 +626,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "大分県／大分市",
     group: "九州・沖縄地方",
     latitude: 33.23806,
-    longitude: 131.61250
+    longitude: 131.6125,
   },
   miyazaki: {
     prefecture: "宮崎県",
@@ -657,7 +634,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "宮崎県／宮崎市",
     group: "九州・沖縄地方",
     latitude: 31.91111,
-    longitude: 131.42389
+    longitude: 131.42389,
   },
   kagoshima: {
     prefecture: "鹿児島県",
@@ -665,15 +642,15 @@ const OBSERVATION_LOCATIONS = {
     displayName: "鹿児島県／鹿児島市",
     group: "九州・沖縄地方",
     latitude: 31.56028,
-    longitude: 130.55806
+    longitude: 130.55806,
   },
   okinawa: {
     prefecture: "沖縄県",
     name: "那覇市",
     displayName: "沖縄県／那覇市",
     group: "九州・沖縄地方",
-    latitude: 26.21250,
-    longitude: 127.68111
+    latitude: 26.2125,
+    longitude: 127.68111,
   },
 
   // ================================
@@ -686,7 +663,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "北極点",
     group: "海外・その他",
     latitude: 90,
-    longitude: 0
+    longitude: 0,
   },
   "south-pole": {
     prefecture: "南極点",
@@ -694,7 +671,7 @@ const OBSERVATION_LOCATIONS = {
     displayName: "南極点",
     group: "海外・その他",
     latitude: -90,
-    longitude: 0
+    longitude: 0,
   },
   "brazil-rio": {
     prefecture: "ブラジル",
@@ -702,17 +679,13 @@ const OBSERVATION_LOCATIONS = {
     displayName: "ブラジル／リオ",
     group: "海外・その他",
     latitude: -22.9068,
-    longitude: -43.1729
-  }
-
+    longitude: -43.1729,
+  },
 };
 
 // 保存された観測地点IDを取得
 function getSavedObservationLocationId() {
-
-  const savedId = localStorage.getItem(
-    OBSERVATION_LOCATION_KEY
-  );
+  const savedId = localStorage.getItem(OBSERVATION_LOCATION_KEY);
 
   // 有効な保存データがなければ大阪府を初期地点にする
   if (!OBSERVATION_LOCATIONS[savedId]) {
@@ -724,24 +697,18 @@ function getSavedObservationLocationId() {
 
 // 保存された観測地点を取得
 function getObservationLocation() {
-
-  const locationId =
-    getSavedObservationLocationId();
+  const locationId = getSavedObservationLocationId();
 
   return OBSERVATION_LOCATIONS[locationId];
 }
 
 // 観測地点を保存
 function setObservationLocation(locationId) {
-
   if (!OBSERVATION_LOCATIONS[locationId]) {
     return false;
   }
 
-  localStorage.setItem(
-    OBSERVATION_LOCATION_KEY,
-    locationId
-  );
+  localStorage.setItem(OBSERVATION_LOCATION_KEY, locationId);
 
   const location = OBSERVATION_LOCATIONS[locationId];
 
@@ -751,16 +718,13 @@ function setObservationLocation(locationId) {
     Number.isFinite(location.longitude) &&
     typeof window.setStarGuideObserver === "function"
   ) {
-    window.setStarGuideObserver(
-      location.latitude,
-      location.longitude
-    );
+    window.setStarGuideObserver(location.latitude, location.longitude);
 
     // 座標が有効な場合のみ、ほかのパネルへ変更を通知
     window.dispatchEvent(
       new CustomEvent("observation-location-changed", {
-        detail: location
-      })
+        detail: location,
+      }),
     );
   }
 
@@ -771,21 +735,89 @@ function setObservationLocation(locationId) {
 }
 
 // 他のJSファイルから利用できるようにする
-window.getObservationLocation =
-  getObservationLocation;
+window.getObservationLocation = getObservationLocation;
 
-window.setObservationLocation =
-  setObservationLocation;
+window.setObservationLocation = setObservationLocation;
+
+// =================================
+// 共有機能用・一時的な観測地点変更
+// =================================
+
+// 一時的に適用している観測地点
+let temporaryObservationLocationId = null;
+
+// 保存されている観測地点IDを取得
+window.getSavedObservationLocationId = getSavedObservationLocationId;
+
+// 現在有効な観測地点を取得
+window.getEffectiveObservationLocation = function () {
+  const locationId =
+    temporaryObservationLocationId || getSavedObservationLocationId();
+
+  return OBSERVATION_LOCATIONS[locationId];
+};
+
+// 保存せずに、両パネルの観測地点を一時変更
+window.setTemporaryObservationLocation = function (locationId) {
+  const location = OBSERVATION_LOCATIONS[locationId];
+
+  if (
+    !location ||
+    !Number.isFinite(location.latitude) ||
+    !Number.isFinite(location.longitude) ||
+    typeof window.setStarGuideObserver !== "function"
+  ) {
+    return false;
+  }
+
+  // 一時適用する地点IDを記録
+  temporaryObservationLocationId = locationId;
+
+  // 星空ガイドの観測地点を変更
+  window.setStarGuideObserver(location.latitude, location.longitude);
+
+  // 両パネルへ観測地点の変更を通知
+  window.dispatchEvent(
+    new CustomEvent("observation-location-changed", {
+      detail: location,
+    }),
+  );
+
+  // 両パネルの地点表示を更新
+  updateObservationLocationLabel(location);
+
+  // localStorageには保存しない
+  return true;
+};
+
+// 一時変更を解除
+window.clearTemporaryObservationLocation = function () {
+  temporaryObservationLocationId = null;
+
+  const location = getObservationLocation();
+
+  if (!location) return false;
+
+  // 元の地点に戻す
+  window.setStarGuideObserver(location.latitude, location.longitude);
+
+  window.dispatchEvent(
+    new CustomEvent("observation-location-changed", {
+      detail: location,
+    }),
+  );
+
+  updateObservationLocationLabel(location);
+
+  return true;
+};
 
 // =================================
 // 観測地点選択欄の初期化
 // =================================
 
 function initObservationLocationSetting() {
-
-  const container = document.getElementById(
-    "observation-location-list"
-  );
+  const container = document.getElementById("observation-location-list");
 
   if (!container) return;
 
@@ -798,38 +830,32 @@ function initObservationLocationSetting() {
     "中国地方",
     "四国地方",
     "九州・沖縄地方",
-    "海外・その他"
+    "海外・その他",
   ];
 
   // 保存済みの観測地点
-  const savedLocationId =
-    getSavedObservationLocationId();
+  const savedLocationId = getSavedObservationLocationId();
 
   // 地方ごとに地点を分類
   const groupedLocations = {};
 
-  Object.entries(OBSERVATION_LOCATIONS).forEach(
-    function ([id, location]) {
+  Object.entries(OBSERVATION_LOCATIONS).forEach(function ([id, location]) {
+    const group = location.group;
 
-      const group = location.group;
-
-      if (!groupedLocations[group]) {
-        groupedLocations[group] = [];
-      }
-
-      groupedLocations[group].push({
-        id: id,
-        location: location
-      });
-
+    if (!groupedLocations[group]) {
+      groupedLocations[group] = [];
     }
-  );
+
+    groupedLocations[group].push({
+      id: id,
+      location: location,
+    });
+  });
 
   // 一覧を生成
   container.innerHTML = "";
 
   regionOrder.forEach(function (groupName) {
-
     const locations = groupedLocations[groupName];
 
     if (!locations || !locations.length) return;
@@ -851,19 +877,17 @@ function initObservationLocationSetting() {
     list.className = "observation-location-items";
 
     locations.forEach(function (item) {
-
       const button = document.createElement("button");
 
       button.type = "button";
       button.className = "observation-location-item";
       button.dataset.locationId = item.id;
 
-      button.textContent =
-        item.location.displayName || item.location.name;
+      button.textContent = item.location.displayName || item.location.name;
 
       button.setAttribute(
         "aria-pressed",
-        item.id === savedLocationId ? "true" : "false"
+        item.id === savedLocationId ? "true" : "false",
       );
 
       if (item.id === savedLocationId) {
@@ -871,22 +895,16 @@ function initObservationLocationSetting() {
       }
 
       list.appendChild(button);
-
     });
 
     details.appendChild(list);
     container.appendChild(details);
-
   });
 
   // イベントの重複登録を防止
   if (!container.dataset.initialized) {
-
     container.addEventListener("click", function (event) {
-
-      const button = event.target.closest(
-        ".observation-location-item"
-      );
+      const button = event.target.closest(".observation-location-item");
 
       if (!button || !container.contains(button)) return;
 
@@ -895,31 +913,22 @@ function initObservationLocationSetting() {
       if (!setObservationLocation(locationId)) return;
 
       // 選択状態を更新
-      container.querySelectorAll(
-        ".observation-location-item"
-      ).forEach(function (item) {
+      container
+        .querySelectorAll(".observation-location-item")
+        .forEach(function (item) {
+          const selected = item.dataset.locationId === locationId;
 
-        const selected =
-          item.dataset.locationId === locationId;
+          item.classList.toggle("is-selected", selected);
 
-        item.classList.toggle("is-selected", selected);
-
-        item.setAttribute(
-          "aria-pressed",
-          selected ? "true" : "false"
-        );
-
-      });
-
+          item.setAttribute("aria-pressed", selected ? "true" : "false");
+        });
     });
 
     container.dataset.initialized = "true";
-
   }
 
   // 保存済みの地点を反映
   setObservationLocation(savedLocationId);
-
 }
 
 // =================================
@@ -927,18 +936,12 @@ function initObservationLocationSetting() {
 // =================================
 
 function updateObservationLocationLabel(location) {
-
   if (!location) return;
 
-  const displayName =
-    location.prefecture
-      ? `（${location.prefecture}）`
-      : "";
+  const displayName = location.prefecture ? `（${location.prefecture}）` : "";
 
   // 星空ガイド
-  const starGuideLabel = document.getElementById(
-    "star-guide-location"
-  );
+  const starGuideLabel = document.getElementById("star-guide-location");
 
   if (starGuideLabel) {
     starGuideLabel.textContent = displayName;
@@ -946,7 +949,7 @@ function updateObservationLocationLabel(location) {
 
   // プラネタリウム
   const planetariumLabel = document.getElementById(
-    "independent-chart-location"
+    "independent-chart-location",
   );
 
   if (planetariumLabel) {
@@ -962,60 +965,37 @@ initObservationLocationSetting();
 // =================================
 
 function initSettingPanel() {
+  const panel = document.getElementById("setting-panel");
 
-  const panel = document.getElementById(
-    "setting-panel"
-  );
+  const closeButton = document.getElementById("settingPanelCloseBtn");
 
-  const closeButton = document.getElementById(
-    "settingPanelCloseBtn"
-  );
-
-  const showButton = document.getElementById(
-    "showSettingBtn"
-  );
+  const showButton = document.getElementById("showSettingBtn");
 
   // 再表示ボタンの状態を更新
   function updateShowButtonState() {
-
     if (!panel || !showButton) {
       return;
     }
 
-    const isVisible =
-      getComputedStyle(panel).display !== "none";
+    const isVisible = getComputedStyle(panel).display !== "none";
 
-    showButton.style.opacity =
-      isVisible ? 0.4 : 1;
+    showButton.style.opacity = isVisible ? 0.4 : 1;
   }
 
   // 閉じるボタン
-  if (
-    closeButton &&
-    panel &&
-    !closeButton.dataset.initialized
-  ) {
-
+  if (closeButton && panel && !closeButton.dataset.initialized) {
     closeButton.addEventListener("click", function () {
-
       panel.style.display = "none";
 
       updateShowButtonState();
-
     });
 
     closeButton.dataset.initialized = "true";
   }
 
   // 設定ボタン
-  if (
-    showButton &&
-    panel &&
-    !showButton.dataset.initialized
-  ) {
-
+  if (showButton && panel && !showButton.dataset.initialized) {
     showButton.addEventListener("click", function () {
-
       panel.style.display = "flex";
 
       window.bringPanelToFront(panel);
@@ -1026,7 +1006,6 @@ function initSettingPanel() {
       panel.classList.add("panel-fade-in");
 
       updateShowButtonState();
-
     });
 
     showButton.dataset.initialized = "true";
@@ -1043,30 +1022,23 @@ initSettingPanel();
 // プラネタリウムパネルの表示
 // =================================
 
-const showPlanetariumBtn = document.getElementById(
-  "showPlanetariumBtn"
-);
+const showPlanetariumBtn = document.getElementById("showPlanetariumBtn");
 
 if (showPlanetariumBtn) {
-
   showPlanetariumBtn.addEventListener("click", function () {
-
     if (typeof window.openPlanetarium === "function") {
       window.openPlanetarium();
     }
-
   });
-
 }
 
 // ▼ 凡例へ移動
 function jumpToExplanatoryNote() {
-
   viewer.classList.remove(
     "fade-out",
     "fade-in",
     "slide-out-left",
-    "slide-out-right"
+    "slide-out-right",
   );
 
   void viewer.offsetWidth;
@@ -1074,7 +1046,6 @@ function jumpToExplanatoryNote() {
   viewer.classList.add("fade-out");
 
   setTimeout(() => {
-
     index = 1;
     isBack = false;
     isFinalNull = false;
@@ -1092,8 +1063,72 @@ function jumpToExplanatoryNote() {
       specialBtn,
       prevBtn,
       nextBtn,
-      peteChartBtn
+      peteChartBtn,
     );
-
   }, 300);
 }
+
+// =================================
+// 星空ガイド共有URLの受け取り
+// =================================
+
+(function () {
+  const params = new URLSearchParams(window.location.search);
+
+  const locationId = params.get("guideLocation");
+  const observationDate = params.get("guideDate");
+
+  // 星空ガイド共有URLでなければ何もしない
+  if (!locationId || !observationDate) {
+    return;
+  }
+
+  // 日付の形式を確認
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(observationDate)) {
+    return;
+  }
+
+  // 元の設定を取得する関数があるか確認
+  if (
+    typeof window.getSavedObservationLocationId !== "function" ||
+    typeof window.getStarGuideObservationDate !== "function"
+  ) {
+    return;
+  }
+
+  // =================================
+  // 共有前の設定を一時退避
+  // =================================
+
+  window.starGuideSharedState = {
+    active: true,
+
+    originalLocationId: window.getSavedObservationLocationId(),
+
+    originalObservationDate: window.getStarGuideObservationDate(),
+  };
+
+  // =================================
+  // 共有された設定を一時適用
+  // =================================
+
+  if (
+    typeof window.setTemporaryObservationLocation !== "function" ||
+    !window.setTemporaryObservationLocation(locationId)
+  ) {
+    return;
+  }
+
+  if (
+    typeof window.setStarGuideObservationDate !== "function" ||
+    !window.setStarGuideObservationDate(observationDate)
+  ) {
+    window.clearTemporaryObservationLocation();
+    return;
+  }
+
+  // 星空ガイドを自動表示
+  if (typeof window.openStarGuide === "function") {
+    window.openStarGuide();
+  }
+})();
