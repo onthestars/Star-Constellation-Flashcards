@@ -727,8 +727,8 @@ body {
 /* 閉じるボタン */
 #chart-share-notice-close {
   position: absolute;
-  top: -20px;
-  right: 6px;
+  top: -16px;
+  right: 8px;
 
   margin: 0 0 4px 4px;
   padding: 0;
@@ -777,8 +777,8 @@ body {
 /* 閉じるボタン */
 #chart-shared-notice-close {
   position: absolute;
-  top: -20px;
-  right: 6px;
+  top: -16px;
+  right: 8px;
 
   margin: 0 0 4px 4px;
   padding: 0;
