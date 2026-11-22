@@ -866,6 +866,18 @@
   const activePointers = new Map();
   let lastPinchDistance = 0;
 
+  // スマートフォンの連続タップ操作用
+  let tapCount = 0;
+  let tapTimer = null;
+  let lastTapX = 0;
+  let lastTapY = 0;
+
+  // 連続タップの判定時間（ミリ秒）
+  const TAP_INTERVAL = 350;
+
+  // タップと判定する最大移動距離
+  const TAP_MOVE_LIMIT = 8;
+
   // ドラッグ・ピンチ操作の設定
   canvas.style.touchAction = "none";
 
@@ -4094,7 +4106,8 @@
 
     if (
       deepSkyObjectsLoaded &&
-      fieldOfViewDeg <= 30 // 表示を開始する拡大率（視野角）
+      // 表示を開始する拡大率（視野角）
+      fieldOfViewDeg <= 30
     ) {
       // 描画済みラベルの領域を記録
       const occupiedLabelAreas = [];
@@ -5085,8 +5098,13 @@
       pointerStartY = event.clientY;
       isMultiPointerGesture = false;
     } else {
-      // 2本目が加わったら星座選択の対象外
+      // 2本目が加わったら星座選択・連続タップ判定を解除
       isMultiPointerGesture = true;
+
+      // 保留中のタップ判定をキャンセル
+      clearTimeout(tapTimer);
+      tapTimer = null;
+      tapCount = 0;
     }
 
     activePointers.set(event.pointerId, {
@@ -5188,6 +5206,91 @@
     drawChart();
   });
 
+  // タップ操作のズーム量を視野角に応じて調整
+  function applyTapZoom(isZoomIn) {
+    // 視野角30°以下では15%、120°では65%の変化量
+    const normalizedFov = Math.max(
+      0,
+      Math.min(1, (fieldOfViewDeg - 30) / (MAX_FIELD_OF_VIEW_DEG - 30)),
+    );
+
+    // ダブルタップ（拡大）のズーム量
+    const zoomInAmount = 0.2 + normalizedFov * 0.5;
+
+    // トリプルタップ（縮小）のズーム量
+    const zoomOutAmount = 0.60 + normalizedFov * 0.90;
+
+    // 拡大または縮小
+    const zoomFactor = isZoomIn ? 1 - zoomInAmount : 1 + zoomOutAmount;
+
+    const startFov = fieldOfViewDeg;
+    const targetFov = Math.max(
+      MIN_FIELD_OF_VIEW_DEG,
+      Math.min(MAX_FIELD_OF_VIEW_DEG, startFov * zoomFactor),
+    );
+
+    // アニメーション設定
+    const duration = 250;
+    const startTime = performance.now();
+
+    function animateZoom(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // 最初と最後がゆっくりになる滑らかな変化
+      const easedProgress = progress * progress * (3 - 2 * progress);
+
+      fieldOfViewDeg = startFov + (targetFov - startFov) * easedProgress;
+
+      drawChart();
+
+      if (progress < 1) {
+        requestAnimationFrame(animateZoom);
+      } else {
+        fieldOfViewDeg = targetFov;
+        drawChart();
+      }
+    }
+
+    requestAnimationFrame(animateZoom);
+  }
+
+  // 星図上のタップによる星座・アステリズム選択
+  function handleChartTap(x, y) {
+    // まず星座評価のタップを判定
+    const ratingId = findConstellationRatingAt(x, y);
+
+    if (ratingId) {
+      incrementConstellationRating(ratingId);
+      drawChart();
+    } else if (!constellationLinesVisible || findConstellationNameAt(x, y)) {
+      // アステリズム名のタップを判定
+      const asterismId = findAsterismNameAt(x, y);
+
+      if (asterismId) {
+        const selectedAsterism = asterisms.find((a) => a.id === asterismId);
+
+        if (selectedAsterism) {
+          startAsterismLineAnimation(selectedAsterism);
+        }
+      } else {
+        // 星座名または星座線のタップを判定
+        const nameId = findConstellationNameAt(x, y);
+
+        const selectedByName = nameId
+          ? constellations.find((c) => c.id === nameId)
+          : null;
+
+        const selected = selectedByName || findConstellationAt(x, y);
+
+        if (selected) {
+          console.log("選択した星座:", selected.name);
+          startConstellationLineAnimation(selected);
+        }
+      }
+    }
+  }
+
   // 指の操作終了
   function stopDragging(event) {
     // すでに処理済みのイベントは無視する
@@ -5207,50 +5310,55 @@
       !isMultiPointerGesture &&
       moveDistance <= 8;
 
-    // タップした位置を判定
-    if (wasTap) {
-      // まず星座評価のタップを判定
-      const ratingId = findConstellationRatingAt(event.clientX, event.clientY);
+    // タップした位置を記録
+    if (wasTap && event.pointerType === "touch") {
+      const currentX = event.clientX;
+      const currentY = event.clientY;
 
-      if (ratingId) {
-        // 評価を1つ進める
-        incrementConstellationRating(ratingId);
+      // 連続タップの位置が大きく離れていたらリセット
+      const tapDistance = Math.hypot(currentX - lastTapX, currentY - lastTapY);
 
-        // 星図を再描画
-        drawChart();
-      } else if (
-        !constellationLinesVisible ||
-        findConstellationNameAt(event.clientX, event.clientY)
-      ) {
-        // まずアステリズム名のタップを判定
-        const asterismId = findAsterismNameAt(event.clientX, event.clientY);
-
-        if (asterismId) {
-          // タップされたアステリズムを取得
-          const selectedAsterism = asterisms.find((a) => a.id === asterismId);
-
-          if (selectedAsterism) {
-            startAsterismLineAnimation(selectedAsterism);
-          }
-        } else {
-          // アステリズム名でなければ、星座名を判定
-          const nameId = findConstellationNameAt(event.clientX, event.clientY);
-
-          // 星座名がタップされていれば、その星座を取得
-          const selectedByName = nameId
-            ? constellations.find((c) => c.id === nameId)
-            : null;
-
-          // 星座名で見つからなければ、星座線の位置を判定
-          const selected =
-            selectedByName || findConstellationAt(event.clientX, event.clientY);
-
-          if (selected) {
-            console.log("選択した星座:", selected.name);
-            startConstellationLineAnimation(selected);
-          }
-        }
+      if (tapCount > 0 && tapDistance > TAP_MOVE_LIMIT * 3) {
+        clearTimeout(tapTimer);
+        tapCount = 0;
       }
+
+      lastTapX = currentX;
+      lastTapY = currentY;
+
+      tapCount++;
+
+      // 前の判定タイマーを解除
+      clearTimeout(tapTimer);
+
+      // 3回タップなら縮小
+      if (tapCount >= 3) {
+        tapCount = 0;
+        applyTapZoom(false);
+      } else {
+        // 2回以下なら、追加タップを待つ
+        tapTimer = setTimeout(() => {
+          if (tapCount === 2) {
+            // ダブルタップなら拡大
+            applyTapZoom(true);
+          } else if (tapCount === 1) {
+            // シングルタップなら従来の星座選択
+            handleChartTap(lastTapX, lastTapY);
+          }
+
+          tapCount = 0;
+        }, TAP_INTERVAL);
+      }
+    } else if (wasTap && event.pointerType === "mouse") {
+      // PCのマウス操作は従来どおり
+      handleChartTap(event.clientX, event.clientY);
+    }
+
+    // タッチ操作がキャンセルされた場合は連続タップ判定を解除
+    if (event.type === "pointercancel" || event.type === "lostpointercapture") {
+      clearTimeout(tapTimer);
+      tapTimer = null;
+      tapCount = 0;
     }
 
     activePointers.delete(event.pointerId);
@@ -5583,7 +5691,8 @@
       // 星図の中心を星座カードの中心に合わせる
       centerAzDeg = constellationAzDeg;
       centerAltDeg = constellationAltDeg;
-      fieldOfViewDeg = 30; //プラネタリウムパネルの初期拡大率（視野角）
+      //プラネタリウムパネルの初期拡大率（視野角）
+      fieldOfViewDeg = 30;
 
       // 星図を再描画
       drawChart();
