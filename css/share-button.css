@@ -1,0 +1,44 @@
+/* =================================
+css/share-button.css
+   共有ボタン共通デザイン
+================================= */
+
+.app-share-button {
+  width: 28px;
+  height: 24px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #FFD700;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+
+/* 押している間 */
+.app-share-button:active {
+  background: rgba(255, 215, 0, 0.28);
+  border-color: #ffd700;
+  color: #ffffff;
+}
+
+/* SVGアイコン */
+.app-share-button svg {
+  display: block;
+}
