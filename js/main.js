@@ -1132,16 +1132,14 @@ function jumpToExplanatoryNote() {
     window.openStarGuide();
   }
 
-    // =================================
+  // =================================
   // 共有URLを開いたときの通知
   // =================================
 
-  const shareNotice = document.getElementById(
-    "star-guide-share-notice"
-  );
+  const shareNotice = document.getElementById("star-guide-share-notice");
 
   const shareNoticeClose = document.getElementById(
-    "star-guide-share-notice-close"
+    "star-guide-share-notice-close",
   );
 
   let shareNoticeTimer = null;
@@ -1169,12 +1167,8 @@ function jumpToExplanatoryNote() {
 
   // ×ボタン
   if (shareNoticeClose) {
-    shareNoticeClose.addEventListener(
-      "click",
-      hideStarGuideShareNotice
-    );
+    shareNoticeClose.addEventListener("click", hideStarGuideShareNotice);
   }
-
 })();
 
 // =================================
@@ -1182,7 +1176,6 @@ function jumpToExplanatoryNote() {
 // =================================
 
 window.restoreStarGuideSharedState = function () {
-
   const sharedState = window.starGuideSharedState;
 
   // 共有状態が有効でなければ何もしない
@@ -1191,18 +1184,13 @@ window.restoreStarGuideSharedState = function () {
   }
 
   // 星空ガイドの表示状態
-  const guidePanel = document.getElementById(
-    "star-guide-panel"
-  );
+  const guidePanel = document.getElementById("star-guide-panel");
 
   // プラネタリウムの表示状態
-  const planetariumPanel = document.getElementById(
-    "independent-chart-overlay"
-  );
+  const planetariumPanel = document.getElementById("independent-chart-overlay");
 
   const guideIsOpen =
-    guidePanel &&
-    window.getComputedStyle(guidePanel).display !== "none";
+    guidePanel && window.getComputedStyle(guidePanel).display !== "none";
 
   const planetariumIsOpen =
     planetariumPanel &&
@@ -1214,19 +1202,16 @@ window.restoreStarGuideSharedState = function () {
   }
 
   // 元の観測地点に戻す
-  if (
-    typeof window.clearTemporaryObservationLocation === "function"
-  ) {
+  if (typeof window.clearTemporaryObservationLocation === "function") {
     window.clearTemporaryObservationLocation();
   }
 
+  // 共有状態を解除
+  sharedState.active = false;
+
   // 元の星空ガイド選択日に戻す
-  if (
-    typeof window.setStarGuideObservationDate === "function"
-  ) {
-    window.setStarGuideObservationDate(
-      sharedState.originalObservationDate
-    );
+  if (typeof window.setStarGuideObservationDate === "function") {
+    window.setStarGuideObservationDate(sharedState.originalObservationDate);
   }
 
   // 共有状態を解除

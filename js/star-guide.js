@@ -64,7 +64,12 @@
     if (selectedDate !== null) return;
 
     try {
-      const savedDate = sessionStorage.getItem(STAR_GUIDE_DATE_SESSION_KEY);
+      let savedDate = localStorage.getItem(STAR_GUIDE_DATE_SESSION_KEY);
+
+      // 以前の保存データがsessionStorageに残っていれば引き継ぐ
+      if (!savedDate) {
+        savedDate = sessionStorage.getItem(STAR_GUIDE_DATE_SESSION_KEY);
+      }
 
       if (savedDate && /^\d{4}-\d{2}-\d{2}$/.test(savedDate)) {
         const [year, month, day] = savedDate.split("-").map(Number);
@@ -94,8 +99,11 @@
   function saveSelectedDate() {
     if (selectedDate === null) return;
 
+    // 共有URLによる一時的な日付は保存しない
+    if (window.starGuideSharedState?.active) return;
+
     try {
-      sessionStorage.setItem(
+      localStorage.setItem(
         STAR_GUIDE_DATE_SESSION_KEY,
         getDateKey(selectedDate),
       );
