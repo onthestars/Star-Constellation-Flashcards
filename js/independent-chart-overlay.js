@@ -20,6 +20,9 @@
   let isOpen = false;
   let pendingObservationTimestamp = null;
 
+  // 共有URLの観測地点を優先するか
+  let hasSharedChartLocation = false;
+
   // 星座カードから受け取った中心座標
   let pendingConstellationCenter = null;
 
@@ -51,6 +54,7 @@
       !isOpen ||
       !frameReady ||
       !frame.contentWindow ||
+      hasSharedChartLocation ||
       typeof window.getObservationLocation !== "function"
     ) {
       return;
@@ -190,6 +194,11 @@
 
   // 通常のプラネタリウムを開く
   function openPlanetarium(sharedSearch = "") {
+    const sharedParams = new URLSearchParams(sharedSearch);
+
+    hasSharedChartLocation =
+      sharedParams.has("lat") && sharedParams.has("lon");
+
     selectedMeteor = null;
 
     updateChartTitle();
@@ -288,7 +297,16 @@
 
     frameReady = true;
 
-    sendObservationLocation();
+    // 共有URLに観測地点が含まれている場合は、
+    // 星図側で復元した観測地点を優先する
+    const params = new URLSearchParams(window.location.search);
+    const hasSharedLocation =
+      params.has("lat") && params.has("lon");
+
+    if (!hasSharedLocation) {
+      sendObservationLocation();
+    }
+
     sendObservationDate();
     sendRadiantCoordinates();
     sendConstellationCenter();
@@ -304,6 +322,7 @@
     isOpen = false;
     frameReady = false;
     pendingObservationTimestamp = null;
+    hasSharedChartLocation = false;
     pendingConstellationCenter = null;
     updatePlanetariumButtonState();
     selectedMeteor = null;
