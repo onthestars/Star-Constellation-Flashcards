@@ -1395,7 +1395,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1457,7 +1457,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -5830,6 +5830,27 @@
       }
     }
 
+    // 観測地点（緯度・経度）
+    const sharedLat = params.get("lat");
+    const sharedLon = params.get("lon");
+
+    if (sharedLat !== null && sharedLon !== null) {
+      const lat = Number(sharedLat);
+      const lon = Number(sharedLon);
+
+      if (
+        Number.isFinite(lat) &&
+        Number.isFinite(lon) &&
+        lat >= -90 &&
+        lat <= 90 &&
+        lon >= -180 &&
+        lon <= 180
+      ) {
+        latitudeDeg = lat;
+        longitudeDeg = lon;
+      }
+    }
+
     // 観測日時
     const sharedDate = params.get("chartDate");
 
@@ -6313,6 +6334,11 @@
       );
 
       shareURL.searchParams.set("chartDate", localDateTime);
+
+      // 観測地点（緯度・経度）
+      shareURL.searchParams.set("lat", latitudeDeg.toString());
+      shareURL.searchParams.set("lon", longitudeDeg.toString());
+
       shareURL.searchParams.set("az", centerAzDeg.toFixed(2));
       shareURL.searchParams.set("alt", centerAltDeg.toFixed(2));
       shareURL.searchParams.set("fov", fieldOfViewDeg.toFixed(2));
