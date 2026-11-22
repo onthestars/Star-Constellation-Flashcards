@@ -1383,7 +1383,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1445,7 +1445,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -2599,13 +2599,9 @@
             continue;
           }
 
-          const x =
-            centerX +
-            (dot(v, basis.right) / denominator) * scaleX;
+          const x = centerX + (dot(v, basis.right) / denominator) * scaleX;
 
-          const y =
-            centerY -
-            (dot(v, basis.up) / denominator) * scaleY;
+          const y = centerY - (dot(v, basis.up) / denominator) * scaleY;
 
           if (!Number.isFinite(x) || !Number.isFinite(y)) {
             drawing = false;
@@ -5872,6 +5868,47 @@
 
   // 共有情報を初回描画前に反映
   restoreSharedChartState();
+
+  // =================================
+  // 共有プラネタリウムの受信通知
+  // =================================
+
+  const chartSharedNotice = document.getElementById("chart-shared-notice");
+
+  const chartSharedNoticeClose = document.getElementById(
+    "chart-shared-notice-close",
+  );
+
+  let chartSharedNoticeTimer = null;
+
+  // 通知を閉じる
+  function hideChartSharedNotice() {
+    if (chartSharedNotice) {
+      chartSharedNotice.hidden = true;
+    }
+
+    if (chartSharedNoticeTimer !== null) {
+      clearTimeout(chartSharedNoticeTimer);
+      chartSharedNoticeTimer = null;
+    }
+  }
+
+  // 共有日時がURLに含まれている場合だけ表示
+  if (
+    new URLSearchParams(window.location.search).has("chartDate") &&
+    chartSharedNotice
+  ) {
+    chartSharedNotice.hidden = false;
+
+    chartSharedNoticeTimer = setTimeout(() => {
+      hideChartSharedNotice();
+    }, 6000);
+  }
+
+  // ×ボタン
+  if (chartSharedNoticeClose) {
+    chartSharedNoticeClose.addEventListener("click", hideChartSharedNotice);
+  }
 
   // 初回表示
   resizeCanvas();
