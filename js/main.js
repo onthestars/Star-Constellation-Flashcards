@@ -1164,7 +1164,7 @@ function jumpToExplanatoryNote() {
 
     shareNoticeTimer = setTimeout(() => {
       hideStarGuideShareNotice();
-    }, 9000);
+    }, 6000);
   }
 
   // ×ボタン
@@ -1174,7 +1174,7 @@ function jumpToExplanatoryNote() {
       hideStarGuideShareNotice
     );
   }
-  
+
 })();
 
 // =================================

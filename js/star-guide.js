@@ -1321,7 +1321,7 @@ ${
 
     starGuideCopyNoticeTimer = setTimeout(() => {
       hideStarGuideCopyNotice();
-    }, 9000);
+    }, 6000);
   }
 
   // ▼ 星空ガイドイベント初期化
