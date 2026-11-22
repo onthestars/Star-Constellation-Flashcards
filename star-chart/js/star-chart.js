@@ -6140,7 +6140,7 @@
     // 秒後に自動で消す
     shareNoticeTimer = setTimeout(() => {
       hideShareNotice();
-    }, 9000);
+    }, 6000);
   }
 
   // ×ボタン
