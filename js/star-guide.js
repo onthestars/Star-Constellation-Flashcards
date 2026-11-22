@@ -1624,7 +1624,26 @@ ${
       closeButton.dataset.initialized = "true";
     }
 
-    // 月の満ち欠けパネル再表示ボタンの初期化
+    // Escapeキーでも閉じる
+    if (!panel.dataset.escapeInitialized) {
+      document.addEventListener("keydown", function (event) {
+        if (
+          event.key === "Escape" &&
+          getComputedStyle(panel).display !== "none"
+        ) {
+          panel.style.display = "none";
+          updateShowButtonState();
+
+          if (typeof window.restoreStarGuideSharedState === "function") {
+            window.restoreStarGuideSharedState();
+          }
+        }
+      });
+
+      panel.dataset.escapeInitialized = "true";
+    }
+
+    // 星空ガイドパネル再表示ボタンの初期化
     if (showButton && panel && !showButton.dataset.initialized) {
       showButton.addEventListener("click", function () {
         panel.style.display = "flex";

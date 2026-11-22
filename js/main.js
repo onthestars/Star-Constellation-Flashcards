@@ -200,7 +200,7 @@ function initConstellationCardPanel() {
     showButton.style.opacity = isVisible ? 0.4 : 1;
   }
 
-  // 閉じるボタン
+  // 閉じるボタン（星座カードパネル）
   if (closeButton && panel && !closeButton.dataset.initialized) {
     closeButton.addEventListener("click", function () {
       panel.style.display = "none";
@@ -210,6 +210,22 @@ function initConstellationCardPanel() {
 
     closeButton.dataset.initialized = "true";
   }
+
+  // Escapeキーでも閉じる
+if (panel && !panel.dataset.escapeInitialized) {
+  document.addEventListener("keydown", function (event) {
+    if (
+      event.key === "Escape" &&
+      getComputedStyle(panel).display !== "none"
+    ) {
+      panel.style.display = "none";
+
+      updateShowButtonState();
+    }
+  });
+
+  panel.dataset.escapeInitialized = "true";
+}
 
   // 再表示ボタン
   if (showButton && panel && !showButton.dataset.initialized) {
@@ -982,7 +998,7 @@ function initSettingPanel() {
     showButton.style.opacity = isVisible ? 0.4 : 1;
   }
 
-  // 閉じるボタン
+  // 閉じるボタン（設定パネル）
   if (closeButton && panel && !closeButton.dataset.initialized) {
     closeButton.addEventListener("click", function () {
       panel.style.display = "none";
@@ -991,6 +1007,22 @@ function initSettingPanel() {
     });
 
     closeButton.dataset.initialized = "true";
+  }
+
+    // Escapeキーでも閉じる
+  if (panel && !panel.dataset.escapeInitialized) {
+    document.addEventListener("keydown", function (event) {
+      if (
+        event.key === "Escape" &&
+        getComputedStyle(panel).display !== "none"
+      ) {
+        panel.style.display = "none";
+
+        updateShowButtonState();
+      }
+    });
+
+    panel.dataset.escapeInitialized = "true";
   }
 
   // 設定ボタン
