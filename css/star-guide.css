@@ -406,7 +406,7 @@
 /* 閉じるボタン */
 #star-guide-share-notice-close {
   position: absolute;
-  top: 4px;
+  top: -20px;
   right: 6px;
 
   margin: 0 0 4px 4px;
@@ -456,7 +456,7 @@
 /* 閉じるボタン */
 #star-guide-copy-notice-close {
   position: absolute;
-  top: 4px;
+  top: -20px;
   right: 6px;
 
   margin: 0 0 4px 4px;
