@@ -53,7 +53,7 @@
   // 現在表示している観察対象日
   let selectedDate = null;
 
-    // =================================
+  // =================================
   // 選択日の一時保存（同じタブ内）
   // =================================
 
@@ -64,22 +64,12 @@
     if (selectedDate !== null) return;
 
     try {
-      const savedDate = sessionStorage.getItem(
-        STAR_GUIDE_DATE_SESSION_KEY
-      );
+      const savedDate = sessionStorage.getItem(STAR_GUIDE_DATE_SESSION_KEY);
 
       if (savedDate && /^\d{4}-\d{2}-\d{2}$/.test(savedDate)) {
         const [year, month, day] = savedDate.split("-").map(Number);
 
-        const targetDate = new Date(
-          year,
-          month - 1,
-          day,
-          12,
-          0,
-          0,
-          0
-        );
+        const targetDate = new Date(year, month - 1, day, 12, 0, 0, 0);
 
         if (
           targetDate.getFullYear() === year &&
@@ -107,7 +97,7 @@
     try {
       sessionStorage.setItem(
         STAR_GUIDE_DATE_SESSION_KEY,
-        getDateKey(selectedDate)
+        getDateKey(selectedDate),
       );
     } catch (error) {
       console.warn("選択日の保存ができませんでした。", error);
@@ -1297,6 +1287,43 @@ ${
   // ウィンドウからフォーカスが外れたら停止
   window.addEventListener("blur", stopMoonDateRepeat);
 
+  // =================================
+  // 星空ガイド：共有URLコピー完了通知
+  // =================================
+
+  let starGuideCopyNoticeTimer = null;
+
+  // 通知を閉じる
+  function hideStarGuideCopyNotice() {
+    const notice = document.getElementById("star-guide-copy-notice");
+
+    if (notice) {
+      notice.hidden = true;
+    }
+
+    if (starGuideCopyNoticeTimer !== null) {
+      clearTimeout(starGuideCopyNoticeTimer);
+      starGuideCopyNoticeTimer = null;
+    }
+  }
+
+  // 通知を表示する
+  function showStarGuideCopyNotice() {
+    const notice = document.getElementById("star-guide-copy-notice");
+
+    if (!notice) return;
+
+    if (starGuideCopyNoticeTimer !== null) {
+      clearTimeout(starGuideCopyNoticeTimer);
+    }
+
+    notice.hidden = false;
+
+    starGuideCopyNoticeTimer = setTimeout(() => {
+      hideStarGuideCopyNotice();
+    }, 9000);
+  }
+
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
     // ▼ 星空ガイド共有ボタン
@@ -1305,6 +1332,16 @@ ${
     );
 
     if (guideShareButton) {
+      // コピー完了通知の×ボタン
+      const copyNoticeClose = document.getElementById(
+        "star-guide-copy-notice-close",
+      );
+
+      if (copyNoticeClose && !copyNoticeClose.dataset.initialized) {
+        copyNoticeClose.addEventListener("click", hideStarGuideCopyNotice);
+        copyNoticeClose.dataset.initialized = "true";
+      }
+
       guideShareButton.addEventListener("click", async function () {
         // 観測地点IDと選択日を取得
         const locationId = window.getSavedObservationLocationId();
@@ -1329,6 +1366,9 @@ ${
           await navigator.clipboard.writeText(shareURL.toString());
 
           console.log("星空ガイド共有URL:", shareURL.toString());
+
+          // コピー完了通知を表示
+          showStarGuideCopyNotice();
         } catch (error) {
           console.error("星空ガイド共有URLのコピーに失敗しました:", error);
         }
