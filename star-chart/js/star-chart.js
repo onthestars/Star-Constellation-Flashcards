@@ -1395,7 +1395,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1457,7 +1457,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -2415,156 +2415,159 @@
     ctx.fillStyle = skyGradient;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    // ==========================================
-    // 地面：低解像度Canvasによる海のグラデーション
-    // ==========================================
+    if (groundRenderingEnabled) {
+      // ==========================================
+      // 地面・地平線・水平線・地上：低解像度Canvasによる海のグラデーション
+      // ==========================================
 
-    // 地面専用Canvasを初回だけ作成
-    if (!groundCanvas) {
-      groundCanvas = document.createElement("canvas");
-      groundCtx = groundCanvas.getContext("2d");
-    }
-
-    // 元のCanvasの解像度を下げる
-    const groundWidth = Math.max(1, Math.ceil(canvasWidth * 0.75));
-
-    const groundHeight = Math.max(1, Math.ceil(canvasHeight * 0.75));
-
-    // サイズが変わったときだけ再設定
-    if (
-      groundCanvas.width !== groundWidth ||
-      groundCanvas.height !== groundHeight
-    ) {
-      groundCanvas.width = groundWidth;
-      groundCanvas.height = groundHeight;
-
-      groundImageData = groundCtx.createImageData(groundWidth, groundHeight);
-    }
-
-    // 地面の描画条件を確認
-    const currentGroundCacheKey = [
-      canvasWidth,
-      canvasHeight,
-      groundWidth,
-      groundHeight,
-      centerX,
-      centerY,
-      scaleX,
-      scaleY,
-      basis.center.z,
-      basis.right.z,
-      basis.up.z,
-      dayMix,
-    ].join("|");
-
-    // 条件が変わったときだけ地面を再計算
-    if (groundCacheKey !== currentGroundCacheKey) {
-      const pixels = groundImageData.data;
-      pixels.fill(0);
-
-      // 色の境界を滑らかにつなぐ
-      const smoothstep = (edge0, edge1, value) => {
-        const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
-        return t * t * (3 - 2 * t);
-      };
-
-      // 2色を滑らかに混ぜる
-      const mixColor = (a, b, t) => {
-        return Math.round(a + (b - a) * t);
-      };
-
-      // 低解像度の各画素を調べる
-      for (let y = 0; y < groundHeight; y++) {
-        const fullY = ((y + 0.5) * canvasHeight) / groundHeight;
-
-        const q = (centerY - fullY) / scaleY;
-
-        for (let x = 0; x < groundWidth; x++) {
-          const fullX = ((x + 0.5) * canvasWidth) / groundWidth;
-
-          const p = (fullX - centerX) / scaleX;
-
-          // 逆投影して高度を計算
-          const numerator =
-            basis.center.z * (1 - p * p - q * q) +
-            2 * p * basis.right.z +
-            2 * q * basis.up.z;
-
-          const denominator = 1 + p * p + q * q;
-
-          const altitudeDeg =
-            Math.asin(Math.max(-1, Math.min(1, numerator / denominator))) / RAD;
-
-          // 地平線より上は透明のまま
-          if (altitudeDeg > 0) continue;
-
-          // 地平線から足元に向かう距離感
-          const depth = Math.max(0, Math.min(1, -altitudeDeg / 90));
-
-          // 太陽高度による明るさ
-          const day = dayMix;
-
-          // 4種類の地形の色
-          const deepSea = [8 + 10 * day, 30 + 65 * day, 75 + 60 * day];
-
-          const shallowSea = [10 + 15 * day, 70 + 95 * day, 95 + 105 * day];
-
-          const sand = [105 + 85 * day, 82 + 90 * day, 45 + 55 * day];
-
-          const grass = [12 + 28 * day, 42 + 90 * day, 20 + 35 * day];
-
-          // 海岸線に自然な凹凸を加える
-          const coastOffset =
-            (Math.sin(p * 5.5) + 0.45 * Math.sin(p * 11 + q * 3)) * 0.012;
-
-          // 海から浅瀬へ
-          let t = smoothstep(0.03 + coastOffset, 0.09 + coastOffset, depth);
-
-          let r = mixColor(deepSea[0], shallowSea[0], t);
-          let g = mixColor(deepSea[1], shallowSea[1], t);
-          let b = mixColor(deepSea[2], shallowSea[2], t);
-
-          // 浅瀬から砂浜へ
-          t = smoothstep(0.11 + coastOffset, 0.17 + coastOffset, depth);
-
-          r = mixColor(r, sand[0], t);
-          g = mixColor(g, sand[1], t);
-          b = mixColor(b, sand[2], t);
-
-          // 砂浜から緑地へ
-          t = smoothstep(0.17 + coastOffset, 0.26 + coastOffset, depth);
-
-          r = mixColor(r, grass[0], t);
-          g = mixColor(g, grass[1], t);
-          b = mixColor(b, grass[2], t);
-
-          const index = (y * groundWidth + x) * 4;
-
-          pixels[index] = r;
-          pixels[index + 1] = g;
-          pixels[index + 2] = b;
-          pixels[index + 3] = 128;
-        }
+      // 地面専用Canvasを初回だけ作成
+      if (!groundCanvas) {
+        groundCanvas = document.createElement("canvas");
+        groundCtx = groundCanvas.getContext("2d");
       }
 
-      // 低解像度Canvasに反映
-      groundCtx.putImageData(groundImageData, 0, 0);
+      // 元のCanvasの解像度を下げる（解像度を下げると負荷軽減につながる）
+      const groundWidth = Math.max(1, Math.ceil(canvasWidth * 0.5));
 
-      // 今回の描画条件を保存
-      groundCacheKey = currentGroundCacheKey;
+      const groundHeight = Math.max(1, Math.ceil(canvasHeight * 0.5));
+
+      // サイズが変わったときだけ再設定
+      if (
+        groundCanvas.width !== groundWidth ||
+        groundCanvas.height !== groundHeight
+      ) {
+        groundCanvas.width = groundWidth;
+        groundCanvas.height = groundHeight;
+
+        groundImageData = groundCtx.createImageData(groundWidth, groundHeight);
+      }
+
+      // 地面の描画条件を確認
+      const currentGroundCacheKey = [
+        canvasWidth,
+        canvasHeight,
+        groundWidth,
+        groundHeight,
+        centerX,
+        centerY,
+        scaleX,
+        scaleY,
+        basis.center.z,
+        basis.right.z,
+        basis.up.z,
+        dayMix,
+      ].join("|");
+
+      // 条件が変わったときだけ地面を再計算
+      if (groundCacheKey !== currentGroundCacheKey) {
+        const pixels = groundImageData.data;
+        pixels.fill(0);
+
+        // 色の境界を滑らかにつなぐ
+        const smoothstep = (edge0, edge1, value) => {
+          const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+          return t * t * (3 - 2 * t);
+        };
+
+        // 2色を滑らかに混ぜる
+        const mixColor = (a, b, t) => {
+          return Math.round(a + (b - a) * t);
+        };
+
+        // 低解像度の各画素を調べる
+        for (let y = 0; y < groundHeight; y++) {
+          const fullY = ((y + 0.5) * canvasHeight) / groundHeight;
+
+          const q = (centerY - fullY) / scaleY;
+
+          for (let x = 0; x < groundWidth; x++) {
+            const fullX = ((x + 0.5) * canvasWidth) / groundWidth;
+
+            const p = (fullX - centerX) / scaleX;
+
+            // 逆投影して高度を計算
+            const numerator =
+              basis.center.z * (1 - p * p - q * q) +
+              2 * p * basis.right.z +
+              2 * q * basis.up.z;
+
+            const denominator = 1 + p * p + q * q;
+
+            const altitudeDeg =
+              Math.asin(Math.max(-1, Math.min(1, numerator / denominator))) /
+              RAD;
+
+            // 地平線より上は透明のまま
+            if (altitudeDeg > 0) continue;
+
+            // 地平線から足元に向かう距離感
+            const depth = Math.max(0, Math.min(1, -altitudeDeg / 90));
+
+            // 太陽高度による明るさ
+            const day = dayMix;
+
+            // 4種類の地形の色
+            const deepSea = [8 + 10 * day, 30 + 65 * day, 75 + 60 * day];
+
+            const shallowSea = [10 + 15 * day, 70 + 95 * day, 95 + 105 * day];
+
+            const sand = [105 + 85 * day, 82 + 90 * day, 45 + 55 * day];
+
+            const grass = [12 + 28 * day, 42 + 90 * day, 20 + 35 * day];
+
+            // 海岸線に自然な凹凸を加える
+            const coastOffset =
+              (Math.sin(p * 5.5) + 0.45 * Math.sin(p * 11 + q * 3)) * 0.012;
+
+            // 海から浅瀬へ
+            let t = smoothstep(0.03 + coastOffset, 0.09 + coastOffset, depth);
+
+            let r = mixColor(deepSea[0], shallowSea[0], t);
+            let g = mixColor(deepSea[1], shallowSea[1], t);
+            let b = mixColor(deepSea[2], shallowSea[2], t);
+
+            // 浅瀬から砂浜へ
+            t = smoothstep(0.11 + coastOffset, 0.17 + coastOffset, depth);
+
+            r = mixColor(r, sand[0], t);
+            g = mixColor(g, sand[1], t);
+            b = mixColor(b, sand[2], t);
+
+            // 砂浜から緑地へ
+            t = smoothstep(0.17 + coastOffset, 0.26 + coastOffset, depth);
+
+            r = mixColor(r, grass[0], t);
+            g = mixColor(g, grass[1], t);
+            b = mixColor(b, grass[2], t);
+
+            const index = (y * groundWidth + x) * 4;
+
+            pixels[index] = r;
+            pixels[index + 1] = g;
+            pixels[index + 2] = b;
+            pixels[index + 3] = 128;
+          }
+        }
+
+        // 低解像度Canvasに反映
+        groundCtx.putImageData(groundImageData, 0, 0);
+
+        // 今回の描画条件を保存
+        groundCacheKey = currentGroundCacheKey;
+      }
+
+      // 星図サイズに滑らかに拡大して重ねる
+      ctx.save();
+
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      ctx.drawImage(groundCanvas, 0, 0, canvasWidth, canvasHeight);
+
+      ctx.restore();
     }
-
-    // 星図サイズに滑らかに拡大して重ねる
-    ctx.save();
-
-    ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = "source-over";
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-
-    ctx.drawImage(groundCanvas, 0, 0, canvasWidth, canvasHeight);
-
-    ctx.restore();
 
     // ==========================================
     // 天の川の輪郭
@@ -3631,7 +3634,8 @@
 
         // 地平線より下の星を半透明にする
         ctx.save();
-        ctx.globalAlpha = projected.altitude < 0 ? 0.1 : 1.0;
+        ctx.globalAlpha =
+          groundRenderingEnabled && projected.altitude < 0 ? 0.1 : 1.0;
 
         // グローの設定
         const glow = style.glow || {};
@@ -4153,8 +4157,9 @@
 
       ctx.save();
 
-      // 地平線の下で太陽の光彩を半透明処理
-      ctx.globalAlpha = sunPoint.altitude < 0 ? 0.1 : 1.0;
+      // 地面表示がONの場合だけ、地平線の下で太陽の光彩を半透明処理
+      ctx.globalAlpha =
+        groundRenderingEnabled && sunPoint.altitude < 0 ? 0.1 : 1.0;
 
       // 太陽の周囲に強い光彩を描く
       ctx.save();
@@ -4193,8 +4198,9 @@
       // 太陽本体
       ctx.save();
 
-      // 地平線の下で太陽本体を半透明処理
-      ctx.globalAlpha = sunPoint.altitude < 0 ? 0.1 : 1.0;
+      // 地面表示がONの場合だけ、地平線の下で太陽本体を半透明処理
+      ctx.globalAlpha =
+        groundRenderingEnabled && sunPoint.altitude < 0 ? 0.1 : 1.0;
 
       ctx.fillStyle = "#FFF0A0";
 
@@ -4311,7 +4317,8 @@
       ctx.save();
 
       // 地平線の下で惑星を半透明処理
-      ctx.globalAlpha = point.altitude < 0 ? 0.1 : 1.0;
+      ctx.globalAlpha =
+        groundRenderingEnabled && point.altitude < 0 ? 0.1 : 1.0;
 
       // 惑星の光彩
       ctx.save();
@@ -4733,8 +4740,9 @@
 
       ctx.save();
 
-      // 地平線の下で月を半透明処理
-      ctx.globalAlpha = moonPoint.altitude < 0 ? 0.1 : 1.0;
+      // 地面表示がONの場合だけ、地平線の下で月を半透明処理
+      ctx.globalAlpha =
+        groundRenderingEnabled && moonPoint.altitude < 0 ? 0.1 : 1.0;
 
       // 太陽の位置はdrawChart冒頭で計算済みの値を再利用
       const sun = sunForSky;
@@ -5001,6 +5009,9 @@
 
   // ▲▲▲drawChart();ここまで
 
+  // 地面表示設定（初期状態はON）
+  let groundRenderingEnabled = true;
+
   // 地面描画専用Canvas（低解像度）
   let groundCanvas = null;
   let groundCtx = null;
@@ -5218,7 +5229,7 @@
     const zoomInAmount = 0.2 + normalizedFov * 0.5;
 
     // トリプルタップ（縮小）のズーム量
-    const zoomOutAmount = 0.60 + normalizedFov * 0.90;
+    const zoomOutAmount = 0.6 + normalizedFov * 0.9;
 
     // 拡大または縮小
     const zoomFactor = isZoomIn ? 1 - zoomInAmount : 1 + zoomOutAmount;
@@ -5628,6 +5639,18 @@
       // 観測地点を更新
       latitudeDeg = data.latitude;
       longitudeDeg = data.longitude;
+
+      // 星図を再描画
+      drawChart();
+
+      return;
+    }
+
+    // 親ページから地面表示設定を受信
+    if (data.type === "set-ground-rendering") {
+      if (typeof data.enabled !== "boolean") return;
+
+      groundRenderingEnabled = data.enabled;
 
       // 星図を再描画
       drawChart();
