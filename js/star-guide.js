@@ -1350,7 +1350,7 @@ ${
     const GUIDE_TEXT_SIZES = {
       small: 0.9,
       medium: 1.0,
-      large: 1.3,
+      large: 1.2,
     };
 
     const guideTextSizeOrder = ["medium", "large", "small"];
