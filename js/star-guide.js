@@ -1004,14 +1004,14 @@
                 text-align:center;
               ">
                 <div style="
-                  font-size:0.9rem;
+                  font-size:0.9em;
                   margin-bottom:2px;
                 ">
                   星空期待値
                 </div>
 
                 <div style="
-                  font-size:1.5rem;
+                  font-size:1.5em;
                   color:rgb(255,215,0);
                   text-shadow:0 0 2px rgba(0,0,0,0.8);
                   line-height:1;
@@ -1030,7 +1030,7 @@
               </div>
 
               <div style="
-                font-size:0.8rem;
+                font-size:0.8em;
                 margin:0.5em 0 1px 0;
                 text-align:center;
               ">
@@ -1350,7 +1350,7 @@ ${
     const GUIDE_TEXT_SIZES = {
       small: 0.9,
       medium: 1.0,
-      large: 1.2,
+      large: 1.3,
     };
 
     const guideTextSizeOrder = ["medium", "large", "small"];
