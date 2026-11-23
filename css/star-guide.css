@@ -507,6 +507,7 @@
 
   font-family: "Meiryo", sans-serif;
   font-size: 11px;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
 
@@ -524,4 +525,9 @@
   .guide-zoom-target {
     zoom: var(--guide-zoom, 1);
   }
+}
+
+/* 星空ガイド：iPhone Safari向け文字サイズ調整 */
+.star-guide-info {
+  font-size: calc(14px * var(--guide-zoom, 1));
 }
