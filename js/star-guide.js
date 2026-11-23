@@ -965,30 +965,7 @@
     </svg>
   </button>
 
-    <button
-    type="button"
-    id="guide-text-size-button"
-    data-text-size="medium"
-    aria-label="文字サイズを変更"
-    title="文字サイズを変更"
-  >中</button>
-
-</div>
-
-<div style="
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 0;
-  padding: 0;
-  line-height: 1.3;
-  font-size: 14px;
-">
-
-  <div class="star-guide-info guide-zoom-target" style="min-width:0; margin:0; padding:0;">
+  <div class="star-guide-info guide-zoom-target" style="flex:1 1 auto; min-width:0; margin:0; padding:0;">
 
 <!-- この夜の星空期待値 表示領域 -->
                         <div style="
@@ -1098,6 +1075,29 @@ ${
 </div>
 
 </div>
+
+    <button
+    type="button"
+    id="guide-text-size-button"
+    data-text-size="medium"
+    aria-label="文字サイズを変更"
+    title="文字サイズを変更"
+  >中</button>
+
+</div>
+
+<div style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0;
+  padding: 0;
+  line-height: 1.3;
+  font-size: 14px;
+">
 
 <div class="moon-control-group">
 
@@ -1350,7 +1350,7 @@ ${
     const GUIDE_TEXT_SIZES = {
       small: 0.9,
       medium: 1.1,
-      large: 1.25,
+      large: 1.2,
     };
 
     const guideTextSizeOrder = ["medium", "large", "small"];
