@@ -124,6 +124,7 @@
   .sun-moon-times {
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 12px;
   }
 
@@ -565,4 +566,21 @@
   .star-guide-info {
     font-size: calc(15px * var(--guide-zoom, 1));
   }
+}
+
+/* =================================
+   月相画像の長押しドラッグ
+================================= */
+
+#star-guide-panel #starGuideMoonImage {
+  cursor: grab;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: pan-y;
+}
+
+#star-guide-panel #starGuideMoonImage:active {
+  cursor: grabbing;
 }
