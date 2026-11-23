@@ -102,7 +102,7 @@
   flex-direction: column;
   gap: 2px;
 
-  text-align: left;
+  text-align: center;
   font-size: 0.85em;
 
   margin: 2px 0 0.25em 0;
@@ -331,16 +331,29 @@
 .star-guide-share-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 0px;
-
+  align-items: flex-start;
+  gap: 6px;
   width: 100%;
   margin: 6px 0 3px 0;
+}
+
+.star-guide-share-row .star-guide-info {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 /* 文字サイズボタン配置のレイアウト調整 */
 #guide-text-size-button {
   margin-right: -1px;
+}
+
+/* 共有ボタン・文字サイズボタンのサイズ固定 */
+#star-guide-share-visible-button,
+#guide-text-size-button {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 /* 星空ガイド共有ボタン */
@@ -486,7 +499,7 @@
 
 /* 星空ガイド：文字サイズ切り替えボタン */
 #guide-text-size-button {
-  display: none;
+  display: flex;
 
   width: 28px;
   height: 24px;
@@ -515,16 +528,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* スマートフォンだけ表示 */
-@media (max-width: 767px) {
-  #guide-text-size-button {
-    display: flex;
-  }
-
-  /* 文字サイズの拡大対象 */
-  .guide-zoom-target {
-    zoom: var(--guide-zoom, 1);
-  }
+/* 全端末共通：文字サイズ切り替え */
+.guide-zoom-target {
+  zoom: var(--guide-zoom, 1);
 }
 
 /* iPhone向け：星空ガイドの文字サイズ補正 */
