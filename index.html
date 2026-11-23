@@ -2,85 +2,59 @@
 
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
-    />
-    <title>トレミー's 48</title>
 
-    <link rel="icon" href="image/icon/favicon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="image/icon/icon-512.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>トレミー's 48</title>
 
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/layout.css" />
-    <link rel="stylesheet" href="css/buttons.css" />
-    <link rel="stylesheet" href="css/viewer.css" />
-    <link rel="stylesheet" href="css/animation.css" />
-    <link rel="stylesheet" href="css/effects.css" />
-    <link rel="stylesheet" href="css/ui.css" />
-    <link rel="stylesheet" href="css/meteor.css" />
-    <link rel="stylesheet" href="css/soleil-meteor.css" />
-    <link rel="stylesheet" href="css/star-guide.css" />
-    <link rel="stylesheet" href="css/soleil-meteor-overlay.css" />
-    <link rel="stylesheet" href="css/independent-chart-overlay.css" />
-    <link rel="stylesheet" href="css/panel-header.css" />
-    <link rel="stylesheet" href="css/panel-management.css" />
-    <link rel="stylesheet" href="css/setting-panel.css" />
-    <link rel="stylesheet" href="star-chart/css/share-button.css" />
+  <link rel="icon" href="image/icon/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="image/icon/icon-512.png" />
 
-    <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/buttons.css" />
+  <link rel="stylesheet" href="css/viewer.css" />
+  <link rel="stylesheet" href="css/animation.css" />
+  <link rel="stylesheet" href="css/effects.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+  <link rel="stylesheet" href="css/meteor.css" />
+  <link rel="stylesheet" href="css/soleil-meteor.css" />
+  <link rel="stylesheet" href="css/star-guide.css" />
+  <link rel="stylesheet" href="css/soleil-meteor-overlay.css" />
+  <link rel="stylesheet" href="css/independent-chart-overlay.css" />
+  <link rel="stylesheet" href="css/panel-header.css" />
+  <link rel="stylesheet" href="css/panel-management.css" />
+  <link rel="stylesheet" href="css/setting-panel.css" />
+  <link rel="stylesheet" href="star-chart/css/share-button.css" />
 
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="theme-color" content="#000000" />
-  </head>
+  <link rel="manifest" href="manifest.json" />
 
-  <body>
-    <!-- ▼ ホーム全体 -->
-    <div class="home-screen">
-      <!-- ▼ 背景ホーム -->
-      <div class="background-home">
-        <!-- アプリタイトル画像 -->
-        <img
-          id="app-title-image"
-          src="image/common/app-title-highlight.png"
-          alt="トレミー's 48"
-        />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="theme-color" content="#000000" />
+</head>
 
-        <!-- 各種ボタン（画面右上固定） -->
-        <div id="main-panel-buttons">
-          <img
-            src="image/common/btn-star-guide.png"
-            id="showStarGuideBtn"
-            alt="星空ガイドパネルを表示"
-            title="星空ガイドパネルを表示"
-          />
+<body>
+  <!-- ▼ ホーム全体 -->
+  <div class="home-screen">
+    <!-- ▼ 背景ホーム -->
+    <div class="background-home">
+      <!-- アプリタイトル画像 -->
+      <img id="app-title-image" src="image/common/app-title-highlight.png" alt="トレミー's 48" />
 
-          <img
-            src="image/common/btn-star-chart.png"
-            id="showPlanetariumBtn"
-            alt="プラネタリウムを表示"
-            title="プラネタリウムを表示"
-          />
+      <!-- 各種ボタン（画面右上固定） -->
+      <div id="main-panel-buttons">
+        <img src="image/common/btn-star-guide.png" id="showStarGuideBtn" alt="星空ガイドパネルを表示" title="星空ガイドパネルを表示" />
 
-          <img
-            src="image/common/btn-flashcard.png"
-            id="showCardBtn"
-            alt="星座カードパネルを表示"
-            title="星座カードパネルを表示"
-          />
+        <img src="image/common/btn-star-chart.png" id="showPlanetariumBtn" alt="プラネタリウムを表示" title="プラネタリウムを表示" />
 
-          <img
-            src="image/common/btn-setting.png"
-            id="showSettingBtn"
-            alt="設定パネルを表示"
-            title="設定パネルを表示"
-          />
+        <img src="image/common/btn-flashcard.png" id="showCardBtn" alt="星座カードパネルを表示" title="星座カードパネルを表示" />
 
-          <!-- ▼ 将来的な操作音機能用（現在は未使用）
+        <img src="image/common/btn-setting.png" id="showSettingBtn" alt="設定パネルを表示" title="設定パネルを表示" />
+
+        <!-- ▼ 将来的な操作音機能用（現在は未使用）
         <img src="image/common/btn-audio-on.png"
         id="soundOnBtn"
         alt="音声ON">
@@ -89,454 +63,324 @@
         id="soundOffBtn"
         alt="音声OFF"
         style="display:none;">
-        --></div>
+        -->
+      </div>
 
-        <div id="rotate-warning">
-          このアプリはスマホ横画面に対応していません
+      <div id="rotate-warning">
+        このアプリはスマホ横画面に対応していません
+      </div>
+
+      <!-- 星の瞬きオーバーレイ -->
+      <div id="stars-overlay"></div>
+
+      <!-- 月の背景アニメーション -->
+      <img id="moon" src="image/common/moon5-crescent.png" alt="月" />
+
+      <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
+
+      <div id="copyright">
+        ©2026 K-A-Z/トレミー's 48 ver.3.72 All rights reserved.
+      </div>
+
+      <div id="specialThanksBtn" class="special-thanks-btn">
+        Special Thanks『ぴーとの星図』
+      </div>
+    </div>
+
+    <!-- ▼ メインパネル -->
+    <div class="main-panels">
+      <!-- ▼ 星空ガイド -->
+      <div id="star-guide-panel">
+        <!-- 星空ガイドのヘッダー -->
+        <div id="star-guide-header">
+          <div id="star-guide-title-group">
+            <img src="image/common/btn-star-guide.png" alt="" id="star-guide-icon" />
+            <span id="star-guide-title">星空ガイド</span>
+            <span id="star-guide-location">大阪市</span>
+          </div>
+
+          <button id="starGuideCloseBtn" aria-label="閉じる">✕</button>
         </div>
 
-        <!-- 星の瞬きオーバーレイ -->
-        <div id="stars-overlay"></div>
-
-        <!-- 月の背景アニメーション -->
-        <img id="moon" src="image/common/moon5-crescent.png" alt="月" />
-
-        <div id="moonAnime" onclick="openMoonSpecialViewer()"></div>
-
-        <div id="copyright">
-          ©2026 K-A-Z/トレミー's 48 ver.3.71 All rights reserved.
+        <!-- 共有URLを開いたときのメッセージ -->
+        <div id="star-guide-share-notice" hidden aria-live="polite">
+          <span id="star-guide-share-notice-text">
+            共有された 星空ガイドを 表示しています。
+          </span>
+          <button type="button" id="star-guide-share-notice-close" aria-label="閉じる">
+            ✕
+          </button>
         </div>
 
-        <div id="specialThanksBtn" class="special-thanks-btn">
-          Special Thanks『ぴーとの星図』
+        <!-- 共有URLコピー完了メッセージ -->
+        <div id="star-guide-copy-notice" hidden aria-live="polite">
+          <span>
+            星空ガイド（URL）を コピーしました。 LINEなどに貼り付けて
+            共有できます。
+          </span>
+          <button type="button" id="star-guide-copy-notice-close" aria-label="閉じる">
+            ✕
+          </button>
+        </div>
+
+        <!-- 星空ガイドの内容 -->
+        <div id="star-guide-content">読み込み中...</div>
+
+        <div class="star-guide-footer">
+          <button type="button" id="showPlanetariumFromGuideBtn" class="datetime-now">
+            <span class="flip-text">🔭</span>今の空<span style="font-size: 0.8em">を</span>見る🔭
+          </button>
         </div>
       </div>
 
-      <!-- ▼ メインパネル -->
-      <div class="main-panels">
-        <!-- ▼ 星空ガイド -->
-        <div id="star-guide-panel">
-          <!-- 星空ガイドのヘッダー -->
-          <div id="star-guide-header">
-            <div id="star-guide-title-group">
-              <img
-                src="image/common/btn-star-guide.png"
-                alt=""
-                id="star-guide-icon"
-              />
-              <span id="star-guide-title">星空ガイド</span>
-              <span id="star-guide-location">大阪市</span>
+      <!-- ▼ プラネタリウム -->
+      <div class="planetarium-panel">
+        <!-- index.html：Soleil流星群オーバーレイ -->
+        <div id="chart-overlay" style="display: none">
+          <div id="chart-panel">
+            <div id="chart-header">
+              <span id="chart-title">Soleil 流星群観察</span>
+              <button id="chart-close">✕</button>
             </div>
 
-            <button id="starGuideCloseBtn" aria-label="閉じる">✕</button>
-          </div>
+            <div id="chart-stage">
+              <iframe id="chart-frame" title="Soleil星図" src="about:blank" allowfullscreen></iframe>
 
-          <!-- 共有URLを開いたときのメッセージ -->
-          <div id="star-guide-share-notice" hidden aria-live="polite">
-            <span id="star-guide-share-notice-text">
-              共有された
-              星空ガイドを
-              表示しています。
-            </span>
-            <button
-              type="button"
-              id="star-guide-share-notice-close"
-              aria-label="閉じる"
-            >
-              ✕
-            </button>
-          </div>
-
-          <!-- 共有URLコピー完了メッセージ -->
-          <div id="star-guide-copy-notice" hidden aria-live="polite">
-            <span>
-              星空ガイド（URL）を
-              コピーしました。
-              LINEなどに貼り付けて
-              共有できます。
-            </span>
-            <button
-              type="button"
-              id="star-guide-copy-notice-close"
-              aria-label="閉じる"
-            >
-              ✕
-            </button>
-          </div>
-
-          <!-- 星空ガイドの内容 -->
-          <div id="star-guide-content">読み込み中...</div>
-
-          <div class="star-guide-footer">
-            <button
-              type="button"
-              id="showPlanetariumFromGuideBtn"
-              class="datetime-now"
-            >
-              <span class="flip-text">🔭</span>今の空<span
-                style="font-size: 0.8em"
-                >を</span
-              >見る🔭
-            </button>
-          </div>
-        </div>
-
-        <!-- ▼ プラネタリウム -->
-        <div class="planetarium-panel">
-          <!-- index.html：Soleil流星群オーバーレイ -->
-          <div id="chart-overlay" style="display: none">
-            <div id="chart-panel">
-              <div id="chart-header">
-                <span id="chart-title">Soleil 流星群観察</span>
-                <button id="chart-close">✕</button>
-              </div>
-
-              <div id="chart-stage">
-                <iframe
-                  id="chart-frame"
-                  title="Soleil星図"
-                  src="about:blank"
-                  allowfullscreen
-                ></iframe>
-
-                <div id="meteor-layer">
-                  <div id="meteor-radiant" aria-label="流星群の放射点"></div>
-                </div>
+              <div id="meteor-layer">
+                <div id="meteor-radiant" aria-label="流星群の放射点"></div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- ▼ プラネタリウム補助 -->
-        <div class="planetarium-sub-panel">
-          <!-- 星図カードオーバーレイ -->
-          <div id="independent-chart-overlay" style="display: none">
-            <div id="independent-chart-panel">
-              <div id="independent-chart-header">
-                <div id="independent-chart-title-group">
-                  <img
-                    src="image/common/btn-star-chart.png"
-                    alt=""
-                    id="independent-chart-icon"
-                  />
-                  <span id="independent-chart-title">プラネタリウム</span>
-                  <span id="independent-chart-location">大阪市</span>
-                </div>
-
-                <button
-                  id="independent-chart-close"
-                  type="button"
-                  aria-label="閉じる"
-                >
-                  ✕
-                </button>
+      <!-- ▼ プラネタリウム補助 -->
+      <div class="planetarium-sub-panel">
+        <!-- 星図カードオーバーレイ -->
+        <div id="independent-chart-overlay" style="display: none">
+          <div id="independent-chart-panel">
+            <div id="independent-chart-header">
+              <div id="independent-chart-title-group">
+                <img src="image/common/btn-star-chart.png" alt="" id="independent-chart-icon" />
+                <span id="independent-chart-title">プラネタリウム</span>
+                <span id="independent-chart-location">大阪市</span>
               </div>
 
-              <iframe
-                id="independent-chart-frame"
-                title="星図カード（開発中）"
-                src="about:blank"
-                allowfullscreen
-              ></iframe>
+              <button id="independent-chart-close" type="button" aria-label="閉じる">
+                ✕
+              </button>
             </div>
+
+            <iframe id="independent-chart-frame" title="星図カード（開発中）" src="about:blank" allowfullscreen></iframe>
           </div>
         </div>
+      </div>
 
-        <!-- ▼ 設定パネル -->
-        <div id="setting-panel">
-          <!-- 設定パネルのヘッダー -->
-          <div id="setting-panel-header">
-            <div id="setting-panel-title-group">
-              <img
-                src="image/common/btn-setting.png"
-                alt=""
-                id="setting-panel-icon"
-              />
+      <!-- ▼ 設定パネル -->
+      <div id="setting-panel">
+        <!-- 設定パネルのヘッダー -->
+        <div id="setting-panel-header">
+          <div id="setting-panel-title-group">
+            <img src="image/common/btn-setting.png" alt="" id="setting-panel-icon" />
 
-              <span id="setting-panel-title">設定</span>
-            </div>
-
-            <button id="settingPanelCloseBtn" type="button" aria-label="閉じる">
-              ✕
-            </button>
+            <span id="setting-panel-title">設定</span>
           </div>
 
-          <!-- 設定パネル本体 -->
-          <div id="setting-panel-content">
-            
-            <!-- 観測地点の設定 -->
-            <section id="observation-location-setting">
-              <h3>◆ 観測地点</h3>
-
-              <div id="observation-location-list"></div>
-            </section>
-
-            <!-- プラネタリウムの設定 -->
-<section id="planetarium-display-setting">
-  <h3>◆ プラネタリウム</h3>
-
-  <label for="ground-rendering-toggle">
-    <input
-      type="checkbox"
-      id="ground-rendering-toggle"
-      checked
-    />
-    地面を表示する
-  </label>
-
-</section>
-          </div>
+          <button id="settingPanelCloseBtn" type="button" aria-label="閉じる">
+            ✕
+          </button>
         </div>
-        <!-- setting-panel を閉じる -->
 
-        <!-- ▼ 星座カード -->
-        <div class="constellation-card-panel">
-          <!-- 星座カードのヘッダー -->
-          <div id="card-panel-header">
-            <div id="card-panel-title-group">
-              <img
-                src="image/common/btn-flashcard.png"
-                alt=""
-                id="card-panel-icon"
-              />
-              <span id="card-panel-title">トレミーの48星座カード</span>
-            </div>
+        <!-- 設定パネル本体 -->
+        <div id="setting-panel-content">
+          <!-- 観測地点の設定 -->
+          <section id="observation-location-setting">
+            <h3>◆ 観測地点</h3>
 
-            <button id="cardPanelCloseBtn" type="button" aria-label="閉じる">
-              ✕
-            </button>
+            <div id="observation-location-list"></div>
+          </section>
+
+          <!-- プラネタリウムの設定 -->
+          <section id="planetarium-display-setting">
+            <h3>◆ プラネタリウム</h3>
+            <label for="ground-rendering-toggle">
+              <input type="checkbox" id="ground-rendering-toggle" checked />
+              地面を表示する
+            </label>
+          </section>
+
+          <!-- 星空ガイドの操作位置設定 -->
+          <section id="star-guide-control-setting">
+            <h3>◆ 星空ガイド</h3>
+
+            <div class="moon-control-position-setting">
+              <div class="moon-control-position-title">
+                月の画像・日付操作位置
+              </div>
+              <div class="moon-control-position-options">
+                <label>
+                  <input type="radio" name="moon-control-position" value="left" />
+                  左側
+                </label>
+
+                <label>
+                  <input type="radio" name="moon-control-position" value="right" />
+                  右側
+                </label>
+              </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- setting-panel を閉じる -->
+
+      <!-- ▼ 星座カード -->
+      <div class="constellation-card-panel">
+        <!-- 星座カードのヘッダー -->
+        <div id="card-panel-header">
+          <div id="card-panel-title-group">
+            <img src="image/common/btn-flashcard.png" alt="" id="card-panel-icon" />
+            <span id="card-panel-title">トレミーの48星座カード</span>
           </div>
 
-          <!-- 星座カード本体 -->
-          <div id="card-frame" class="card-frame">
-            <div class="card-image-area">
-              <div id="card-anim-wrapper">
-                <img
-                  src="image/other/card-top.png"
-                  id="card-img"
-                  class="card-img"
-                  alt="星座カード"
-                />
-              </div>
+          <button id="cardPanelCloseBtn" type="button" aria-label="閉じる">
+            ✕
+          </button>
+        </div>
+
+        <!-- 星座カード本体 -->
+        <div id="card-frame" class="card-frame">
+          <div class="card-image-area">
+            <div id="card-anim-wrapper">
+              <img src="image/other/card-top.png" id="card-img" class="card-img" alt="星座カード" />
+            </div>
+          </div>
+
+          <div class="button-block">
+            <div class="season-group">
+              <img src="image/common/btn-spring.png" class="btn-season" id="springBtn" data-season="spring" alt="春" />
+              <img src="image/common/btn-summer.png" class="btn-season" id="summerBtn" data-season="summer" alt="夏" />
+              <img src="image/common/btn-autumn.png" class="btn-season" id="autumnBtn" data-season="autumn" alt="秋" />
+              <img src="image/common/btn-winter.png" class="btn-season" id="winterBtn" data-season="winter" alt="冬" />
+              <img src="image/common/btn-south.png" class="btn-season" id="southBtn" data-season="south" alt="南" />
             </div>
 
-            <div class="button-block">
-              <div class="season-group">
-                <img
-                  src="image/common/btn-spring.png"
-                  class="btn-season"
-                  id="springBtn"
-                  data-season="spring"
-                  alt="春"
-                />
-                <img
-                  src="image/common/btn-summer.png"
-                  class="btn-season"
-                  id="summerBtn"
-                  data-season="summer"
-                  alt="夏"
-                />
-                <img
-                  src="image/common/btn-autumn.png"
-                  class="btn-season"
-                  id="autumnBtn"
-                  data-season="autumn"
-                  alt="秋"
-                />
-                <img
-                  src="image/common/btn-winter.png"
-                  class="btn-season"
-                  id="winterBtn"
-                  data-season="winter"
-                  alt="冬"
-                />
-                <img
-                  src="image/common/btn-south.png"
-                  class="btn-season"
-                  id="southBtn"
-                  data-season="south"
-                  alt="南"
-                />
-              </div>
+            <!-- ぴーとの星図ボタン（独立した上段） -->
+            <div class="pete-chart-group">
+              <img src="image/common/btn-star-chart.png" id="peteChartBtn" class="btn-special" alt="ぴーとの星図"
+                role="button" tabindex="0" />
+            </div>
 
-              <!-- ぴーとの星図ボタン（独立した上段） -->
-              <div class="pete-chart-group">
-                <img
-                  src="image/common/btn-star-chart.png"
-                  id="peteChartBtn"
-                  class="btn-special"
-                  alt="ぴーとの星図"
-                  role="button"
-                  tabindex="0"
-                />
-              </div>
+            <!-- 操作ボタン（下段） -->
+            <div class="control-group">
+              <img src="image/common/btn-back.png" class="btn-control" id="prevBtn" alt="前へ" />
+              <img src="image/common/btn-flip.png" class="btn-control" id="flipBtn" alt="裏返す" />
+              <img src="image/common/btn-next.png" class="btn-control" id="nextBtn" alt="次へ" />
+            </div>
 
-              <!-- 操作ボタン（下段） -->
-              <div class="control-group">
-                <img
-                  src="image/common/btn-back.png"
-                  class="btn-control"
-                  id="prevBtn"
-                  alt="前へ"
-                />
-                <img
-                  src="image/common/btn-flip.png"
-                  class="btn-control"
-                  id="flipBtn"
-                  alt="裏返す"
-                />
-                <img
-                  src="image/common/btn-next.png"
-                  class="btn-control"
-                  id="nextBtn"
-                  alt="次へ"
-                />
-              </div>
-
-              <div class="special-group">
-                <img
-                  src="image/common/btn-camera.png"
-                  class="btn-special"
-                  id="specialBtn"
-                  alt="Special"
-                />
-              </div>
+            <div class="special-group">
+              <img src="image/common/btn-camera.png" class="btn-special" id="specialBtn" alt="Special" />
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- ▼ サブパネル -->
-    <div class="sub-panels">
-      <div class="constellation-special-panel">
-        <!-- 星座スペシャルビューア -->
-        <div id="special-viewer" style="display: none">
-          <!-- 画像・キャプション領域 -->
-          <div class="special-content">
-            <img id="special-img" src="" alt="Special画像" />
-            <div id="special-caption"></div>
-          </div>
-
-          <!-- 操作ボタン専用領域 -->
-          <div class="special-controls-row">
-            <img
-              src="image/common/btn-back.png"
-              id="special-prev"
-              class="special-btn"
-              alt="前へ"
-            />
-            <img
-              src="image/common/btn-3stars.png"
-              id="special-clear"
-              class="special-btn"
-              alt="星座線あり"
-            />
-            <img
-              src="image/common/btn-close.png"
-              id="special-close"
-              class="special-btn"
-              alt="閉じる"
-            />
-            <img
-              src="image/common/btn-3stars-lines.png"
-              id="special-lines"
-              class="special-btn"
-              alt="星座線なし"
-            />
-            <img
-              src="image/common/btn-next.png"
-              id="special-next"
-              class="special-btn"
-              alt="次へ"
-            />
-          </div>
+  <!-- ▼ サブパネル -->
+  <div class="sub-panels">
+    <div class="constellation-special-panel">
+      <!-- 星座スペシャルビューア -->
+      <div id="special-viewer" style="display: none">
+        <!-- 画像・キャプション領域 -->
+        <div class="special-content">
+          <img id="special-img" src="" alt="Special画像" />
+          <div id="special-caption"></div>
         </div>
-      </div>
 
-      <div class="moon-special-panel">
-        <!-- 月スペシャルビューア -->
-        <div id="moon-special-viewer" style="display: none">
-          <!-- 画像・キャプション領域 -->
-          <div class="special-content">
-            <img id="moon-special-img" src="" />
-            <div id="moon-special-caption"></div>
-          </div>
-
-          <!-- 操作ボタン専用領域 -->
-          <div class="special-controls-row">
-            <img
-              src="image/common/btn-back.png"
-              id="moon-special-prev"
-              class="special-btn"
-            />
-            <img
-              src="image/common/btn-close.png"
-              id="moon-special-close"
-              class="special-btn"
-            />
-            <img
-              src="image/common/btn-next.png"
-              id="moon-special-next"
-              class="special-btn"
-            />
-          </div>
+        <!-- 操作ボタン専用領域 -->
+        <div class="special-controls-row">
+          <img src="image/common/btn-back.png" id="special-prev" class="special-btn" alt="前へ" />
+          <img src="image/common/btn-3stars.png" id="special-clear" class="special-btn" alt="星座線あり" />
+          <img src="image/common/btn-close.png" id="special-close" class="special-btn" alt="閉じる" />
+          <img src="image/common/btn-3stars-lines.png" id="special-lines" class="special-btn" alt="星座線なし" />
+          <img src="image/common/btn-next.png" id="special-next" class="special-btn" alt="次へ" />
         </div>
       </div>
     </div>
 
-    <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
-    <script src="js/images.js"></script>
+    <div class="moon-special-panel">
+      <!-- 月スペシャルビューア -->
+      <div id="moon-special-viewer" style="display: none">
+        <!-- 画像・キャプション領域 -->
+        <div class="special-content">
+          <img id="moon-special-img" src="" />
+          <div id="moon-special-caption"></div>
+        </div>
 
-    <!-- ▼ アニメーションなどのUI補助 -->
-    <script src="js/animation-controls.js"></script>
+        <!-- 操作ボタン専用領域 -->
+        <div class="special-controls-row">
+          <img src="image/common/btn-back.png" id="moon-special-prev" class="special-btn" />
+          <img src="image/common/btn-close.png" id="moon-special-close" class="special-btn" />
+          <img src="image/common/btn-next.png" id="moon-special-next" class="special-btn" />
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- ▼ データ系（リンク・季節データ） -->
-    <script src="js/data-links.js"></script>
-    <script src="js/data-season.js"></script>
+  <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
+  <script src="js/images.js"></script>
 
-    <script src="js/update-season-buttons.js"></script>
+  <!-- ▼ アニメーションなどのUI補助 -->
+  <script src="js/animation-controls.js"></script>
 
-    <!-- ▼ viewer / navigation（カード表示と移動の中核） -->
-    <script src="js/viewer.js"></script>
-    <script src="js/navigation.js"></script>
+  <!-- ▼ データ系（リンク・季節データ） -->
+  <script src="js/data-links.js"></script>
+  <script src="js/data-season.js"></script>
 
-    <!-- ▼ 背景・月アニメーションなどの視覚効果 -->
-    <script src="js/background-image.js"></script>
+  <script src="js/update-season-buttons.js"></script>
 
-    <!-- ▼ 星座カード専用スペシャルビューア（特別カード表示） -->
-    <script src="js/data-star-special.js"></script>
-    <script src="js/star-special-viewer.js"></script>
+  <!-- ▼ viewer / navigation（カード表示と移動の中核） -->
+  <script src="js/viewer.js"></script>
+  <script src="js/navigation.js"></script>
 
-    <!-- ▼月専用スペシャルビューア -->
-    <script src="js/moon-animation.js"></script>
-    <script src="js/data-moon-special.js"></script>
-    <script src="js/moon-special-viewer.js"></script>
+  <!-- ▼ 背景・月アニメーションなどの視覚効果 -->
+  <script src="js/background-image.js"></script>
 
-    <!-- ▼流星イベント -->
-    <script src="js/meteor.js"></script>
+  <!-- ▼ 星座カード専用スペシャルビューア（特別カード表示） -->
+  <script src="js/data-star-special.js"></script>
+  <script src="js/star-special-viewer.js"></script>
 
-    <!-- ▼ 外部リンク（依存なし） -->
-    <script src="js/external-links.js"></script>
+  <!-- ▼月専用スペシャルビューア -->
+  <script src="js/moon-animation.js"></script>
+  <script src="js/data-moon-special.js"></script>
+  <script src="js/moon-special-viewer.js"></script>
 
-    <!-- ▼ 画面向き警告 -->
-    <script src="js/orientation-warning.js"></script>
+  <!-- ▼流星イベント -->
+  <script src="js/meteor.js"></script>
 
-    <!-- 月齢計算ライブラリ読み込み -->
-    <script src="js/vendor/astronomy.browser.min.js"></script>
+  <!-- ▼ 外部リンク（依存なし） -->
+  <script src="js/external-links.js"></script>
 
-    <!-- ▼ 今夜の月 -->
-    <script src="js/data-meteor.js"></script>
-    <script src="js/meteor-events.js"></script>
-    <script src="js/star-guide.js"></script>
+  <!-- ▼ 画面向き警告 -->
+  <script src="js/orientation-warning.js"></script>
 
-    <!-- ▼ 最後に main.js（全ての初期化を行う） -->
-    <script src="js/main.js"></script>
+  <!-- 月齢計算ライブラリ読み込み -->
+  <script src="js/vendor/astronomy.browser.min.js"></script>
 
-    <!-- index.html：Soleilオーバーレイの処理 -->
-    <script src="js/soleil-meteor-overlay.js"></script>
+  <!-- ▼ 今夜の月 -->
+  <script src="js/data-meteor.js"></script>
+  <script src="js/meteor-events.js"></script>
+  <script src="js/star-guide.js"></script>
 
-    <!-- 星図カードの処理：HTML要素より後に読み込む -->
-    <script src="js/independent-chart-overlay.js"></script>
-  </body>
+  <!-- ▼ 最後に main.js（全ての初期化を行う） -->
+  <script src="js/main.js"></script>
+
+  <!-- index.html：Soleilオーバーレイの処理 -->
+  <script src="js/soleil-meteor-overlay.js"></script>
+
+  <!-- 星図カードの処理：HTML要素より後に読み込む -->
+  <script src="js/independent-chart-overlay.js"></script>
+</body>
+
 </html>
