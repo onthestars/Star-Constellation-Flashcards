@@ -964,6 +964,15 @@
       <path d="M8.6 13.5 15.4 17.5" />
     </svg>
   </button>
+
+    <button
+    type="button"
+    id="guide-text-size-button"
+    data-text-size="medium"
+    aria-label="文字サイズを変更"
+    title="文字サイズを変更"
+  >中</button>
+
 </div>
 
 <div style="
@@ -979,7 +988,7 @@
   font-size: 14px;
 ">
 
-  <div class="star-guide-info" style="min-width:0; margin:0; padding:0;">
+  <div class="star-guide-info guide-zoom-target" style="min-width:0; margin:0; padding:0;">
 
 <!-- この夜の星空期待値 表示領域 -->
                         <div style="
@@ -995,7 +1004,7 @@
                 text-align:center;
               ">
                 <div style="
-                  font-size:0.8rem;
+                  font-size:0.9rem;
                   margin-bottom:2px;
                 ">
                   星空期待値
@@ -1138,7 +1147,7 @@ ${
   "
 >
 
-  <div style="
+  <div class="guide-zoom-target" style="
     font-size:0.75em;
     text-align:center;
     line-height:1.2;
@@ -1334,6 +1343,66 @@ ${
 
   // ▼ 星空ガイドイベント初期化
   function initializeStarGuideEvents(content, today) {
+
+        // ▼ 星空ガイド文字サイズ切り替え
+    const GUIDE_TEXT_SIZE_KEY = "guideTextSize";
+
+    const GUIDE_TEXT_SIZES = {
+      small: 0.9,
+      medium: 1.0,
+      large: 1.2,
+    };
+
+    const guideTextSizeOrder = ["medium", "large", "small"];
+
+    const guideTextSizeLabels = {
+      small: "小",
+      medium: "中",
+      large: "大",
+    };
+
+    const guideTextSizeButton = content.querySelector(
+      "#guide-text-size-button",
+    );
+
+    if (guideTextSizeButton) {
+      // 前回の設定を復元（未設定・不正値なら中）
+      let guideTextSize =
+        localStorage.getItem(GUIDE_TEXT_SIZE_KEY) || "medium";
+
+      if (!GUIDE_TEXT_SIZES.hasOwnProperty(guideTextSize)) {
+        guideTextSize = "medium";
+      }
+
+      // 文字サイズを反映
+      function applyGuideTextSize() {
+        content.style.setProperty(
+          "--guide-zoom",
+          GUIDE_TEXT_SIZES[guideTextSize],
+        );
+
+        guideTextSizeButton.dataset.textSize = guideTextSize;
+        guideTextSizeButton.textContent =
+          guideTextSizeLabels[guideTextSize];
+      }
+
+      applyGuideTextSize();
+
+      // 押すたびに 中 → 大 → 小 → 中
+      guideTextSizeButton.addEventListener("click", function () {
+        const currentIndex = guideTextSizeOrder.indexOf(guideTextSize);
+
+        guideTextSize =
+          guideTextSizeOrder[
+            (currentIndex + 1) % guideTextSizeOrder.length
+          ];
+
+        localStorage.setItem(GUIDE_TEXT_SIZE_KEY, guideTextSize);
+
+        applyGuideTextSize();
+      });
+    }
+
     // ▼ 星空ガイド共有ボタン
     const guideShareButton = content.querySelector(
       "#star-guide-share-visible-button",
