@@ -115,19 +115,25 @@
   overflow-y: auto;
 }
 
-/* ============================
-   観測地点の選択
-   ============================ */
-
-#observation-location-setting h3 {
+/* 設定パネル内の見出し */
+#setting-panel-content h3 {
   margin: 0 0 12px;
   font-family: "Meiryo", sans-serif;
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 800;
   line-height: 1.4;
-  color: #ffffff;
+  color: #cccccc;
 }
 
+/* 観測地点の見出し */
+#observation-location-setting h3 {
+  margin-top: 0;
+}
+
+/* プラネタリウムの見出し */
+#planetarium-display-setting h3 {
+  margin-top: 18px;
+}
 
 /* =================================
    観測地点リスト
@@ -200,4 +206,16 @@
 /* タップ・クリック時の反応 */
 .observation-location-item:active {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* 地面表示設定：チェックボックスと文字を中央揃え */
+#planetarium-display-setting label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* チェックボックスの余分な余白をリセット */
+#ground-rendering-toggle {
+  margin: 0;
 }
