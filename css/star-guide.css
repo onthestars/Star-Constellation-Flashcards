@@ -29,13 +29,13 @@
   font-family: "Meiryo", sans-serif;
   position: fixed;
   left: 50%;
-  top: calc(50% + 20px);
+  top: calc(50% + 16px);
   transform: translate(-50%, -50%);
 
   width: 92%;
   max-width: 500px;
   height: calc(100svh - 20px);
-  max-height: calc(100svh - 56px);
+  max-height: calc(100svh - 48px);
 
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@
 }
 
 #star-guide-content {
-  padding: 6px 16px;
+  padding: 6px 14px;
 
   flex: 1 1 auto;
   min-height: 0;
@@ -205,7 +205,7 @@
   #star-guide-panel .moon-control-group {
     position: absolute;
     right: 1%;
-    top: 50%;
+    top: 60%;
     transform: translateY(-50%);
   }
 }
@@ -327,14 +327,20 @@
   pointer-events: none;
 }
 
-/* 星空ガイド共有ボタンの配置 */
+/* 星空ガイド共有ボタン、文字サイズボタンなどの配置 */
 .star-guide-share-row {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  gap: 0px;
 
   width: 100%;
   margin: 6px 0 3px 0;
+}
+
+/* 文字サイズボタン配置のレイアウト調整 */
+#guide-text-size-button {
+  margin-right: -1px;
 }
 
 /* 星空ガイド共有ボタン */
@@ -476,4 +482,46 @@
 /* 閉じるボタン：ホバー */
 #star-guide-copy-notice-close:hover {
   opacity: 0.7;
+}
+
+/* 星空ガイド：文字サイズ切り替えボタン */
+#guide-text-size-button {
+  display: none;
+
+  width: 28px;
+  height: 24px;
+  padding: 0;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #fff;
+
+  font-family: "Meiryo", sans-serif;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* スマートフォンだけ表示 */
+@media (max-width: 767px) {
+  #guide-text-size-button {
+    display: flex;
+  }
+
+  /* 文字サイズの拡大対象 */
+  .guide-zoom-target {
+    zoom: var(--guide-zoom, 1);
+  }
 }
