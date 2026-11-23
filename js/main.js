@@ -256,6 +256,8 @@ initConstellationCardPanel();
 
 const OBSERVATION_LOCATION_KEY = "starConstellationObservationLocation";
 
+const GROUND_RENDERING_KEY = "planetariumGroundRendering";
+
 // 観測地点データ
 const OBSERVATION_LOCATIONS = {
   // ================================
@@ -972,6 +974,50 @@ function updateObservationLocationLabel(location) {
     planetariumLabel.textContent = displayName;
   }
 }
+
+// =================================
+// プラネタリウムの地面表示設定
+// =================================
+
+// 地面表示の設定を取得（初期値はON）
+function getGroundRenderingEnabled() {
+  return localStorage.getItem(GROUND_RENDERING_KEY) !== "false";
+}
+
+// 他のJSファイルから設定を取得できるようにする
+window.getGroundRenderingEnabled = getGroundRenderingEnabled;
+
+// 設定欄を初期化
+function initGroundRenderingSetting() {
+  const toggle = document.getElementById("ground-rendering-toggle");
+
+  if (!toggle) return;
+
+  // 保存済みの設定をチェックボックスに反映
+  toggle.checked = getGroundRenderingEnabled();
+
+  // イベントの重複登録を防止
+  if (toggle.dataset.initialized) return;
+
+  toggle.addEventListener("change", function () {
+    const enabled = toggle.checked;
+
+    // 設定を保存
+    localStorage.setItem(GROUND_RENDERING_KEY, String(enabled));
+
+    // プラネタリウムへ変更を通知
+    window.dispatchEvent(
+      new CustomEvent("ground-rendering-changed", {
+        detail: { enabled: enabled },
+      }),
+    );
+  });
+
+  toggle.dataset.initialized = "true";
+}
+
+// 初期化
+initGroundRenderingSetting();
 
 // 観測地点選択欄を初期化
 initObservationLocationSetting();

@@ -77,6 +77,26 @@
     );
   }
 
+  // 地面表示設定を星図へ送信
+  function sendGroundRenderingSetting() {
+    if (
+      !isOpen ||
+      !frameReady ||
+      !frame.contentWindow ||
+      typeof window.getGroundRenderingEnabled !== "function"
+    ) {
+      return;
+    }
+
+    frame.contentWindow.postMessage(
+      {
+        type: "set-ground-rendering",
+        enabled: window.getGroundRenderingEnabled(),
+      },
+      CHART_ORIGIN,
+    );
+  }
+
   let frameReady = false;
 
   // 右上のプラネタリウムボタンの状態を更新
@@ -102,7 +122,6 @@
     title.textContent = "プラネタリウム";
   }
 
-
   // プラネタリウムの地点名だけを更新
   function updatePlanetariumLocationLabel(location) {
     const label = document.getElementById("independent-chart-location");
@@ -113,7 +132,6 @@
       ? `（${location.prefecture}）`
       : "（共有地点）";
   }
-
 
   // 共有URLの座標から登録済みの観測地点を特定
   function updatePlanetariumLocationFromSharedParams(params) {
@@ -142,20 +160,15 @@
 
     // 2地点間の距離をキロメートルで計算
     function getDistanceKm(lat1, lon1, lat2, lon2) {
-      const toRad = (degree) => degree * Math.PI / 180;
+      const toRad = (degree) => (degree * Math.PI) / 180;
       const dLat = toRad(lat2 - lat1);
       const dLon = toRad(lon2 - lon1);
 
       const a =
         Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) ** 2;
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
 
-      return 6371 * 2 * Math.atan2(
-        Math.sqrt(a),
-        Math.sqrt(1 - a),
-      );
+      return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
     let nearestLocation = null;
@@ -294,8 +307,7 @@
 
     const sharedParams = new URLSearchParams(sharedSearch);
 
-    hasSharedChartLocation =
-      sharedParams.has("lat") && sharedParams.has("lon");
+    hasSharedChartLocation = sharedParams.has("lat") && sharedParams.has("lon");
 
     if (hasSharedChartLocation) {
       updatePlanetariumLocationFromSharedParams(sharedParams);
@@ -401,6 +413,8 @@
 
     frameReady = true;
 
+    sendGroundRenderingSetting();
+
     // 共有URLに観測地点が含まれている場合は、
     // 星図側で復元した観測地点を優先する
     if (!hasSharedChartLocation) {
@@ -415,6 +429,11 @@
   // 観測地点の変更を受信
   window.addEventListener("observation-location-changed", function () {
     sendObservationLocation();
+  });
+
+  // 地面表示設定の変更を受信
+  window.addEventListener("ground-rendering-changed", function () {
+    sendGroundRenderingSetting();
   });
 
   // オーバーレイを閉じる
@@ -435,7 +454,6 @@
     }
 
     updatePlanetariumLocationFromCurrentSetting();
-
   }
 
   closeButton.addEventListener("click", closeIndependentChart);
