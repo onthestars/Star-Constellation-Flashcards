@@ -527,7 +527,9 @@
   }
 }
 
-/* 星空ガイド：iPhone Safari向け文字サイズ調整 */
-.star-guide-info {
-  font-size: calc(14px * var(--guide-zoom, 1));
+/* iPhone向け：星空ガイドの文字サイズ補正 */
+@supports (-webkit-touch-callout: none) {
+  .star-guide-info {
+    font-size: calc(15px * var(--guide-zoom, 1));
+  }
 }
