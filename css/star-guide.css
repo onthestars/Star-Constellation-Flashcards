@@ -61,9 +61,14 @@
   flex: 1 1 auto;
   min-height: 0;
 
+  /* スクロールは上下のみ許可 */
   overflow-y: auto;
+  overflow-x: hidden;
+
+  touch-action: pan-y;
 
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ▼ 月相アイコン */
