@@ -258,6 +258,8 @@ const OBSERVATION_LOCATION_KEY = "starConstellationObservationLocation";
 
 const GROUND_RENDERING_KEY = "planetariumGroundRendering";
 
+const MOON_CONTROL_POSITION_KEY = "starGuideMoonControlPosition";
+
 // 観測地点データ
 const OBSERVATION_LOCATIONS = {
   // ================================
@@ -1021,6 +1023,87 @@ initGroundRenderingSetting();
 
 // 観測地点選択欄を初期化
 initObservationLocationSetting();
+
+// =================================
+// 星空ガイドの月相・日付操作位置設定
+// =================================
+
+// 操作位置を取得（初期値は左側）
+function getMoonControlPosition() {
+  const savedPosition = localStorage.getItem(
+    MOON_CONTROL_POSITION_KEY
+  );
+
+  return savedPosition === "right" ? "right" : "left";
+}
+
+// 操作位置を反映
+function applyMoonControlPosition(position) {
+  const panel = document.getElementById("star-guide-panel");
+
+  if (!panel) return;
+
+  panel.classList.toggle(
+    "moon-controls-left",
+    position === "left"
+  );
+
+  panel.classList.toggle(
+    "moon-controls-right",
+    position === "right"
+  );
+}
+
+// 設定欄を初期化
+function initMoonControlPositionSetting() {
+  const radios = document.querySelectorAll(
+    'input[name="moon-control-position"]'
+  );
+
+  if (!radios.length) return;
+
+  // 保存値を復元（未設定・不正値なら左側）
+  const position = getMoonControlPosition();
+
+  radios.forEach(function (radio) {
+    radio.checked = radio.value === position;
+  });
+
+  // 初期位置を反映
+  applyMoonControlPosition(position);
+
+  // イベントの重複登録を防止
+  const container = document.getElementById(
+    "star-guide-control-setting"
+  );
+
+  if (!container || container.dataset.initialized) return;
+
+  container.addEventListener("change", function (event) {
+    const radio = event.target;
+
+    if (
+      !radio.matches('input[name="moon-control-position"]') ||
+      !radio.checked
+    ) {
+      return;
+    }
+
+    // 設定を保存
+    localStorage.setItem(
+      MOON_CONTROL_POSITION_KEY,
+      radio.value
+    );
+
+    // 即時反映
+    applyMoonControlPosition(radio.value);
+  });
+
+  container.dataset.initialized = "true";
+}
+
+// 初期化
+initMoonControlPositionSetting();
 
 // =================================
 // 設定パネルの開閉
