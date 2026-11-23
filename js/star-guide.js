@@ -1002,13 +1002,13 @@
                   line-height:1.2;
                   opacity:0.7;
                 ">
-                  ※晴れていることが条件です
+                  ※晴れていることが条件
                 </div>
               </div>
 
               <div style="
                 font-size:0.8em;
-                margin:0.5em 0 1px 0;
+                margin:0.5em 0 -4px 0;
                 text-align:center;
               ">
                 星空おすすめ時間帯
@@ -1022,6 +1022,7 @@
                 ${observationWindowText}
               </div>
             </div>
+
             <!-- 区切り線 -->
             <div style="
   width:100%;
