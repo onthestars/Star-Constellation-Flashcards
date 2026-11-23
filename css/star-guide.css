@@ -200,18 +200,40 @@
 @media (min-width: 768px) {
   #star-guide-panel .moon-control-group {
     position: absolute;
-    right: 8%;
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  /* 左側 */
+  #star-guide-panel.moon-controls-left .moon-control-group {
+    left: 8%;
+    right: auto;
+  }
+
+  /* 右側 */
+  #star-guide-panel.moon-controls-right .moon-control-group {
+    right: 8%;
+    left: auto;
   }
 }
 
 @media (max-width: 767px) {
   #star-guide-panel .moon-control-group {
     position: absolute;
-    right: 1%;
     top: 60%;
     transform: translateY(-50%);
+  }
+
+  /* 左側 */
+  #star-guide-panel.moon-controls-left .moon-control-group {
+    left: 1%;
+    right: auto;
+  }
+
+  /* 右側 */
+  #star-guide-panel.moon-controls-right .moon-control-group {
+    right: 1%;
+    left: auto;
   }
 }
 
