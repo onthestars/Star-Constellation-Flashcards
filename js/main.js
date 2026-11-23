@@ -260,6 +260,8 @@ const GROUND_RENDERING_KEY = "planetariumGroundRendering";
 
 const MOON_CONTROL_POSITION_KEY = "starGuideMoonControlPosition";
 
+const MOON_CONTROL_DRAG_POSITION_KEY = "starGuideMoonControlDragPosition";
+
 // 観測地点データ
 const OBSERVATION_LOCATIONS = {
   // ================================
@@ -1034,7 +1036,10 @@ function getMoonControlPosition() {
     MOON_CONTROL_POSITION_KEY
   );
 
-  return savedPosition === "right" ? "right" : "left";
+  if (savedPosition === "right") return "right";
+  if (savedPosition === "free") return "free";
+
+  return "left";
 }
 
 // 操作位置を反映
@@ -1042,6 +1047,14 @@ function applyMoonControlPosition(position) {
   const panel = document.getElementById("star-guide-panel");
 
   if (!panel) return;
+
+  // ドラッグで指定した位置を解除
+  const group = panel.querySelector(".moon-control-group");
+
+  if (group) {
+    group.style.left = "";
+    group.style.right = "";
+  }
 
   panel.classList.toggle(
     "moon-controls-left",
@@ -1089,14 +1102,19 @@ function initMoonControlPositionSetting() {
       return;
     }
 
-    // 設定を保存
-    localStorage.setItem(
-      MOON_CONTROL_POSITION_KEY,
-      radio.value
-    );
+// 設定を保存
+localStorage.setItem(
+  MOON_CONTROL_POSITION_KEY,
+  radio.value
+);
 
-    // 即時反映
-    applyMoonControlPosition(radio.value);
+// ドラッグ位置をリセット
+localStorage.removeItem(
+  "starGuideMoonControlDragPosition"
+);
+
+// 即時反映
+applyMoonControlPosition(radio.value);
   });
 
   container.dataset.initialized = "true";

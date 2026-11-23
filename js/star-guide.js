@@ -1555,12 +1555,222 @@ ${
       });
     }
 
-    // ▼ 月相画像クリックで月Special Viewer起動
-    const moonImage = content.querySelector("#starGuideMoonImage");
+// ▼ 月相画像の長押しで月相・日付操作ブロックを移動
+const moonImage = content.querySelector("#starGuideMoonImage");
+const moonControlGroup = content.querySelector(".moon-control-group");
+const guidePanel = document.getElementById("star-guide-panel");
 
-    if (moonImage && typeof openMoonSpecialViewer === "function") {
-      moonImage.addEventListener("click", openMoonSpecialViewer);
+if (moonImage && moonControlGroup && guidePanel) {
+  const dragPositionKey = "starGuideMoonControlDragPosition";
+
+  let holdTimer = null;
+  let isDragging = false;
+  let suppressMoonClick = false;
+
+  let startPointerX = 0;
+  let startGroupLeft = 0;
+
+  // パネル内で移動できる最大の横幅
+  function getMaxMoonControlLeft() {
+    return Math.max(
+      0,
+      guidePanel.clientWidth - moonControlGroup.offsetWidth
+    );
+  }
+
+  // パネル左端からの位置を指定して反映
+  function applyMoonControlLeft(left) {
+    const panelRect = guidePanel.getBoundingClientRect();
+
+    const offsetParent =
+      moonControlGroup.offsetParent || guidePanel;
+
+    const parentRect = offsetParent.getBoundingClientRect();
+
+    const desiredViewportLeft =
+      panelRect.left + guidePanel.clientLeft + left;
+
+    const parentOrigin =
+      parentRect.left + offsetParent.clientLeft;
+
+    const cssLeft =
+      desiredViewportLeft -
+      parentOrigin +
+      offsetParent.scrollLeft;
+
+    moonControlGroup.style.left = `${cssLeft}px`;
+    moonControlGroup.style.right = "auto";
+  }
+
+  // 保存位置を復元
+  const savedDragPosition = localStorage.getItem(dragPositionKey);
+
+  if (savedDragPosition !== null) {
+    const savedRatio = Number(savedDragPosition);
+
+    if (Number.isFinite(savedRatio)) {
+      const ratio = Math.max(0, Math.min(1, savedRatio));
+
+      applyMoonControlLeft(
+        getMaxMoonControlLeft() * ratio
+      );
     }
+  }
+
+  // ドラッグ終了時の位置を保存
+  function saveMoonControlLeft() {
+    const panelRect = guidePanel.getBoundingClientRect();
+    const groupRect = moonControlGroup.getBoundingClientRect();
+
+    const currentLeft =
+      groupRect.left -
+      panelRect.left -
+      guidePanel.clientLeft;
+
+    const maxLeft = getMaxMoonControlLeft();
+
+    const ratio =
+      maxLeft > 0
+        ? Math.max(0, Math.min(1, currentLeft / maxLeft))
+        : 0;
+
+    localStorage.setItem(dragPositionKey, String(ratio));
+  }
+
+  // ドラッグ開始
+  function startMoonControlDrag() {
+    isDragging = true;
+    suppressMoonClick = true;
+
+    moonImage.style.cursor = "grabbing";
+  }
+
+  // ドラッグ中の移動
+  moonImage.addEventListener("pointermove", function (event) {
+    // 長押し判定前に大きく動いた場合はドラッグしない
+    if (!isDragging) {
+      if (
+        Math.abs(event.clientX - startPointerX) > 8 &&
+        holdTimer !== null
+      ) {
+        clearTimeout(holdTimer);
+        holdTimer = null;
+      }
+
+      return;
+    }
+
+    event.preventDefault();
+
+    const deltaX = event.clientX - startPointerX;
+
+    const newLeft = Math.max(
+      0,
+      Math.min(
+        getMaxMoonControlLeft(),
+        startGroupLeft + deltaX
+      )
+    );
+
+    applyMoonControlLeft(newLeft);
+  });
+
+  // 押し始め
+  moonImage.addEventListener("pointerdown", function (event) {
+    if (!event.isPrimary || event.button !== 0) {
+      return;
+    }
+
+    startPointerX = event.clientX;
+
+    const panelRect = guidePanel.getBoundingClientRect();
+    const groupRect = moonControlGroup.getBoundingClientRect();
+
+    startGroupLeft =
+      groupRect.left -
+      panelRect.left -
+      guidePanel.clientLeft;
+
+    // ポインターを画像上に保持
+    try {
+      moonImage.setPointerCapture(event.pointerId);
+    } catch (error) {}
+
+    // 約200msの長押しでドラッグ開始
+    holdTimer = setTimeout(function () {
+      holdTimer = null;
+      startMoonControlDrag();
+    }, 200);
+  });
+
+  // 指・マウスを離したとき
+  function finishMoonControlDrag() {
+    if (holdTimer !== null) {
+      clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+
+if (isDragging) {
+  // 自由配置として保存
+  saveMoonControlLeft();
+
+  localStorage.setItem(
+    "starGuideMoonControlPosition",
+    "free"
+  );
+
+  // 左右の配置クラスを解除
+  guidePanel.classList.remove(
+    "moon-controls-left",
+    "moon-controls-right"
+  );
+
+  // 設定パネルの左右選択を両方OFF
+  document.querySelectorAll(
+    'input[name="moon-control-position"]'
+  ).forEach(function (radio) {
+    radio.checked = false;
+  });
+}
+
+    isDragging = false;
+    moonImage.style.cursor = "grab";
+
+    // ドラッグ後のクリックを抑止
+    if (suppressMoonClick) {
+      setTimeout(function () {
+        suppressMoonClick = false;
+      }, 0);
+    }
+  }
+
+  moonImage.addEventListener("pointerup", finishMoonControlDrag);
+
+  moonImage.addEventListener("pointercancel", finishMoonControlDrag);
+
+  // ドラッグ後に月Special Viewerが開くのを防ぐ
+  moonImage.addEventListener(
+    "click",
+    function (event) {
+      if (suppressMoonClick) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        suppressMoonClick = false;
+      }
+    },
+    true
+  );
+
+  // 画像の長押しメニューを抑止
+  moonImage.addEventListener("contextmenu", function (event) {
+    event.preventDefault();
+  });
+}
+
+// ▼ 月相画像クリックで月Special Viewer起動
+if (moonImage && typeof openMoonSpecialViewer === "function") {
+  moonImage.addEventListener("click", openMoonSpecialViewer);
+}
     // ▼ 今の空を見るボタン
     const showPlanetariumBtn = document.getElementById(
       "showPlanetariumFromGuideBtn",
