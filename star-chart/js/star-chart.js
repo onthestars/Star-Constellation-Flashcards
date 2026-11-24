@@ -3821,40 +3821,46 @@ function scheduleSpaceSwimResume() {
         // 星の等級・スペクトル型に応じて色と大きさを決める
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
+        
+        // 視野角に応じて恒星の透明度を制御
+        // 等級ごとの表示境界を中心に4度の範囲でフェード
 
-        // 視野角に応じて表示する等級を6段階に制御
+        let fadeThreshold = null;
 
-        // 視野角90°超：1等星
-        if (fieldOfViewDeg > 90 && mag >= 1.5) {
-          continue;
+        if (mag >= 6.5) {
+          fadeThreshold = 10;
+        } else if (mag >= 5.5) {
+          fadeThreshold = 20;
+        } else if (mag >= 4.5) {
+          fadeThreshold = 30;
+        } else if (mag >= 3.5) {
+          fadeThreshold = 50;
+        } else if (mag >= 2.5) {
+          fadeThreshold = 80;
+        } else if (mag >= 1.5) {
+          fadeThreshold = 90;
         }
 
-        // 視野角50°超～90°以下：1～2等星
-        if (fieldOfViewDeg > 80 && mag >= 2.5) {
-          continue;
+        let starOpacity = 1.0;
+
+        if (fadeThreshold !== null) {
+          const fadeProgress = Math.max(
+            0,
+            Math.min(
+              1,
+              (fadeThreshold + 2 - fieldOfViewDeg) / 4,
+            ),
+          );
+
+          // 滑らかなフェード
+          starOpacity =
+            fadeProgress *
+            fadeProgress *
+            (3 - 2 * fadeProgress);
         }
 
-        // 視野角50°超～90°以下：1～3等星
-        if (fieldOfViewDeg > 50 && mag >= 3.5) {
-          continue;
-        }
-
-        // 視野角30°超～50°以下：1～4等星
-        if (fieldOfViewDeg > 30 && mag >= 4.5) {
-          continue;
-        }
-
-        // 視野角20°超～30°以下：1～5等星
-        if (fieldOfViewDeg > 20 && mag >= 5.5) {
-          continue;
-        }
-
-        // 視野角10°超～20°以下：1～6等星
-        if (fieldOfViewDeg > 10 && mag >= 6.5) {
-          continue;
-        }
-
-        // 視野角10°以下：読み込み対象の全星を表示
+        // 完全に透明な星は描画しない
+        if (starOpacity <= 0) continue;
 
         // スペクトル型から恒星の色を取得
         const spect = String(star.spect || "")
@@ -3893,12 +3899,16 @@ function scheduleSpaceSwimResume() {
           radius = 0.4;
         }
 
-        // 地平線より下の星を半透明にする
-        ctx.save();
-        ctx.globalAlpha =
-          groundRenderingEnabled && !starOnlyMode && projected.altitude < 0
+        // 地平線の透明度と等級フェードを適用
+        const groundOpacity =
+          groundRenderingEnabled &&
+          !starOnlyMode &&
+          projected.altitude < 0
             ? 0.1
             : 1.0;
+
+        ctx.save();
+        ctx.globalAlpha = groundOpacity * starOpacity;
 
         // グローの設定
         const glow = style.glow || {};
@@ -3956,7 +3966,7 @@ function scheduleSpaceSwimResume() {
           glowGradient.addColorStop(0.65, `${color}35`);
           glowGradient.addColorStop(1.0, `${color}00`);
 
-          ctx.globalAlpha = glowStrength;
+          ctx.globalAlpha = glowStrength * groundOpacity * starOpacity;
           ctx.fillStyle = glowGradient;
 
           ctx.beginPath();
@@ -3974,13 +3984,13 @@ function scheduleSpaceSwimResume() {
           const rayLength = 28;
           const rayWidth = 1.2;
 
-          ctx.globalAlpha = 0.9;
+          ctx.globalAlpha = 0.9 * groundOpacity * starOpacity;
 
           // 短い光芒8本（45度間隔・淡いグラデーション）
           const shortRayLength = 22;
           const shortRayWidth = 0.5;
 
-          ctx.globalAlpha = 0.12;
+          ctx.globalAlpha = 0.12 * groundOpacity * starOpacity;
           ctx.lineWidth = shortRayWidth;
           ctx.lineCap = "round";
 
