@@ -733,6 +733,13 @@
       // 星空だけ表示モードを切り替え
       starOnlyMode = !starOnlyMode;
 
+      // 自動宇宙遊泳を開始・停止
+      if (starOnlyMode) {
+        startSpaceSwim();
+      } else {
+        stopSpaceSwim();
+      }
+
       // 星空のみモードのBGMを制御
       if (starOnlyMode) {
         // 進行中のフェードを停止
@@ -1022,6 +1029,106 @@
   // 角度を0～360°に収める
   function normalizeDeg(deg) {
     return ((deg % 360) + 360) % 360;
+  }
+
+  // ==========================================
+  // 自動宇宙遊泳
+  // ==========================================
+
+  let spaceSwimAnimationId = null;
+  let spaceSwimLastTime = 0;
+  let spaceSwimPhase = 0;
+
+  let spaceSwimBaseAz = 0;
+  let spaceSwimBaseAlt = 0;
+  let spaceSwimBaseFov = 0;
+
+  // 自動宇宙遊泳を開始
+  function startSpaceSwim() {
+    if (!starOnlyMode || spaceSwimAnimationId !== null) return;
+
+    // 現在の視点と視野角を基準にする
+    spaceSwimBaseAz = centerAzDeg;
+    spaceSwimBaseAlt = centerAltDeg;
+    spaceSwimBaseFov = fieldOfViewDeg;
+
+    spaceSwimLastTime = 0;
+
+    function animateSpaceSwim(time) {
+      if (!starOnlyMode) {
+        spaceSwimAnimationId = null;
+        return;
+      }
+
+      if (spaceSwimLastTime === 0) {
+        spaceSwimLastTime = time;
+      }
+
+      // フレーム間隔（秒）
+      const deltaTime = Math.min(
+        (time - spaceSwimLastTime) / 1000,
+        0.05,
+      );
+
+      spaceSwimLastTime = time;
+
+      // 時間の経過に合わせて位相を進める
+      // ゆっくりした速度変化を加える
+      const speed = 0.16 + 0.07 * Math.sin(spaceSwimPhase * 0.35);
+
+      spaceSwimPhase += deltaTime * speed;
+
+      const t = spaceSwimPhase;
+
+      // 方位：複数のサインカーブを組み合わせる
+      const azOffset =
+        24 * Math.sin(t) +
+        9 * Math.sin(t * 0.43 + 1.2);
+
+      // 高度：上下・斜め方向へ自然に移動
+      const altOffset =
+        13 * Math.sin(t * 0.72 + 0.8) +
+        5 * Math.sin(t * 0.31);
+
+      // 視野角：拡大と縮小をゆっくり繰り返す
+      const fovOffset =
+        13 * Math.sin(t * 0.48 + 0.5);
+
+      centerAzDeg = normalizeDeg(
+        spaceSwimBaseAz + azOffset,
+      );
+
+      centerAltDeg = Math.max(
+        -80,
+        Math.min(80, spaceSwimBaseAlt + altOffset),
+      );
+
+      fieldOfViewDeg = Math.max(
+        MIN_FIELD_OF_VIEW_DEG,
+        Math.min(
+          MAX_FIELD_OF_VIEW_DEG,
+          spaceSwimBaseFov + fovOffset,
+        ),
+      );
+
+      drawChart();
+
+      spaceSwimAnimationId =
+        requestAnimationFrame(animateSpaceSwim);
+    }
+
+    spaceSwimAnimationId =
+      requestAnimationFrame(animateSpaceSwim);
+  }
+
+  // 自動宇宙遊泳を停止
+  function stopSpaceSwim() {
+    if (spaceSwimAnimationId !== null) {
+      cancelAnimationFrame(spaceSwimAnimationId);
+      spaceSwimAnimationId = null;
+    }
+
+    spaceSwimLastTime = 0;
   }
 
   // ==========================================
