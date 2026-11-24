@@ -1151,9 +1151,6 @@
   let spaceSwimBaseAlt = 0;
   let spaceSwimBaseFov = 0;
 
-
-  // 自動宇宙遊泳を開始
-
   // 自動宇宙遊泳を開始
   function startSpaceSwim() {
     if (!starOnlyMode || spaceSwimAnimationId !== null) return;
@@ -2557,79 +2554,6 @@
     };
   }
 
-  // ==========================================
-  // ラベルの重なりを回避する共通配置関数
-  // ==========================================
-
-  function findNonOverlappingLabelPosition(
-    baseX,
-    baseY,
-    textWidth,
-    textHeight,
-    occupiedAreas,
-    padding = 2,
-    gap = 4,
-  ) {
-    const boxWidth = textWidth + padding * 2;
-    const boxHeight = textHeight + padding * 2;
-
-    const moveY = boxHeight + gap;
-    const moveX = boxWidth + gap;
-
-    // 元の位置を優先し、周囲を順番に探す
-    const candidates = [
-      { x: 0, y: 0 },
-      { x: 0, y: -moveY },
-      { x: 0, y: moveY },
-      { x: moveX, y: 0 },
-      { x: -moveX, y: 0 },
-      { x: moveX, y: -moveY },
-      { x: -moveX, y: -moveY },
-      { x: moveX, y: moveY },
-      { x: -moveX, y: moveY },
-      { x: 0, y: -moveY * 2 },
-      { x: 0, y: moveY * 2 },
-    ];
-
-    for (const candidate of candidates) {
-      const x = baseX + candidate.x;
-      const y = baseY + candidate.y;
-
-      const area = {
-        left: x - padding,
-        right: x + textWidth + padding,
-        top: y - boxHeight / 2,
-        bottom: y + boxHeight / 2,
-      };
-
-      // キャンバスの外には配置しない
-      if (
-        area.left < 0 ||
-        area.right > canvasWidth ||
-        area.top < 0 ||
-        area.bottom > canvasHeight
-      ) {
-        continue;
-      }
-
-      // 既に配置されたラベルと重ならないか確認
-      const overlaps = occupiedAreas.some(
-        (other) =>
-          area.left < other.right &&
-          area.right > other.left &&
-          area.top < other.bottom &&
-          area.bottom > other.top,
-      );
-
-      if (!overlaps) {
-        return { x, y, area };
-      }
-    }
-
-    // 空き場所がなければ配置しない
-    return null;
-  }
-
   // 惑星位置の計算結果を一時保存
   let planetPositionCacheTime = null;
   const planetPositionCache = new Map();
@@ -3905,21 +3829,28 @@
 
             const projectedSegments = [];
 
+
             for (const segment of constellation.segments) {
               const starA = starById.get(segment[0]);
               const starB = starById.get(segment[1]);
 
               if (!starA || !starB) continue;
 
-              const pointA = getCachedProjectedStar(starA);
-              const pointB = getCachedProjectedStar(starB);
+              // 視野境界で線分を切り取って投影
+              const clipped = projectLineSegment(
+                starA,
+                starB,
+                lstDeg,
+                basis,
+                minDot,
+              );
 
-              if (!pointA || !pointB) continue;
+              if (!clipped) continue;
 
-              const ax = centerX + pointA.x * scaleX;
-              const ay = centerY + pointA.y * scaleY;
-              const bx = centerX + pointB.x * scaleX;
-              const by = centerY + pointB.y * scaleY;
+              const ax = centerX + clipped.pointA.x * scaleX;
+              const ay = centerY + clipped.pointA.y * scaleY;
+              const bx = centerX + clipped.pointB.x * scaleX;
+              const by = centerY + clipped.pointB.y * scaleY;
 
               const length = Math.hypot(bx - ax, by - ay);
 
@@ -3933,6 +3864,7 @@
                 length,
               });
             }
+
 
             const totalLength = projectedSegments.reduce(
               (sum, segment) => sum + segment.length,
@@ -4908,27 +4840,9 @@
 
             const textWidth = ctx.measureText(asterism.name).width;
 
-            // 重なりを避けて表示位置を決定
-            const selectedPosition = findNonOverlappingLabelPosition(
-              labelX - textWidth / 2,
-              labelY,
-              textWidth,
-              20,
-              occupiedLabelAreas,
-              7,
-              4,
-            );
-
-            // 配置できる場所がなければ、この名前は描画しない
-            if (!selectedPosition) {
-              ctx.restore();
-              continue;
-            }
-
-            // 実際に使用する表示位置
-            const selectedLabelX = selectedPosition.x + textWidth / 2;
-
-            const selectedLabelY = selectedPosition.y;
+            // 重なり回避をせず、本来の位置に表示
+            const selectedLabelX = labelX;
+            const selectedLabelY = labelY;
 
             // 背景のサイズ
             const paddingX = 7;
@@ -4936,11 +4850,8 @@
             const boxHeight = 20;
 
             // 背景の位置
-            const boxX = selectedPosition.area.left;
+            const boxX = selectedLabelX - boxWidth / 2;
             const boxY = selectedLabelY - boxHeight / 2;
-
-            // 配置済み領域として登録
-            occupiedLabelAreas.push(selectedPosition.area);
 
             // 線と同じフェード状態で背景（角丸矩形）を描画
             ctx.globalAlpha = state.opacity * 0.65;
@@ -5121,22 +5032,14 @@
             ctx.globalAlpha = starLabelOpacity;
 
             for (const label of constellationStarLabels) {
-              const textWidth =
-                ctx.measureText(label.text).width;
 
-              const selectedPosition =
-                findNonOverlappingLabelPosition(
-                  label.x,
-                  label.y,
-                  textWidth,
-                  starLabelFontSize,
-                  occupiedLabelAreas,
-                );
+              // 重なり回避をせず、本来の恒星位置に表示
+              renderedStarLabelIds.add(label.id);
 
-              if (!selectedPosition) continue;
-
-              occupiedLabelAreas.push(
-                selectedPosition.area,
+              ctx.fillText(
+                label.text,
+                label.x,
+                label.y,
               );
 
               renderedStarLabelIds.add(label.id);
@@ -5150,7 +5053,6 @@
 
             ctx.restore();
           }
-
         }
       }
 
@@ -5176,23 +5078,9 @@
           // 恒星名が非表示なら描画しない
           if (!objectLabelsVisible) continue;
 
-          const textWidth = ctx.measureText(label.text).width;
+          // 恒星名を本来の恒星位置に表示
+          ctx.fillText(label.text, label.x, label.y);
 
-          const selectedPosition = findNonOverlappingLabelPosition(
-            label.x,
-            label.y,
-            textWidth,
-            starLabelFontSize,
-            occupiedLabelAreas,
-          );
-
-          if (!selectedPosition) continue;
-
-          // 配置領域を記録
-          occupiedLabelAreas.push(selectedPosition.area);
-
-          // 恒星名を描画
-          ctx.fillText(label.text, selectedPosition.x, selectedPosition.y);
         }
 
         // 星の描画範囲の制限を解除する
