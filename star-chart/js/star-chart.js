@@ -6407,6 +6407,17 @@
   canvas.addEventListener("pointercancel", stopDragging);
   canvas.addEventListener("lostpointercapture", stopDragging);
 
+  // 星図操作中のブラウザ標準スクロールを抑制（iPhoneのLINEブラウザ対策テスト）
+  canvas.addEventListener(
+    "touchmove",
+    (event) => {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+    },
+    { passive: false },
+  );
+
   // 星データを読み込む
   async function loadStarData() {
     try {
