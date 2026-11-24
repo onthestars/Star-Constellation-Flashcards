@@ -733,6 +733,8 @@
       // 星空だけ表示モードを切り替え
       starOnlyMode = !starOnlyMode;
 
+      console.log("宇宙遊泳モード切替後", starOnlyMode);
+
       // 自動宇宙遊泳を開始・停止
       if (starOnlyMode) {
         startSpaceSwim();
@@ -807,6 +809,112 @@
 
   // 非表示中にタップして表示した星座を記録
   const discoveredConstellationIds = new Set();
+
+  // ==========================================
+  // 宇宙遊泳モード：星座発見管理
+  // ==========================================
+
+  // 宇宙遊泳中に発見した星座
+
+  // 宇宙遊泳モードの発見記録の保存先
+  const SPACE_SWIM_DISCOVERED_STORAGE_KEY =
+    "starChartSpaceSwimDiscoveredConstellationIds";
+
+  // 保存済みの発見記録を読み込む
+  function loadSpaceSwimDiscoveredConstellationIds() {
+    try {
+      const saved = localStorage.getItem(
+        SPACE_SWIM_DISCOVERED_STORAGE_KEY,
+      );
+
+      if (!saved) return [];
+
+      const parsed = JSON.parse(saved);
+
+      if (!Array.isArray(parsed)) return [];
+
+      return parsed.filter(
+        (id) =>
+          (typeof id === "string" && id.length > 0) ||
+          (typeof id === "number" && Number.isFinite(id)),
+      );
+    } catch (error) {
+      console.warn(
+        "宇宙遊泳モードの発見記録を読み込めませんでした。",
+        error,
+      );
+      return [];
+    }
+  }
+
+  // 発見記録を保存する
+  function saveSpaceSwimDiscoveredConstellationIds() {
+    try {
+      localStorage.setItem(
+        SPACE_SWIM_DISCOVERED_STORAGE_KEY,
+        JSON.stringify([
+          ...spaceSwimDiscoveredConstellationIds,
+        ]),
+      );
+
+      return true;
+    } catch (error) {
+      console.warn(
+        "宇宙遊泳モードの発見記録を保存できませんでした。",
+        error,
+      );
+      return false;
+    }
+  }
+
+  // 保存済みの星座を読み込んで発見記録を初期化
+  const spaceSwimDiscoveredConstellationIds = new Set(
+    loadSpaceSwimDiscoveredConstellationIds(),
+  );
+
+  // ==========================================
+  // 宇宙遊泳モード：アステリズム発見管理
+  // ==========================================
+
+  // 宇宙遊泳中に発見したアステリズム
+  const spaceSwimDiscoveredAsterismIds = new Set();
+
+  // アステリズム名のフェードアニメーション状態
+  const spaceSwimAsterismLabelStates = new Map();
+
+  // アステリズムの発見判定を行う視野角
+  const SPACE_SWIM_ASTERISM_DISCOVERY_MAX_FOV = 100;
+  // アステリズムの発見判定時刻
+  let spaceSwimLastAsterismDiscoveryCheckTime = 0;
+
+  // 宇宙遊泳中の星座名の透明度を管理
+  const spaceSwimConstellationLabelStates = new Map();
+
+  // 星座発見の判定間隔
+  let spaceSwimLastDiscoveryCheckTime = 0;
+
+  // 星座名のフェードアニメーション
+  let spaceSwimLabelAnimationFrame = null;
+
+  // ==========================================
+  // 星座発見条件（宇宙遊泳モードで星座線が現れる視野角）
+  // ==========================================
+
+  // この視野角以下で発見判定を行う
+  const SPACE_SWIM_DISCOVERY_MAX_FOV = 50;
+
+  // 星座の中心が画面中央から何割以内なら対象にするか
+  const SPACE_SWIM_DISCOVERY_CENTER_RATIO = 0.60;
+
+  // 星座を構成する恒星のうち、画面内に必要な割合
+  const SPACE_SWIM_DISCOVERY_VISIBLE_RATIO = 0.70;
+
+  // 発見判定の間隔（ミリ秒）
+  const SPACE_SWIM_DISCOVERY_INTERVAL = 500;
+
+  // 星座名のフェードイン時間（ミリ秒）
+  const SPACE_SWIM_LABEL_FADE_DURATION = 2000;
+
 
   // 星座ごとのフェード専用アニメーションフレーム
   let constellationFadeAnimationFrame = null;
@@ -1040,25 +1148,65 @@
   let spaceSwimPhase = 0;
 
   // 手動操作後の自動再開タイマー
-let spaceSwimResumeTimer = null;
+  let spaceSwimResumeTimer = null;
 
   let spaceSwimBaseAz = 0;
   let spaceSwimBaseAlt = 0;
   let spaceSwimBaseFov = 0;
 
-  
+
+  // 自動宇宙遊泳を開始
+
   // 自動宇宙遊泳を開始
   function startSpaceSwim() {
     if (!starOnlyMode || spaceSwimAnimationId !== null) return;
 
-    // 現在表示されている星図を出発点にする
-    spaceSwimBaseAz = centerAzDeg;
-    spaceSwimBaseAlt = centerAltDeg;
-    spaceSwimBaseFov = fieldOfViewDeg;
+    // 現在位置を次の移動の出発点にする
+    let startAz = centerAzDeg;
+    let startAlt = centerAltDeg;
+    let startFov = fieldOfViewDeg;
 
-    // 移動量をゼロから開始
-    spaceSwimPhase = 0;
-    spaceSwimLastTime = 0;
+    let targetAz = startAz;
+    let targetAlt = startAlt;
+    let targetFov = startFov;
+
+    let segmentStartTime = null;
+    let segmentDuration = 0;
+
+    // 指定範囲のランダムな数値を取得
+    function randomRange(min, max) {
+      return min + Math.random() * (max - min);
+    }
+
+    // 次の移動目標を決める
+    function setNextTarget(time) {
+      startAz = centerAzDeg;
+      startAlt = centerAltDeg;
+      startFov = fieldOfViewDeg;
+
+      // 方位：左右に大きく漂う
+      targetAz = startAz + randomRange(-50, 50);
+
+      // 高度：上下・斜め方向にも移動
+      targetAlt = Math.max(
+        -80,
+        Math.min(80, startAlt + randomRange(-22, 22)),
+      );
+
+      // 視野角：拡大・縮小をランダムに行う
+      targetFov = Math.max(
+        MIN_FIELD_OF_VIEW_DEG,
+        Math.min(
+          MAX_FIELD_OF_VIEW_DEG,
+          startFov + randomRange(-22, 22),
+        ),
+      );
+
+      // 移動にかける時間もランダムに変える
+      segmentDuration = randomRange(9000, 18000);
+
+      segmentStartTime = time;
+    }
 
     function animateSpaceSwim(time) {
       if (!starOnlyMode) {
@@ -1066,57 +1214,44 @@ let spaceSwimResumeTimer = null;
         return;
       }
 
-      if (spaceSwimLastTime === 0) {
-        spaceSwimLastTime = time;
+      // 最初の目標を設定
+      if (segmentStartTime === null) {
+        setNextTarget(time);
       }
 
-      // フレーム間隔（秒）
-      const deltaTime = Math.min(
-        (time - spaceSwimLastTime) / 1000,
-        0.05,
+      const progress = Math.min(
+        (time - segmentStartTime) / segmentDuration,
+        1,
       );
 
-      spaceSwimLastTime = time;
+      // 滑らかな加速・減速
+      const easedProgress =
+        progress * progress * (3 - 2 * progress);
 
-      // ゆっくりした速度変化
-      const speed = 0.16 + 0.07 * Math.sin(spaceSwimPhase * 0.35);
+      // 方位
+      const currentAz =
+        startAz + (targetAz - startAz) * easedProgress;
 
-      spaceSwimPhase += deltaTime * speed;
+      centerAzDeg = normalizeDeg(currentAz);
 
-      const t = spaceSwimPhase;
+      // 高度
+      centerAltDeg =
+        startAlt + (targetAlt - startAlt) * easedProgress;
 
-      // 方位：開始時のオフセットを差し引く
-      const azOffset =
-        24 * (Math.sin(t) - Math.sin(0)) +
-        9 * (Math.sin(t * 0.43 + 1.2) - Math.sin(1.2));
-
-      // 高度：開始時のオフセットを差し引く
-      const altOffset =
-        13 * (Math.sin(t * 0.72 + 0.8) - Math.sin(0.8)) +
-        5 * Math.sin(t * 0.31);
-
-      // 視野角：開始時のオフセットを差し引く
-      const fovOffset =
-        13 * (Math.sin(t * 0.48 + 0.5) - Math.sin(0.5));
-
-      centerAzDeg = normalizeDeg(
-        spaceSwimBaseAz + azOffset,
-      );
-
-      centerAltDeg = Math.max(
-        -80,
-        Math.min(80, spaceSwimBaseAlt + altOffset),
-      );
-
-      fieldOfViewDeg = Math.max(
-        MIN_FIELD_OF_VIEW_DEG,
-        Math.min(
-          MAX_FIELD_OF_VIEW_DEG,
-          spaceSwimBaseFov + fovOffset,
-        ),
-      );
+      // 視野角
+      fieldOfViewDeg =
+        startFov + (targetFov - startFov) * easedProgress;
 
       drawChart();
+
+      // 目標地点に到着したら、次の目標を決める
+      if (progress >= 1) {
+        centerAzDeg = normalizeDeg(targetAz);
+        centerAltDeg = targetAlt;
+        fieldOfViewDeg = targetFov;
+
+        setNextTarget(time);
+      }
 
       spaceSwimAnimationId =
         requestAnimationFrame(animateSpaceSwim);
@@ -1134,38 +1269,38 @@ let spaceSwimResumeTimer = null;
     }
 
     if (spaceSwimResumeTimer !== null) {
-  clearTimeout(spaceSwimResumeTimer);
-  spaceSwimResumeTimer = null;
-}
+      clearTimeout(spaceSwimResumeTimer);
+      spaceSwimResumeTimer = null;
+    }
 
     spaceSwimLastTime = 0;
   }
 
   // 手動操作による自動宇宙遊泳の一時停止
-function pauseSpaceSwimForInteraction() {
-  if (!starOnlyMode) return;
+  function pauseSpaceSwimForInteraction() {
+    if (!starOnlyMode) return;
 
-  stopSpaceSwim();
-}
-
-// 手動操作終了後、自動宇宙遊泳を再開
-function scheduleSpaceSwimResume() {
-  if (!starOnlyMode) return;
-
-  // 既存の再開予約を解除
-  if (spaceSwimResumeTimer !== null) {
-    clearTimeout(spaceSwimResumeTimer);
+    stopSpaceSwim();
   }
 
-  // 5秒間操作がなければ再開
-  spaceSwimResumeTimer = setTimeout(() => {
-    spaceSwimResumeTimer = null;
+  // 手動操作終了後、自動宇宙遊泳を再開
+  function scheduleSpaceSwimResume() {
+    if (!starOnlyMode) return;
 
-    if (starOnlyMode && activePointers.size === 0) {
-      startSpaceSwim();
+    // 既存の再開予約を解除
+    if (spaceSwimResumeTimer !== null) {
+      clearTimeout(spaceSwimResumeTimer);
     }
-  }, 5000);
-}
+
+    // 5秒間操作がなければ再開
+    spaceSwimResumeTimer = setTimeout(() => {
+      spaceSwimResumeTimer = null;
+
+      if (starOnlyMode && activePointers.size === 0) {
+        startSpaceSwim();
+      }
+    }, 5000);
+  }
 
   // ==========================================
   // スマホ姿勢センサーによる星図自動追従
@@ -2249,8 +2384,19 @@ function scheduleSpaceSwimResume() {
   }
 
   // 選択した星座線のアニメーションを開始
-  function startConstellationLineAnimation(constellation) {
+  function startConstellationLineAnimation(
+    constellation,
+    isSpaceSwim = false,
+  ) {
     if (!constellation) return;
+
+    // 宇宙遊泳中は、進行中の描画を中断しない
+    if (
+      isSpaceSwim &&
+      constellationLineAnimationPhase === "drawing"
+    ) {
+      return;
+    }
 
     // 進行中のアニメーションを停止
     if (constellationLineAnimationFrame !== null) {
@@ -2258,7 +2404,11 @@ function scheduleSpaceSwimResume() {
       constellationLineAnimationFrame = null;
     }
 
-    discoveredConstellationIds.delete(constellation.id);
+    // 通常操作では、再描画する星座を発見記録から外す
+    if (!isSpaceSwim) {
+      discoveredConstellationIds.delete(constellation.id);
+    }
+
     selectedConstellationId = constellation.id;
     constellationAnimationProgress = 0;
     constellationLineAnimationPhase = "drawing";
@@ -2273,14 +2423,35 @@ function scheduleSpaceSwimResume() {
       }
 
       const elapsed = timestamp - phaseStartTime;
-
       const progress = Math.min(elapsed / drawDuration, 1);
 
-      constellationAnimationProgress = progress * progress * (3 - 2 * progress);
+      constellationAnimationProgress =
+        progress * progress * (3 - 2 * progress);
 
       if (progress >= 1) {
         // 描画が完了した星座を記録
-        discoveredConstellationIds.add(constellation.id);
+
+        if (isSpaceSwim) {
+          spaceSwimDiscoveredConstellationIds.add(constellation.id);
+
+          console.log("宇宙遊泳・星座線完成", constellation.name, {
+            discovered: spaceSwimDiscoveredConstellationIds.has(constellation.id),
+            phase: constellationLineAnimationPhase,
+          });
+
+          // 星座線の完成後、星座名のフェードインを開始
+          if (starOnlyMode) {
+            spaceSwimConstellationLabelStates.set(
+              constellation.id,
+              {
+                startTime: performance.now(),
+                opacity: 0,
+              },
+            );
+          }
+        } else {
+          discoveredConstellationIds.add(constellation.id);
+        }
 
         constellationLineAnimationPhase = "idle";
         constellationAnimationProgress = 1;
@@ -2302,7 +2473,10 @@ function scheduleSpaceSwimResume() {
   }
 
   // 選択したアステリズムの線のアニメーションを開始
-  function startAsterismLineAnimation(asterism) {
+  function startAsterismLineAnimation(
+    asterism,
+    isSpaceSwim = false,
+  ) {
     if (!asterism) return;
 
     // 特別な線が表示中ならアニメーションしない
@@ -2327,17 +2501,30 @@ function scheduleSpaceSwimResume() {
       }
 
       const elapsed = timestamp - phaseStartTime;
-
       const progress = Math.min(elapsed / drawDuration, 1);
 
       // 滑らかに進むアニメーション
-      asterismAnimationProgress = progress * progress * (3 - 2 * progress);
+      asterismAnimationProgress =
+        progress * progress * (3 - 2 * progress);
 
       drawChart();
 
       if (progress >= 1) {
         // 描画が完了したアステリズムを記録
-        discoveredAsterismIds.add(asterism.id);
+        if (isSpaceSwim) {
+          spaceSwimDiscoveredAsterismIds.add(asterism.id);
+
+          // 星群名のフェードインを開始
+          spaceSwimAsterismLabelStates.set(
+            asterism.id,
+            {
+              startTime: performance.now(),
+              opacity: 0,
+            },
+          );
+        } else {
+          discoveredAsterismIds.add(asterism.id);
+        }
 
         asterismAnimationProgress = 1;
         asterismLineAnimationFrame = null;
@@ -2346,10 +2533,12 @@ function scheduleSpaceSwimResume() {
         return;
       }
 
-      asterismLineAnimationFrame = requestAnimationFrame(animateAsterism);
+      asterismLineAnimationFrame =
+        requestAnimationFrame(animateAsterism);
     }
 
-    asterismLineAnimationFrame = requestAnimationFrame(animateAsterism);
+    asterismLineAnimationFrame =
+      requestAnimationFrame(animateAsterism);
   }
 
   // 方角の位置を星図上の座標に変換する
@@ -2891,38 +3080,37 @@ function scheduleSpaceSwimResume() {
   ${0.25 + 0.17 * dayMix}
 )`;
 
-    if (!starOnlyMode) {
-      ctx.strokeStyle = gridLineColor;
+    // 地平線を描画
+    ctx.strokeStyle = gridLineColor;
+    // 地平線の太さ（プラネタリウム、宇宙遊泳共通）
+    ctx.lineWidth = 0.6;
 
-      ctx.lineWidth = 1;
+    // 前回の描画パスを引き継がない
+    ctx.beginPath();
 
-      // 前回の描画パスを引き継がない
-      ctx.beginPath();
+    let horizonDrawing = false;
 
-      let horizonDrawing = false;
+    for (let az = 0; az <= 360; az += 1) {
+      const point = projectDirection(az, 0, basis, minDot);
 
-      for (let az = 0; az <= 360; az += 1) {
-        const point = projectDirection(az, 0, basis, minDot);
+      if (!point) {
+        horizonDrawing = false;
+        continue;
+      }
 
-        if (!point) {
-          horizonDrawing = false;
-          continue;
-        }
+      const x = centerX + point.x * scaleX;
+      const y = centerY + point.y * scaleY;
 
-        const x = centerX + point.x * scaleX;
-        const y = centerY + point.y * scaleY;
+      if (!Number.isFinite(x) || !Number.isFinite(y)) {
+        horizonDrawing = false;
+        continue;
+      }
 
-        if (!Number.isFinite(x) || !Number.isFinite(y)) {
-          horizonDrawing = false;
-          continue;
-        }
-
-        if (!horizonDrawing) {
-          ctx.moveTo(x, y);
-          horizonDrawing = true;
-        } else {
-          ctx.lineTo(x, y);
-        }
+      if (!horizonDrawing) {
+        ctx.moveTo(x, y);
+        horizonDrawing = true;
+      } else {
+        ctx.lineTo(x, y);
       }
 
       ctx.stroke();
@@ -3076,85 +3264,81 @@ function scheduleSpaceSwimResume() {
     }
 
     // 地平線上の東西南北・中間方位を表示
-    if (!starOnlyMode) {
-      const directions = [
-        { az: 0, label: "北", primary: true },
-        { az: 45, label: "北東" },
-        { az: 90, label: "東", primary: true },
-        { az: 135, label: "南東" },
-        { az: 180, label: "南", primary: true },
-        { az: 225, label: "南西" },
-        { az: 270, label: "西", primary: true },
-        { az: 315, label: "北西" },
-      ];
+    const directions = [
+      { az: 0, label: "北", primary: true },
+      { az: 45, label: "北東" },
+      { az: 90, label: "東", primary: true },
+      { az: 135, label: "南東" },
+      { az: 180, label: "南", primary: true },
+      { az: 225, label: "南西" },
+      { az: 270, label: "西", primary: true },
+      { az: 315, label: "北西" },
+    ];
 
-      ctx.font = 'bold 16px "Meiryo", sans-serif';
-      ctx.fillStyle = "#FFD700";
+    ctx.font = 'bold 16px "Meiryo", sans-serif';
+    ctx.fillStyle = "#FFD700";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    for (const direction of directions) {
+      const point = projectDirection(direction.az, 0, basis, minDot);
+
+      if (!point) continue;
+
+      const x = centerX + point.x * scaleX;
+      const y = centerY + point.y * scaleY;
+
+      // 方位表示の位置
+      const labelX = x;
+      const labelY = y;
+
+      // 方位表示：半透明の白い丸＋濃紺の文字
+      ctx.save();
+
+      const isPrimary = direction.primary;
+
+      // 背景の白い丸
+      ctx.beginPath();
+      ctx.arc(labelX, labelY, isPrimary ? 13 : 10, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+      ctx.fill();
+
+      // 方位の文字
+      ctx.font = isPrimary
+        ? 'bold 16px "Meiryo", sans-serif'
+        : 'bold 8px "Meiryo", sans-serif';
+
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgb(6, 7, 64)";
+      ctx.fillText(direction.label, labelX, labelY);
 
-      for (const direction of directions) {
-        const point = projectDirection(direction.az, 0, basis, minDot);
-
-        if (!point) continue;
-
-        const x = centerX + point.x * scaleX;
-        const y = centerY + point.y * scaleY;
-
-        // 方位表示の位置
-        const labelX = x;
-        const labelY = y;
-
-        // 方位表示：半透明の白い丸＋濃紺の文字
-        ctx.save();
-
-        const isPrimary = direction.primary;
-
-        // 背景の白い丸
-        ctx.beginPath();
-        ctx.arc(labelX, labelY, isPrimary ? 13 : 10, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
-        ctx.fill();
-
-        // 方位の文字
-        ctx.font = isPrimary
-          ? 'bold 16px "Meiryo", sans-serif'
-          : 'bold 8px "Meiryo", sans-serif';
-
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "rgb(6, 7, 64)";
-        ctx.fillText(direction.label, labelX, labelY);
-
-        ctx.restore();
-      }
+      ctx.restore();
     }
 
     // 天頂の表示
-    if (!starOnlyMode) {
-      const zenithPoint = projectDirection(0, 90, basis, minDot);
+    const zenithPoint = projectDirection(0, 90, basis, minDot);
 
-      if (zenithPoint) {
-        const zenithX = centerX + zenithPoint.x * scaleX;
-        const zenithY = centerY + zenithPoint.y * scaleY;
+    if (zenithPoint) {
+      const zenithX = centerX + zenithPoint.x * scaleX;
+      const zenithY = centerY + zenithPoint.y * scaleY;
 
-        ctx.save();
+      ctx.save();
 
-        // 半透明の白い丸
-        ctx.beginPath();
-        ctx.arc(zenithX, zenithY, 28, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.fill();
+      // 半透明の白い丸
+      ctx.beginPath();
+      ctx.arc(zenithX, zenithY, 28, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.fill();
 
-        // 「天頂」の文字
-        ctx.font = 'bold 18px "Meiryo", sans-serif';
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "rgb(6, 7, 64)";
-        ctx.fillText("天頂", zenithX, zenithY);
+      // 「天頂」の文字
+      ctx.font = 'bold 18px "Meiryo", sans-serif';
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgb(6, 7, 64)";
+      ctx.fillText("天頂", zenithX, zenithY);
 
-        ctx.restore();
-      }
+      ctx.restore();
     }
 
     if (dataLoaded) {
@@ -3172,6 +3356,155 @@ function scheduleSpaceSwimResume() {
       }
 
       const starById = new Map(stars.map((star) => [star.id, star]));
+
+      // ==========================================
+      // 宇宙遊泳：星座の自動発見判定
+      // ==========================================
+
+      if (
+        starOnlyMode &&
+        fieldOfViewDeg <= SPACE_SWIM_DISCOVERY_MAX_FOV &&
+        constellationLineAnimationPhase !== "drawing"
+      ) {
+        const now = Date.now();
+
+        // 一定間隔で発見候補を調べる
+        if (
+          now - spaceSwimLastDiscoveryCheckTime >=
+          SPACE_SWIM_DISCOVERY_INTERVAL
+        ) {
+          spaceSwimLastDiscoveryCheckTime = now;
+
+          let bestConstellation = null;
+          let nearestCenterDistance = Infinity;
+
+          let diagnostic = {
+            undiscovered: 0,
+            missingStars: 0,
+            projectedOut: 0,
+            outsideScreen: 0,
+            ratioPassed: 0,
+            centerPassed: 0,
+          };
+
+          const centerLimit =
+            (Math.min(canvasWidth, canvasHeight) / 2) *
+            SPACE_SWIM_DISCOVERY_CENTER_RATIO;
+
+          // すべての星座を調べる
+          for (const constellation of constellations) {
+            // 発見済みの星座は対象外
+            if (
+              spaceSwimDiscoveredConstellationIds.has(
+                constellation.id,
+              )
+            ) {
+              continue;
+            }
+
+            diagnostic.undiscovered++;
+
+            // 星座を構成する恒星を取得
+            const memberIds = new Set(
+              constellation.segments.flat(),
+            );
+
+            if (memberIds.size === 0) continue;
+
+            const visiblePoints = [];
+
+            // 画面内に見えている構成星を調べる
+            for (const id of memberIds) {
+              const star = starById.get(id);
+              if (!star) {
+                diagnostic.missingStars++;
+                continue;
+              }
+
+              const projected = getCachedProjectedStar(star);
+              if (!projected) {
+                diagnostic.projectedOut++;
+                continue;
+              }
+
+              const x = centerX + projected.x * scaleX;
+              const y = centerY + projected.y * scaleY;
+
+              if (
+                x < 0 ||
+                x > canvasWidth ||
+                y < 0 ||
+                y > canvasHeight
+              ) {
+                continue;
+              }
+
+              visiblePoints.push({ x, y });
+            }
+
+            // 星座の構成星が十分に見えているか確認
+            const visibleRatio =
+              visiblePoints.length / memberIds.size;
+
+            if (
+              visibleRatio <
+              SPACE_SWIM_DISCOVERY_VISIBLE_RATIO
+            ) {
+              continue;
+            }
+
+            diagnostic.ratioPassed++;
+
+            // 見えている構成星の中心位置を計算
+            const centerOfConstellation = {
+              x:
+                visiblePoints.reduce(
+                  (sum, point) => sum + point.x,
+                  0,
+                ) / visiblePoints.length,
+              y:
+                visiblePoints.reduce(
+                  (sum, point) => sum + point.y,
+                  0,
+                ) / visiblePoints.length,
+            };
+
+            // 画面中央からの距離
+            const distance = Math.hypot(
+              centerOfConstellation.x - centerX,
+              centerOfConstellation.y - centerY,
+            );
+
+            if (distance <= centerLimit) {
+              diagnostic.centerPassed++;
+            }
+
+            // 中央付近にある星座のうち、最も近いものを選ぶ
+            if (
+              distance <= centerLimit &&
+              distance < nearestCenterDistance
+            ) {
+              nearestCenterDistance = distance;
+              bestConstellation = constellation;
+            }
+          }
+
+          console.log("宇宙遊泳・詳細診断", {
+            ...diagnostic,
+            centerLimit,
+            nearestCenterDistance,
+            bestConstellation: bestConstellation?.name ?? "なし",
+          });
+
+          // 最も中央に近い星座を一つだけ発見
+          if (bestConstellation) {
+            startConstellationLineAnimation(
+              bestConstellation,
+              true,
+            );
+          }
+        }
+      }
 
       // 現在の視野角で表示対象となる星座を収集
       const visibleConstellationIds = new Set();
@@ -3537,14 +3870,27 @@ function scheduleSpaceSwimResume() {
               const starA = starById.get(segment[0]);
               const starB = starById.get(segment[1]);
 
-              if (!starA || !starB) continue;
+              if (!starA || !starB) {
+                console.log("星座線・恒星データ不足", constellation.name, {
+                  starA: !!starA,
+                  starB: !!starB,
+                  segment,
+                });
+                continue;
+              }
 
               const pointA = getCachedProjectedStar(starA);
-
               const pointB = getCachedProjectedStar(starB);
 
-              if (!pointA || !pointB) continue;
-
+              if (!pointA || !pointB) {
+                console.log("星座線・投影座標取得失敗", constellation.name, {
+                  pointA,
+                  pointB,
+                  starA: starA.id,
+                  starB: starB.id,
+                });
+                continue;
+              }
               ctx.moveTo(
                 centerX + pointA.x * scaleX,
                 centerY + pointA.y * scaleY,
@@ -3558,6 +3904,104 @@ function scheduleSpaceSwimResume() {
 
             ctx.stroke();
             ctx.globalAlpha = 1;
+          }
+        }
+
+        // ==========================================
+        // 宇宙遊泳：発見済み星座線を常時表示
+        // ==========================================
+
+        console.log("宇宙遊泳モード状態", starOnlyMode);
+
+        // 発見済み星座線を表示
+        if (starOnlyMode) {
+          for (const constellation of constellations) {
+            if (
+              !spaceSwimDiscoveredConstellationIds.has(
+                constellation.id,
+              ) &&
+              !(
+                constellationLineAnimationPhase === "drawing" &&
+                constellation.id === selectedConstellationId
+              )
+            ) {
+              continue;
+            }
+
+            const projectedSegments = [];
+
+            for (const segment of constellation.segments) {
+              const starA = starById.get(segment[0]);
+              const starB = starById.get(segment[1]);
+
+              if (!starA || !starB) continue;
+
+              const pointA = getCachedProjectedStar(starA);
+              const pointB = getCachedProjectedStar(starB);
+
+              if (!pointA || !pointB) continue;
+
+              const ax = centerX + pointA.x * scaleX;
+              const ay = centerY + pointA.y * scaleY;
+              const bx = centerX + pointB.x * scaleX;
+              const by = centerY + pointB.y * scaleY;
+
+              const length = Math.hypot(bx - ax, by - ay);
+
+              if (length === 0) continue;
+
+              projectedSegments.push({
+                ax,
+                ay,
+                bx,
+                by,
+                length,
+              });
+            }
+
+            const totalLength = projectedSegments.reduce(
+              (sum, segment) => sum + segment.length,
+              0,
+            );
+
+            if (totalLength <= 0) continue;
+
+            const isDrawing =
+              constellationLineAnimationPhase === "drawing" &&
+              constellation.id === selectedConstellationId;
+
+            let remainingLength =
+              totalLength *
+              (isDrawing ? constellationAnimationProgress : 1);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle =
+              constellation.lineColor || "#FF3CC8";
+            ctx.lineWidth = 0.75;
+            ctx.globalAlpha = 1;
+
+            for (const segment of projectedSegments) {
+              if (remainingLength <= 0) break;
+
+              const drawLength = Math.min(
+                segment.length,
+                remainingLength,
+              );
+
+              const ratio = drawLength / segment.length;
+
+              ctx.moveTo(segment.ax, segment.ay);
+              ctx.lineTo(
+                segment.ax + (segment.bx - segment.ax) * ratio,
+                segment.ay + (segment.by - segment.ay) * ratio,
+              );
+
+              remainingLength -= drawLength;
+            }
+
+            ctx.stroke();
+            ctx.restore();
           }
         }
 
@@ -3788,7 +4232,222 @@ function scheduleSpaceSwimResume() {
         }
       }
 
+      // ==========================================
+      // 宇宙遊泳：発見済み星座線と描画中の星座線
+      // ==========================================
+
+      if (starOnlyMode) {
+        for (const constellation of constellations) {
+          const isDrawing =
+            constellationLineAnimationPhase === "drawing" &&
+            constellation.id === selectedConstellationId;
+
+          const isDiscovered =
+            spaceSwimDiscoveredConstellationIds.has(
+              constellation.id,
+            );
+
+          // 描画中でも発見済みでもない星座は対象外
+          if (!isDrawing && !isDiscovered) continue;
+
+          // 星座線の各区間を投影
+          const projectedSegments = [];
+
+          for (const segment of constellation.segments) {
+            const starA = starById.get(segment[0]);
+            const starB = starById.get(segment[1]);
+
+            if (!starA || !starB) continue;
+
+            const pointA = getCachedProjectedStar(starA);
+            const pointB = getCachedProjectedStar(starB);
+
+            if (!pointA || !pointB) continue;
+
+            const ax = centerX + pointA.x * scaleX;
+            const ay = centerY + pointA.y * scaleY;
+            const bx = centerX + pointB.x * scaleX;
+            const by = centerY + pointB.y * scaleY;
+
+            const length = Math.hypot(bx - ax, by - ay);
+
+            if (length === 0) continue;
+
+            projectedSegments.push({
+              ax,
+              ay,
+              bx,
+              by,
+              length,
+            });
+          }
+
+          const totalLength = projectedSegments.reduce(
+            (sum, segment) => sum + segment.length,
+            0,
+          );
+
+          if (totalLength <= 0) continue;
+
+          // 描画中なら進行度に応じた長さにする
+          // 発見済みなら全体を表示する
+          let remainingLength =
+            totalLength *
+            (isDrawing ? constellationAnimationProgress : 1);
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.strokeStyle =
+            constellation.lineColor || "#FF3CC8";
+          ctx.lineWidth = 0.75;
+          ctx.globalAlpha = 1;
+
+          // 星座線を配列順に少しずつ描画
+          for (const segment of projectedSegments) {
+            if (remainingLength <= 0) break;
+
+            const drawLength = Math.min(
+              segment.length,
+              remainingLength,
+            );
+
+            const ratio = drawLength / segment.length;
+
+            ctx.moveTo(segment.ax, segment.ay);
+            ctx.lineTo(
+              segment.ax + (segment.bx - segment.ax) * ratio,
+              segment.ay + (segment.by - segment.ay) * ratio,
+            );
+
+            remainingLength -= drawLength;
+          }
+
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+
+      // ==========================================
+      // 宇宙遊泳：発見済みアステリズム線と描画中の線
+      // ==========================================
+
+      if (starOnlyMode && !constellationLinesVisible) {
+        for (const asterism of asterisms) {
+          const isDrawing =
+            asterismLineAnimationFrame !== null &&
+            asterism.id === selectedAsterismId;
+
+          const isDiscovered =
+            spaceSwimDiscoveredAsterismIds.has(
+              asterism.id,
+            );
+
+          // 描画中でも発見済みでもない星群は対象外
+          if (!isDrawing && !isDiscovered) continue;
+
+          const progress = isDrawing
+            ? asterismAnimationProgress
+            : 1;
+
+          // 春の大曲線は既存の滑らかな曲線描画を再利用
+          if (asterism.id === "spring-arc") {
+            drawSpringArc(
+              ctx,
+              asterism,
+              1,
+              progress,
+            );
+
+            continue;
+          }
+
+          // それ以外のアステリズムは直線で描画
+          const projectedSegments = [];
+
+          for (const segment of asterism.segments) {
+            const starA = starById.get(segment[0]);
+            const starB = starById.get(segment[1]);
+
+            if (!starA || !starB) continue;
+
+            const pointA = getCachedProjectedStar(starA);
+            const pointB = getCachedProjectedStar(starB);
+
+            if (!pointA || !pointB) continue;
+
+            const ax = centerX + pointA.x * scaleX;
+            const ay = centerY + pointA.y * scaleY;
+            const bx = centerX + pointB.x * scaleX;
+            const by = centerY + pointB.y * scaleY;
+
+            const length = Math.hypot(
+              bx - ax,
+              by - ay,
+            );
+
+            if (length === 0) continue;
+
+            projectedSegments.push({
+              ax,
+              ay,
+              bx,
+              by,
+              length,
+            });
+          }
+
+          const totalLength = projectedSegments.reduce(
+            (sum, segment) => sum + segment.length,
+            0,
+          );
+
+          if (totalLength <= 0) continue;
+
+          // 描画中なら進行度に応じた長さにする
+          // 発見済みなら全体を表示する
+          let remainingLength = totalLength * progress;
+
+          ctx.save();
+          ctx.beginPath();
+
+          ctx.strokeStyle =
+            asterism.lineColor || "#439F85";
+
+          ctx.lineWidth = asterism.lineWidth || 1.8;
+          ctx.lineCap = "round";
+          ctx.globalAlpha = 1;
+
+          // 星群の線を配列順に少しずつ描画
+          for (const segment of projectedSegments) {
+            if (remainingLength <= 0) break;
+
+            const drawLength = Math.min(
+              segment.length,
+              remainingLength,
+            );
+
+            const ratio = drawLength / segment.length;
+
+            ctx.moveTo(segment.ax, segment.ay);
+            ctx.lineTo(
+              segment.ax +
+              (segment.bx - segment.ax) * ratio,
+              segment.ay +
+              (segment.by - segment.ay) * ratio,
+            );
+
+            remainingLength -= drawLength;
+          }
+
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      // ==========================================
       // 恒星を描画
+      // ==========================================
 
       // 星座評価のタップ判定領域を初期化
       constellationRatingHitAreas = [];
@@ -3821,7 +4480,7 @@ function scheduleSpaceSwimResume() {
         // 星の等級・スペクトル型に応じて色と大きさを決める
         const isPolaris = projected.id === "hip-11767";
         const mag = projected.mag;
-        
+
         // 視野角に応じて恒星の透明度を制御
         // 等級ごとの表示境界を中心に4度の範囲でフェード
 
@@ -3902,8 +4561,8 @@ function scheduleSpaceSwimResume() {
         // 地平線の透明度と等級フェードを適用
         const groundOpacity =
           groundRenderingEnabled &&
-          !starOnlyMode &&
-          projected.altitude < 0
+            !starOnlyMode &&
+            projected.altitude < 0
             ? 0.1
             : 1.0;
 
@@ -4087,6 +4746,7 @@ function scheduleSpaceSwimResume() {
         // 恒星名を一時保存
         if (shouldShowStarLabel && (isPolaris || projected.label)) {
           starLabels.push({
+            id: star.id,
             text: isPolaris ? "北極星(ポラリス)" : projected.label,
             x: x + 9,
             y: y - 8,
@@ -4112,7 +4772,9 @@ function scheduleSpaceSwimResume() {
 
           for (const id of memberIds) {
             const star = starById.get(id);
-            if (!star) continue;
+            if (!star) {
+              continue;
+            }
 
             const projected = getCachedProjectedStar(star);
 
@@ -4332,6 +4994,187 @@ function scheduleSpaceSwimResume() {
 
             ctx.restore();
           }
+        }
+      }
+
+      if (starOnlyMode) {
+        // 同じ恒星名を重複して描画しない
+        const renderedStarLabelIds = new Set();
+
+        for (const constellation of constellations) {
+          const labelState =
+            spaceSwimConstellationLabelStates.get(
+              constellation.id,
+            );
+
+          // 星座線の完成前は名前を表示しない
+          if (!labelState) continue;
+
+          // フェードインの進行度を計算
+          const elapsed =
+            performance.now() - labelState.startTime;
+
+          const progress = Math.max(
+            0,
+            Math.min(
+              1,
+              elapsed / SPACE_SWIM_LABEL_FADE_DURATION,
+            ),
+          );
+
+          // 滑らかなフェードイン
+          const opacity =
+            progress * progress * (3 - 2 * progress);
+
+          labelState.opacity = opacity;
+
+          // 星座を構成する恒星の位置を取得
+          const memberIds = new Set(
+            constellation.segments.flat(),
+          );
+
+          const points = [];
+
+          for (const id of memberIds) {
+            const star = starById.get(id);
+            if (!star) continue;
+
+            const projected = getCachedProjectedStar(star);
+            if (!projected) continue;
+
+            points.push({
+              x: centerX + projected.x * scaleX,
+              y: centerY + projected.y * scaleY,
+            });
+          }
+
+          if (points.length === 0) continue;
+
+          // 星座の表示範囲を計算
+          const minX = Math.min(...points.map((p) => p.x));
+          const maxX = Math.max(...points.map((p) => p.x));
+          const minY = Math.min(...points.map((p) => p.y));
+          const maxY = Math.max(...points.map((p) => p.y));
+
+          // 星座名の表示位置
+          const labelX = (minX + maxX) / 2;
+          const labelY = (minY + maxY) / 2;
+
+          ctx.save();
+
+          ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          const textWidth =
+            ctx.measureText(constellation.name).width;
+
+          const paddingX = 5;
+          const boxWidth = textWidth + paddingX * 2;
+          const boxHeight = 20;
+
+          const boxX = labelX - boxWidth / 2;
+          const boxY = labelY - boxHeight / 2;
+
+          // 半透明の白い角丸背景
+          ctx.globalAlpha = opacity * 0.3;
+          ctx.fillStyle = "#FFFFFF";
+          ctx.beginPath();
+          ctx.roundRect(
+            boxX,
+            boxY,
+            boxWidth,
+            boxHeight,
+            10,
+          );
+          ctx.fill();
+
+          // 濃紺の星座名
+          ctx.globalAlpha = opacity;
+          ctx.fillStyle = "rgb(6, 7, 64)";
+          ctx.fillText(
+            constellation.name,
+            labelX,
+            labelY,
+          );
+
+          ctx.restore();
+
+          // ==========================================
+          // 宇宙遊泳：発見した星座の恒星名を表示
+          // ==========================================
+
+          // 星座名のフェードインが完了してから開始
+          const starLabelFadeDuration = 1200;
+
+          const starLabelProgress = Math.max(
+            0,
+            Math.min(
+              1,
+              (elapsed - SPACE_SWIM_LABEL_FADE_DURATION) /
+              starLabelFadeDuration,
+            ),
+          );
+
+          const starLabelOpacity =
+            starLabelProgress *
+            starLabelProgress *
+            (3 - 2 * starLabelProgress);
+
+          if (starLabelOpacity > 0) {
+            // この星座に属する恒星名だけを抽出
+            const constellationStarLabels = starLabels
+              .filter(
+                (label) =>
+                  memberIds.has(label.id) &&
+                  !renderedStarLabelIds.has(label.id),
+              )
+              .sort((a, b) => a.mag - b.mag);
+
+            const starLabelFontSize =
+              9 * CHART_TEXT_SIZES[chartTextSize];
+
+            ctx.save();
+
+            ctx.font =
+              `${starLabelFontSize}px "Meiryo", sans-serif`;
+
+            ctx.fillStyle = "#F5DFA0";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            ctx.globalAlpha = starLabelOpacity;
+
+            for (const label of constellationStarLabels) {
+              const textWidth =
+                ctx.measureText(label.text).width;
+
+              const selectedPosition =
+                findNonOverlappingLabelPosition(
+                  label.x,
+                  label.y,
+                  textWidth,
+                  starLabelFontSize,
+                  occupiedLabelAreas,
+                );
+
+              if (!selectedPosition) continue;
+
+              occupiedLabelAreas.push(
+                selectedPosition.area,
+              );
+
+              renderedStarLabelIds.add(label.id);
+
+              ctx.fillText(
+                label.text,
+                selectedPosition.x,
+                selectedPosition.y,
+              );
+            }
+
+            ctx.restore();
+          }
+
         }
       }
 
@@ -5382,7 +6225,7 @@ function scheduleSpaceSwimResume() {
   canvas.addEventListener("pointerdown", (event) => {
 
     // 手動操作を開始したら自動宇宙遊泳を停止
-pauseSpaceSwimForInteraction();
+    pauseSpaceSwimForInteraction();
 
     if (event.pointerType === "mouse" && event.button !== 0) {
       return;
@@ -5701,9 +6544,9 @@ pauseSpaceSwimForInteraction();
     }
 
     // すべての指を離したら自動宇宙遊泳の再開を予約
-if (activePointers.size === 0) {
-  scheduleSpaceSwimResume();
-}
+    if (activePointers.size === 0) {
+      scheduleSpaceSwimResume();
+    }
 
   }
 
