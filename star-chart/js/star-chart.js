@@ -4740,7 +4740,7 @@
         // 拡大率（視野角）に応じて恒星名の表示対象を切り替える
         // 宇宙遊泳モード : 通常プラネタリウムモード
         const shouldShowStarLabel =
-          fieldOfViewDeg <= (starOnlyMode ? 60 : 30) &&
+          fieldOfViewDeg <= (starOnlyMode ? 40 : 30) &&
           projected.label &&
           projected.label.trim() !== "";
 
