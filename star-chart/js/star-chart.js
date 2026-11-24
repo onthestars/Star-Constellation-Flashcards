@@ -1983,7 +1983,10 @@
     ctx.drawImage(icon, x - size / 2, y - size / 2, size, size);
 
     // 天体名を描画
-    if (objectLabelsVisible && !starOnlyMode) {
+    if (
+      objectLabelsVisible &&
+      fieldOfViewDeg <= (starOnlyMode ? 40 : 30)
+    ) {
       ctx.save();
 
       const fontSize = 9 * CHART_TEXT_SIZES[chartTextSize];
@@ -5232,7 +5235,7 @@
     if (
       deepSkyObjectsLoaded &&
       // 表示を開始する拡大率（視野角）
-      fieldOfViewDeg <= 30
+      fieldOfViewDeg <= (starOnlyMode ? 40 : 30)
     ) {
       // 描画済みラベルの領域を記録
       const occupiedLabelAreas = [];
