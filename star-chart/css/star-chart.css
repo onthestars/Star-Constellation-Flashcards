@@ -214,12 +214,19 @@ body {
   display: block;
 }
 
+/* 星図操作領域のブラウザ標準タッチ動作を抑制　iPhoneのLINE対策（テスト） */
+#chart-container {
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
 /* 星図キャンバス */
 #star-chart-canvas {
   display: block;
   width: 100%;
   height: 100%;
   margin: 0;
+  touch-action: none; /* iPhoneのLINE対策（テスト） */
 }
 
 /* ステータス表示 */
