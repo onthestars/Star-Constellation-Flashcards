@@ -677,6 +677,48 @@
   // 星座線の表示・非表示
   let constellationLinesVisible = true;
 
+  // 星空だけ表示モード
+  let starOnlyMode = false;
+
+  // 星空だけ表示ボタン
+  const starOnlyModeButton = document.getElementById(
+    "toggle-star-only-mode",
+  );
+
+  if (starOnlyModeButton) {
+    starOnlyModeButton.addEventListener("click", () => {
+      // 星空だけ表示モードを切り替え
+      starOnlyMode = !starOnlyMode;
+
+      // ボタンの選択状態を更新
+      starOnlyModeButton.setAttribute(
+        "aria-pressed",
+        String(starOnlyMode),
+      );
+
+      // 星空だけ表示中の状態を親要素に反映
+      document
+        .getElementById("chart-container")
+        .classList.toggle("star-only-mode-active", starOnlyMode);
+
+      // 星空だけ表示中は、ほかの操作ボタンを無効にする
+      const otherButtons = document.querySelectorAll(
+        "#chart-share-visible-button, " +
+        "#toggle-constellation-lines, " +
+        "#toggle-constellation-ratings, " +
+        "#toggle-object-labels, " +
+        "#chart-text-size-panel button"
+      );
+
+      otherButtons.forEach((button) => {
+        button.disabled = starOnlyMode;
+      });
+
+      // 星図を再描画
+      drawChart();
+    });
+  }
+
   // 星座線ボタンのアイコンを更新
   function updateConstellationLinesButton() {
     const button = document.getElementById("toggle-constellation-lines");
@@ -1395,7 +1437,7 @@
     const polePositionAngle = Math.atan2(
       Math.cos(poleDec) * Math.sin(deltaRA),
       Math.sin(poleDec) * Math.cos(saturnDec) -
-        Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
+      Math.cos(poleDec) * Math.sin(saturnDec) * Math.cos(deltaRA),
     );
 
     // 環の長軸は自転軸の見かけの方向と直角
@@ -1457,7 +1499,7 @@
     const positionAngle = Math.atan2(
       Math.cos(sunDec) * Math.sin(deltaRA),
       Math.sin(sunDec) * Math.cos(moonDec) -
-        Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
+      Math.cos(sunDec) * Math.sin(moonDec) * Math.cos(deltaRA),
     );
 
     return {
@@ -1602,7 +1644,7 @@
     ctx.drawImage(icon, x - size / 2, y - size / 2, size, size);
 
     // 天体名を描画
-    if (objectLabelsVisible) {
+    if (objectLabelsVisible && !starOnlyMode) {
       ctx.save();
 
       const fontSize = 9 * CHART_TEXT_SIZES[chartTextSize];
@@ -2415,7 +2457,7 @@
     ctx.fillStyle = skyGradient;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    if (groundRenderingEnabled) {
+    if (groundRenderingEnabled && !starOnlyMode) {
       // ==========================================
       // 地面・地平線・水平線・地上：低解像度Canvasによる海のグラデーション
       // ==========================================
@@ -2593,8 +2635,8 @@
             lstDeg,
           );
 
-          // 地平線より下は描かない
-          if (v.z < 0) {
+          // 地平線より下は通常モードでは描かない
+          if (v.z < 0 && !starOnlyMode) {
             drawing = false;
             continue;
           }
@@ -2645,40 +2687,43 @@
   ${0.25 + 0.17 * dayMix}
 )`;
 
-    ctx.strokeStyle = gridLineColor;
+    if (!starOnlyMode) {
+      ctx.strokeStyle = gridLineColor;
 
-    ctx.lineWidth = 1;
+      ctx.lineWidth = 1;
 
-    // 前回の描画パスを引き継がない
-    ctx.beginPath();
+      // 前回の描画パスを引き継がない
+      ctx.beginPath();
 
-    let horizonDrawing = false;
+      let horizonDrawing = false;
 
-    for (let az = 0; az <= 360; az += 1) {
-      const point = projectDirection(az, 0, basis, minDot);
+      for (let az = 0; az <= 360; az += 1) {
+        const point = projectDirection(az, 0, basis, minDot);
 
-      if (!point) {
-        horizonDrawing = false;
-        continue;
+        if (!point) {
+          horizonDrawing = false;
+          continue;
+        }
+
+        const x = centerX + point.x * scaleX;
+        const y = centerY + point.y * scaleY;
+
+        if (!Number.isFinite(x) || !Number.isFinite(y)) {
+          horizonDrawing = false;
+          continue;
+        }
+
+        if (!horizonDrawing) {
+          ctx.moveTo(x, y);
+          horizonDrawing = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
       }
 
-      const x = centerX + point.x * scaleX;
-      const y = centerY + point.y * scaleY;
-
-      if (!Number.isFinite(x) || !Number.isFinite(y)) {
-        horizonDrawing = false;
-        continue;
-      }
-
-      if (!horizonDrawing) {
-        ctx.moveTo(x, y);
-        horizonDrawing = true;
-      } else {
-        ctx.lineTo(x, y);
-      }
+      ctx.stroke();
     }
 
-    ctx.stroke();
     ctx.restore();
 
     // 地平座標の目盛り線
@@ -2688,214 +2733,224 @@
     ctx.lineWidth = 0.7;
 
     // 高度線：10°刻み（地平線の0°は既存の線を使用）
-    for (let alt = 10; alt <= 80; alt += 10) {
-      let drawing = false;
+    if (!starOnlyMode) {
+      for (let alt = 10; alt <= 80; alt += 10) {
+        let drawing = false;
 
-      ctx.beginPath();
+        ctx.beginPath();
 
-      for (let az = 0; az <= 360; az += 1) {
-        const point = projectDirection(az, alt, basis, minDot);
+        for (let az = 0; az <= 360; az += 1) {
+          const point = projectDirection(az, alt, basis, minDot);
 
-        if (!point) {
-          drawing = false;
-          continue;
+          if (!point) {
+            drawing = false;
+            continue;
+          }
+
+          const x = centerX + point.x * scaleX;
+          const y = centerY + point.y * scaleY;
+
+          if (!Number.isFinite(x) || !Number.isFinite(y)) {
+            drawing = false;
+            continue;
+          }
+
+          if (!drawing) {
+            ctx.moveTo(x, y);
+            drawing = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
         }
 
-        const x = centerX + point.x * scaleX;
-        const y = centerY + point.y * scaleY;
-
-        if (!Number.isFinite(x) || !Number.isFinite(y)) {
-          drawing = false;
-          continue;
-        }
-
-        if (!drawing) {
-          ctx.moveTo(x, y);
-          drawing = true;
-        } else {
-          ctx.lineTo(x, y);
-        }
+        ctx.stroke();
       }
-
-      ctx.stroke();
     }
 
     // 方位角線：30°刻み
     // 北・東・南・西の線は既存の方位表示を活用する
-    for (let az = 0; az < 360; az += 30) {
-      let drawing = false;
+    if (!starOnlyMode) {
+      for (let az = 0; az < 360; az += 30) {
+        let drawing = false;
 
-      ctx.beginPath();
+        ctx.beginPath();
 
-      for (let alt = 0; alt <= 90; alt += 1) {
-        const point = projectDirection(az, alt, basis, minDot);
+        for (let alt = 0; alt <= 90; alt += 1) {
+          const point = projectDirection(az, alt, basis, minDot);
 
-        if (!point) {
-          drawing = false;
-          continue;
+          if (!point) {
+            drawing = false;
+            continue;
+          }
+
+          const x = centerX + point.x * scaleX;
+          const y = centerY + point.y * scaleY;
+
+          if (!Number.isFinite(x) || !Number.isFinite(y)) {
+            drawing = false;
+            continue;
+          }
+
+          if (!drawing) {
+            ctx.moveTo(x, y);
+            drawing = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
         }
 
-        const x = centerX + point.x * scaleX;
-        const y = centerY + point.y * scaleY;
-
-        if (!Number.isFinite(x) || !Number.isFinite(y)) {
-          drawing = false;
-          continue;
-        }
-
-        if (!drawing) {
-          ctx.moveTo(x, y);
-          drawing = true;
-        } else {
-          ctx.lineTo(x, y);
-        }
+        ctx.stroke();
       }
-
-      ctx.stroke();
     }
 
     ctx.restore();
 
     // 黄道を描画
     // 黄道傾斜角：約23.4393°
-    ctx.save();
-
-    ctx.strokeStyle = "rgba(210, 185, 100, 0.55)";
-    ctx.lineWidth = 0.8;
-    ctx.setLineDash([4, 5]);
-    ctx.beginPath();
-
-    const eclipticObliquity = (23.4393 * Math.PI) / 180;
-    let eclipticDrawing = false;
-
-    // 黄経0°～360°を1°刻みで計算
-    for (let lambdaDeg = 0; lambdaDeg <= 360; lambdaDeg += 1) {
-      const lambda = (lambdaDeg * Math.PI) / 180;
-
-      // 黄道座標から赤道座標（赤経・赤緯）へ変換
-      const ra = Math.atan2(
-        Math.sin(lambda) * Math.cos(eclipticObliquity),
-        Math.cos(lambda),
-      );
-
-      const dec = Math.asin(Math.sin(lambda) * Math.sin(eclipticObliquity));
-
-      const raDeg = ((ra * 180) / Math.PI + 360) % 360;
-      const decDeg = (dec * 180) / Math.PI;
-
-      // 赤道座標から地平座標へ変換
-      const horizontal = equatorialToHorizontalVector(raDeg, decDeg, lstDeg);
-
-      const azDeg =
-        ((Math.atan2(horizontal.x, horizontal.y) * 180) / Math.PI + 360) % 360;
-
-      const altDeg =
-        (Math.asin(Math.max(-1, Math.min(1, horizontal.z))) * 180) / Math.PI;
-
-      // 現在の星図と同じ投影方式で描画位置を求める
-      const point = projectDirection(azDeg, altDeg, basis, minDot);
-
-      if (!point) {
-        eclipticDrawing = false;
-        continue;
-      }
-
-      const x = centerX + point.x * scaleX;
-      const y = centerY + point.y * scaleY;
-
-      if (!Number.isFinite(x) || !Number.isFinite(y)) {
-        eclipticDrawing = false;
-        continue;
-      }
-
-      if (!eclipticDrawing) {
-        ctx.moveTo(x, y);
-        eclipticDrawing = true;
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
-
-    // 地平線上の東西南北・中間方位を表示
-    const directions = [
-      { az: 0, label: "北", primary: true },
-      { az: 45, label: "北東" },
-      { az: 90, label: "東", primary: true },
-      { az: 135, label: "南東" },
-      { az: 180, label: "南", primary: true },
-      { az: 225, label: "南西" },
-      { az: 270, label: "西", primary: true },
-      { az: 315, label: "北西" },
-    ];
-
-    ctx.font = 'bold 16px "Meiryo", sans-serif';
-    ctx.fillStyle = "#FFD700";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    for (const direction of directions) {
-      const point = projectDirection(direction.az, 0, basis, minDot);
-
-      if (!point) continue;
-
-      const x = centerX + point.x * scaleX;
-      const y = centerY + point.y * scaleY;
-
-      // 方位表示の位置
-      const labelX = x;
-      const labelY = y;
-
-      // 方位表示：半透明の白い丸＋濃紺の文字
+    if (!starOnlyMode) {
       ctx.save();
 
-      const isPrimary = direction.primary;
-
-      // 背景の白い丸
+      ctx.strokeStyle = "rgba(210, 185, 100, 0.55)";
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([4, 5]);
       ctx.beginPath();
-      ctx.arc(labelX, labelY, isPrimary ? 13 : 10, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
-      ctx.fill();
 
-      // 方位の文字
-      ctx.font = isPrimary
-        ? 'bold 16px "Meiryo", sans-serif'
-        : 'bold 8px "Meiryo", sans-serif';
+      const eclipticObliquity = (23.4393 * Math.PI) / 180;
+      let eclipticDrawing = false;
 
+      // 黄経0°～360°を1°刻みで計算
+      for (let lambdaDeg = 0; lambdaDeg <= 360; lambdaDeg += 1) {
+        const lambda = (lambdaDeg * Math.PI) / 180;
+
+        // 黄道座標から赤道座標（赤経・赤緯）へ変換
+        const ra = Math.atan2(
+          Math.sin(lambda) * Math.cos(eclipticObliquity),
+          Math.cos(lambda),
+        );
+
+        const dec = Math.asin(Math.sin(lambda) * Math.sin(eclipticObliquity));
+
+        const raDeg = ((ra * 180) / Math.PI + 360) % 360;
+        const decDeg = (dec * 180) / Math.PI;
+
+        // 赤道座標から地平座標へ変換
+        const horizontal = equatorialToHorizontalVector(raDeg, decDeg, lstDeg);
+
+        const azDeg =
+          ((Math.atan2(horizontal.x, horizontal.y) * 180) / Math.PI + 360) % 360;
+
+        const altDeg =
+          (Math.asin(Math.max(-1, Math.min(1, horizontal.z))) * 180) / Math.PI;
+
+        // 現在の星図と同じ投影方式で描画位置を求める
+        const point = projectDirection(azDeg, altDeg, basis, minDot);
+
+        if (!point) {
+          eclipticDrawing = false;
+          continue;
+        }
+
+        const x = centerX + point.x * scaleX;
+        const y = centerY + point.y * scaleY;
+
+        if (!Number.isFinite(x) || !Number.isFinite(y)) {
+          eclipticDrawing = false;
+          continue;
+        }
+
+        if (!eclipticDrawing) {
+          ctx.moveTo(x, y);
+          eclipticDrawing = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+
+    // 地平線上の東西南北・中間方位を表示
+    if (!starOnlyMode) {
+      const directions = [
+        { az: 0, label: "北", primary: true },
+        { az: 45, label: "北東" },
+        { az: 90, label: "東", primary: true },
+        { az: 135, label: "南東" },
+        { az: 180, label: "南", primary: true },
+        { az: 225, label: "南西" },
+        { az: 270, label: "西", primary: true },
+        { az: 315, label: "北西" },
+      ];
+
+      ctx.font = 'bold 16px "Meiryo", sans-serif';
+      ctx.fillStyle = "#FFD700";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillStyle = "rgb(6, 7, 64)";
-      ctx.fillText(direction.label, labelX, labelY);
 
-      ctx.restore();
+      for (const direction of directions) {
+        const point = projectDirection(direction.az, 0, basis, minDot);
+
+        if (!point) continue;
+
+        const x = centerX + point.x * scaleX;
+        const y = centerY + point.y * scaleY;
+
+        // 方位表示の位置
+        const labelX = x;
+        const labelY = y;
+
+        // 方位表示：半透明の白い丸＋濃紺の文字
+        ctx.save();
+
+        const isPrimary = direction.primary;
+
+        // 背景の白い丸
+        ctx.beginPath();
+        ctx.arc(labelX, labelY, isPrimary ? 13 : 10, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+        ctx.fill();
+
+        // 方位の文字
+        ctx.font = isPrimary
+          ? 'bold 16px "Meiryo", sans-serif'
+          : 'bold 8px "Meiryo", sans-serif';
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "rgb(6, 7, 64)";
+        ctx.fillText(direction.label, labelX, labelY);
+
+        ctx.restore();
+      }
     }
 
     // 天頂の表示
-    const zenithPoint = projectDirection(0, 90, basis, minDot);
+    if (!starOnlyMode) {
+      const zenithPoint = projectDirection(0, 90, basis, minDot);
 
-    if (zenithPoint) {
-      const zenithX = centerX + zenithPoint.x * scaleX;
-      const zenithY = centerY + zenithPoint.y * scaleY;
+      if (zenithPoint) {
+        const zenithX = centerX + zenithPoint.x * scaleX;
+        const zenithY = centerY + zenithPoint.y * scaleY;
 
-      ctx.save();
+        ctx.save();
 
-      // 半透明の白い丸
-      ctx.beginPath();
-      ctx.arc(zenithX, zenithY, 28, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-      ctx.fill();
+        // 半透明の白い丸
+        ctx.beginPath();
+        ctx.arc(zenithX, zenithY, 28, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.fill();
 
-      // 「天頂」の文字
-      ctx.font = 'bold 18px "Meiryo", sans-serif';
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = "rgb(6, 7, 64)";
-      ctx.fillText("天頂", zenithX, zenithY);
+        // 「天頂」の文字
+        ctx.font = 'bold 18px "Meiryo", sans-serif';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "rgb(6, 7, 64)";
+        ctx.fillText("天頂", zenithX, zenithY);
 
-      ctx.restore();
+        ctx.restore();
+      }
     }
 
     if (dataLoaded) {
@@ -3140,138 +3195,101 @@
         ctx.restore();
       }
 
-      // ==========================================
-      // アステリズム（特別な星の並び）を描画
-      // ==========================================
+      if (!starOnlyMode) {
+        // ==========================================
+        // アステリズム（特別な星の並び）を描画
+        // ==========================================
 
-      if (constellationLinesVisible) {
-        // 春の大曲線を先に描画
-        const springArc = asterisms.find((a) => a.id === "spring-arc");
+        if (constellationLinesVisible) {
+          // 春の大曲線を先に描画
+          const springArc = asterisms.find((a) => a.id === "spring-arc");
 
-        if (springArc) {
-          const state = constellationFadeStates.get(`asterism:${springArc.id}`);
+          if (springArc) {
+            const state = constellationFadeStates.get(`asterism:${springArc.id}`);
 
-          if (state && state.opacity > 0) {
-            drawSpringArc(ctx, springArc, state.opacity);
+            if (state && state.opacity > 0) {
+              drawSpringArc(ctx, springArc, state.opacity);
+            }
+          }
+
+          for (const asterism of asterisms) {
+            // アステリズムのフェード状態を取得
+            const state = constellationFadeStates.get(`asterism:${asterism.id}`);
+
+            if (!state || state.opacity <= 0) continue;
+
+            ctx.save();
+
+            ctx.beginPath();
+
+            ctx.strokeStyle = asterism.lineColor || "#FFD700";
+
+            ctx.lineWidth = asterism.lineWidth || 1.8;
+
+            ctx.lineCap = "round";
+
+            // フェードイン・フェードアウト
+            ctx.globalAlpha = state.opacity;
+
+            for (const segment of asterism.segments) {
+              if (asterism.id === "spring-arc") continue;
+
+              const starA = starById.get(segment[0]);
+              const starB = starById.get(segment[1]);
+
+              if (!starA || !starB) continue;
+
+              const clipped = projectLineSegment(
+                starA,
+                starB,
+                lstDeg,
+                basis,
+                minDot,
+              );
+
+              if (!clipped) continue;
+
+              const pointA = clipped.pointA;
+              const pointB = clipped.pointB;
+
+              ctx.moveTo(
+                centerX + pointA.x * scaleX,
+                centerY + pointA.y * scaleY,
+              );
+
+              ctx.lineTo(
+                centerX + pointB.x * scaleX,
+                centerY + pointB.y * scaleY,
+              );
+            }
+
+            ctx.stroke();
+
+            ctx.restore();
           }
         }
 
-        for (const asterism of asterisms) {
-          // アステリズムのフェード状態を取得
-          const state = constellationFadeStates.get(`asterism:${asterism.id}`);
+        // 星座ごとの透明度に応じて星座線を描画
+        for (const constellation of constellations) {
+          // 星座線の非表示中は通常の星座線を描かない
+          if (!constellationLinesVisible) continue;
+
+          // アニメーション中の星座は通常描画から除外
+          if (
+            constellationLineAnimationPhase === "drawing" &&
+            constellation.id === selectedConstellationId
+          )
+            continue;
+
+          const state = constellationFadeStates.get(constellation.id);
 
           if (!state || state.opacity <= 0) continue;
 
-          ctx.save();
-
-          ctx.beginPath();
-
-          ctx.strokeStyle = asterism.lineColor || "#FFD700";
-
-          ctx.lineWidth = asterism.lineWidth || 1.8;
-
-          ctx.lineCap = "round";
-
-          // フェードイン・フェードアウト
           ctx.globalAlpha = state.opacity;
-
-          for (const segment of asterism.segments) {
-            if (asterism.id === "spring-arc") continue;
-
-            const starA = starById.get(segment[0]);
-            const starB = starById.get(segment[1]);
-
-            if (!starA || !starB) continue;
-
-            const clipped = projectLineSegment(
-              starA,
-              starB,
-              lstDeg,
-              basis,
-              minDot,
-            );
-
-            if (!clipped) continue;
-
-            const pointA = clipped.pointA;
-            const pointB = clipped.pointB;
-
-            ctx.moveTo(
-              centerX + pointA.x * scaleX,
-              centerY + pointA.y * scaleY,
-            );
-
-            ctx.lineTo(
-              centerX + pointB.x * scaleX,
-              centerY + pointB.y * scaleY,
-            );
-          }
-
-          ctx.stroke();
-
-          ctx.restore();
-        }
-      }
-
-      // 星座ごとの透明度に応じて星座線を描画
-      for (const constellation of constellations) {
-        // 星座線の非表示中は通常の星座線を描かない
-        if (!constellationLinesVisible) continue;
-
-        // アニメーション中の星座は通常描画から除外
-        if (
-          constellationLineAnimationPhase === "drawing" &&
-          constellation.id === selectedConstellationId
-        )
-          continue;
-
-        const state = constellationFadeStates.get(constellation.id);
-
-        if (!state || state.opacity <= 0) continue;
-
-        ctx.globalAlpha = state.opacity;
-
-        ctx.beginPath();
-        ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
-        ctx.lineWidth = 0.75;
-
-        for (const segment of constellation.segments) {
-          const starA = starById.get(segment[0]);
-          const starB = starById.get(segment[1]);
-
-          if (!starA || !starB) continue;
-
-          const clipped = projectLineSegment(
-            starA,
-            starB,
-            lstDeg,
-            basis,
-            minDot,
-          );
-
-          if (!clipped) continue;
-
-          const pointA = clipped.pointA;
-          const pointB = clipped.pointB;
-
-          ctx.moveTo(centerX + pointA.x * scaleX, centerY + pointA.y * scaleY);
-
-          ctx.lineTo(centerX + pointB.x * scaleX, centerY + pointB.y * scaleY);
-        }
-
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
-
-      // 星座線の非表示中に発見済みの星座を描画
-      if (!constellationLinesVisible) {
-        for (const constellation of constellations) {
-          if (!discoveredConstellationIds.has(constellation.id)) continue;
 
           ctx.beginPath();
           ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
           ctx.lineWidth = 0.75;
-          ctx.globalAlpha = 1;
 
           for (const segment of constellation.segments) {
             const starA = starById.get(segment[0]);
@@ -3279,53 +3297,6 @@
 
             if (!starA || !starB) continue;
 
-            const pointA = getCachedProjectedStar(starA);
-
-            const pointB = getCachedProjectedStar(starB);
-
-            if (!pointA || !pointB) continue;
-
-            ctx.moveTo(
-              centerX + pointA.x * scaleX,
-              centerY + pointA.y * scaleY,
-            );
-
-            ctx.lineTo(
-              centerX + pointB.x * scaleX,
-              centerY + pointB.y * scaleY,
-            );
-          }
-
-          ctx.stroke();
-          ctx.globalAlpha = 1;
-        }
-      }
-
-      // 特別な線の非表示中に発見済みのアステリズムを描画
-      if (!constellationLinesVisible) {
-        for (const asterism of asterisms) {
-          if (!discoveredAsterismIds.has(asterism.id)) continue;
-
-          // 春の大曲線は滑らかな曲線で描画
-          if (asterism.id === "spring-arc") {
-            drawSpringArc(ctx, asterism, 1);
-
-            continue;
-          }
-
-          // それ以外の特別な線は従来どおり直線で描画
-          ctx.beginPath();
-          ctx.strokeStyle = asterism.lineColor || "#439F85";
-          ctx.lineWidth = asterism.lineWidth || 1.8;
-          ctx.lineCap = "round";
-          ctx.globalAlpha = 1;
-
-          for (const segment of asterism.segments) {
-            const starA = starById.get(segment[0]);
-            const starB = starById.get(segment[1]);
-
-            if (!starA || !starB) continue;
-
             const clipped = projectLineSegment(
               starA,
               starB,
@@ -3339,44 +3310,212 @@
             const pointA = clipped.pointA;
             const pointB = clipped.pointB;
 
-            ctx.moveTo(
-              centerX + pointA.x * scaleX,
-              centerY + pointA.y * scaleY,
-            );
+            ctx.moveTo(centerX + pointA.x * scaleX, centerY + pointA.y * scaleY);
 
-            ctx.lineTo(
-              centerX + pointB.x * scaleX,
-              centerY + pointB.y * scaleY,
-            );
+            ctx.lineTo(centerX + pointB.x * scaleX, centerY + pointB.y * scaleY);
           }
 
           ctx.stroke();
           ctx.globalAlpha = 1;
         }
-      }
 
-      // 選択したアステリズムの線をアニメーション描画
-      if (
-        !constellationLinesVisible &&
-        selectedAsterismId !== null &&
-        asterismAnimationProgress < 1
-      ) {
-        const selectedAsterism = asterisms.find(
-          (asterism) => asterism.id === selectedAsterismId,
-        );
+        // 星座線の非表示中に発見済みの星座を描画
+        if (!constellationLinesVisible) {
+          for (const constellation of constellations) {
+            if (!discoveredConstellationIds.has(constellation.id)) continue;
 
-        if (selectedAsterism) {
-          // 春の大曲線は滑らかな曲線でアニメーション描画
-          if (selectedAsterism.id === "spring-arc") {
-            drawSpringArc(ctx, selectedAsterism, 1, asterismAnimationProgress);
+            ctx.beginPath();
+            ctx.strokeStyle = constellation.lineColor || "#FF3CC8";
+            ctx.lineWidth = 0.75;
+            ctx.globalAlpha = 1;
+
+            for (const segment of constellation.segments) {
+              const starA = starById.get(segment[0]);
+              const starB = starById.get(segment[1]);
+
+              if (!starA || !starB) continue;
+
+              const pointA = getCachedProjectedStar(starA);
+
+              const pointB = getCachedProjectedStar(starB);
+
+              if (!pointA || !pointB) continue;
+
+              ctx.moveTo(
+                centerX + pointA.x * scaleX,
+                centerY + pointA.y * scaleY,
+              );
+
+              ctx.lineTo(
+                centerX + pointB.x * scaleX,
+                centerY + pointB.y * scaleY,
+              );
+            }
+
+            ctx.stroke();
+            ctx.globalAlpha = 1;
           }
+        }
 
-          // 春の大曲線以外は従来どおり直線で描画
-          if (selectedAsterism.id !== "spring-arc") {
-            // 特別な線を配列順に投影
+        // 特別な線の非表示中に発見済みのアステリズムを描画
+        if (!constellationLinesVisible) {
+          for (const asterism of asterisms) {
+            if (!discoveredAsterismIds.has(asterism.id)) continue;
+
+            // 春の大曲線は滑らかな曲線で描画
+            if (asterism.id === "spring-arc") {
+              drawSpringArc(ctx, asterism, 1);
+
+              continue;
+            }
+
+            // それ以外の特別な線は従来どおり直線で描画
+            ctx.beginPath();
+            ctx.strokeStyle = asterism.lineColor || "#439F85";
+            ctx.lineWidth = asterism.lineWidth || 1.8;
+            ctx.lineCap = "round";
+            ctx.globalAlpha = 1;
+
+            for (const segment of asterism.segments) {
+              const starA = starById.get(segment[0]);
+              const starB = starById.get(segment[1]);
+
+              if (!starA || !starB) continue;
+
+              const clipped = projectLineSegment(
+                starA,
+                starB,
+                lstDeg,
+                basis,
+                minDot,
+              );
+
+              if (!clipped) continue;
+
+              const pointA = clipped.pointA;
+              const pointB = clipped.pointB;
+
+              ctx.moveTo(
+                centerX + pointA.x * scaleX,
+                centerY + pointA.y * scaleY,
+              );
+
+              ctx.lineTo(
+                centerX + pointB.x * scaleX,
+                centerY + pointB.y * scaleY,
+              );
+            }
+
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+        }
+
+        // 選択したアステリズムの線をアニメーション描画
+        if (
+          !constellationLinesVisible &&
+          selectedAsterismId !== null &&
+          asterismAnimationProgress < 1
+        ) {
+          const selectedAsterism = asterisms.find(
+            (asterism) => asterism.id === selectedAsterismId,
+          );
+
+          if (selectedAsterism) {
+            // 春の大曲線は滑らかな曲線でアニメーション描画
+            if (selectedAsterism.id === "spring-arc") {
+              drawSpringArc(ctx, selectedAsterism, 1, asterismAnimationProgress);
+            }
+
+            // 春の大曲線以外は従来どおり直線で描画
+            if (selectedAsterism.id !== "spring-arc") {
+              // 特別な線を配列順に投影
+              const projectedSegments = [];
+
+              for (const segment of selectedAsterism.segments) {
+                const starA = starById.get(segment[0]);
+                const starB = starById.get(segment[1]);
+
+                if (!starA || !starB) continue;
+                if (starA.id === starB.id) continue;
+
+                const pointA = getCachedProjectedStar(starA);
+
+                const pointB = getCachedProjectedStar(starB);
+
+                if (!pointA || !pointB) continue;
+
+                const ax = centerX + pointA.x * scaleX;
+                const ay = centerY + pointA.y * scaleY;
+                const bx = centerX + pointB.x * scaleX;
+                const by = centerY + pointB.y * scaleY;
+
+                const length = Math.hypot(bx - ax, by - ay);
+
+                if (length === 0) continue;
+
+                projectedSegments.push({
+                  ax,
+                  ay,
+                  bx,
+                  by,
+                  length,
+                });
+              }
+
+              const totalLength = projectedSegments.reduce(
+                (sum, segment) => sum + segment.length,
+                0,
+              );
+
+              if (totalLength > 0) {
+                let remainingLength = totalLength * asterismAnimationProgress;
+
+                ctx.strokeStyle = selectedAsterism.lineColor || "#439F85";
+                ctx.lineWidth = selectedAsterism.lineWidth || 1.8;
+                ctx.lineCap = "round";
+                ctx.globalAlpha = 1;
+
+                // 配列順に一本ずつ描画
+                for (const segment of projectedSegments) {
+                  if (remainingLength <= 0) break;
+
+                  const drawLength = Math.min(segment.length, remainingLength);
+
+                  const ratio = drawLength / segment.length;
+
+                  const endX = segment.ax + (segment.bx - segment.ax) * ratio;
+
+                  const endY = segment.ay + (segment.by - segment.ay) * ratio;
+
+                  ctx.beginPath();
+                  ctx.moveTo(segment.ax, segment.ay);
+                  ctx.lineTo(endX, endY);
+                  ctx.stroke();
+
+                  remainingLength -= drawLength;
+                }
+
+                ctx.globalAlpha = 1;
+              }
+            }
+          }
+        }
+
+        // 選択した星座線のアニメーション描画
+        if (
+          constellationLineAnimationPhase === "drawing" &&
+          selectedConstellationId !== null
+        ) {
+          const selectedConstellation = constellations.find(
+            (constellation) => constellation.id === selectedConstellationId,
+          );
+
+          if (selectedConstellation) {
+            // 星座線を配列順に投影
             const projectedSegments = [];
 
-            for (const segment of selectedAsterism.segments) {
+            for (const segment of selectedConstellation.segments) {
               const starA = starById.get(segment[0]);
               const starB = starById.get(segment[1]);
 
@@ -3413,11 +3552,10 @@
             );
 
             if (totalLength > 0) {
-              let remainingLength = totalLength * asterismAnimationProgress;
+              let remainingLength = totalLength * constellationAnimationProgress;
 
-              ctx.strokeStyle = selectedAsterism.lineColor || "#439F85";
-              ctx.lineWidth = selectedAsterism.lineWidth || 1.8;
-              ctx.lineCap = "round";
+              ctx.strokeStyle = selectedConstellation.lineColor || "#FF3CC8";
+              ctx.lineWidth = 0.75;
               ctx.globalAlpha = 1;
 
               // 配列順に一本ずつ描画
@@ -3442,87 +3580,6 @@
 
               ctx.globalAlpha = 1;
             }
-          }
-        }
-      }
-
-      // 選択した星座線のアニメーション描画
-      if (
-        constellationLineAnimationPhase === "drawing" &&
-        selectedConstellationId !== null
-      ) {
-        const selectedConstellation = constellations.find(
-          (constellation) => constellation.id === selectedConstellationId,
-        );
-
-        if (selectedConstellation) {
-          // 星座線を配列順に投影
-          const projectedSegments = [];
-
-          for (const segment of selectedConstellation.segments) {
-            const starA = starById.get(segment[0]);
-            const starB = starById.get(segment[1]);
-
-            if (!starA || !starB) continue;
-            if (starA.id === starB.id) continue;
-
-            const pointA = getCachedProjectedStar(starA);
-
-            const pointB = getCachedProjectedStar(starB);
-
-            if (!pointA || !pointB) continue;
-
-            const ax = centerX + pointA.x * scaleX;
-            const ay = centerY + pointA.y * scaleY;
-            const bx = centerX + pointB.x * scaleX;
-            const by = centerY + pointB.y * scaleY;
-
-            const length = Math.hypot(bx - ax, by - ay);
-
-            if (length === 0) continue;
-
-            projectedSegments.push({
-              ax,
-              ay,
-              bx,
-              by,
-              length,
-            });
-          }
-
-          const totalLength = projectedSegments.reduce(
-            (sum, segment) => sum + segment.length,
-            0,
-          );
-
-          if (totalLength > 0) {
-            let remainingLength = totalLength * constellationAnimationProgress;
-
-            ctx.strokeStyle = selectedConstellation.lineColor || "#FF3CC8";
-            ctx.lineWidth = 0.75;
-            ctx.globalAlpha = 1;
-
-            // 配列順に一本ずつ描画
-            for (const segment of projectedSegments) {
-              if (remainingLength <= 0) break;
-
-              const drawLength = Math.min(segment.length, remainingLength);
-
-              const ratio = drawLength / segment.length;
-
-              const endX = segment.ax + (segment.bx - segment.ax) * ratio;
-
-              const endY = segment.ay + (segment.by - segment.ay) * ratio;
-
-              ctx.beginPath();
-              ctx.moveTo(segment.ax, segment.ay);
-              ctx.lineTo(endX, endY);
-              ctx.stroke();
-
-              remainingLength -= drawLength;
-            }
-
-            ctx.globalAlpha = 1;
           }
         }
       }
@@ -3635,7 +3692,9 @@
         // 地平線より下の星を半透明にする
         ctx.save();
         ctx.globalAlpha =
-          groundRenderingEnabled && projected.altitude < 0 ? 0.1 : 1.0;
+          groundRenderingEnabled && !starOnlyMode && projected.altitude < 0
+            ? 0.1
+            : 1.0;
 
         // グローの設定
         const glow = style.glow || {};
@@ -3822,143 +3881,18 @@
         }
       }
 
-      // 全星座の名前を描画
-      for (const constellation of constellations) {
-        // 指定視野角（拡大率）より広い場合は星座名を描画しない
-        if (fieldOfViewDeg > 50) continue;
+      if (!starOnlyMode) {
+        // 全星座の名前を描画
+        for (const constellation of constellations) {
+          // 指定視野角（拡大率）より広い場合は星座名を描画しない
+          if (fieldOfViewDeg > 50) continue;
 
-        const state = constellationFadeStates.get(constellation.id);
-
-        if (!state || state.opacity <= 0) continue;
-
-        // 星座を構成する恒星の位置を取得
-        const memberIds = new Set(constellation.segments.flat());
-
-        const points = [];
-
-        for (const id of memberIds) {
-          const star = starById.get(id);
-          if (!star) continue;
-
-          const projected = getCachedProjectedStar(star);
-
-          if (!projected) continue;
-
-          points.push({
-            x: centerX + projected.x * scaleX,
-            y: centerY + projected.y * scaleY,
-          });
-        }
-
-        if (points.length > 0) {
-          // 星座の表示範囲を計算
-          const minX = Math.min(...points.map((p) => p.x));
-          const maxX = Math.max(...points.map((p) => p.x));
-          const minY = Math.min(...points.map((p) => p.y));
-          const maxY = Math.max(...points.map((p) => p.y));
-
-          // 星座名の表示位置
-          const labelX = minX + (maxX - minX) * 0.5;
-          const labelY = minY + (maxY - minY) * 0.5;
-
-          ctx.save();
-
-          ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-
-          // 星座名の幅を取得
-          const textWidth = ctx.measureText(constellation.name).width;
-
-          // 角丸背景のサイズ
-          const paddingX = 5;
-          const paddingY = 4;
-          const boxWidth = textWidth + paddingX * 2;
-          const boxHeight = 20;
-
-          // 背景の位置
-          const boxX = labelX - boxWidth / 2;
-          const boxY = labelY - boxHeight / 2;
-
-          // 星座名の表示領域を記録
-          if (objectLabelsVisible) {
-            occupiedLabelAreas.push({
-              left: boxX,
-              right: boxX + boxWidth,
-              top: boxY,
-              bottom: boxY + boxHeight,
-            });
-          }
-
-          if (objectLabelsVisible) {
-            // 星座名などの背景（角丸矩形）の透明度を設定
-            ctx.globalAlpha = state.opacity * 0.3;
-
-            ctx.fillStyle = "#FFFFFF";
-            ctx.beginPath();
-            ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
-            ctx.fill();
-
-            // 星座名は完全不透明
-            ctx.globalAlpha = 1.0;
-            ctx.fillStyle = "rgb(6, 7, 64)";
-
-            ctx.fillText(constellation.name, labelX, labelY);
-
-            // 星座名のタップ判定領域を記録
-            constellationNameHitAreas.push({
-              id: constellation.id,
-              x: boxX,
-              y: boxY,
-              width: boxWidth,
-              height: boxHeight,
-            });
-          }
-
-          // 星座の評価を描画
-          if (constellationRatingsVisible) {
-            const rating = getConstellationRating(constellation.id);
-            const ratingText = "★".repeat(rating) + "☆".repeat(3 - rating);
-
-            // 選択中の文字サイズに合わせる
-            const ratingFontSize = 13 * (CHART_TEXT_SIZES[chartTextSize] || 1);
-
-            ctx.save();
-            ctx.globalAlpha = state.opacity;
-            ctx.font = `bold ${ratingFontSize}px "Meiryo", sans-serif`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillStyle = "#FFD700";
-
-            ctx.fillText(ratingText, labelX, boxY + boxHeight + 2);
-
-            ctx.restore();
-
-            // 星のタップ判定領域を記録
-            constellationRatingHitAreas.push({
-              id: constellation.id,
-              x: labelX - 22,
-              y: boxY + boxHeight + 2,
-              width: 44,
-              height: 22,
-            });
-          }
-        }
-      }
-
-      // ==========================================
-      // アステリズム名を描画
-      // ==========================================
-
-      if (fieldOfViewDeg <= 75 && objectLabelsVisible) {
-        for (const asterism of asterisms) {
-          // アステリズムのフェード状態を取得
-          const state = constellationFadeStates.get(`asterism:${asterism.id}`);
+          const state = constellationFadeStates.get(constellation.id);
 
           if (!state || state.opacity <= 0) continue;
 
-          // 構成する恒星の位置を取得
-          const memberIds = new Set(asterism.segments.flat());
+          // 星座を構成する恒星の位置を取得
+          const memberIds = new Set(constellation.segments.flat());
 
           const points = [];
 
@@ -3976,132 +3910,261 @@
             });
           }
 
-          if (points.length === 0) continue;
+          if (points.length > 0) {
+            // 星座の表示範囲を計算
+            const minX = Math.min(...points.map((p) => p.x));
+            const maxX = Math.max(...points.map((p) => p.x));
+            const minY = Math.min(...points.map((p) => p.y));
+            const maxY = Math.max(...points.map((p) => p.y));
 
-          // 表示範囲の中央を名前の位置にする
-          const minX = Math.min(...points.map((p) => p.x));
-          const maxX = Math.max(...points.map((p) => p.x));
-          const minY = Math.min(...points.map((p) => p.y));
-          const maxY = Math.max(...points.map((p) => p.y));
+            // 星座名の表示位置
+            const labelX = minX + (maxX - minX) * 0.5;
+            const labelY = minY + (maxY - minY) * 0.5;
 
-          const labelX = (minX + maxX) / 2;
-          const labelY = (minY + maxY) / 2;
+            ctx.save();
 
-          ctx.save();
+            ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
 
-          ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+            // 星座名の幅を取得
+            const textWidth = ctx.measureText(constellation.name).width;
 
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
+            // 角丸背景のサイズ
+            const paddingX = 5;
+            const paddingY = 4;
+            const boxWidth = textWidth + paddingX * 2;
+            const boxHeight = 20;
 
-          const textWidth = ctx.measureText(asterism.name).width;
+            // 背景の位置
+            const boxX = labelX - boxWidth / 2;
+            const boxY = labelY - boxHeight / 2;
 
-          // 重なりを避けて表示位置を決定
-          const selectedPosition = findNonOverlappingLabelPosition(
-            labelX - textWidth / 2,
-            labelY,
-            textWidth,
-            20,
-            occupiedLabelAreas,
-            7,
-            4,
-          );
+            // 星座名の表示領域を記録
+            if (objectLabelsVisible) {
+              occupiedLabelAreas.push({
+                left: boxX,
+                right: boxX + boxWidth,
+                top: boxY,
+                bottom: boxY + boxHeight,
+              });
+            }
 
-          // 配置できる場所がなければ、この名前は描画しない
-          if (!selectedPosition) {
-            ctx.restore();
-            continue;
+            if (objectLabelsVisible) {
+              // 星座名などの背景（角丸矩形）の透明度を設定
+              ctx.globalAlpha = state.opacity * 0.3;
+
+              ctx.fillStyle = "#FFFFFF";
+              ctx.beginPath();
+              ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
+              ctx.fill();
+
+              // 星座名は完全不透明
+              ctx.globalAlpha = 1.0;
+              ctx.fillStyle = "rgb(6, 7, 64)";
+
+              ctx.fillText(constellation.name, labelX, labelY);
+
+              // 星座名のタップ判定領域を記録
+              constellationNameHitAreas.push({
+                id: constellation.id,
+                x: boxX,
+                y: boxY,
+                width: boxWidth,
+                height: boxHeight,
+              });
+            }
+
+            // 星座の評価を描画
+            if (constellationRatingsVisible) {
+              const rating = getConstellationRating(constellation.id);
+              const ratingText = "★".repeat(rating) + "☆".repeat(3 - rating);
+
+              // 選択中の文字サイズに合わせる
+              const ratingFontSize = 13 * (CHART_TEXT_SIZES[chartTextSize] || 1);
+
+              ctx.save();
+              ctx.globalAlpha = state.opacity;
+              ctx.font = `bold ${ratingFontSize}px "Meiryo", sans-serif`;
+              ctx.textAlign = "center";
+              ctx.textBaseline = "top";
+              ctx.fillStyle = "#FFD700";
+
+              ctx.fillText(ratingText, labelX, boxY + boxHeight + 2);
+
+              ctx.restore();
+
+              // 星のタップ判定領域を記録
+              constellationRatingHitAreas.push({
+                id: constellation.id,
+                x: labelX - 22,
+                y: boxY + boxHeight + 2,
+                width: 44,
+                height: 22,
+              });
+            }
           }
+        }
 
-          // 実際に使用する表示位置
-          const selectedLabelX = selectedPosition.x + textWidth / 2;
+        // ==========================================
+        // アステリズム名を描画
+        // ==========================================
 
-          const selectedLabelY = selectedPosition.y;
+        if (fieldOfViewDeg <= 75 && objectLabelsVisible) {
+          for (const asterism of asterisms) {
+            // アステリズムのフェード状態を取得
+            const state = constellationFadeStates.get(`asterism:${asterism.id}`);
 
-          // 背景のサイズ
-          const paddingX = 7;
-          const boxWidth = textWidth + paddingX * 2;
-          const boxHeight = 20;
+            if (!state || state.opacity <= 0) continue;
 
-          // 背景の位置
-          const boxX = selectedPosition.area.left;
-          const boxY = selectedLabelY - boxHeight / 2;
+            // 構成する恒星の位置を取得
+            const memberIds = new Set(asterism.segments.flat());
 
-          // 配置済み領域として登録
-          occupiedLabelAreas.push(selectedPosition.area);
+            const points = [];
 
-          // 線と同じフェード状態で背景（角丸矩形）を描画
-          ctx.globalAlpha = state.opacity * 0.65;
-          ctx.fillStyle =
-            asterism.id === "spring-arc"
-              ? "rgba(255, 170, 205, 0.90)" //春の大曲線専用
-              : "#439F85";
+            for (const id of memberIds) {
+              const star = starById.get(id);
+              if (!star) continue;
 
-          ctx.beginPath();
-          ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 8);
-          ctx.fill();
+              const projected = getCachedProjectedStar(star);
 
-          // 文字は背景とは別に透明度を設定
-          ctx.globalAlpha = state.opacity;
-          ctx.fillStyle = "rgb(6, 7, 64)";
+              if (!projected) continue;
 
-          ctx.fillText(asterism.name, selectedLabelX, selectedLabelY);
+              points.push({
+                x: centerX + projected.x * scaleX,
+                y: centerY + projected.y * scaleY,
+              });
+            }
 
-          // アステリズム名のタップ判定領域を記録
-          asterismNameHitAreas.push({
-            id: asterism.id,
-            x: boxX,
-            y: boxY,
-            width: boxWidth,
-            height: boxHeight,
-          });
+            if (points.length === 0) continue;
 
-          ctx.restore();
+            // 表示範囲の中央を名前の位置にする
+            const minX = Math.min(...points.map((p) => p.x));
+            const maxX = Math.max(...points.map((p) => p.x));
+            const minY = Math.min(...points.map((p) => p.y));
+            const maxY = Math.max(...points.map((p) => p.y));
+
+            const labelX = (minX + maxX) / 2;
+            const labelY = (minY + maxY) / 2;
+
+            ctx.save();
+
+            ctx.font = `bold ${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const textWidth = ctx.measureText(asterism.name).width;
+
+            // 重なりを避けて表示位置を決定
+            const selectedPosition = findNonOverlappingLabelPosition(
+              labelX - textWidth / 2,
+              labelY,
+              textWidth,
+              20,
+              occupiedLabelAreas,
+              7,
+              4,
+            );
+
+            // 配置できる場所がなければ、この名前は描画しない
+            if (!selectedPosition) {
+              ctx.restore();
+              continue;
+            }
+
+            // 実際に使用する表示位置
+            const selectedLabelX = selectedPosition.x + textWidth / 2;
+
+            const selectedLabelY = selectedPosition.y;
+
+            // 背景のサイズ
+            const paddingX = 7;
+            const boxWidth = textWidth + paddingX * 2;
+            const boxHeight = 20;
+
+            // 背景の位置
+            const boxX = selectedPosition.area.left;
+            const boxY = selectedLabelY - boxHeight / 2;
+
+            // 配置済み領域として登録
+            occupiedLabelAreas.push(selectedPosition.area);
+
+            // 線と同じフェード状態で背景（角丸矩形）を描画
+            ctx.globalAlpha = state.opacity * 0.65;
+            ctx.fillStyle =
+              asterism.id === "spring-arc"
+                ? "rgba(255, 170, 205, 0.90)" //春の大曲線専用
+                : "#439F85";
+
+            ctx.beginPath();
+            ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 8);
+            ctx.fill();
+
+            // 文字は背景とは別に透明度を設定
+            ctx.globalAlpha = state.opacity;
+            ctx.fillStyle = "rgb(6, 7, 64)";
+
+            ctx.fillText(asterism.name, selectedLabelX, selectedLabelY);
+
+            // アステリズム名のタップ判定領域を記録
+            asterismNameHitAreas.push({
+              id: asterism.id,
+              x: boxX,
+              y: boxY,
+              width: boxWidth,
+              height: boxHeight,
+            });
+
+            ctx.restore();
+          }
         }
       }
 
-      // ==========================================
-      // 恒星名の重なりを回避して描画
-      // ==========================================
+      if (!starOnlyMode) {
+        // ==========================================
+        // 恒星名の重なりを回避して描画
+        // ==========================================
 
-      const starLabelFontSize = 9 * CHART_TEXT_SIZES[chartTextSize];
+        const starLabelFontSize = 9 * CHART_TEXT_SIZES[chartTextSize];
 
-      ctx.font = `${starLabelFontSize}px "Meiryo", sans-serif`;
+        ctx.font = `${starLabelFontSize}px "Meiryo", sans-serif`;
 
-      ctx.fillStyle = "#F5DFA0";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
+        ctx.fillStyle = "#F5DFA0";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
 
-      // 明るい恒星の名前から優先的に配置
-      const sortedStarLabels = [...starLabels].sort((a, b) => a.mag - b.mag);
+        // 明るい恒星の名前から優先的に配置
+        const sortedStarLabels = [...starLabels].sort((a, b) => a.mag - b.mag);
 
-      // 配置済みラベルの領域
+        // 配置済みラベルの領域
 
-      for (const label of sortedStarLabels) {
-        // 恒星名が非表示なら描画しない
-        if (!objectLabelsVisible) continue;
+        for (const label of sortedStarLabels) {
+          // 恒星名が非表示なら描画しない
+          if (!objectLabelsVisible) continue;
 
-        const textWidth = ctx.measureText(label.text).width;
+          const textWidth = ctx.measureText(label.text).width;
 
-        const selectedPosition = findNonOverlappingLabelPosition(
-          label.x,
-          label.y,
-          textWidth,
-          starLabelFontSize,
-          occupiedLabelAreas,
-        );
+          const selectedPosition = findNonOverlappingLabelPosition(
+            label.x,
+            label.y,
+            textWidth,
+            starLabelFontSize,
+            occupiedLabelAreas,
+          );
 
-        if (!selectedPosition) continue;
+          if (!selectedPosition) continue;
 
-        // 配置領域を記録
-        occupiedLabelAreas.push(selectedPosition.area);
+          // 配置領域を記録
+          occupiedLabelAreas.push(selectedPosition.area);
 
-        // 恒星名を描画
-        ctx.fillText(label.text, selectedPosition.x, selectedPosition.y);
+          // 恒星名を描画
+          ctx.fillText(label.text, selectedPosition.x, selectedPosition.y);
+        }
+
+        // 星の描画範囲の制限を解除する
+        ctx.restore();
       }
-
-      // 星の描画範囲の制限を解除する
-      ctx.restore();
     }
 
     // ==========================================
@@ -4159,7 +4222,9 @@
 
       // 地面表示がONの場合だけ、地平線の下で太陽の光彩を半透明処理
       ctx.globalAlpha =
-        groundRenderingEnabled && sunPoint.altitude < 0 ? 0.1 : 1.0;
+        groundRenderingEnabled && !starOnlyMode && sunPoint.altitude < 0
+          ? 0.1
+          : 1.0;
 
       // 太陽の周囲に強い光彩を描く
       ctx.save();
@@ -4200,7 +4265,9 @@
 
       // 地面表示がONの場合だけ、地平線の下で太陽本体を半透明処理
       ctx.globalAlpha =
-        groundRenderingEnabled && sunPoint.altitude < 0 ? 0.1 : 1.0;
+        groundRenderingEnabled && !starOnlyMode && sunPoint.altitude < 0
+          ? 0.1
+          : 1.0;
 
       ctx.fillStyle = "#FFF0A0";
 
@@ -4211,7 +4278,7 @@
       ctx.restore();
 
       // 太陽の名前
-      if (objectLabelsVisible) {
+      if (objectLabelsVisible && !starOnlyMode) {
         ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
         ctx.fillStyle = "#FFF0A0";
         ctx.textAlign = "left";
@@ -4318,7 +4385,9 @@
 
       // 地平線の下で惑星を半透明処理
       ctx.globalAlpha =
-        groundRenderingEnabled && point.altitude < 0 ? 0.1 : 1.0;
+        groundRenderingEnabled && !starOnlyMode && point.altitude < 0
+          ? 0.1
+          : 1.0;
 
       // 惑星の光彩
       ctx.save();
@@ -4711,7 +4780,7 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      if (objectLabelsVisible) {
+      if (objectLabelsVisible && !starOnlyMode) {
         ctx.fillText(planet.name, x + planet.radius + 4, y);
       }
 
@@ -4742,7 +4811,9 @@
 
       // 地面表示がONの場合だけ、地平線の下で月を半透明処理
       ctx.globalAlpha =
-        groundRenderingEnabled && moonPoint.altitude < 0 ? 0.1 : 1.0;
+        groundRenderingEnabled && !starOnlyMode && moonPoint.altitude < 0
+          ? 0.1
+          : 1.0;
 
       // 太陽の位置はdrawChart冒頭で計算済みの値を再利用
       const sun = sunForSky;
@@ -4855,7 +4926,7 @@
       ctx.restore();
 
       // 月の名前
-      if (objectLabelsVisible) {
+      if (objectLabelsVisible && !starOnlyMode) {
         ctx.font = `${10 * CHART_TEXT_SIZES[chartTextSize]}px "Meiryo", sans-serif`;
         ctx.fillStyle = "#FFF2B0";
         ctx.textAlign = "left";
