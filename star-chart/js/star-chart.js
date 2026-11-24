@@ -1286,14 +1286,14 @@
       clearTimeout(spaceSwimResumeTimer);
     }
 
-    // 5秒間操作がなければ再開
+    // n秒間操作がなければ再開
     spaceSwimResumeTimer = setTimeout(() => {
       spaceSwimResumeTimer = null;
 
       if (starOnlyMode && activePointers.size === 0) {
         startSpaceSwim();
       }
-    }, 5000);
+    }, 2000);
   }
 
   // ==========================================
