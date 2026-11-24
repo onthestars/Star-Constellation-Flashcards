@@ -733,8 +733,6 @@
       // 星空だけ表示モードを切り替え
       starOnlyMode = !starOnlyMode;
 
-      console.log("宇宙遊泳モード切替後", starOnlyMode);
-
       // 自動宇宙遊泳を開始・停止
       if (starOnlyMode) {
         startSpaceSwim();
@@ -1066,7 +1064,6 @@
     // ワープ演出を開始
     window.startStarWarp();
 
-    console.log("星図のワープ演出を開始しました。");
   }
 
   // ドラッグ・ピンチ操作用
@@ -2437,11 +2434,6 @@
         if (isSpaceSwim) {
           spaceSwimDiscoveredConstellationIds.add(constellation.id);
 
-          console.log("宇宙遊泳・星座線完成", constellation.name, {
-            discovered: spaceSwimDiscoveredConstellationIds.has(constellation.id),
-            phase: constellationLineAnimationPhase,
-          });
-
           // 星座線の完成後、星座名のフェードインを開始
           if (starOnlyMode) {
             spaceSwimConstellationLabelStates.set(
@@ -3492,13 +3484,6 @@
             }
           }
 
-          console.log("宇宙遊泳・詳細診断", {
-            ...diagnostic,
-            centerLimit,
-            nearestCenterDistance,
-            bestConstellation: bestConstellation?.name ?? "なし",
-          });
-
           // 最も中央に近い星座を一つだけ発見
           if (bestConstellation) {
             startConstellationLineAnimation(
@@ -3874,11 +3859,6 @@
               const starB = starById.get(segment[1]);
 
               if (!starA || !starB) {
-                console.log("星座線・恒星データ不足", constellation.name, {
-                  starA: !!starA,
-                  starB: !!starB,
-                  segment,
-                });
                 continue;
               }
 
@@ -3886,12 +3866,6 @@
               const pointB = getCachedProjectedStar(starB);
 
               if (!pointA || !pointB) {
-                console.log("星座線・投影座標取得失敗", constellation.name, {
-                  pointA,
-                  pointB,
-                  starA: starA.id,
-                  starB: starB.id,
-                });
                 continue;
               }
               ctx.moveTo(
@@ -3913,8 +3887,6 @@
         // ==========================================
         // 宇宙遊泳：発見済み星座線を常時表示
         // ==========================================
-
-        console.log("宇宙遊泳モード状態", starOnlyMode);
 
         // 発見済み星座線を表示
         if (starOnlyMode) {
@@ -6152,16 +6124,6 @@
 
   // 慣性移動
   function startInertia() {
-    console.log(
-      "慣性開始チェック:",
-      "Az速度 =",
-      dragVelocityAz,
-      "Alt速度 =",
-      dragVelocityAlt,
-      "合成速度 =",
-      Math.hypot(dragVelocityAz, dragVelocityAlt),
-    );
-
     if (inertiaFrameId !== null) {
       cancelAnimationFrame(inertiaFrameId);
       inertiaFrameId = null;
@@ -6437,7 +6399,6 @@
         const selected = selectedByName || findConstellationAt(x, y);
 
         if (selected) {
-          console.log("選択した星座:", selected.name);
           startConstellationLineAnimation(selected);
         }
       }
@@ -6590,33 +6551,6 @@
 
       status.textContent = `星図表示中：${stars.length}個の恒星データを読み込みました。`;
 
-      console.log("全星データ件数:", data.length);
-      console.log("有効な恒星データ件数:", stars.length);
-
-      // 1等星・2等星のうち、星名が未登録の恒星を調査
-      const missingLabels = stars.filter(
-        (star) => star.mag < 2.5 && (!star.label || star.label.trim() === ""),
-      );
-
-      console.log("星名未登録の1等星・2等星:", missingLabels.length);
-
-      console.log(
-        "星名未登録一覧:",
-        JSON.stringify(
-          missingLabels.map((star) => ({
-            id: star.id,
-            mag: star.mag,
-            con: star.con,
-            ra: star.ra,
-            dec: star.dec,
-          })),
-          null,
-          2,
-        ),
-      );
-
-      console.log("現在の地方恒星時:", getLocalSiderealTimeDeg());
-
       tryStartStarWarp();
     } catch (error) {
       console.error("星データの読み込みに失敗しました:", error);
@@ -6629,7 +6563,6 @@
   // ==========================================
 
   async function loadDeepSkyObjects() {
-    console.log("深空天体データ読み込み開始");
 
     try {
       const response = await fetch("data/deep-sky-objects.json");
@@ -6653,8 +6586,6 @@
       );
 
       deepSkyObjectsLoaded = true;
-
-      console.log("深空天体データ読み込み:", deepSkyObjects);
 
       drawChart();
     } catch (error) {
@@ -6683,7 +6614,6 @@
       constellationsLoaded = true;
       tryStartStarWarp();
 
-      console.log("星座線データを読み込みました:", constellations);
     } catch (error) {
       console.error("星座線データの読み込みに失敗しました:", error);
     }
@@ -6708,7 +6638,6 @@
 
       drawChart();
 
-      console.log("アステリズムデータを読み込みました:", asterisms);
     } catch (error) {
       console.error("アステリズムデータの読み込みに失敗しました:", error);
     }
@@ -6740,8 +6669,6 @@
       );
 
       milkyWayBoundaryLoaded = true;
-
-      console.log("天の川の輪郭データを読み込みました:", milkyWaySegments);
 
       drawChart();
     } catch (error) {
@@ -6871,14 +6798,6 @@
       // 状態を表示
       status.textContent = `${data.name || "星座カード"}の中心を表示中`;
 
-      console.log("星座カードの中心座標を受信しました:", {
-        name: data.name,
-        ra: data.ra,
-        dec: data.dec,
-        az: constellationAzDeg,
-        alt: constellationAltDeg,
-      });
-
       return;
     }
 
@@ -6941,13 +6860,6 @@
       `流星群の放射点を表示中：方位 ${radiantAzDeg.toFixed(1)}° ` +
       `高度 ${radiantAltDeg.toFixed(1)}°`;
 
-    console.log("流星群の放射点を受信しました:", {
-      name: data.name,
-      ra: data.ra,
-      dec: data.dec,
-      az: radiantAzDeg,
-      alt: radiantAltDeg,
-    });
   });
 
   // ==========================================
@@ -7533,8 +7445,6 @@
         "constellations",
         Array.from(discoveredConstellationIds).join(","),
       );
-
-      console.log("共有する特別な線:", Array.from(discoveredAsterismIds));
 
       // 表示中の特別な線のID一覧
       shareURL.searchParams.set(
