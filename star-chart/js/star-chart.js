@@ -1039,19 +1039,25 @@
   let spaceSwimLastTime = 0;
   let spaceSwimPhase = 0;
 
+  // 手動操作後の自動再開タイマー
+let spaceSwimResumeTimer = null;
+
   let spaceSwimBaseAz = 0;
   let spaceSwimBaseAlt = 0;
   let spaceSwimBaseFov = 0;
 
+  
   // 自動宇宙遊泳を開始
   function startSpaceSwim() {
     if (!starOnlyMode || spaceSwimAnimationId !== null) return;
 
-    // 現在の視点と視野角を基準にする
+    // 現在表示されている星図を出発点にする
     spaceSwimBaseAz = centerAzDeg;
     spaceSwimBaseAlt = centerAltDeg;
     spaceSwimBaseFov = fieldOfViewDeg;
 
+    // 移動量をゼロから開始
+    spaceSwimPhase = 0;
     spaceSwimLastTime = 0;
 
     function animateSpaceSwim(time) {
@@ -1072,27 +1078,26 @@
 
       spaceSwimLastTime = time;
 
-      // 時間の経過に合わせて位相を進める
-      // ゆっくりした速度変化を加える
+      // ゆっくりした速度変化
       const speed = 0.16 + 0.07 * Math.sin(spaceSwimPhase * 0.35);
 
       spaceSwimPhase += deltaTime * speed;
 
       const t = spaceSwimPhase;
 
-      // 方位：複数のサインカーブを組み合わせる
+      // 方位：開始時のオフセットを差し引く
       const azOffset =
-        24 * Math.sin(t) +
-        9 * Math.sin(t * 0.43 + 1.2);
+        24 * (Math.sin(t) - Math.sin(0)) +
+        9 * (Math.sin(t * 0.43 + 1.2) - Math.sin(1.2));
 
-      // 高度：上下・斜め方向へ自然に移動
+      // 高度：開始時のオフセットを差し引く
       const altOffset =
-        13 * Math.sin(t * 0.72 + 0.8) +
+        13 * (Math.sin(t * 0.72 + 0.8) - Math.sin(0.8)) +
         5 * Math.sin(t * 0.31);
 
-      // 視野角：拡大と縮小をゆっくり繰り返す
+      // 視野角：開始時のオフセットを差し引く
       const fovOffset =
-        13 * Math.sin(t * 0.48 + 0.5);
+        13 * (Math.sin(t * 0.48 + 0.5) - Math.sin(0.5));
 
       centerAzDeg = normalizeDeg(
         spaceSwimBaseAz + azOffset,
@@ -1128,8 +1133,39 @@
       spaceSwimAnimationId = null;
     }
 
+    if (spaceSwimResumeTimer !== null) {
+  clearTimeout(spaceSwimResumeTimer);
+  spaceSwimResumeTimer = null;
+}
+
     spaceSwimLastTime = 0;
   }
+
+  // 手動操作による自動宇宙遊泳の一時停止
+function pauseSpaceSwimForInteraction() {
+  if (!starOnlyMode) return;
+
+  stopSpaceSwim();
+}
+
+// 手動操作終了後、自動宇宙遊泳を再開
+function scheduleSpaceSwimResume() {
+  if (!starOnlyMode) return;
+
+  // 既存の再開予約を解除
+  if (spaceSwimResumeTimer !== null) {
+    clearTimeout(spaceSwimResumeTimer);
+  }
+
+  // 5秒間操作がなければ再開
+  spaceSwimResumeTimer = setTimeout(() => {
+    spaceSwimResumeTimer = null;
+
+    if (starOnlyMode && activePointers.size === 0) {
+      startSpaceSwim();
+    }
+  }, 5000);
+}
 
   // ==========================================
   // スマホ姿勢センサーによる星図自動追従
@@ -5334,6 +5370,10 @@
 
   // 指の操作開始
   canvas.addEventListener("pointerdown", (event) => {
+
+    // 手動操作を開始したら自動宇宙遊泳を停止
+pauseSpaceSwimForInteraction();
+
     if (event.pointerType === "mouse" && event.button !== 0) {
       return;
     }
@@ -5649,6 +5689,12 @@
       dragVelocityAz = 0;
       dragVelocityAlt = 0;
     }
+
+    // すべての指を離したら自動宇宙遊泳の再開を予約
+if (activePointers.size === 0) {
+  scheduleSpaceSwimResume();
+}
+
   }
 
   canvas.addEventListener("pointerup", stopDragging);
