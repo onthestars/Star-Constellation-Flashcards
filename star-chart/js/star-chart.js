@@ -677,8 +677,51 @@
   // 星座線の表示・非表示
   let constellationLinesVisible = true;
 
-  // 星空だけ表示モード
+  // 星空だけ表示モード（星空のみ、星空オンリー）
   let starOnlyMode = false;
+
+  // 星空のみモード専用BGM
+  const starOnlyBgm = new Audio("../sound/outer-space.mp3");
+
+  starOnlyBgm.loop = true;
+  starOnlyBgm.volume = 0.25;
+  starOnlyBgm.preload = "auto";
+
+  // BGMフェード処理の管理
+  let starOnlyBgmFadeFrame = null;
+
+  // BGMのフェードアウト
+  function fadeOutStarOnlyBgm() {
+    // 進行中のフェードを停止
+    if (starOnlyBgmFadeFrame !== null) {
+      cancelAnimationFrame(starOnlyBgmFadeFrame);
+      starOnlyBgmFadeFrame = null;
+    }
+
+    const startVolume = starOnlyBgm.volume;
+    const duration = 2000;
+    const startTime = performance.now();
+
+    function fade() {
+      const progress = Math.min(
+        (performance.now() - startTime) / duration,
+        1
+      );
+
+      starOnlyBgm.volume = startVolume * (1 - progress);
+
+      if (progress < 1) {
+        starOnlyBgmFadeFrame = requestAnimationFrame(fade);
+      } else {
+        starOnlyBgmFadeFrame = null;
+        starOnlyBgm.pause();
+        starOnlyBgm.currentTime = 0;
+        starOnlyBgm.volume = 0.25;
+      }
+    }
+
+    fade();
+  }
 
   // 星空だけ表示ボタン
   const starOnlyModeButton = document.getElementById(
@@ -689,6 +732,24 @@
     starOnlyModeButton.addEventListener("click", () => {
       // 星空だけ表示モードを切り替え
       starOnlyMode = !starOnlyMode;
+
+      // 星空のみモードのBGMを制御
+      if (starOnlyMode) {
+        // 進行中のフェードを停止
+        if (starOnlyBgmFadeFrame !== null) {
+          cancelAnimationFrame(starOnlyBgmFadeFrame);
+          starOnlyBgmFadeFrame = null;
+        }
+
+        starOnlyBgm.volume = 0.25;
+        starOnlyBgm.currentTime = 0;
+
+        starOnlyBgm.play().catch((error) => {
+          console.warn("BGMを再生できませんでした:", error);
+        });
+      } else {
+        fadeOutStarOnlyBgm();
+      }
 
       // ボタンの選択状態を更新
       starOnlyModeButton.setAttribute(
@@ -5109,8 +5170,10 @@
     // 視野角に応じて慣性の初速を調整
     const zoomSensitivity = Math.min(1, fieldOfViewDeg / 90);
 
-    dragVelocityAz *= 0.5 * zoomSensitivity;
-    dragVelocityAlt *= 0.5 * zoomSensitivity;
+    const inertiaStrength = starOnlyMode ? 0.9 : 0.5;
+
+    dragVelocityAz *= inertiaStrength * zoomSensitivity;
+    dragVelocityAlt *= inertiaStrength * zoomSensitivity;
 
     // 速度が小さければ慣性を開始しない
     if (Math.hypot(dragVelocityAz, dragVelocityAlt) < 1.5) {
@@ -5136,8 +5199,10 @@
         Math.min(89.5, centerAltDeg + dragVelocityAlt * deltaTime),
       );
 
-      // 徐々に減速
-      const friction = Math.exp(-5 * deltaTime);
+      // 星空のみモードでは慣性を強める
+      const friction = Math.exp(
+        -(starOnlyMode ? 1.5 : 5) * deltaTime
+      );
 
       dragVelocityAz *= friction;
       dragVelocityAlt *= friction;
@@ -5145,7 +5210,9 @@
       drawChart();
 
       // 十分に遅くなったら停止
-      if (Math.hypot(dragVelocityAz, dragVelocityAlt) < 0.8) {
+      const stopThreshold = starOnlyMode ? 0.15 : 0.8;
+
+      if (Math.hypot(dragVelocityAz, dragVelocityAlt) < stopThreshold) {
         inertiaFrameId = null;
         dragVelocityAz = 0;
         dragVelocityAlt = 0;
