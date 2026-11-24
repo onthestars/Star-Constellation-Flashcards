@@ -114,6 +114,55 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+
+/* 星空だけ表示の切り替えボタン */
+#toggle-star-only-mode {
+  position: absolute;
+  top: 6px;
+  left: 107px;
+  z-index: 10;
+
+  width: 28px;
+  height: 24px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+
+  background: rgba(8, 13, 26, 0.75);
+  color: #ffffff;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 地球儀アイコンの内側の線 */
+#toggle-star-only-mode .star-only-icon-inner {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* 星空だけ表示がONのとき */
+#toggle-star-only-mode[aria-pressed="true"] {
+  background: rgba(255, 215, 0, 0.35);
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.45);
+}
+
+/* ONのときは内側の線を消す */
+#toggle-star-only-mode.active .star-only-icon-inner {
+  opacity: 0;
+}
+
 /* プラネタリウム共有ボタン */
 #chart-share-visible-button {
   position: absolute;
@@ -808,4 +857,19 @@ body {
 /* 閉じるボタン：ホバー */
 #chart-shared-notice-close:hover {
   opacity: 0.7;
+}
+
+/* 星空だけ表示中は、ほかの操作ボタンをグレーアウト */
+#chart-container.star-only-mode-active
+  #chart-share-visible-button,
+#chart-container.star-only-mode-active
+  #toggle-constellation-lines,
+#chart-container.star-only-mode-active
+  #toggle-constellation-ratings,
+#chart-container.star-only-mode-active
+  #toggle-object-labels,
+#chart-container.star-only-mode-active
+  #chart-text-size-panel button {
+  opacity: 0.35;
+  filter: grayscale(1);
 }
