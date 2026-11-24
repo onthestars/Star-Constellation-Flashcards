@@ -94,19 +94,72 @@
         ★
       </button>
 
-      <!-- 星空だけ表示の切り替え -->
-      <button type="button" id="toggle-star-only-mode" aria-label="星空だけ表示" title="星空だけ表示" aria-pressed="false">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.0"
-          stroke-linecap="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="9.5" stroke-dasharray="1 2" />
-          <g class="star-only-icon-inner" stroke-dasharray="1 2">
-            <path d="M12 2.5 C7 7 7 17 12 21.5" />
-            <path d="M12 2.5 C17 7 17 17 12 21.5" />
-            <path d="M3 9 C8 11 16 11 21 9" />
-            <path d="M3 15 C8 13 16 13 21 15" />
-          </g>
-        </svg>
-      </button>
+<!-- 宇宙遊泳モードの切り替え -->
+<button type="button" id="toggle-star-only-mode"
+  aria-label="宇宙遊泳モード"
+  title="宇宙遊泳モード"
+  aria-pressed="false">
+
+  <svg viewBox="0 0 24 24"
+    width="18" height="18"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true">
+
+    <!-- ヘルメット -->
+    <path d="M4.5 10
+      A7.5 7.5 0 0 1 19.5 10
+      V12.5
+      Q19.5 15 17.5 16.5
+      L16 17.5
+      H8
+      L6.5 16.5
+      Q4.5 15 4.5 12.5 Z"/>
+
+    <!-- バイザー -->
+    <path d="M6.5 10
+      A5.5 5.5 0 0 1 17.5 10
+      V11.5
+      Q17.5 14 15.5 14.8
+      Q12 16.2 8.5 14.8
+      Q6.5 14 6.5 11.5 Z"
+      fill="currentColor"
+      fill-opacity="0.13"/>
+
+    <!-- バイザーの反射 -->
+    <path d="M8.5 9.5 Q10 7.5 12.5 7.5"
+      opacity="0.65"/>
+
+    <!-- ヘルメット左右の接続部 -->
+    <path d="M4.5 10 L2.8 11
+      V13.5 L5.5 14.5
+      M19.5 10 L21.2 11
+      V13.5 L18.5 14.5"/>
+
+    <!-- 首元 -->
+    <path d="M9 17.2 V18.5
+      Q12 20 15 18.5 V17.2"/>
+
+    <!-- 肩と宇宙服 -->
+    <path d="M2.5 22
+      Q3 19 6.5 18
+      L9 17.5
+      M15 17.5 L17.5 18
+      Q21 19 21.5 22"/>
+
+    <!-- 胸元の装備 -->
+    <path d="M9 19.5 H15
+      L15.5 22 H8.5 Z"/>
+
+    <!-- 胸元の操作パネル -->
+    <circle cx="12" cy="20.7" r="0.7"
+      fill="currentColor" stroke="none"/>
+
+  </svg>
+</button>
 
       <!-- 親パネルから共有処理を呼び出すための内部ボタン -->
       <button type="button" id="chart-share-button" hidden></button>
