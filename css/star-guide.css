@@ -151,8 +151,8 @@
 
   color: #DCE5EF;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(0.8rem, 2vw, 1.5rem); /* 上と下のボタン共通 */
-  font-weight: bold;
+  font-size: clamp(0.8rem, 2vw, 1.0rem); /* 上と下のボタン共通 */
+  font-weight: 800;
 
   background: linear-gradient(
     to bottom,
