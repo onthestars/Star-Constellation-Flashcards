@@ -151,14 +151,12 @@
 
   color: #DCE5EF;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(0.8rem, 2vw, 1.0rem); /* 上と下のボタン共通 */
-  font-weight: 800;
+  font-size: 0.8rem;
+  font-weight: 700;
 
-  background: linear-gradient(
-    to bottom,
-    #34465B,
-    #26374B
-  );
+  background: linear-gradient(to bottom,
+      #34465B,
+      #26374B);
 
   border: 1px solid #52677D;
   border-radius: 7px;
@@ -308,11 +306,9 @@
   font-size: 20px;
   font-weight: bold;
 
-  background: linear-gradient(
-    to bottom,
-    #34465B,
-    #26374B
-  );
+  background: linear-gradient(to bottom,
+      #34465B,
+      #26374B);
 
   border: 1px solid #52677D;
   border-radius: 7px;
@@ -334,11 +330,9 @@
 /* 押したとき */
 #star-guide-panel .datetime-now:active,
 #star-guide-panel .datetime-selected:active {
-  background: linear-gradient(
-    to bottom,
-    #1D2C40,
-    #25364A
-  );
+  background: linear-gradient(to bottom,
+      #1D2C40,
+      #25364A);
 
   color: #DCE5EF;
   transform: translateY(2px);
