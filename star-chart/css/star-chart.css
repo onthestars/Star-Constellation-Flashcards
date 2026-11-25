@@ -584,11 +584,6 @@ body {
    今の空に戻すボタン
 ================================= */
 
-
-/* =================================
-   今の空に戻すボタン
-================================= */
-
 .datetime-now {
   flex: 0 0 auto;
 
@@ -604,7 +599,7 @@ body {
 
   color: #DCE5EF;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(14px, 2vw, 16px);
+  font-size: clamp(0.8rem, 2vw, 1.5rem);
   font-weight: bold;
 
   background: linear-gradient(
