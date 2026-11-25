@@ -5044,11 +5044,11 @@
 
               renderedStarLabelIds.add(label.id);
 
-              ctx.fillText(
-                label.text,
-                selectedPosition.x,
-                selectedPosition.y,
-              );
+              // ctx.fillText(
+              //   label.text,
+              //   selectedPosition.x,
+              //   selectedPosition.y,
+              // );
             }
 
             ctx.restore();
