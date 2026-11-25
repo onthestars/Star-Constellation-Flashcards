@@ -214,10 +214,15 @@ body {
   display: block;
 }
 
-/* 星図操作領域のブラウザ標準タッチ動作を抑制　iPhoneのLINE対策（テスト） */
+/* 星図操作領域のブラウザ標準タッチ動作を抑制　iPhoneのLINE対策 */
 #chart-container {
   touch-action: none;
   overscroll-behavior: none;
+
+  /* iPhoneの文字選択・長押しメニューを抑制 */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 /* 星図キャンバス */
@@ -226,7 +231,7 @@ body {
   width: 100%;
   height: 100%;
   margin: 0;
-  touch-action: none; /* iPhoneのLINE対策（テスト） */
+  touch-action: none; /* iPhoneのLINE対策 */
 }
 
 /* ステータス表示 */
