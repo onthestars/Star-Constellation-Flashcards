@@ -80,9 +80,3 @@
     transform: none;
   }
 }
-
-/* テキスト左右反転（絵文字も） */
-.flip-text {
-  display: inline-block;
-  transform: scaleX(-1);
-}

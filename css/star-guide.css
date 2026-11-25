@@ -134,10 +134,7 @@
   }
 }
 
-/* =================================
-   今の星空を見る・選んだ日の20時 ボタン
-================================= */
-
+/* 星空ガイド：現在の空を見る */
 #star-guide-panel .datetime-now {
   flex: 1 1 0;
   min-width: 0;
@@ -152,20 +149,47 @@
   margin: 4px 0 2px;
   padding: 0 4px;
 
-  color: #080D32;
+  color: #DCE5EF;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(14px, 2vw, 16px); /* プラネタリウムを見るボタンの文字の大きさ */
+  font-size: clamp(14px, 2vw, 16px);
   font-weight: bold;
 
-  background: linear-gradient(to bottom, #FFE080, #D9A928);
+  background: linear-gradient(
+    to bottom,
+    #34465B,
+    #26374B
+  );
 
-  border: 1px solid #FFD700;
+  border: 1px solid #52677D;
   border-radius: 7px;
+
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 0 0 2px rgba(5, 12, 27, 0.65);
 
   white-space: nowrap;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease,
+    background 0.1s ease;
 }
+
+#star-guide-panel .datetime-now:active {
+  background: #25364A;
+
+  transform: translateY(2px);
+
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 2px rgba(5, 12, 27, 0.65);
+}
+
 
 #star-guide-panel .datetime-now:active {
   background: #FFD700;
@@ -267,9 +291,7 @@
   margin-bottom: 8px;
 }
 
-/* css/star-guide.css */
-
-/* ▼ 選択日の夜空を見る */
+/* 選択日の夜空を見る */
 #star-guide-panel .datetime-selected {
   width: 100%;
   min-height: 56px;
@@ -278,24 +300,53 @@
   align-items: center;
   justify-content: center;
 
-  margin: 4px 0 8px 0;
+  margin: 4px 0 8px;
   padding: 8px;
 
-  color: #080D32;
+  color: #DCE5EF;
   font-family: "Meiryo", sans-serif;
   font-size: 20px;
   font-weight: bold;
 
-  background:
-    linear-gradient(to bottom,
-      #FFE080,
-      #D9A928);
+  background: linear-gradient(
+    to bottom,
+    #34465B,
+    #26374B
+  );
 
-  border: 1px solid #FFD700;
+  border: 1px solid #52677D;
   border-radius: 7px;
+
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 0 0 2px rgba(5, 12, 27, 0.65);
 
   cursor: pointer;
   line-height: 1.3;
+
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+/* 押したとき */
+#star-guide-panel .datetime-now:active,
+#star-guide-panel .datetime-selected:active {
+  background: linear-gradient(
+    to bottom,
+    #1D2C40,
+    #25364A
+  );
+
+  color: #DCE5EF;
+  transform: translateY(2px);
+
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 2px rgba(5, 12, 27, 0.65);
 }
 
 /* ▼ 星空ガイド上部ボタン帯 */
