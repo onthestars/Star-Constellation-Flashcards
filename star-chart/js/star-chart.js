@@ -2581,6 +2581,7 @@
   // ▼▼▼drawChart();ここから
   // 星図全体を再描画
   function drawChart() {
+
     if (canvasWidth <= 0 || canvasHeight <= 0) return;
 
     // 円形の星図を維持する共通倍率
@@ -5986,7 +5987,12 @@
 
     if (rect.width <= 0 || rect.height <= 0) return;
 
-    const dpr = window.devicePixelRatio || 1;
+    // PCで低解像度モード（高速描画モード）、スマホで高精細モード
+    // >1600 > [数値] で解像度を変更する。
+    const dpr =
+      window.innerWidth > 1600
+        ? 1.25
+        : (window.devicePixelRatio || 1);
 
     canvasWidth = rect.width;
     canvasHeight = rect.height;
