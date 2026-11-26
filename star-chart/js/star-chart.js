@@ -1147,6 +1147,9 @@
   // 手動操作後の自動再開タイマー
   let spaceSwimResumeTimer = null;
 
+  // タップ中の微小な漂流を管理
+  let spaceSwimPauseRequested = false;
+
   let spaceSwimBaseAz = 0;
   let spaceSwimBaseAlt = 0;
   let spaceSwimBaseFov = 0;
@@ -1166,6 +1169,12 @@
 
     let segmentStartTime = null;
     let segmentDuration = 0;
+
+    // タップ中の微小な漂流用
+    let isPaused = false;
+    let pauseStartTime = 0;
+    let pauseAz = 0;
+    let pauseAlt = 0;
 
     // 指定範囲のランダムな数値を取得
     function randomRange(min, max) {
@@ -1187,14 +1196,21 @@
         Math.min(80, startAlt + randomRange(-22, 22)),
       );
 
-      // 視野角：拡大・縮小をランダムに行う
-      targetFov = Math.max(
-        MIN_FIELD_OF_VIEW_DEG,
-        Math.min(
+      // 視野角：狭くなりすぎた場合は、広げる方向を優先
+      if (startFov < 40) {
+        targetFov = Math.min(
           MAX_FIELD_OF_VIEW_DEG,
-          startFov + randomRange(-22, 22),
-        ),
-      );
+          startFov + randomRange(18, 30),
+        );
+      } else {
+        targetFov = Math.max(
+          MIN_FIELD_OF_VIEW_DEG,
+          Math.min(
+            MAX_FIELD_OF_VIEW_DEG,
+            startFov + randomRange(-22, 22),
+          ),
+        );
+      }
 
       // 移動にかける時間もランダムに変える
       segmentDuration = randomRange(9000, 18000);
@@ -1206,6 +1222,48 @@
       if (!starOnlyMode) {
         spaceSwimAnimationId = null;
         return;
+      }
+
+      // タップ中は目的地への移動を保留し、微小な漂流だけ続ける
+      if (spaceSwimPauseRequested) {
+        if (!isPaused) {
+          isPaused = true;
+          pauseStartTime = time;
+          pauseAz = centerAzDeg;
+          pauseAlt = centerAltDeg;
+        }
+
+        const pauseElapsed = (time - pauseStartTime) / 1000;
+
+        centerAzDeg = normalizeDeg(
+          pauseAz +
+          Math.sin(pauseElapsed * 0.35) * 0.12 +
+          Math.cos(pauseElapsed * 0.22) * 0.06
+        );
+
+        centerAltDeg = Math.max(
+          -80,
+          Math.min(
+            80,
+            pauseAlt + Math.sin(pauseElapsed * 0.28) * 0.08
+          )
+        );
+
+        drawChart();
+
+        spaceSwimAnimationId =
+          requestAnimationFrame(animateSpaceSwim);
+
+        return;
+      }
+
+      // 一時停止が終わったら、停止していた時間だけ進行時刻を補正
+      if (isPaused) {
+        if (segmentStartTime !== null) {
+          segmentStartTime += time - pauseStartTime;
+        }
+
+        isPaused = false;
       }
 
       // 最初の目標を設定
@@ -1268,13 +1326,15 @@
     }
 
     spaceSwimLastTime = 0;
+
+    spaceSwimPauseRequested = false;
   }
 
   // 手動操作による自動宇宙遊泳の一時停止
   function pauseSpaceSwimForInteraction() {
     if (!starOnlyMode) return;
 
-    stopSpaceSwim();
+    spaceSwimPauseRequested = true;
   }
 
   // 手動操作終了後、自動宇宙遊泳を再開
@@ -1291,7 +1351,11 @@
       spaceSwimResumeTimer = null;
 
       if (starOnlyMode && activePointers.size === 0) {
-        startSpaceSwim();
+        spaceSwimPauseRequested = false;
+
+        if (spaceSwimAnimationId === null) {
+          startSpaceSwim();
+        }
       }
     }, 2000);
   }
