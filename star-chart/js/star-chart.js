@@ -1187,14 +1187,22 @@
         Math.min(80, startAlt + randomRange(-22, 22)),
       );
 
-      // 視野角：拡大・縮小をランダムに行う
-      targetFov = Math.max(
-        MIN_FIELD_OF_VIEW_DEG,
-        Math.min(
+      // 視野角：狭くなりすぎた場合は、広げる方向を優先
+      if (startFov < 40) {
+        targetFov = Math.min(
           MAX_FIELD_OF_VIEW_DEG,
-          startFov + randomRange(-22, 22),
-        ),
-      );
+          startFov + randomRange(18, 30),
+        );
+      } else {
+        // 通常時は拡大・縮小をランダムに行う
+        targetFov = Math.max(
+          MIN_FIELD_OF_VIEW_DEG,
+          Math.min(
+            MAX_FIELD_OF_VIEW_DEG,
+            startFov + randomRange(-22, 22),
+          ),
+        );
+      }
 
       // 移動にかける時間もランダムに変える
       segmentDuration = randomRange(9000, 18000);
