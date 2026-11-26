@@ -932,7 +932,7 @@
     id="showSelectedDateBtn"
     class="datetime-now selected-date-button"
   >
-    <span style="display:inline-block;margin-right:4px;">🔭</span>${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日<span style="font-size:0.8em;">の</span>夜空<span style="display:inline-block;transform:scaleX(-1);margin-left:2px;">🔭</span>
+    <span style="display:inline-block;margin-right:4px;">🔭</span>${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日の夜空<span style="font-size:0.8em;">を</span>見る<span style="display:inline-block;transform:scaleX(-1);margin-left:2px;">🔭</span>
   </button>
 
 </div>
