@@ -933,7 +933,7 @@
     class="datetime-now guide-planetarium-button"
   >
     ${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日<span style="font-size:0.8em;">の</span>夜空
-<span class="guide-pointing-finger" aria-hidden="true">☝</span>
+<span style="font-size:1.25em;" class="guide-pointing-finger" aria-hidden="true">👆</span>
   </button>
 
 </div>
