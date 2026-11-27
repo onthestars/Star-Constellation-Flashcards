@@ -599,7 +599,7 @@ body {
 
   color: #DCE5EF;
   font-family: "Meiryo", sans-serif;
-  font-size: clamp(0.8rem, 2vw, 1.0rem);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   font-weight: 800;
 
   background: linear-gradient(
