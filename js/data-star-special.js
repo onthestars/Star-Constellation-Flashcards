@@ -384,12 +384,10 @@ const specialPhotos = {
     noline: [
       "Perseus-Taurus-noline-pic01.jpg",
       "Taurus-noline-pic02.jpg"
-
     ],
     lines: [
       "Perseus-Taurus-lines-pic01.jpg",
       "Taurus-lines-pic02.jpg"
-
     ],
     caption: [
       "ペルセウス座とおうし座（ふたご座流星）／2025年12月14日／紀伊半島中部",
@@ -399,13 +397,16 @@ const specialPhotos = {
 
   "Orion": {
     noline: [
-      "Orion-noline-pic01.jpg"
+      "Orion-noline-pic01.jpg",
+      "Orion-noline-pic02.jpg"
     ],
     lines: [
-      "Orion-lines-pic01.jpg"
+      "Orion-lines-pic01.jpg",
+      "Orion-lines-pic02.jpg"
     ],
     caption: [
-      "吊り橋とオリオン／2025年1月26日／紀伊半島南部"
+      "吊り橋とオリオン／2025年1月26日／紀伊半島南部",
+      "展望の丘から望むオリオン／2026年11月7日／茨木市山中"
     ]
   },
 
