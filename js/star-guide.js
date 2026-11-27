@@ -930,9 +930,10 @@
   <button
     type="button"
     id="showSelectedDateBtn"
-    class="datetime-now selected-date-button"
+    class="datetime-now guide-planetarium-button"
   >
-    <span style="display:inline-block;margin-right:4px;">🔭</span>${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日<span style="font-size:0.8em;">の</span>夜空<span style="display:inline-block;transform:scaleX(-1);margin-left:2px;">🔭</span>
+    ${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日<span style="font-size:0.8em;">の</span>夜空
+<span class="guide-pointing-finger" aria-hidden="true">☝</span>
   </button>
 
 </div>
