@@ -629,3 +629,22 @@
 #star-guide-panel #starGuideMoonImage:active {
   cursor: grabbing;
 }
+
+
+/* 星空ガイド：プラネタリウム表示ボタン */
+#star-guide-panel .datetime-now.guide-planetarium-button {
+  position: relative;
+  padding: 0 30px;
+}
+
+/* 右端の人差し指 */
+.guide-pointing-finger {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #ffd700;
+  font-size: 1.15em;
+  line-height: 1;
+}
