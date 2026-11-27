@@ -119,46 +119,68 @@ function updateMoonButtons() {
     moonSpecialNext.disabled ? 0.4 : 1;
 }
 
+
+// ================================
+// ボタン制御
+// ================================
+let isMoonTransitioning = false;
+
+function updateMoonButtons() {
+
+  moonSpecialPrev.disabled =
+    isMoonTransitioning || moonSpecialIndex === 0;
+
+  moonSpecialPrev.style.opacity =
+    moonSpecialPrev.disabled ? 0.4 : 1;
+
+  moonSpecialNext.disabled =
+    isMoonTransitioning ||
+    moonSpecialIndex >= displayMoonData.length - 1;
+
+  moonSpecialNext.style.opacity =
+    moonSpecialNext.disabled ? 0.4 : 1;
+}
+
 // ================================
 // 画像切替
 // ================================
-function fadeChangeMoonImage(newIndex) {
+async function fadeChangeMoonImage(newIndex) {
+
+  if (isMoonTransitioning) return;
+
+  if (
+    newIndex < 0 ||
+    newIndex >= displayMoonData.length ||
+    newIndex === moonSpecialIndex
+  ) {
+    return;
+  }
 
   const direction =
-    (newIndex > moonSpecialIndex) ? "right" : "left";
+    newIndex > moonSpecialIndex ? "next" : "prev";
 
-  moonSpecialImg.classList.remove(
-    "moon-slide-in-right",
-    "moon-slide-in-left"
-  );
+  const nextData = displayMoonData[newIndex];
 
-  moonSpecialImg.style.opacity = 0;
+  isMoonTransitioning = true;
+  updateMoonButtons();
 
-  setTimeout(() => {
+  try {
+    await animateImageTransition(
+      moonSpecialImg,
+      nextData.image,
+      direction,
+      () => {
+        moonSpecialIndex = newIndex;
 
-    moonSpecialIndex = newIndex;
+        moonSpecialCaption.innerText =
+          `${buildMoonCaption(nextData)}（${moonSpecialIndex + 1}/${displayMoonData.length}）`;
+      },
+    );
 
-    const currentData =
-      displayMoonData[moonSpecialIndex];
-
-    moonSpecialImg.src = currentData.image;
-
-    moonSpecialCaption.innerText =
-      `${buildMoonCaption(currentData)}（${moonSpecialIndex + 1}/${displayMoonData.length}）`;
-
-    void moonSpecialImg.offsetWidth;
-
-    if (direction === "right") {
-      moonSpecialImg.classList.add("moon-slide-in-right");
-    } else {
-      moonSpecialImg.classList.add("moon-slide-in-left");
-    }
-
-    moonSpecialImg.style.opacity = 1;
-
+  } finally {
+    isMoonTransitioning = false;
     updateMoonButtons();
-
-  }, 200);
+  }
 }
 
 // ================================

@@ -164,41 +164,80 @@ specialClear.onclick = () => {
 };
 
 // 次へ
-specialNext.onclick = () => {
+specialNext.onclick = async () => {
+  if (specialNext.disabled) return;
+
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
+
+  if (specialIndex >= specialPhotos[starName].noline.length - 1) return;
+
+  const nextIndex = specialIndex + 1;
   const folder = getSpecialFolder(savedIndex);
+  const nextSrc = folder + specialPhotos[starName].noline[nextIndex];
 
-  if (specialIndex < specialPhotos[starName].noline.length - 1) {
-    specialIndex++;
-    specialMode = "noline";
-    spAnimationClass = "sp-slide-next";
-    applySpecialAnimation();
+  specialNext.disabled = true;
+  specialPrev.disabled = true;
 
-    specialImg.src = folder + specialPhotos[starName].noline[specialIndex];
-    specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
-  }
+  const success = await animateImageTransition(
+    specialImg,
+    nextSrc,
+    "next",
+    () => {
+      specialIndex = nextIndex;
+      specialMode = "noline";
+
+      specialCaption.innerHTML =
+        specialPhotos[starName].caption[specialIndex]
+          .replace(/　/g, "<br>");
+    },
+  );
 
   updateSpecialButtons();
+
+  if (!success) {
+    specialNext.disabled = false;
+    specialPrev.disabled = (specialIndex === 0);
+  }
 };
 
 // 前へ
-specialPrev.onclick = () => {
+specialPrev.onclick = async () => {
+  if (specialPrev.disabled) return;
+
   const starName = getStarNameFromIndex(savedIndex);
   if (!starName || !specialPhotos[starName]) return;
+
+  if (specialIndex <= 0) return;
+
+  const prevIndex = specialIndex - 1;
   const folder = getSpecialFolder(savedIndex);
+  const prevSrc = folder + specialPhotos[starName].noline[prevIndex];
 
-  if (specialIndex > 0) {
-    specialIndex--;
-    specialMode = "noline";
-    spAnimationClass = "sp-slide-prev";
-    applySpecialAnimation();
+  specialNext.disabled = true;
+  specialPrev.disabled = true;
 
-    specialImg.src = folder + specialPhotos[starName].noline[specialIndex];
-    specialCaption.innerHTML = specialPhotos[starName].caption[specialIndex].replace(/　/g, "<br>");
-  }
+  const success = await animateImageTransition(
+    specialImg,
+    prevSrc,
+    "prev",
+    () => {
+      specialIndex = prevIndex;
+      specialMode = "noline";
+
+      specialCaption.innerHTML =
+        specialPhotos[starName].caption[specialIndex]
+          .replace(/　/g, "<br>");
+    },
+  );
 
   updateSpecialButtons();
+
+  if (!success) {
+    specialPrev.disabled = false;
+    specialNext.disabled =
+      (specialIndex >= specialPhotos[starName].noline.length - 1);
+  }
 };
 
 // スワイプ操作
