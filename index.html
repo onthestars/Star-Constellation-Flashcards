@@ -128,14 +128,26 @@
 
         <div class="star-guide-footer">
           <button type="button" id="showPlanetariumFromGuideBtn" class="datetime-now guide-planetarium-button">
-            現在<span style="font-size:0.8em;">の</span>空<span style="font-size:0.8em;">を</span>見る
-            <span style="font-size:1.5em;" class="guide-pointing-finger" aria-hidden="true">👆</span>
+
+            <span class="guide-button-label">
+              現在<span style="font-size:0.8em;">の</span>空<span style="font-size:0.8em;">を</span>見る
+            </span>
+
+            <svg class="guide-play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+
+              <circle cx="12" cy="12" r="10" fill="none" stroke="#FFD700" stroke-width="2" />
+
+              <polygon points="10,8 17,12 10,16" fill="#FFD700" />
+
+            </svg>
+
           </button>
         </div>
       </div>
 
       <!-- ▼ プラネタリウム -->
       <div class="planetarium-panel">
+
         <!-- index.html：Soleil流星群オーバーレイ -->
         <div id="chart-overlay" style="display: none">
           <div id="chart-panel">
@@ -331,7 +343,7 @@
 
   <!-- 画像データ（カード画像・季節ボタン画像など）を定義する最重要データファイル。最も多くのJSが依存するため、必ず最初に読み込む -->
   <script src="js/images.js"></script>
-  
+
   <script src="js/animation-controls.js"></script>
   <script src="js/image-transition.js"></script>
 
