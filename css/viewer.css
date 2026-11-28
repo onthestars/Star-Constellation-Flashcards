@@ -300,6 +300,47 @@
   }
 }
 
+/* =================================
+   PC：星スペシャルビューアのレイアウト改善
+   ================================= */
+
+@media (min-width: 768px) {
+
+  /* 画像とキャプションを独立したグループにする */
+  #special-viewer .special-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    box-sizing: border-box;
+
+    /* 下部の操作ボタンと重ならない余白 */
+    padding: 10px 0 80px;
+  }
+
+  /* 画像の大きさ */
+  #special-img {
+    max-height: calc(100vh - 150px);
+    max-width: 95vw;
+  }
+
+  /* キャプション */
+  #special-caption {
+    margin: 10px 0 0;
+    flex: 0 0 auto;
+  }
+
+  /* 操作ボタンを画面最下部に固定 */
+  #special-viewer .special-controls-row {
+    height: 80px;
+    bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+}
 
 /* =================================
    PC：月スペシャルビューアのレイアウト改善
